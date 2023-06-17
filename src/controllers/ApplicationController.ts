@@ -1,13 +1,12 @@
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { BackgroundController } from './BackgroundController';
-import { PrepareIconsController } from './PrepareIconsController';
+import { PrepareIconsCommand } from '../commands/PrepareIconsController';
 
 export class ApplicationController extends BaseController {
     protected async doExecute() {
         new BackgroundController().execute();
-        const prepare = await new PrepareIconsController().execute();
-        prepare.destroy();
+        await new PrepareIconsCommand().execute();
         await this.nextCicle();
     }
 

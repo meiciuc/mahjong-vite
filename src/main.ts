@@ -30,7 +30,7 @@ window.onload = async (): Promise<void> => {
     document.body.appendChild(app.view as unknown as Node);
 
     stageService.config({
-        layers: [LAYERS.BACKGROUND, LAYERS.GAME, LAYERS.EFFECTS, LAYERS.UI],
+        layers: [LAYERS.BACKGROUND, LAYERS.GAME, LAYERS.EFFECTS],
         layerDefault: LAYERS.GAME,
     });
     await stageService.init(app);

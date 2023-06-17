@@ -1,4 +1,4 @@
-import { BaseCommand } from "../../common/BaseCommand";
+import { BaseCommand } from "../../utils/BaseCommand";
 import { PointLike } from "../../utils/point";
 
 export class CrossFinder extends BaseCommand{

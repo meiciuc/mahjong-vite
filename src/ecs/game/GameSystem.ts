@@ -1,5 +1,5 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
-import { throwIfNull } from '../../common/throwIfNull';
+import { throwIfNull } from '../../utils/throwIfNull';
 import { Config } from '../../Config';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 import { EntityCreator } from '../EntityCreator';

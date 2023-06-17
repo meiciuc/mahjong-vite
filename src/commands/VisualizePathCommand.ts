@@ -1,6 +1,6 @@
 import { Entity } from '@ash.ts/ash';
 import { Config } from '../Config';
-import { BaseCommand } from '../common/BaseCommand';
+import { BaseCommand } from '../utils/BaseCommand';
 import { PointLike } from '../utils/point';
 import { TimeSkipper } from '../utils/TimeSkipper';
 import { EntityCreator } from '../ecs/EntityCreator';

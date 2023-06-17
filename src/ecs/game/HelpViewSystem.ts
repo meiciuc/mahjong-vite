@@ -1,5 +1,5 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
-import { throwIfNull } from '../../common/throwIfNull';
+import { throwIfNull } from '../../utils/throwIfNull';
 import { EntityCreator } from '../EntityCreator';
 import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';

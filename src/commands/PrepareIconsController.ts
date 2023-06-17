@@ -1,8 +1,8 @@
 import { Config } from '../Config';
 import { getGameState } from '../states/GameState';
-import { BaseController } from './BaseController';
+import { BaseCommand } from '../utils/BaseCommand';
 
-export class PrepareIconsController extends BaseController {
+export class PrepareIconsCommand extends BaseCommand {
     protected async doExecute() {
         const namePart = 'icons/image_part_';
         const length = Config.ASSETST_ICONS_NUMBER;

@@ -1,5 +1,5 @@
 import { Engine, NodeList } from '@ash.ts/ash';
-import { throwIfNull } from '../../common/throwIfNull';
+import { throwIfNull } from '../../utils/throwIfNull';
 import { Config } from '../../Config';
 import { CrossFinder } from '../../controllers/finder/CrossFinder';
 import { PointLike } from '../../utils/point';

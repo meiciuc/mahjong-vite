@@ -1,5 +1,5 @@
 import { Engine } from '@ash.ts/ash';
-import { throwIfNull } from '../common/throwIfNull';
+import { throwIfNull } from '../utils/throwIfNull';
 import { stageService } from '../core/services/StageService';
 import { DisplaySystem } from '../ecs/display/DisplaySystem';
 import { EntityCreator } from '../ecs/EntityCreator';

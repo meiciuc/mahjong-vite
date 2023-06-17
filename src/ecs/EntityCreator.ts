@@ -1,5 +1,7 @@
 import { Engine, Entity, EntityStateMachine } from '@ash.ts/ash';
-import { Assets, Container, Sprite, Text, Texture } from 'pixi.js';
+import { Assets, Container, Sprite, Texture } from 'pixi.js';
+import { Config } from '../Config';
+import { stageService } from '../core/services/StageService';
 import { getGameState } from '../states/GameState';
 import { GridView } from '../view/GridView';
 import { TileHelpEffectView } from '../view/TileHelpEffectView';
@@ -15,8 +17,6 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
-import { Config } from '../Config';
-import { stageService } from '../core/services/StageService';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
@@ -59,41 +59,6 @@ export class EntityCreator {
         this.engine.addEntity(entity);
     }
 
-    public __createTile(index: number, gridX: number, gridY: number) {
-        const state = getGameState();
-        const icon = state.icons[index];
-
-        const text = new Text('\u0080', {
-            fontFamily: 'Untitled-1',
-            fontSize: 148,
-            fill: 0xff0000,
-            align: 'center',
-            stroke: '#0000ff',
-            strokeThickness: 5,
-        });
-        const container = new Container();
-        container.addChild(text);
-
-        const entity = new Entity();
-        const fsm = new EntityStateMachine(entity);
-
-        fsm.createState(TileStateEnum.IDLE);
-
-        fsm.createState(TileStateEnum.SELECTED).add(Selected);
-
-        entity
-            .add(new Tile(fsm))
-            .add(new GridPosition(gridX, gridY))
-            .add(new Transform({ x: 0, y: 0 }))
-            .add(new Display(container, this.gridView.tiles))
-            .add(new Icon(icon));
-
-        fsm.changeState(TileStateEnum.IDLE);
-
-        this.engine.addEntity(entity);
-    }
-
-    textures?: { [key: string]: Texture };
     icons: { [key: string]: Texture } = {};
 
     public createTile(index: number, gridX: number, gridY: number) {
