@@ -1,5 +1,5 @@
 import { FrameTickProvider, Signal1, Signal3 } from '@ash.ts/ash';
-import { debounce } from 'lodash';
+import { debounce, throttle } from 'lodash';
 import { Application, Container } from 'pixi.js';
 import { Config } from '../../Config';
 
@@ -43,7 +43,7 @@ export class StageService {
         tickProvider.add((delta: number) => this.updateSignal.dispatch(delta));
         tickProvider.start();
 
-        window.addEventListener('resize', this.resize);
+        window.addEventListener('resize', throttle(this.resize, 50));
         window.addEventListener('deviceorientation', debounce(this.handleOrientation, 100), true);
 
         return Promise.resolve(this);

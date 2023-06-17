@@ -1,18 +1,15 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
-import { Container, Sprite, Text, Texture } from 'pixi.js';
-import { BaseButton } from '../../core/mvc/BaseButton';
-import { stageService } from '../../core/services/StageService';
-import { LAYERS } from '../../GameLayers';
+import { throwIfNull } from '../../common/throwIfNull';
 import { EntityCreator } from '../EntityCreator';
+import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
-import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
-import { throwIfNull } from '../../common/throwIfNull';
 
 export class HelpViewSystem extends System {
-    private helpButton?: BaseButton;
     private helpNodes?: NodeList<TileHelpEffectNode>;
     private selectedNodes?: NodeList<TileSelectedNode>;
+
+    private helpButton?: HTMLDivElement;
 
     constructor(private creator: EntityCreator, private gameLogic: GameLogic) {
         super();
@@ -29,14 +26,14 @@ export class HelpViewSystem extends System {
         this.helpNodes = undefined;
         this.selectedNodes?.nodeAdded.remove(this.handleSelectedNodeAdded);
         this.selectedNodes = undefined;
+
+        this.helpButton?.remove();
     }
 
     update(_time: number): void {}
 
     private async setup() {
-        this.helpButton = await this.createButton();
-        this.helpButton.on('click', this.handleHelpButton);
-        stageService.getLayer(LAYERS.UI).addChild(this.helpButton);
+        this.helpButton = this.createButton();
     }
 
     private handleSelectedNodeAdded = (_node: TileSelectedNode) => {
@@ -58,25 +55,29 @@ export class HelpViewSystem extends System {
         this.creator.createTileHelpEffect(nodeB.transform.position.x, nodeB.transform.position.y);
     };
 
-    private async createButton(): Promise<BaseButton> {
-        const container = new Container();
+    private createButton() {
+        let ui: HTMLDivElement | null = document.body.querySelector('#ui');
+        if (!ui) {
+            ui = document.createElement('div') as HTMLDivElement;
+            ui.style.position = 'absolute';
+            ui.style.top = '0px';
+            ui.style.left = '0px';
+            ui.id = 'ui';
+            document.body.appendChild(ui);
+        }
 
-        const text = new Text('need help', {
-            fontFamily: 'Arial',
-            fontSize: 48,
-            fill: 0x000000,
-            align: 'center',
-        });
+        const template = 'help';
+        const button = document.createElement('div');
+        button.innerHTML = template;
+        button.style.border = 'solid';
+        button.style.borderRadius = '15px';
+        button.style.width = '100px';
+        button.style.height = '20px';
+        button.style.textAlign = 'center';
+        button.style.cursor = 'pointer';
+        button.addEventListener('click', () => {this.handleHelpButton()})
+        ui.appendChild(button);
 
-        const background = new Sprite(Texture.WHITE);
-        background.width = text.width + 20;
-        background.height = text.height + 10;
-
-        container.addChild(background);
-        container.addChild(text);
-        text.position.set(10, 5);
-
-        const image = await stageService.stage.renderer.extract.image(container);
-        return new BaseButton(Texture.from(image));
+        return button;
     }
 }
