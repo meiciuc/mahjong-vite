@@ -5,6 +5,9 @@ import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { htmlService } from '../../core/services/HtmlService';
+import { createApp } from 'vue';
+import TestButton from '../../vue/TestButton.vue';
+import mitt from '../../utils/mitt';
 
 export class HelpViewSystem extends System {
     private helpNodes?: NodeList<TileHelpEffectNode>;
@@ -35,6 +38,9 @@ export class HelpViewSystem extends System {
 
     private async setup() {
         this.helpButton = this.createButton();
+        // this.createButtonAlt();
+        // this.createButtonAlt();
+
     }
 
     private handleSelectedNodeAdded = (_node: TileSelectedNode) => {
@@ -57,16 +63,6 @@ export class HelpViewSystem extends System {
     };
 
     private createButton() {
-        let ui: HTMLDivElement | null = document.body.querySelector('#ui');
-        if (!ui) {
-            ui = document.createElement('div') as HTMLDivElement;
-            ui.style.position = 'absolute';
-            ui.style.top = '0px';
-            ui.style.left = '0px';
-            ui.id = 'ui';
-            document.body.appendChild(ui);
-        }
-
         const template = 'help';
         const button = document.createElement('div');
         button.innerHTML = template;
@@ -81,5 +77,16 @@ export class HelpViewSystem extends System {
         htmlService.ui.appendChild(button);
 
         return button;
+    }
+
+    private createButtonAlt() {
+        const app = createApp(TestButton);
+        app.config.globalProperties.emitter = mitt();
+        app.mount(htmlService.ui.appendChild(document.createElement('div')));
+        // app.provide('emitter', mitt());
+
+        // app.config.globalProperties.emitter.on('click', () => {
+        //     console.log('args CLICK')
+        // })
     }
 }
