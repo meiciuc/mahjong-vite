@@ -4,6 +4,7 @@ import { EntityCreator } from '../EntityCreator';
 import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
+import { htmlService } from '../../core/services/HtmlService';
 
 export class HelpViewSystem extends System {
     private helpNodes?: NodeList<TileHelpEffectNode>;
@@ -76,7 +77,8 @@ export class HelpViewSystem extends System {
         button.style.textAlign = 'center';
         button.style.cursor = 'pointer';
         button.addEventListener('click', () => {this.handleHelpButton()})
-        ui.appendChild(button);
+
+        htmlService.ui.appendChild(button);
 
         return button;
     }

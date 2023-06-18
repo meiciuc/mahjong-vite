@@ -9,7 +9,7 @@ export interface RootConfig {
     layerDefault: number;
 }
 
-export class StageService {
+class StageService {
     private readonly layers = new Map<number, Container>();
 
     private cfg: RootConfig | undefined;
