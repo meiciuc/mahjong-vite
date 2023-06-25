@@ -15,6 +15,7 @@ import { Config } from './Config';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const WebFont = require('webfontloader');
 import WebFont from 'webfontloader';
+import { vueService } from './vue/VueService';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -34,6 +35,7 @@ window.onload = async (): Promise<void> => {
         layerDefault: LAYERS.GAME,
     });
     await stageService.init(app);
+    vueService.init();
 
     new ApplicationController().execute();
 
