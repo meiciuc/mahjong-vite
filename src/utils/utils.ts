@@ -36,8 +36,6 @@ export function clone<Data>(source: Data): Data {
 export function shuffle(array: any[], seed = '') {
     seed = seed ? seed : '' + Math.random();
     const arng =   seedrandom.alea(seed);
-    console.log('arng()', arng())
-
 
     let currentIndex = array.length,  randomIndex;
   

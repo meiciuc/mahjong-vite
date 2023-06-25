@@ -2,18 +2,17 @@
     import { AppStateEnum } from '../model/GameModel';
     import HelpButton from './HelpButton.vue';
     import StartScreen from './StartScreen.vue';
+    import { useModel } from '../model/modelHelper';
+    import { computed } from 'vue';
 
-    let appState = AppStateEnum.NONE;
+    const data = useModel(["appState"]);
+    const appState = computed(() => {return data.value});
 
-    // onMounted(() => {
-    //     const model = dataService.getRootModel<GameModel>();
-    //     model.subscribe(['appState'], appState = () => {return model.data.appState})
-    // });
 </script>
 
 <template>
-    <StartScreen ref="StartScreen" v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
-    <HelpButton ref="HelpButton" v-if="appState === AppStateEnum.GAME_SCREEN"></HelpButton>
+    <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
+    <HelpButton v-if="appState === AppStateEnum.GAME_SCREEN"></HelpButton>
 </template>
 
 <style lang="scss" scoped>

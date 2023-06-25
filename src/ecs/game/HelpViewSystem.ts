@@ -19,7 +19,7 @@ export class HelpViewSystem extends System {
         this.selectedNodes = engine.getNodeList(TileSelectedNode);
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
         
-        vueService.signalHelpButton.add(this.handleHelpButton);
+        vueService.signalHelpButton.on(this.handleHelpButton);
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -27,7 +27,7 @@ export class HelpViewSystem extends System {
         this.selectedNodes?.nodeAdded.remove(this.handleSelectedNodeAdded);
         this.selectedNodes = undefined;
 
-        vueService.signalHelpButton.remove(this.handleHelpButton);
+        vueService.signalHelpButton.off(this.handleHelpButton);
     }
 
     update(_time: number): void {}

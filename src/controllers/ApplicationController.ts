@@ -22,8 +22,7 @@ export class ApplicationController extends BaseController {
         const game = await new GameController().execute();
         game.destroy();
 
-        setTimeout(() => {
-            this.nextCicle();
-        }, 1000);
+        gameModel.data.appState = AppStateEnum.NONE;
+        this.nextCicle();
     }
 }
