@@ -32,9 +32,9 @@ export class GameSystem extends System {
             return;
         }
 
-        this.game.head.game.stateTime += time;
+        this.game.head.game.model.data.gameStateTime += time;
 
-        switch (this.game.head.game.state) {
+        switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
                 let index = 0;
                 const grid: number[][] = [];
@@ -79,7 +79,7 @@ export class GameSystem extends System {
             case GameStateEnum.ANIMATION:
                 break;
             case GameStateEnum.TIMEOUT:
-                if (this.game.head.game.stateTime > 0.001) {
+                if (this.game.head.game.model.data.gameStateTime > 0.001) {
                     this.setState(GameStateEnum.CLICK_WAIT);
                 }
                 break;
@@ -90,8 +90,8 @@ export class GameSystem extends System {
 
     private setState(state: GameStateEnum) {
         if (this.game?.head) {
-            this.game.head.game.stateTime = 0;
-            this.game.head.game.state = state;
+            this.game.head.game.model.data.gameStateTime = 0;
+            this.game.head.game.model.data.gameState = state;
         }
     }
 

@@ -17,6 +17,7 @@
     "pixi.js": "^7.2.4",
     "seedrandom": "^3.0.5",
     "stats.js": "^0.17.0",
+    "valtio": "^1.10.6",
     "vue": "^3.2.47",
     "webfontloader": "^1.6.28"
   },

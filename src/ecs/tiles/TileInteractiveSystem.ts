@@ -62,7 +62,7 @@ export class TileInteractiveSystem extends System {
     }
 
     private isHandable() {
-        return this.game?.head?.game.state === GameStateEnum.CLICK_WAIT;
+        return this.game?.head?.game.model.data.gameState === GameStateEnum.CLICK_WAIT;
     }
     
 }

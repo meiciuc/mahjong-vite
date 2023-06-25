@@ -2,7 +2,6 @@ import { Engine, Entity, EntityStateMachine } from '@ash.ts/ash';
 import { Assets, Container, Sprite, Texture } from 'pixi.js';
 import { Config } from '../Config';
 import { stageService } from '../core/services/StageService';
-import { getGameState } from '../states/GameState';
 import { GridView } from '../view/GridView';
 import { TileHelpEffectView } from '../view/TileHelpEffectView';
 import { Display } from './display/components/Display';
@@ -17,6 +16,8 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
+import { dataService } from '../core/services/DataService';
+import { GameModel } from '../model/Model';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
@@ -44,7 +45,7 @@ export class EntityCreator {
         }
 
         const entity = new Entity();
-        entity.add(new Game(getGameState()));
+        entity.add(new Game(dataService.getRootModel()));
         this.engine.addEntity(entity);
     }
 
@@ -62,8 +63,7 @@ export class EntityCreator {
     icons: { [key: string]: Texture } = {};
 
     public createTile(index: number, gridX: number, gridY: number) {
-        const state = getGameState();
-        const icon = state.icons[index];
+        const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key]; //this.getIconTexture(index);
         const sprite = new Sprite(tex);
 

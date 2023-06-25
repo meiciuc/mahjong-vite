@@ -1,8 +1,6 @@
-import { GameState } from '../../../states/GameState';
-import { GameStateEnum } from '../GameStateEnum';
+import { Model } from '../../../core/mvc/model';
+import { GameModel } from '../../../model/Model';
 
 export class Game {
-    public stateTime = 0;
-    public state = GameStateEnum.NONE;
-    constructor(public gameState: GameState) {}
+    constructor(readonly model: Model<GameModel> ) {}
 }

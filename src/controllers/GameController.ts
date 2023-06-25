@@ -15,7 +15,8 @@ import { TilesGridSystem } from '../ecs/tiles/TilesGridSystem';
 import { LAYERS } from '../GameLayers';
 import { GridView } from '../view/GridView';
 import { BaseController } from './BaseController';
-import { getGameState } from '../states/GameState';
+import { dataService } from '../core/services/DataService';
+import { GameModel } from '../model/Model';
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;
@@ -24,7 +25,6 @@ export class GameController extends BaseController {
     private gameLogic?: GameLogic;
 
     protected async doExecute() {
-        this.setup();
         this.setupView();
         this.setupEngine();
     }
@@ -48,8 +48,8 @@ export class GameController extends BaseController {
         this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
 
         const keys: string[] = [];
-        const state = getGameState();
-        state.icons.forEach((icon) => {
+        const icons = dataService.getRootModel<GameModel>().data.icons;
+        icons.forEach((icon) => {
             keys.push(icon.key);
         });
         await this.creator.prepareIconTexures(keys);
@@ -64,18 +64,15 @@ export class GameController extends BaseController {
         this.engine.addSystem(new HelpViewSystem(this.creator, this.gameLogic), 1);
 
         stageService.updateSignal.add(this.update);
+        dataService.getRootModel<GameModel>().data.gameState = GameStateEnum.NONE;
 
         this.creator.createGame();
-    }
-
-    private setup() {
-        stageService.updateSignal.add(this.update);
     }
 
     update = (time: number) => {
         this.engine?.update(time);
 
-        if (this.engine?.getNodeList(GameNode).head?.game.state === GameStateEnum.GAME_OVER) {
+        if (this.engine?.getNodeList(GameNode).head?.game.model.data.gameState === GameStateEnum.GAME_OVER) {
             console.log('gameOver');
             this.complete();
         }

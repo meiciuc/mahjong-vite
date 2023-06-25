@@ -1,5 +1,6 @@
 import { Config } from '../Config';
-import { getGameState } from '../states/GameState';
+import { dataService } from '../core/services/DataService';
+import { GameModel } from '../model/Model';
 import { BaseCommand } from '../utils/BaseCommand';
 
 export class PrepareIconsCommand extends BaseCommand {
@@ -7,11 +8,11 @@ export class PrepareIconsCommand extends BaseCommand {
         const namePart = 'icons/image_part_';
         const length = Config.ASSETST_ICONS_NUMBER;
 
-        const gameState = getGameState();
-        gameState.icons.splice(0);
+        const icons = dataService.getRootModel<GameModel>().data.icons
+        icons.splice(0);
         for (let i = 0; i < length; i++) {
             const part = i + 1;
-            gameState.icons.push({
+            icons.push({
                 key: `${namePart}${part < 100 ? '0' : ''}${part < 10 ? '0' : ''}${part}`,
             });
         }
