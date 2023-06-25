@@ -22,6 +22,9 @@ export class ApplicationController extends BaseController {
         const game = await new GameController().execute();
         game.destroy();
 
+        gameModel.data.appState = AppStateEnum.GAME_VICTORY;
+        await vueService.signalGameEndButton.future();
+
         gameModel.data.appState = AppStateEnum.NONE;
         this.nextCicle();
     }
