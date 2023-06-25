@@ -16,7 +16,7 @@ import { LAYERS } from '../GameLayers';
 import { GridView } from '../view/GridView';
 import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
-import { GameModel } from '../model/Model';
+import { GameModel } from '../model/GameModel';
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;

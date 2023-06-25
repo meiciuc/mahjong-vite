@@ -1,6 +1,6 @@
 import { Config } from '../Config';
 import { dataService } from '../core/services/DataService';
-import { GameModel } from '../model/Model';
+import { GameModel } from '../model/GameModel';
 import { BaseCommand } from '../utils/BaseCommand';
 
 export class PrepareIconsCommand extends BaseCommand {

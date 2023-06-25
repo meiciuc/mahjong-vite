@@ -10,7 +10,7 @@ import { Config } from './Config';
 import WebFont from 'webfontloader';
 import { vueService } from './vue/VueService';
 import { dataService } from './core/services/DataService';
-import { AppStateEnum, GameStateEnum, GameModel } from './model/Model';
+import { AppStateEnum, GameStateEnum, GameModel } from './model/GameModel';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,

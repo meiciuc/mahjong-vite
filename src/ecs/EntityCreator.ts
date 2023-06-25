@@ -17,7 +17,7 @@ import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
 import { dataService } from '../core/services/DataService';
-import { GameModel } from '../model/Model';
+import { GameModel } from '../model/GameModel';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
