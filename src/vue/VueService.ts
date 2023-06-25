@@ -1,10 +1,11 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { Signal0 } from '@ash.ts/ash';
+import { Signal } from '../core/utils/signal';
 
 class VueService {
 
-    signalHelpButton = new Signal0();
+    signalStartButton = new Signal()
+    signalHelpButton = new Signal();
 
     init () {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));

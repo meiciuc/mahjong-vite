@@ -9,6 +9,8 @@ export enum GameStateEnum {
 
 export enum AppStateEnum {
     NONE = 'none',
+    START_SCREEN = 'startScreen',
+    GAME_SCREEN = 'gameScreen',
 }
 
 export interface IconState {

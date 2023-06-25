@@ -1,17 +1,20 @@
 <script setup lang="ts">
-// import HelloWorld from './components/HelloWorld.vue'
-  import HelpButton from './HelpButton.vue';
+    import { AppStateEnum } from '../model/GameModel';
+    import HelpButton from './HelpButton.vue';
+    import StartScreen from './StartScreen.vue';
+
+    let appState = AppStateEnum.NONE;
+
+    // onMounted(() => {
+    //     const model = dataService.getRootModel<GameModel>();
+    //     model.subscribe(['appState'], appState = () => {return model.data.appState})
+    // });
 </script>
 
 <template>
-  <HelpButton ref="HelpButton" class="HelpButton"></HelpButton>
+    <StartScreen ref="StartScreen" v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
+    <HelpButton ref="HelpButton" v-if="appState === AppStateEnum.GAME_SCREEN"></HelpButton>
 </template>
 
 <style lang="scss" scoped>
-  .HelpButton {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-  }
-
 </style>

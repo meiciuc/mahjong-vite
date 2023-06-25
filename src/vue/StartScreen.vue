@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { vueService } from './VueService';
     const handleClick = () => {
-        vueService.signalHelpButton.dispatch();
+        vueService.signalStartButton.dispatch();
     }
 </script>
 
 <template>
-    <div class="HelpButton" @click="handleClick">HELP</div>
+    <div class="StartButton" @click="handleClick">START</div>
 </template>
 
 <style lang="scss" scoped>
-    .HelpButton {
+    .StartButton {
         position: absolute;
-        top: 10px;
-        left: 10px;
         border: solid;
         border-radius: 15px;
         background-color: bisque;
@@ -22,5 +20,9 @@ import { vueService } from './VueService';
         text-align: center;
         cursor: pointer;
         user-select: none;
+        margin-left: -50px;
+        margin-top: -10px;
+        left: 50%;
+        bottom: 30%;
     }   
 </style>
