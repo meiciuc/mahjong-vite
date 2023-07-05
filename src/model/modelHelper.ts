@@ -1,12 +1,14 @@
-import { GameModel } from "./GameModel";
-import { Ref } from "vue";
 import { dataService } from "../core/services/DataService";
-import { PropertyPath } from "../core/mvc/model";
-import { GetPropertyType } from "../core/utils/types";
-import { useModel as useModelCore} from "../core/mvc/modelVueHook";
+import { AppStateEnum, GameModel } from "./GameModel";
 
-export function useModel<Path extends string[]>(
-    path: PropertyPath<GameModel, Path>
-): Ref<GetPropertyType<GameModel, Path>> {
-    return useModelCore(dataService.getRootModel(), path);
+export class ModelHelper {
+    static setApplicationState(value: AppStateEnum) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.appState = value;
+    }
+
+    static getGameState() {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.gameState;
+    }
 }

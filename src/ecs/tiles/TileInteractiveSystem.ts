@@ -3,7 +3,7 @@ import { GameNode } from "../game/nodes/GameNode";
 import { TileNode } from "./nodes/TileNode";
 import { TileSelectedNode } from "./nodes/TileSelectedNode";
 import { EntityCreator } from "../EntityCreator";
-import { GameStateEnum } from "../game/GameStateEnum";
+import { GameStateEnum } from "../../model/GameModel";
 
 export class TileInteractiveSystem extends System {
 

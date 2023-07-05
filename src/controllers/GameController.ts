@@ -4,7 +4,6 @@ import { stageService } from '../core/services/StageService';
 import { DisplaySystem } from '../ecs/display/DisplaySystem';
 import { EntityCreator } from '../ecs/EntityCreator';
 import { GameLogic } from '../ecs/game/GameLogic';
-import { GameStateEnum } from '../ecs/game/GameStateEnum';
 import { GameSystem } from '../ecs/game/GameSystem';
 import { GridViewSystem } from '../ecs/game/GridViewSystem';
 import { HelpViewSystem } from '../ecs/game/HelpViewSystem';
@@ -16,7 +15,7 @@ import { LAYERS } from '../GameLayers';
 import { GridView } from '../view/GridView';
 import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
-import { GameModel } from '../model/GameModel';
+import { GameModel, GameStateEnum } from '../model/GameModel';
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;
@@ -72,8 +71,7 @@ export class GameController extends BaseController {
     update = (time: number) => {
         this.engine?.update(time);
 
-        if (this.engine?.getNodeList(GameNode).head?.game.model.data.gameState === GameStateEnum.GAME_OVER) {
-            console.log('gameOver');
+        if (this.gameIsOver()) {
             this.complete();
         }
     };
@@ -83,5 +81,10 @@ export class GameController extends BaseController {
             throw new Error('Error: this.gridView is undefined');
         }
         return this.gridView;
+    }
+
+    private gameIsOver() {
+        const state = this.engine?.getNodeList(GameNode).head?.game.model.data.gameState;
+        return state === GameStateEnum.GAME_DEFEATE || state === GameStateEnum.GAME_VICTORY || state === GameStateEnum.GAME_NO_MORE_MOVES;
     }
 }

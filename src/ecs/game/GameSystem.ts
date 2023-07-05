@@ -6,8 +6,8 @@ import { EntityCreator } from '../EntityCreator';
 import { TileNode } from '../tiles/nodes/TileNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
-import { GameStateEnum } from './GameStateEnum';
 import { GameNode } from './nodes/GameNode';
+import { GameStateEnum } from '../../model/GameModel';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
@@ -61,7 +61,7 @@ export class GameSystem extends System {
                 break;
             case GameStateEnum.CLICK_WAIT:
                 if (!this.tiles?.head) {
-                    this.setState(GameStateEnum.GAME_OVER);
+                    this.setState(GameStateEnum.GAME_VICTORY);
                     return;
                 }
                 const arr: TileSelectedNode[] = [];
@@ -81,9 +81,17 @@ export class GameSystem extends System {
             case GameStateEnum.TIMEOUT:
                 if (this.game.head.game.model.data.gameStateTime > 0.001) {
                     this.setState(GameStateEnum.CLICK_WAIT);
+
+                    if (this.tiles?.head) {
+                        this.gameLogic.needHelp()
+                        .then((arr) => {
+                            if (arr.length === 0) {
+                                this.setState(GameStateEnum.GAME_NO_MORE_MOVES);
+                            }
+                        })
+                    }
+                    
                 }
-                break;
-            case GameStateEnum.GAME_OVER:
                 break;
         }
     };

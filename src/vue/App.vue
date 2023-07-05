@@ -3,7 +3,8 @@
     import HelpButton from './HelpButton.vue';
     import StartScreen from './StartScreen.vue';
     import GameVictoryScreen from './GameVictoryScreen.vue';
-    import { useModel } from '../model/modelHelper';
+    import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
+    import { useModel } from '../model/useModel';
     import { computed } from 'vue';
 
     const data = useModel(["appState"]);
@@ -15,6 +16,7 @@
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <HelpButton v-if="appState === AppStateEnum.GAME_SCREEN"></HelpButton>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
+    <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 </template>
 
 <style lang="scss" scoped>

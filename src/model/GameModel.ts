@@ -4,7 +4,9 @@ export enum GameStateEnum {
     CLICK_WAIT = 'clickWait',
     ANIMATION = 'animation',
     TIMEOUT = 'timeout',
-    GAME_OVER = 'gameOver',
+    GAME_VICTORY = 'gameVictory',
+    GAME_DEFEATE = 'gameDefeate',
+    GAME_NO_MORE_MOVES = 'gameNoMoreMoves',
 }
 
 export enum AppStateEnum {
@@ -12,6 +14,8 @@ export enum AppStateEnum {
     START_SCREEN = 'startScreen',
     GAME_SCREEN = 'gameScreen',
     GAME_VICTORY = 'gameVictoryScreen',
+    GAME_DEFEATE = 'gameDefeateScreen',
+    GAME_NO_MORE_MOVES = 'gameNoMoreMovesScreen',
 }
 
 export interface IconState {
