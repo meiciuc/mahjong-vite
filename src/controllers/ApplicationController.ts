@@ -28,9 +28,9 @@ export class ApplicationController extends BaseController {
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             ModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
-        game.destroy();
-
         await vueService.signalGameEndButton.future();
+
+        game.destroy();
 
         ModelHelper.setApplicationState(AppStateEnum.NONE);
         this.nextCicle();

@@ -23,16 +23,18 @@ export class GameController extends BaseController {
     private gridView?: GridView;
     private gameLogic?: GameLogic;
 
+    destroy(): void {
+        stageService.updateSignal.remove(this.update);
+        this.engine?.removeAllSystems();
+        this.gridView?.destroy();
+    }
+
     protected async doExecute() {
         this.setupView();
         this.setupEngine();
     }
 
     protected complete(): void {
-        stageService.updateSignal.remove(this.update);
-        this.engine?.removeAllSystems();
-        this.gridView?.destroy();
-
         super.complete();
     }
 
