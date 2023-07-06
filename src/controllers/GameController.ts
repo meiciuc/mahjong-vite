@@ -6,7 +6,7 @@ import { EntityCreator } from '../ecs/EntityCreator';
 import { GameLogic } from '../ecs/game/GameLogic';
 import { GameSystem } from '../ecs/game/GameSystem';
 import { GridViewSystem } from '../ecs/game/GridViewSystem';
-import { HelpViewSystem } from '../ecs/game/HelpViewSystem';
+import { HelpSystem } from '../ecs/game/HelpSystem';
 import { GameNode } from '../ecs/game/nodes/GameNode';
 import { TileImageSelectedEffectSystem } from '../ecs/tiles/TileImageSelectedEffectSystem';
 import { TileInteractiveSystem } from '../ecs/tiles/TileInteractiveSystem';
@@ -62,7 +62,7 @@ export class GameController extends BaseController {
         this.engine.addSystem(new TileImageSelectedEffectSystem(), 1);
         this.engine.addSystem(new TilesGridSystem(), 1);
 
-        this.engine.addSystem(new HelpViewSystem(this.creator, this.gameLogic), 1);
+        this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), 1);
 
         stageService.updateSignal.add(this.update);
         dataService.getRootModel<GameModel>().data.gameState = GameStateEnum.NONE;

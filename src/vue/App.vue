@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { AppStateEnum } from '../model/GameModel';
-    import HelpButton from './HelpButton.vue';
+    import HelpPanel from './HelpPanel.vue';
     import StartScreen from './StartScreen.vue';
     import GameVictoryScreen from './GameVictoryScreen.vue';
     import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
@@ -20,7 +20,7 @@
 <template>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
-    <HelpButton v-if="appState === AppStateEnum.GAME_SCREEN"></HelpButton>
+    <HelpPanel v-if="appState === AppStateEnum.GAME_SCREEN"></HelpPanel>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 </template>

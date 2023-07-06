@@ -82,14 +82,14 @@ export class GameSystem extends System {
                 if (this.game.head.game.model.data.gameStateTime > 0.001) {
                     this.setState(GameStateEnum.CLICK_WAIT);
 
-                    if (this.tiles?.head) {
-                        this.gameLogic.needHelp()
-                        .then((arr) => {
-                            if (arr.length === 0) {
-                                this.setState(GameStateEnum.GAME_NO_MORE_MOVES);
-                            }
-                        })
-                    }
+                    // if (this.tiles?.head) {
+                    //     this.gameLogic.needHelp()
+                    //     .then((arr) => {
+                    //         if (arr.length === 0) {
+                    //             this.setState(GameStateEnum.GAME_NO_MORE_MOVES);
+                    //         }
+                    //     })
+                    // }
                     
                 }
                 break;
