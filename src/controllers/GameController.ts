@@ -17,6 +17,7 @@ import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
 import { GameModel, GameStateEnum } from '../model/GameModel';
 import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
+import { ModelHelper } from '../model/ModelHelper';
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;
@@ -67,7 +68,7 @@ export class GameController extends BaseController {
         this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), 1);
 
         stageService.updateSignal.add(this.update);
-        dataService.getRootModel<GameModel>().data.gameState = GameStateEnum.NONE;
+        ModelHelper.setGameState(GameStateEnum.NONE);
 
         this.creator.createGame();
     }
