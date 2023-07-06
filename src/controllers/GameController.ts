@@ -16,6 +16,7 @@ import { GridView } from '../view/GridView';
 import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
 import { GameModel, GameStateEnum } from '../model/GameModel';
+import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;
@@ -61,6 +62,7 @@ export class GameController extends BaseController {
         this.engine.addSystem(new TileInteractiveSystem(this.creator), 1);
         this.engine.addSystem(new TileImageSelectedEffectSystem(), 1);
         this.engine.addSystem(new TilesGridSystem(), 1);
+        this.engine.addSystem(new GameTimerSystem(), 1);
 
         this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), 1);
 

@@ -72,33 +72,19 @@ export class GameSystem extends System {
                 if (arr.length > 1) {
                     this.setState(GameStateEnum.ANIMATION);
                     this.handleClick(arr).then(() => {
-                        this.setState(GameStateEnum.TIMEOUT);
+                        if (this.game.head.game.model.data.gameStateTime > 0.001) {
+                            this.setState(GameStateEnum.CLICK_WAIT);
+                        }
                     });
                 }
                 break;
             case GameStateEnum.ANIMATION:
-                break;
-            case GameStateEnum.TIMEOUT:
-                if (this.game.head.game.model.data.gameStateTime > 0.001) {
-                    this.setState(GameStateEnum.CLICK_WAIT);
-
-                    // if (this.tiles?.head) {
-                    //     this.gameLogic.needHelp()
-                    //     .then((arr) => {
-                    //         if (arr.length === 0) {
-                    //             this.setState(GameStateEnum.GAME_NO_MORE_MOVES);
-                    //         }
-                    //     })
-                    // }
-                    
-                }
                 break;
         }
     };
 
     private setState(state: GameStateEnum) {
         if (this.game?.head) {
-            this.game.head.game.model.data.gameStateTime = 0;
             this.game.head.game.model.data.gameState = state;
         }
     }
