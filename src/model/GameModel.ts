@@ -25,7 +25,7 @@ export interface IconState {
 export interface GameModel {
     icons: IconState[];
     appState: AppStateEnum;
-    appStateTime: 0,
+    appStateTime: number,
     gameState: GameStateEnum,
-    gameStateTime: 0,
+    gameStateTime: number,
 }

@@ -27,12 +27,10 @@ export class GameSystem extends System {
 
     removeFromEngine(_engine: Engine): void {}
 
-    update = (time: number): void => {
+    update = (): void => {
         if (!this.game?.head) {
             return;
         }
-
-        this.game.head.game.model.data.gameStateTime += time;
 
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
@@ -72,9 +70,7 @@ export class GameSystem extends System {
                 if (arr.length > 1) {
                     this.setState(GameStateEnum.ANIMATION);
                     this.handleClick(arr).then(() => {
-                        if (this.game.head.game.model.data.gameStateTime > 0.001) {
-                            this.setState(GameStateEnum.CLICK_WAIT);
-                        }
+                        this.setState(GameStateEnum.CLICK_WAIT);
                     });
                 }
                 break;
