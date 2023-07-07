@@ -16,4 +16,14 @@ export class ModelHelper {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.gameState;
     }
+
+    static getHelpsCount() {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.helpsCount;
+    }
+
+    static setHelpsCount(value: number) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.helpsCount = value;
+    }
 }

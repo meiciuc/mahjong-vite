@@ -102,5 +102,6 @@ function createModel() {
         appStateTime: 0,
         gameState: GameStateEnum.NONE,
         gameStateTime: 0,
+        helpsCount: 3,
     });
 }

@@ -23,6 +23,7 @@ export class HelpSystem extends System {
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
         
         vueService.signalHelpButton.on(this.handleHelpButton);
+        ModelHelper.setHelpsCount(3);
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -63,6 +64,8 @@ export class HelpSystem extends System {
             const nodeB = throwIfNull(this.creator.getTileNodeByGridPosition(arr[arr.length - 1].x, arr[arr.length - 1].y));
             this.creator.createTileHelpEffect(nodeA.transform.position.x, nodeA.transform.position.y);
             this.creator.createTileHelpEffect(nodeB.transform.position.x, nodeB.transform.position.y);
+
+            ModelHelper.setHelpsCount(Math.max(0, ModelHelper.getHelpsCount() - 1));
         }
     }
 }

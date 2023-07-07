@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { vueService } from './VueService';
+import { useModel } from '../model/useModel';
+
+const helpsCount = useModel(["helpsCount"]);
     const handleClick = () => {
-        console.log('help')
         vueService.signalHelpButton.dispatch();
     }
 </script>
 
 <template>
     <div class="HelpPanel">
-        <div class="HelpButton" @click="handleClick">HELP</div>
+        <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
+        <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
+        <div class="HelpsCount">{{ helpsCount }}</div>
     </div>
     
 </template>
@@ -16,6 +20,7 @@ import { vueService } from './VueService';
 <style lang="scss" scoped>
     .HelpPanel {
         position: absolute;
+        display: flex;
         left: 0px;
         top: 0px;
         right: 0px;
@@ -31,5 +36,18 @@ import { vueService } from './VueService';
         text-align: center;
         cursor: pointer;
         user-select: none;
+    }
+    .HelpButtonDisabled {
+        user-select: none;
+        cursor: auto;
+        opacity: 0.7;
+    }
+    .HelpsCount {
+        background: rgba($color: #000000, $alpha: 0.3);
+        margin-left: 1em;
+        color: white;
+        font-size: 1.5em;
+        width: 2em;
+        text-align: center;
     }   
 </style>
