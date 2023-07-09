@@ -18,12 +18,12 @@ import { TileNode } from './tiles/nodes/TileNode';
 import { dataService } from '../core/services/DataService';
 import { GameModel } from '../model/GameModel';
 import { PathView } from '../view/PathView';
-import { PathAnimatedView } from '../view/PathAnimatedView';
+import { PointLike } from '../utils/point';
 import { AnimationComponent } from './animation/components/AnimationComponent';
+import { PathAnimatedView } from '../view/PathAnimatedView';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
-        this.createPathTileTexture();
     }
 
     public getEngine() {
@@ -54,14 +54,11 @@ export class EntityCreator {
     public createTileHelpEffect(x: number, y: number) {
         const entity = new Entity();
 
-        const view = new PathAnimatedView(this.createPath());
+        const view = new PathView(this.createPath());
         entity
             .add(new TileHelpEffect())
-            // .add(new Display(new PathView(this.createPath()), this.gridView.effects))
             .add(new Display(view, this.gridView.effects))
-            .add(new AnimationComponent(view))
             .add(new Transform({ x, y }));
-
         this.engine.addEntity(entity);
     }
 
@@ -108,14 +105,35 @@ export class EntityCreator {
         return svg;
     }
 
-    public showPath(_x: number, _y: number) {
-        const entity = new Entity();
-        // const container = rootService.stage.make.container({}, false);
-        // container.add(rootService.stage.make.image({key: 'hudbar'}, false));
+    public showPath(arr: PointLike[]) {
+        if (arr.length === 0) {
+            return;
+        }
+        
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
+        
+        svg.appendChild(svgPath);
 
-        // entity
-        //     .add(new Transform({x, y}))
-        //     .add(new Display(container))
+        const w = Config.ICON_IMAGE_WIDTH;
+        const h = Config.ICON_IMAGE_HEIGHT;
+        const dX = Config.ICON_IMAGE_WIDTH / 2;
+        const dY = Config.ICON_IMAGE_HEIGHT / 2;
+        let d = `M ${arr[0].x * w + dX} ${arr[0].y * h + dY}`;
+        for (let i = 1; i < arr.length; i++) {
+            d += ` L ${arr[i].x * w + dX} ${arr[i].y * h + dY}`;
+        }
+        svgPath.setAttribute('d', d);
+
+        const entity = new Entity();
+
+        const view = new PathAnimatedView(svg);
+        entity
+            .add(new TileHelpEffect())
+            .add(new Transform())
+            .add(new Display(view, this.gridView.effects))
+            .add(new AnimationComponent(view))
 
         this.engine.addEntity(entity);
 
@@ -149,13 +167,6 @@ export class EntityCreator {
     public getGridMatrix() {
         const list = this.engine.getNodeList(GridNode);
         return list.head?.grid.grid;
-    }
-
-    // TODO System
-    private createPathTileTexture() {
-        // var graphics = rootService.stage.make.graphics({}).fillStyle(0x00ff00, .1).fillRect(0, 0, Config.ICON_IMAGE_WIDTH, Config.ICON_IMAGE_WIDTH);
-        // graphics.generateTexture('hudbar', Config.ICON_IMAGE_WIDTH, Config.ICON_IMAGE_WIDTH);
-        // graphics.destroy();
     }
 
     // TODO сделать отдельный комманд (контроллер?)

@@ -93,6 +93,9 @@ export class GameSystem extends System {
 
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
+        const pathEntity = this.creator.showPath(arr);
+        await new TimeSkipper(1000).execute();
+
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             tiles.forEach((node) => {
                 this.creator.removeEntity(node.entity);
@@ -101,6 +104,10 @@ export class GameSystem extends System {
             tiles.forEach((node) => {
                 this.creator.selectTile(node.tile, false);
             });
+        }
+
+        if (pathEntity) {
+            this.creator.removeEntity(pathEntity);
         }
     }
 }
