@@ -13,7 +13,6 @@ export class PathView extends Container {
         const length = Math.floor(totalLength / 2 );
         const k = 1 / length;// 100 / length;
         let time = 0;
-        console.log(totalLength, length)
         for (let i = 0; i < length; i++) {
             const point = path.getPointAtLength(time * totalLength);
             time += k;

@@ -18,6 +18,8 @@ import { TileNode } from './tiles/nodes/TileNode';
 import { dataService } from '../core/services/DataService';
 import { GameModel } from '../model/GameModel';
 import { PathView } from '../view/PathView';
+import { PathAnimatedView } from '../view/PathAnimatedView';
+import { AnimationComponent } from './animation/components/AnimationComponent';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
@@ -52,10 +54,12 @@ export class EntityCreator {
     public createTileHelpEffect(x: number, y: number) {
         const entity = new Entity();
 
+        const view = new PathAnimatedView(this.createPath());
         entity
             .add(new TileHelpEffect())
-            // .add(new Display(new TileHelpEffectView(), this.gridView.effects))
-            .add(new Display(new PathView(this.createPath()), this.gridView.effects))
+            // .add(new Display(new PathView(this.createPath()), this.gridView.effects))
+            .add(new Display(view, this.gridView.effects))
+            .add(new AnimationComponent(view))
             .add(new Transform({ x, y }));
 
         this.engine.addEntity(entity);
