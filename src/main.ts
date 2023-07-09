@@ -60,6 +60,7 @@ async function loadFonts() {
 
 async function loadGameAssets() {
     await Assets.load([`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`]);
+    await Assets.load([`./assets/particle.png`]);
 }
 
 function setupTweens() {

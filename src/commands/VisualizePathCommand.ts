@@ -14,7 +14,7 @@ export class VisualizePath extends BaseCommand {
         const entities: Entity[] = [];
         for (let i = 0; i < this.arr.length; i++) {
             entities.push(
-                this.creator.createPath(
+                this.creator.showPath(
                     this.arr[i].x * Config.ICON_IMAGE_WIDTH,
                     this.arr[i].y * Config.ICON_IMAGE_HEIGHT - 25,
                 ),
