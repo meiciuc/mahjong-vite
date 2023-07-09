@@ -18,6 +18,17 @@ import { dataService } from '../core/services/DataService';
 import { GameModel, GameStateEnum } from '../model/GameModel';
 import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
 import { ModelHelper } from '../model/ModelHelper';
+import { AnimationSystem } from '../ecs/animation/AnimationSystem';
+
+export enum SystemPriorities {
+    preUpdate = 1,
+    update = 2,
+    move = 3,
+    resolveCollisions = 4,
+    animate = 5,
+    render = 6,
+    audio = 7,
+}
 
 export class GameController extends BaseController {
     private creator?: EntityCreator;
@@ -57,15 +68,18 @@ export class GameController extends BaseController {
         });
         await this.creator.prepareIconTexures(keys);
 
-        this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), 1);
-        this.engine.addSystem(new GridViewSystem(this.getGridView()), 9);
-        this.engine.addSystem(new DisplaySystem(), 10);
-        this.engine.addSystem(new TileInteractiveSystem(this.creator), 1);
-        this.engine.addSystem(new TileImageSelectedEffectSystem(), 1);
-        this.engine.addSystem(new TilesGridSystem(), 1);
-        this.engine.addSystem(new GameTimerSystem(), 1);
+        this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
+        this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
+        this.engine.addSystem(new TilesGridSystem(), SystemPriorities.update);
+        this.engine.addSystem(new GameTimerSystem(), SystemPriorities.update);
 
-        this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), 1);
+        this.engine.addSystem(new TileInteractiveSystem(this.creator), SystemPriorities.move);
+        this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), SystemPriorities.move);
+
+        this.engine.addSystem(new TileImageSelectedEffectSystem(), SystemPriorities.animate);
+        this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
+
+        this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
 
         stageService.updateSignal.add(this.update);
         ModelHelper.setGameState(GameStateEnum.NONE);

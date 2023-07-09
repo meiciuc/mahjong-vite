@@ -96,9 +96,9 @@ export class EntityCreator {
         
         svg.appendChild(svgPath);
 
-        const w = 100;
-        const h = 100;
-        const r = 25;
+        const w = Config.ICON_IMAGE_WIDTH;
+        const h = Config.ICON_IMAGE_HEIGHT;
+        const r = Math.floor((Config.ICON_IMAGE_WIDTH + Config.ICON_IMAGE_HEIGHT) / 2 * .25);
         const d = `M ${r} ${0} L ${w - r} ${0} Q ${w} ${0} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${0} ${h} ${0} ${h - r} L ${0} ${r} Q ${0} ${0} ${r} ${0}`;
         svgPath.setAttribute('d', d);
         return svg;

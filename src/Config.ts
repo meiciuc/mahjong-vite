@@ -8,7 +8,7 @@ export class Config {
 
     static ICON_IMAGE_WIDTH = 124;
     static ICON_IMAGE_HEIGHT = 124;
-    static ICON_IMAGE_SCALE = 0.4;
+    static ICON_IMAGE_SCALE = 0.44;
 
     static GRID_WIDTH = 4;
     static GRID_HEIGHT = 5;
