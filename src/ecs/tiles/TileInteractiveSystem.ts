@@ -4,12 +4,15 @@ import { TileNode } from "./nodes/TileNode";
 import { TileSelectedNode } from "./nodes/TileSelectedNode";
 import { EntityCreator } from "../EntityCreator";
 import { GameStateEnum } from "../../model/GameModel";
+import { Config } from "../../Config";
 
 export class TileInteractiveSystem extends System {
 
     private tiles?: NodeList<TileNode>;
     private tilesSelected?: NodeList<TileSelectedNode>;
     private game?: NodeList<GameNode>;
+
+    private clickLastTime = 0;
 
     constructor(
         private creator: EntityCreator
@@ -43,6 +46,8 @@ export class TileInteractiveSystem extends System {
             return;
         }
 
+        this.clickLastTime = Date.now();
+
         for (let node = this.tiles?.head; node; node = node.next) {
             if (node.display.view === e.target) {
                 this.clickTile(node);
@@ -62,7 +67,11 @@ export class TileInteractiveSystem extends System {
     }
 
     private isHandable() {
-        return this.game?.head?.game.model.data.gameState === GameStateEnum.CLICK_WAIT;
+        if (this.game?.head?.game.model.data.gameState !== GameStateEnum.CLICK_WAIT) {
+            return false;
+        }
+
+        return Date.now() - this.clickLastTime > Config.CLICK_TIMEOUT;
     }
     
 }

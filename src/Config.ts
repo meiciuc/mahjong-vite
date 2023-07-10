@@ -16,4 +16,6 @@ export class Config {
 
     static readonly ASSETST_ICONS_VERSION = 'v2';
     static readonly ASSETST_ICONS_NUMBER = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
+
+    static readonly CLICK_TIMEOUT = 300;
 }

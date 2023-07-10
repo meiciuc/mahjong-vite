@@ -2,7 +2,7 @@ import { Assets, Container, Sprite } from "pixi.js";
 import { Animatable } from "../ecs/animation/components/Animatable";
 
 export class PathAnimatedView extends Container implements Animatable {
-    private timeFactor = 2;
+    private timeFactor = 4;
     private lastTime = 0;
     private particleScale = 0.2;
 
