@@ -18,4 +18,6 @@ export class Config {
     static readonly ASSETST_ICONS_NUMBER = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
 
     static readonly CLICK_TIMEOUT = 300;
+    static readonly GRID_BaCKGROUND_COLOR = 0xffffff
+    static PATH_COLOR = 0xff0000;
 }

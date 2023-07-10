@@ -1,4 +1,5 @@
 import { Assets, Container, Sprite } from "pixi.js";
+import { Config } from "../Config";
 
 export class PathView extends Container {
     constructor(public svg: SVGElement) {
@@ -17,6 +18,7 @@ export class PathView extends Container {
             const point = path.getPointAtLength(time * totalLength);
             time += k;
             const sprite = new Sprite(texture);
+            sprite.tint = Config.PATH_COLOR;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             sprite.scale.set(0.2)

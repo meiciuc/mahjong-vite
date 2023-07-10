@@ -38,7 +38,7 @@ export class GridViewSystem extends System {
         const h = (Config.GRID_HEIGHT + 2) * Config.ICON_IMAGE_HEIGHT;
 
         const bg = new Sprite(Texture.WHITE);
-        bg.tint = 0x999999;
+        bg.tint = Config.GRID_BaCKGROUND_COLOR;
         bg.width = w;
         bg.height = h;
         this.gridView.background.addChild(bg);

@@ -1,5 +1,6 @@
 import { Assets, Container, Sprite } from "pixi.js";
 import { Animatable } from "../ecs/animation/components/Animatable";
+import { Config } from "../Config";
 
 export class PathAnimatedView extends Container implements Animatable {
     private timeFactor = 4;
@@ -22,6 +23,7 @@ export class PathAnimatedView extends Container implements Animatable {
             const point = path.getPointAtLength(time * totalLength);
             time += k;
             const sprite = new Sprite(texture);
+            sprite.tint = Config.PATH_COLOR;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             sprite.scale.set(this.particleScale);
