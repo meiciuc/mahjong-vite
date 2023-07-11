@@ -21,6 +21,7 @@ import { PathView } from '../view/PathView';
 import { PointLike } from '../utils/point';
 import { AnimationComponent } from './animation/components/AnimationComponent';
 import { PathAnimatedView } from '../view/PathAnimatedView';
+import { PathAnimatedLikeSnakeView } from '../view/PathAnimatedLikeSnakeView';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
@@ -128,7 +129,8 @@ export class EntityCreator {
 
         const entity = new Entity();
 
-        const view = new PathAnimatedView(svg);
+        // const view = new PathAnimatedView(svg);
+        const view = new PathAnimatedLikeSnakeView(svg);
         entity
             .add(new TileHelpEffect())
             .add(new Transform())
