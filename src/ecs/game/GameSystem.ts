@@ -83,14 +83,12 @@ export class GameSystem extends System {
     }
 
     private async handleClick(tiles: TileSelectedNode[]) {
-        // this.setState(GameStateEnum.ANIMATION);
+        this.setState(GameStateEnum.ANIMATION);
 
         const tileA = tiles[0];
         const tileB = tiles[1];
 
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
-
-        this.setState(GameStateEnum.CLICK_WAIT);
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             const pathEntity = this.creator.showPath(arr);
@@ -106,5 +104,7 @@ export class GameSystem extends System {
                 this.creator.selectTile(node.tile, false);
             });
         }
+
+        this.setState(GameStateEnum.CLICK_WAIT);
     }
 }
