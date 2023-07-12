@@ -2,7 +2,6 @@ export enum GameStateEnum {
     NONE = 'none',
     PREPARE = 'prepare',
     CLICK_WAIT = 'clickWait',
-    ANIMATION = 'animation',
     GAME_PAUSE = 'gamePause',
     GAME_VICTORY = 'gameVictory',
     GAME_DEFEATE = 'gameDefeate',

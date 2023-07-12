@@ -3,7 +3,7 @@ import { EntityStateMachine } from "@ash.ts/ash";
 export enum TileStateEnum {
     IDLE = 'idle',
     SELECTED = 'selected',
-    INACTIVATED = 'inactivated',
+    NON_INTERACTIVE = 'non_interactive',
 }
 
 export class Tile {

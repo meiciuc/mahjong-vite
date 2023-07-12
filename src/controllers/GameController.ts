@@ -8,7 +8,6 @@ import { GameSystem } from '../ecs/game/GameSystem';
 import { GridViewSystem } from '../ecs/game/GridViewSystem';
 import { HelpSystem } from '../ecs/game/HelpSystem';
 import { GameNode } from '../ecs/game/nodes/GameNode';
-import { TileImageSelectedEffectSystem } from '../ecs/tiles/TileImageSelectedEffectSystem';
 import { TileInteractiveSystem } from '../ecs/tiles/TileInteractiveSystem';
 import { TilesGridSystem } from '../ecs/tiles/TilesGridSystem';
 import { LAYERS } from '../GameLayers';
@@ -75,7 +74,6 @@ export class GameController extends BaseController {
         this.engine.addSystem(new TileInteractiveSystem(this.creator), SystemPriorities.move);
         this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), SystemPriorities.move);
 
-        this.engine.addSystem(new TileImageSelectedEffectSystem(), SystemPriorities.animate);
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
 
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);

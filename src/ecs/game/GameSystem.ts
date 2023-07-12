@@ -68,10 +68,8 @@ export class GameSystem extends System {
                 }
 
                 if (arr.length > 1) {
-                    this.handleClick(arr);
+                    this.handleTwoSelected(arr);
                 }
-                break;
-            case GameStateEnum.ANIMATION:
                 break;
         }
     };
@@ -82,19 +80,25 @@ export class GameSystem extends System {
         }
     }
 
-    private async handleClick(tiles: TileSelectedNode[]) {
-        this.setState(GameStateEnum.ANIMATION);
-
-        const tileA = tiles[0];
-        const tileB = tiles[1];
+    private async handleTwoSelected(tiles: TileSelectedNode[]) {
+        const tileA = throwIfNull(tiles[0]);
+        const tileB = throwIfNull(tiles[1]);
 
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             const pathEntity = this.creator.showPath(arr);
-            await new TimeSkipper(1000).execute();
+            const ids: number[] = [];
             tiles.forEach((node) => {
-                this.creator.removeEntity(node.entity);
+                ids.push(node.tile.id);
+                this.creator.nonInteractiveTile(node.tile);
+            });
+            await new TimeSkipper(1000).execute();
+            ids.forEach((id) => {
+                const node = this.creator.getTileNodeById(id);
+                if (node) {
+                    this.creator.removeEntity(node.entity);
+                }
             });
             if (pathEntity) {
                 this.creator.removeEntity(pathEntity);
@@ -105,6 +109,6 @@ export class GameSystem extends System {
             });
         }
 
-        this.setState(GameStateEnum.CLICK_WAIT);
+        // this.setState(GameStateEnum.CLICK_WAIT);
     }
 }

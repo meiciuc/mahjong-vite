@@ -15,6 +15,8 @@ import { GameNode } from './game/nodes/GameNode';
 import { Grid } from './tiles/components/Grid';
 import { GridPosition } from './tiles/components/GridPosition';
 import { Icon } from './tiles/components/Icon';
+import { Interactive } from './tiles/components/Interactive';
+import { NonInteractive } from './tiles/components/NonInteractive';
 import { Selected } from './tiles/components/Selected';
 import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
@@ -34,6 +36,16 @@ export class EntityCreator {
         const list = this.engine.getNodeList(TileNode);
         for (let node = list.head; node; node = node.next) {
             if (node.gridPosition.x === x && node.gridPosition.y === y) {
+                return node;
+            }
+        }
+        return undefined;
+    }
+
+    public getTileNodeById(id: number) {
+        const list = this.engine.getNodeList(TileNode);
+        for (let node = list.head; node; node = node.next) {
+            if (node.tile.id === id) {
                 return node;
             }
         }
@@ -68,6 +80,7 @@ export class EntityCreator {
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key]; //this.getIconTexture(index);
         const sprite = new Sprite(tex);
+        const interactive = new Interactive();
 
         const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
         sprite.scale.set(scale);
@@ -75,9 +88,23 @@ export class EntityCreator {
         const entity = new Entity();
         const fsm = new EntityStateMachine(entity);
 
-        fsm.createState(TileStateEnum.IDLE);
+        fsm.createState(TileStateEnum.IDLE).add(Interactive).withMethod(() => {
+            (entity.get(Display).view as Sprite).tint = 0xffffff;
+            return interactive;
+        });
 
-        fsm.createState(TileStateEnum.SELECTED).add(Selected);
+        fsm.createState(TileStateEnum.SELECTED)
+            .add(Selected).withMethod(() => {
+                (entity.get(Display).view as Sprite).tint = 0xff0000;
+                return new Selected();
+            })
+            .add(Interactive).withInstance(interactive);
+
+        fsm.createState(TileStateEnum.NON_INTERACTIVE)
+            .add(NonInteractive).withMethod(() => {
+                (entity.get(Display).view as Sprite).tint = 0x660000;
+                return new NonInteractive();
+            })
 
         entity
             .add(new Tile(fsm))
@@ -95,6 +122,10 @@ export class EntityCreator {
 
     public selectTile(tile: Tile, value: boolean) {
         tile.fsm.changeState(value ? TileStateEnum.SELECTED : TileStateEnum.IDLE);
+    }
+
+    public nonInteractiveTile(tile: Tile) {
+        tile.fsm.changeState(TileStateEnum.NON_INTERACTIVE);
     }
 
     private createPath() {

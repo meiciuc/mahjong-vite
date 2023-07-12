@@ -1,14 +1,22 @@
-import { Engine, NodeList, System } from "@ash.ts/ash";
+import { Engine, NodeList, System, defineNode } from "@ash.ts/ash";
 import { GameNode } from "../game/nodes/GameNode";
-import { TileNode } from "./nodes/TileNode";
 import { TileSelectedNode } from "./nodes/TileSelectedNode";
 import { EntityCreator } from "../EntityCreator";
 import { GameStateEnum } from "../../model/GameModel";
 import { Config } from "../../Config";
+import { Tile } from "./components/Tile";
+import { Display } from "../display/components/Display";
+import { Interactive } from "./components/Interactive";
+
+export class TileInteractiveNode extends defineNode({
+    tile: Tile,
+    display: Display,
+    interactive: Interactive,
+}) {}
 
 export class TileInteractiveSystem extends System {
 
-    private tiles?: NodeList<TileNode>;
+    private tiles?: NodeList<TileInteractiveNode>;
     private tilesSelected?: NodeList<TileSelectedNode>;
     private game?: NodeList<GameNode>;
 
@@ -21,7 +29,7 @@ export class TileInteractiveSystem extends System {
     }
 
     addToEngine(engine: Engine): void {
-        this.tiles = engine.getNodeList(TileNode);
+        this.tiles = engine.getNodeList(TileInteractiveNode);
         this.tiles.nodeAdded.add(this.handleTileAdded);
         this.tiles.nodeRemoved.add(this.handleTileRemoved);
 
@@ -31,18 +39,24 @@ export class TileInteractiveSystem extends System {
     }
 
     removeFromEngine(_engine: Engine): void {
+        this.tiles.nodeAdded.remove(this.handleTileAdded);
+        this.tiles.nodeRemoved.remove(this.handleTileRemoved);
+        this.tiles = undefined;
+        
+
+        this.tilesSelected = undefined;
     }
 
     update(_time: number): void {
     }
 
-    private handleTileAdded = (node: TileNode) => {
+    private handleTileAdded = (node: TileInteractiveNode) => {
         node.display.view.interactive = true;
         node.display.view.cursor = 'pointer';
         node.display.view.on('mouseup', this.handleClick);
     }
 
-    private handleTileRemoved = (node: TileNode) => {
+    private handleTileRemoved = (node: TileInteractiveNode) => {
         node.display.view.interactive = false;
         node.display.view.cursor = 'auto';
         node.display.view.off('mouseup', this.handleClick);
@@ -62,7 +76,7 @@ export class TileInteractiveSystem extends System {
         }
     }
 
-    private clickTile(node: TileNode) {
+    private clickTile(node: TileInteractiveNode) {
         for (let selected = this.tilesSelected?.head; selected; selected = selected.next) {
             if (selected.tile.id === node.tile.id) {
                 this.creator.selectTile(node.tile, false);
