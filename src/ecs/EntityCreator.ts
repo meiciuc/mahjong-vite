@@ -20,7 +20,6 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
-
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
         const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
@@ -94,6 +93,10 @@ export class EntityCreator {
         return entity;
     }
 
+    public selectTile(tile: Tile, value: boolean) {
+        tile.fsm.changeState(value ? TileStateEnum.SELECTED : TileStateEnum.IDLE);
+    }
+
     private createPath() {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -143,10 +146,6 @@ export class EntityCreator {
         this.engine.addEntity(entity);
 
         return entity;
-    }
-
-    public selectTile(tile: Tile, value: boolean) {
-        tile.fsm.changeState(value ? TileStateEnum.SELECTED : TileStateEnum.IDLE);
     }
 
     public createGrid(grid: number[][]) {

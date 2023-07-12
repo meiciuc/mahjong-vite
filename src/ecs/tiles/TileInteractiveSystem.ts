@@ -23,6 +23,7 @@ export class TileInteractiveSystem extends System {
     addToEngine(engine: Engine): void {
         this.tiles = engine.getNodeList(TileNode);
         this.tiles.nodeAdded.add(this.handleTileAdded);
+        this.tiles.nodeRemoved.add(this.handleTileRemoved);
 
         this.tilesSelected = engine.getNodeList(TileSelectedNode);
 
@@ -38,7 +39,13 @@ export class TileInteractiveSystem extends System {
     private handleTileAdded = (node: TileNode) => {
         node.display.view.interactive = true;
         node.display.view.cursor = 'pointer';
-        node.display.view.on('mouseup', this.handleClick)
+        node.display.view.on('mouseup', this.handleClick);
+    }
+
+    private handleTileRemoved = (node: TileNode) => {
+        node.display.view.interactive = false;
+        node.display.view.cursor = 'auto';
+        node.display.view.off('mouseup', this.handleClick);
     }
 
     private handleClick = (e: any) => {

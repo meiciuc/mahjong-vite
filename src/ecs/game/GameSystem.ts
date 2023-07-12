@@ -68,10 +68,7 @@ export class GameSystem extends System {
                 }
 
                 if (arr.length > 1) {
-                    this.setState(GameStateEnum.ANIMATION);
-                    this.handleClick(arr).then(() => {
-                        this.setState(GameStateEnum.CLICK_WAIT);
-                    });
+                    this.handleClick(arr);
                 }
                 break;
             case GameStateEnum.ANIMATION:
@@ -86,28 +83,28 @@ export class GameSystem extends System {
     }
 
     private async handleClick(tiles: TileSelectedNode[]) {
-        await new TimeSkipper(100).execute();
+        // this.setState(GameStateEnum.ANIMATION);
 
         const tileA = tiles[0];
         const tileB = tiles[1];
 
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
-        const pathEntity = this.creator.showPath(arr);
-        await new TimeSkipper(1000).execute();
+        this.setState(GameStateEnum.CLICK_WAIT);
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
+            const pathEntity = this.creator.showPath(arr);
+            await new TimeSkipper(1000).execute();
             tiles.forEach((node) => {
                 this.creator.removeEntity(node.entity);
             });
+            if (pathEntity) {
+                this.creator.removeEntity(pathEntity);
+            }
         } else {
             tiles.forEach((node) => {
                 this.creator.selectTile(node.tile, false);
             });
-        }
-
-        if (pathEntity) {
-            this.creator.removeEntity(pathEntity);
         }
     }
 }
