@@ -6,16 +6,15 @@ export class Config {
     static GAME_HEIGHT = Config.GAME_HEIGHT_DEFAULT;
     static readonly APPLICATION_BACKGROUND_COLOR = 0x101726;
 
-    static ICON_IMAGE_WIDTH = 124;
-    static ICON_IMAGE_HEIGHT = 124;
-    static ICON_IMAGE_SCALE = 0.44;
+    static ICON_IMAGE_WIDTH = 128;
+    static ICON_IMAGE_HEIGHT = 128;
 
     static GRID_WIDTH = 4;
     static GRID_HEIGHT = 5;
     static GRID_EMPTY_VALUE = -1;
 
     static readonly ASSETST_ICONS_VERSION = 'v2';
-    static readonly ASSETST_ICONS_NUMBER = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
+    static readonly ASSETS_ICONS_NUMBER = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
 
     static readonly CLICK_TIMEOUT = 300;
     static readonly GRID_BaCKGROUND_COLOR = 0xffffff

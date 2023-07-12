@@ -6,7 +6,7 @@ import { BaseCommand } from '../utils/BaseCommand';
 export class PrepareIconsCommand extends BaseCommand {
     protected async doExecute() {
         const namePart = 'icons/image_part_';
-        const length = Config.ASSETST_ICONS_NUMBER;
+        const length = Config.ASSETS_ICONS_NUMBER;
 
         const icons = dataService.getRootModel<GameModel>().data.icons
         icons.splice(0);

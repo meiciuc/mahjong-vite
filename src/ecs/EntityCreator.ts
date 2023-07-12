@@ -178,7 +178,9 @@ export class EntityCreator {
             const key = keys[i];
             if (this.icons[key] === undefined) {
                 const sprite = new Sprite(textures[key]);
-                sprite.scale.set(Config.ICON_IMAGE_SCALE);
+                const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
+                sprite.scale.set(scale);
+                
                 const container = new Container();
                 container.addChild(sprite);
 

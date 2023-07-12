@@ -45,7 +45,7 @@ export class GameSystem extends System {
                             continue;
                         }
 
-                        this.creator.createTile(this.gameLogic.getIcon(index % Config.ASSETST_ICONS_NUMBER), x, y);
+                        this.creator.createTile(this.gameLogic.getIcon(index % Config.ASSETS_ICONS_NUMBER), x, y);
                         row.push(throwIfNull(this.tiles?.tail).tile.id);
 
                         index++;
