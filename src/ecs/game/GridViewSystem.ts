@@ -1,5 +1,5 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
-import { Sprite, Texture } from 'pixi.js';
+import { Container, Sprite, Texture } from 'pixi.js';
 import { Config } from '../../Config';
 import { GridView } from '../../view/GridView';
 import { TileNode } from '../tiles/nodes/TileNode';
@@ -29,6 +29,7 @@ export class GridViewSystem extends System {
     }
 
     private handleTileAdded = (node: TileNode) => {
+        console.log((node.display.view as Container).width)
         node.transform.position.x = node.gridPosition.x * Config.ICON_IMAGE_WIDTH;
         node.transform.position.y = node.gridPosition.y * Config.ICON_IMAGE_HEIGHT;
     };

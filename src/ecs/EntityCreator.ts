@@ -1,8 +1,13 @@
 import { Engine, Entity, EntityStateMachine } from '@ash.ts/ash';
-import { Assets, Container, Sprite, Texture } from 'pixi.js';
+import { Assets, Sprite, Texture } from 'pixi.js';
 import { Config } from '../Config';
-import { stageService } from '../core/services/StageService';
+import { dataService } from '../core/services/DataService';
+import { GameModel } from '../model/GameModel';
+import { PointLike } from '../utils/point';
 import { GridView } from '../view/GridView';
+import { PathAnimatedLikeSnakeView } from '../view/PathAnimatedLikeSnakeView';
+import { PathView } from '../view/PathView';
+import { AnimationComponent } from './animation/components/AnimationComponent';
 import { Display } from './display/components/Display';
 import { Transform } from './display/components/Transform';
 import { Game } from './game/components/Game';
@@ -15,16 +20,11 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
-import { dataService } from '../core/services/DataService';
-import { GameModel } from '../model/GameModel';
-import { PathView } from '../view/PathView';
-import { PointLike } from '../utils/point';
-import { AnimationComponent } from './animation/components/AnimationComponent';
-import { PathAnimatedView } from '../view/PathAnimatedView';
-import { PathAnimatedLikeSnakeView } from '../view/PathAnimatedLikeSnakeView';
 
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
+        const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
+        this.icons = textures;
     }
 
     public getEngine() {
@@ -69,6 +69,9 @@ export class EntityCreator {
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key]; //this.getIconTexture(index);
         const sprite = new Sprite(tex);
+
+        const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
+        sprite.scale.set(scale);
 
         const entity = new Entity();
         const fsm = new EntityStateMachine(entity);
@@ -169,25 +172,5 @@ export class EntityCreator {
     public getGridMatrix() {
         const list = this.engine.getNodeList(GridNode);
         return list.head?.grid.grid;
-    }
-
-    // TODO сделать отдельный комманд (контроллер?)
-    public async prepareIconTexures(keys: string[]) {
-        const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            if (this.icons[key] === undefined) {
-                const sprite = new Sprite(textures[key]);
-                const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
-                sprite.scale.set(scale);
-                
-                const container = new Container();
-                container.addChild(sprite);
-
-                const image = await stageService.stage.renderer.extract.image(container);
-                const tex = Texture.from(image);
-                this.icons[key] = tex;
-            }
-        }
     }
 }

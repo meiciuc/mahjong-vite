@@ -66,7 +66,6 @@ export class GameController extends BaseController {
         icons.forEach((icon) => {
             keys.push(icon.key);
         });
-        await this.creator.prepareIconTexures(keys);
 
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
