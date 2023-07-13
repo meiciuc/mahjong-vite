@@ -104,11 +104,10 @@ export class GameSystem extends System {
                 this.creator.removeEntity(pathEntity);
             }
         } else {
+            this.creator.shakeTile(tileA.tile, true);
             tiles.forEach((node) => {
                 this.creator.selectTile(node.tile, false);
             });
         }
-
-        // this.setState(GameStateEnum.CLICK_WAIT);
     }
 }

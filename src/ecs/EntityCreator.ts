@@ -16,12 +16,12 @@ import { Grid } from './tiles/components/Grid';
 import { GridPosition } from './tiles/components/GridPosition';
 import { Icon } from './tiles/components/Icon';
 import { Interactive } from './tiles/components/Interactive';
-import { NonInteractive } from './tiles/components/NonInteractive';
 import { Selected } from './tiles/components/Selected';
 import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
+import { TileAnimatedShakingView } from '../view/TileAnimatedShakingView';
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
         const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
@@ -80,7 +80,6 @@ export class EntityCreator {
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key]; //this.getIconTexture(index);
         const sprite = new Sprite(tex);
-        const interactive = new Interactive();
 
         const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
         sprite.scale.set(scale);
@@ -88,30 +87,31 @@ export class EntityCreator {
         const entity = new Entity();
         const fsm = new EntityStateMachine(entity);
 
-        fsm.createState(TileStateEnum.IDLE).add(Interactive).withMethod(() => {
+        fsm.createState(TileStateEnum.IDLE).add(Object).withMethod(() => {
             (entity.get(Display).view as Sprite).tint = 0xffffff;
-            return interactive;
+            return {};
         });
 
         fsm.createState(TileStateEnum.SELECTED)
             .add(Selected).withMethod(() => {
                 (entity.get(Display).view as Sprite).tint = 0xff0000;
                 return new Selected();
-            })
-            .add(Interactive).withInstance(interactive);
+            });
 
         fsm.createState(TileStateEnum.NON_INTERACTIVE)
-            .add(NonInteractive).withMethod(() => {
+            .add(Object).withMethod(() => {
+                entity.remove(Interactive);
                 (entity.get(Display).view as Sprite).tint = 0x660000;
-                return new NonInteractive();
-            })
+                return {};
+            });
 
         entity
             .add(new Tile(fsm))
             .add(new GridPosition(gridX, gridY))
             .add(new Transform({ x: 0, y: 0 }))
             .add(new Display(sprite, this.gridView.tiles))
-            .add(new Icon(icon));
+            .add(new Icon(icon))
+            .add(new Interactive());
 
         fsm.changeState(TileStateEnum.IDLE);
 
@@ -126,6 +126,22 @@ export class EntityCreator {
 
     public nonInteractiveTile(tile: Tile) {
         tile.fsm.changeState(TileStateEnum.NON_INTERACTIVE);
+    }
+
+    public shakeTile(tile: Tile, value: boolean) {
+        const node = this.getTileNodeById(tile.id);
+        if (!node) {
+            return;
+        }
+
+        if (value) {
+            const shaker = new TileAnimatedShakingView();
+            node.entity.add(new AnimationComponent(shaker));
+            node.entity.add(shaker);
+        } else if (node.entity.has(TileAnimatedShakingView)) {
+            node.entity.remove(TileAnimatedShakingView);
+            node.entity.remove(AnimationComponent);
+        }
     }
 
     private createPath() {
