@@ -17,6 +17,7 @@ export class BackgroundController extends BaseController {
 
     protected async doExecute() {
         this.view = new Sprite(Texture.WHITE);
+        this.view.tint = Config.GRID_BaCKGROUND_COLOR;
         stageService.getLayer(LAYERS.BACKGROUND).addChild(this.view);
 
         this.resize();

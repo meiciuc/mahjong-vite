@@ -37,6 +37,7 @@ const helpsCount = useModel(["helpsCount"]);
         align-items: center;
         background-color: $background_colored_darken;
         border-radius: $button_border_radius;
+        margin-left: 10%;
     }
     .HelpButton {
         font-family: 'Inter-SemiBold';
