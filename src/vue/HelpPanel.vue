@@ -10,47 +10,67 @@ const helpsCount = useModel(["helpsCount"]);
 
 <template>
     <div class="HelpPanel">
-        <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
-        <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
-        <div class="HelpsCount">{{ helpsCount }}</div>
+        <div class="Container">
+            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
+            <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
+            <div class="HelpsCount">{{ helpsCount }}</div>
+        </div>
     </div>
     
 </template>
 
 <style lang="scss" scoped>
+
+    @import './global.scss';
     .HelpPanel {
         position: absolute;
         display: flex;
         left: 0px;
         top: 0px;
         right: 0px;
-        background: rgba($color: #000000, $alpha: 0.3);
+        background: rgba($color: $background_colored, $alpha: 1);
         padding: 10px;
+    }
+
+    .Container {
+        display: flex;
+        align-items: center;
+        background-color: $background_colored_darken;
+        border-radius: $button_border_radius;
     }
     .HelpButton {
         font-family: 'Inter-SemiBold';
-        border: solid;
-        border-radius: 15px;
-        background-color: bisque;
-        width: 100px;
-        height: 20px;
+        color: $button_text_colored;
+        background-color: $button_text_idle;
         text-align: center;
         cursor: pointer;
         user-select: none;
+        padding-top: calc($button_padding_vertical / 2);
+        padding-bottom: calc($button_padding_vertical / 2);
+        padding-left: calc($button_padding_horizontal / 2);
+        padding-right: calc($button_padding_horizontal / 2);
+        border-radius: $button_border_radius;
+        border-color: $button_text_idle;
+        border: solid;
+    }
+
+    .HelpButton:hover {
+        background-color: $button_background_colored;
+        color: $button_text_idle;
+        border-color: $button_text_idle;
     }
     .HelpButtonDisabled {
-        font-family: 'Inter-SemiBold';
-        user-select: none;
+        pointer-events: none;
         cursor: auto;
         opacity: 0.7;
     }
     .HelpsCount {
+        user-select: none;
         font-family: 'Inter-SemiBold';
-        background: rgba($color: #000000, $alpha: 0.3);
-        margin-left: 1em;
-        color: white;
-        font-size: 1.5em;
-        width: 2em;
-        text-align: center;
+        color: $button_text_idle;
+        padding-top: calc($button_padding_vertical / 2);
+        padding-bottom: calc($button_padding_vertical / 2);
+        padding-left: calc($button_padding_horizontal / 2);
+        padding-right: calc($button_padding_horizontal / 2);
     }   
 </style>

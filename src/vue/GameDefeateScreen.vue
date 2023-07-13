@@ -6,34 +6,59 @@ import { vueService } from './VueService';
 </script>
 
 <template>
-    <div class="Text">DEFEATE</div>
-    <div class="Button" @click="handleClick">PLAY AGAIN</div>
+    <div class="Background">
+    </div>
+    <div class="Container">
+        <div class="Text">DEFEATE</div>
+    </div>
+    <div class="Container">
+        <div class="Button" @click="handleClick">PLAY AGAIN</div>
+    </div>
 </template>
 
 <style lang="scss" scoped>
-    .Text {
+    @import './global.scss';
+
+    .Background {
+        background-color: $background_colored_darken;
         position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+    .Container {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        overflow: hidden;
+    }
+    .Text {
         font-family: 'Inter-SemiBold';
-        top: 30%;
-        left: 20%;
         text-align: center;
         font-size: xx-large;
-        color: red;
+        color: white;
+        user-select: none;
+        margin-bottom: 50%;
     }
     .Button {
-        position: absolute;
         font-family: 'Inter-SemiBold';
-        border: solid;
-        border-radius: 15px;
-        background-color: bisque;
-        width: 100px;
-        height: 20px;
+        color: $button_text_colored;
+        border-radius: $button_border_radius;
+        background-color: $button_background_idle;
         text-align: center;
         cursor: pointer;
         user-select: none;
-        margin-left: -50px;
-        margin-top: -10px;
-        left: 50%;
-        bottom: 30%;
+        padding-top: $button_padding_vertical;
+        padding-bottom: $button_padding_vertical;
+        padding-left: $button_padding_horizontal;
+        padding-right: $button_padding_horizontal;
+
+        margin-bottom: 20%;
     }   
 </style>

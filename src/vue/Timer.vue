@@ -8,20 +8,39 @@
 </script>
 
 <template>
-    <div class="Timer">
-        {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
+    <div class="Container">
+        <div class="Timer">
+            {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
+        </div>
     </div>
-    
 </template>
 
 <style lang="scss" scoped>
-    .Timer {
+
+    @import './global.scss';
+
+    .Container {
+        user-select: none;
+        pointer-events: none;
         position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        padding: 10px;
+    }
+    .Timer {
         font-family: 'Inter-SemiBold';
-        left: 50%;
-        top: 5px;
-        background: rgba($color: #000000, $alpha: 0.3);
+        background: rgba($color: $button_background_colored, $alpha: 1);
         color: white;
-        font-size: 1.5em;
+        padding-top: calc($button_padding_vertical / 2);
+        padding-bottom: calc($button_padding_vertical / 2);
+        width: 6em;
+        border-radius: $button_border_radius;
+        border-color: $button_background_idle;
+        text-align: center;
+        border: solid;
     }
 </style>
