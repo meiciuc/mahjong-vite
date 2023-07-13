@@ -53,13 +53,13 @@ export class TileInteractiveSystem extends System {
     private handleTileAdded = (node: TileInteractiveNode) => {
         node.display.view.interactive = true;
         node.display.view.cursor = 'pointer';
-        node.display.view.on('mouseup', this.handleClick);
+        node.display.view.on('click', this.handleClick);
     }
 
     private handleTileRemoved = (node: TileInteractiveNode) => {
         node.display.view.interactive = false;
         node.display.view.cursor = 'auto';
-        node.display.view.off('mouseup', this.handleClick);
+        node.display.view.off('click', this.handleClick);
     }
 
     private handleClick = (e: any) => {
