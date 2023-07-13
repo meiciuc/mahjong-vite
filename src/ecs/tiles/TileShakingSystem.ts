@@ -45,7 +45,6 @@ export class TileShakingSystem extends System {
     }
 
     private handleNodeAdded = (node: TileShakingNode) => {
-        console.log('handleNodeAdded')
         node.shaker.startX = node.transform.position.x;
         node.shaker.startY = node.transform.position.y;
         node.shaker.currentX = node.shaker.startX;
@@ -53,7 +52,6 @@ export class TileShakingSystem extends System {
     }
 
     private handleNodeRemoved = (node: TileShakingNode) => {
-        console.log('handleNodeRemoved')
         node.transform.position.x = node.shaker.startX
         node.transform.position.y = node.shaker.startY;
     }
