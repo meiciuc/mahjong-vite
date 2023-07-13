@@ -13,6 +13,7 @@ import { vueService } from './VueService';
 <style lang="scss" scoped>
     .Text {
         position: absolute;
+        font-family: 'Inter-SemiBold';
         top: 30%;
         left: 20%;
         text-align: center;
@@ -21,6 +22,7 @@ import { vueService } from './VueService';
     }
     .Button {
         position: absolute;
+        font-family: 'Inter-SemiBold';
         border: solid;
         border-radius: 15px;
         background-color: bisque;

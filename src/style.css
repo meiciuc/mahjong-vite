@@ -11,9 +11,9 @@ body {
 }
 
 @font-face {
-  font-family: 'Untitled-1';
+  font-family: 'Inter-SemiBold';
   font-style: normal;
-  src: url('./assets/fonts/Untitled-1.woff') format('woff');
+  src: url('../fonts/Inter-SemiBold.woff') format('woff');
 }
 
 @media (prefers-color-scheme: light) {

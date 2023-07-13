@@ -17,6 +17,7 @@
 <style lang="scss" scoped>
     .Timer {
         position: absolute;
+        font-family: 'Inter-SemiBold';
         left: 50%;
         top: 5px;
         background: rgba($color: #000000, $alpha: 0.3);

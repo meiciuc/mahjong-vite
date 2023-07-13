@@ -28,6 +28,7 @@ const helpsCount = useModel(["helpsCount"]);
         padding: 10px;
     }
     .HelpButton {
+        font-family: 'Inter-SemiBold';
         border: solid;
         border-radius: 15px;
         background-color: bisque;
@@ -38,11 +39,13 @@ const helpsCount = useModel(["helpsCount"]);
         user-select: none;
     }
     .HelpButtonDisabled {
+        font-family: 'Inter-SemiBold';
         user-select: none;
         cursor: auto;
         opacity: 0.7;
     }
     .HelpsCount {
+        font-family: 'Inter-SemiBold';
         background: rgba($color: #000000, $alpha: 0.3);
         margin-left: 1em;
         color: white;

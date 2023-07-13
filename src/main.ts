@@ -38,14 +38,17 @@ window.onload = async (): Promise<void> => {
 };
 
 async function loadFonts() {
+    
+
     return new Promise((resolve) => {
         WebFont.load({
             custom: {
-                families: ['Untitled-1'],
+                families: [
+                    'Inter-SemiBold',
+                ],
             },
             timeout: 1000,
             active: () => {
-                console.log('active');
                 resolve(true);
             },
         });

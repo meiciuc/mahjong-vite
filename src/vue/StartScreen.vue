@@ -11,6 +11,7 @@ import { vueService } from './VueService';
 
 <style lang="scss" scoped>
     .StartButton {
+        font-family: 'Inter-SemiBold';
         position: absolute;
         border: solid;
         border-radius: 15px;

@@ -12,6 +12,7 @@ import { vueService } from './VueService';
 <style lang="scss" scoped>
     .HelpButton {
         position: absolute;
+        font-family: 'Inter-SemiBold';
         top: 10px;
         left: 10px;
         border: solid;
