@@ -9,7 +9,7 @@ import { vueService } from './VueService';
     <div class="Background">
     </div>
     <div class="Container">
-        <div class="Text">DEFEATE</div>
+        <div class="Text">DEFEAT</div>
     </div>
     <div class="Container">
         <div class="Button" @click="handleClick">PLAY AGAIN</div>
@@ -41,7 +41,7 @@ import { vueService } from './VueService';
     .Text {
         font-family: 'Inter-SemiBold';
         text-align: center;
-        font-size: xx-large;
+        font-size: 4em;
         color: white;
         user-select: none;
         margin-bottom: 50%;
