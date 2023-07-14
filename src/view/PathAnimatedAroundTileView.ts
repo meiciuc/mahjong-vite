@@ -3,27 +3,35 @@ import { Animatable } from "../ecs/animation/components/Animatable";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 
-class Particle {
-    private static count = 0;
+function createPath() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
+    
+    svg.appendChild(svgPath);
 
-    public id = Particle.count++;
-    constructor(
-        public sprite: Sprite,
-        public age: number,
-    ) {}
+    const w = Config.ICON_IMAGE_WIDTH * .95;
+    const h = Config.ICON_IMAGE_HEIGHT * .95;
+    const r = Math.floor((Config.ICON_IMAGE_WIDTH + Config.ICON_IMAGE_HEIGHT) / 2 * .25);
+    const d = `M ${r} ${0} L ${w - r} ${0} Q ${w} ${0} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${0} ${h} ${0} ${h - r} L ${0} ${r} Q ${0} ${0} ${r} ${0}`;
+    svgPath.setAttribute('d', d);
+    return svg;
 }
 
-export class PathAnimatedLikeSnakeView extends Container implements Animatable {
+export class PathAnimatedAroundTileView extends Container implements Animatable {
+    private static svg: SVGElement;
+    private svg: SVGElement;
     private currentTime = 0;
     private currentPathTime = 0;
     private particleScale = 0.2;
-    private easing = easingsFunctions.easeInOutCubic;
-    private readonly age = .2;
+    private easing = easingsFunctions.easeOutSine;
 
-    private particles: Map<number, Particle> = new Map();
-
-    constructor(public svg: SVGElement, private duration = 1) {
+    constructor(private duration = .5) {
         super();
+        if (!PathAnimatedAroundTileView.svg) {
+            PathAnimatedAroundTileView.svg = createPath();
+        }
+        this.svg = PathAnimatedAroundTileView.svg;
     }
 
     private draw(from: number, to: number) {
@@ -38,46 +46,27 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
             const prev = this.children[this.children.length - 1];
             const point = path.getPointAtLength(time * totalLength);
             time += k;
-
+            
             if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
                 continue;
             }
-
+            
             const sprite = new Sprite(texture);
             sprite.tint = Config.PATH_COLOR;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             sprite.scale.set(this.particleScale);
             this.addChild(sprite);
-
-            const particle = new Particle(sprite, this.age);
-            this.particles.set(particle.id, particle);
         }
     }
 
     animate(time: number): void {
         this.currentTime += time;
         const t = this.easing(this.currentTime / this.duration);
-        if (this.currentPathTime < 1) {
-            this.draw(this.currentPathTime, t);
-            this.currentPathTime = t;
+        if (this.currentPathTime >= 1) {
+            return;
         }
-
-        // if (this.currentPathTime < 1) {
-        //     const t = Math.min(1, this.currentPathTime + time * this.timeFactor);
-        //     this.draw(this.currentPathTime, t);
-        //     this.currentPathTime = t;
-        // }
-        
-
-        this.particles.forEach((particle, id) => {
-            particle.age -= time;
-            particle.sprite.alpha = particle.age * 10;
-            particle.sprite.scale.set(0.2 * particle.age / this.age)
-            if (particle.age < 0) {
-                particle.sprite.destroy();
-                this.particles.delete(id);
-            }
-        })
+        this.draw(this.currentPathTime, t);
+        this.currentPathTime = t;
     }
 }

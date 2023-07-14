@@ -5,8 +5,9 @@ import { dataService } from '../core/services/DataService';
 import { GameModel } from '../model/GameModel';
 import { PointLike } from '../utils/point';
 import { GridView } from '../view/GridView';
+import { PathAnimatedAroundTileView } from '../view/PathAnimatedAroundTileView';
 import { PathAnimatedLikeSnakeView } from '../view/PathAnimatedLikeSnakeView';
-import { PathView } from '../view/PathView';
+import { TileAnimatedShakingView } from '../view/TileAnimatedShakingView';
 import { AnimationComponent } from './animation/components/AnimationComponent';
 import { Display } from './display/components/Display';
 import { Transform } from './display/components/Transform';
@@ -21,7 +22,6 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
-import { TileAnimatedShakingView } from '../view/TileAnimatedShakingView';
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
         const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
@@ -66,11 +66,12 @@ export class EntityCreator {
     public createTileHelpEffect(x: number, y: number) {
         const entity = new Entity();
 
-        const view = new PathView(this.createPath());
+        const view = new PathAnimatedAroundTileView();
         entity
             .add(new TileHelpEffect())
             .add(new Display(view, this.gridView.effects))
-            .add(new Transform({ x, y }));
+            .add(new Transform({ x, y }))
+            .add(new AnimationComponent(view));
         this.engine.addEntity(entity);
     }
 
@@ -142,21 +143,6 @@ export class EntityCreator {
             node.entity.remove(TileAnimatedShakingView);
             node.entity.remove(AnimationComponent);
         }
-    }
-
-    private createPath() {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
-        
-        svg.appendChild(svgPath);
-
-        const w = Config.ICON_IMAGE_WIDTH;
-        const h = Config.ICON_IMAGE_HEIGHT;
-        const r = Math.floor((Config.ICON_IMAGE_WIDTH + Config.ICON_IMAGE_HEIGHT) / 2 * .25);
-        const d = `M ${r} ${0} L ${w - r} ${0} Q ${w} ${0} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${0} ${h} ${0} ${h - r} L ${0} ${r} Q ${0} ${0} ${r} ${0}`;
-        svgPath.setAttribute('d', d);
-        return svg;
     }
 
     public showPath(arr: PointLike[]) {
