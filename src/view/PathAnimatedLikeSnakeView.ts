@@ -17,12 +17,12 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
     private particleScale = 0.2;
-    private easing = easingsFunctions.easeInOutCubic;
+    private easing = easingsFunctions.easeOutExpo;
     private readonly age = .2;
 
     private particles: Map<number, Particle> = new Map();
 
-    constructor(public svg: SVGElement, private duration = 1) {
+    constructor(public svg: SVGElement, private duration = .5) {
         super();
     }
 

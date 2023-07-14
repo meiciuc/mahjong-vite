@@ -18,5 +18,5 @@ export class Config {
 
     static readonly CLICK_TIMEOUT = 300;
     static readonly GRID_BaCKGROUND_COLOR = 0xF9F9F9;
-    static PATH_COLOR = 0xff0000;
+    static PATH_COLOR = 0xFA4A0C;
 }
