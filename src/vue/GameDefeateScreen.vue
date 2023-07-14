@@ -44,7 +44,7 @@ import { vueService } from './VueService';
         font-size: 4em;
         color: white;
         user-select: none;
-        margin-bottom: 50%;
+        margin-bottom: 30%;
     }
     .Button {
         font-family: 'Inter-SemiBold';
