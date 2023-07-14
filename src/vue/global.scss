@@ -1,15 +1,19 @@
+$first_color: #F9F9F9;
+$second_color: #FA4A0C;
+$second_color_darken: #b63204;
+
 $button_padding_horizontal: 4em;
 $button_padding_vertical: 1em;
-$button_background_colored: #FA4A0C;
-$button_background_idle: #FFFFFF;
-$button_text_colored: #FA4A0C;
-$button_text_idle: #FFFFFF;
+$button_background_colored: $second_color;
+$button_background_idle: $first_color;
+$button_text_colored: $second_color;
+$button_text_idle: $first_color;
 $button_border_radius: 2em;
 
 
-$background_colored: #FA4A0C;
-$background_colored_darken: #E9390b;
-$background_idle: #F9F9F9;
+$background_colored: $second_color;
+$background_colored_darken: $second_color_darken;
+$background_idle: $first_color;
 
 * {
     margin: 0;
