@@ -105,9 +105,10 @@ export class GameSystem extends System {
             }
         } else {
             this.creator.shakeTile(tileA.tile, true);
-            tiles.forEach((node) => {
-                this.creator.selectTile(node.tile, false);
-            });
+            this.creator.selectTile(tileB.tile, false);
+            // tiles.forEach((node) => {
+            //     this.creator.selectTile(node.tile, false);
+            // });
         }
     }
 }
