@@ -7,6 +7,7 @@ import { Config } from "../../Config";
 import { Tile } from "./components/Tile";
 import { Display } from "../display/components/Display";
 import { Interactive } from "./components/Interactive";
+import { Container, Rectangle } from "pixi.js";
 
 export class TileInteractiveNode extends defineNode({
     tile: Tile,
@@ -51,6 +52,9 @@ export class TileInteractiveSystem extends System {
     }
 
     private handleTileAdded = (node: TileInteractiveNode) => {
+        const width = (node.display.view as Container).width;
+        const height = (node.display.view as Container).height;
+        node.display.view.hitArea = new Rectangle(width * 0.1, height * 0.1, width * 0.8, height * 0.8);
         node.display.view.interactive = true;
         node.display.view.cursor = 'pointer';
         node.display.view.on('click', this.handleClick);
