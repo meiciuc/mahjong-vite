@@ -16,7 +16,7 @@ class Particle {
 export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.
+    private particleScale = 0.2;
     private easing = easingsFunctions.easeInOutCirc;
     private particleAge = .2;
 
@@ -67,7 +67,6 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
             sprite.tint = Config.PATH_COLOR;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
-            sprite.scale.set(this.particleScale);
             this.addChild(sprite);
 
             const particle = new Particle(sprite, this.particleAge);
@@ -86,7 +85,7 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
         this.particles.forEach((particle, id) => {
             particle.age -= time;
             particle.sprite.alpha = particle.age * 10;
-            particle.sprite.scale.set(0.2 * particle.age / this.particleAge)
+            particle.sprite.scale.set(this.particleScale * particle.age / this.particleAge);
             if (particle.age < 0) {
                 particle.sprite.destroy();
                 this.particles.delete(id);
