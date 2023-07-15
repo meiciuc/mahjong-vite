@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite } from "pixi.js";
+import { Assets, Container, Rectangle, Sprite } from "pixi.js";
 import { Animatable } from "../ecs/animation/components/Animatable";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
@@ -16,14 +16,23 @@ class Particle {
 export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.2;
-    private easing = easingsFunctions.easeOutExpo;
-    private readonly age = .2;
+    private particleScale = 0.
+    private easing = easingsFunctions.easeInOutCirc;
+    private particleAge = .2;
 
     private particles: Map<number, Particle> = new Map();
+    private masks: Rectangle[] = [];
 
     constructor(public svg: SVGElement, private duration = .5) {
         super();
+        this.particleAge = this.duration / 1.5;
+
+        const hitzone = Config.ICON_IMAGE_WIDTH * .9;
+        const path = this.svg.querySelector('path');
+        let point = path.getPointAtLength(0);
+        this.masks.push(new Rectangle(point.x - hitzone / 2, point.y - hitzone / 2, hitzone, hitzone));
+        point = path.getPointAtLength(path.getTotalLength());
+        this.masks.push(new Rectangle(point.x - hitzone / 2, point.y - hitzone / 2, hitzone, hitzone));
     }
 
     private draw(from: number, to: number) {
@@ -43,6 +52,17 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
                 continue;
             }
 
+            let cont = false;
+            for (const rect of this.masks) {
+                if (rect.contains(point.x, point.y)) {
+                    cont = true;
+                }
+            }
+
+            if (cont) {
+                continue;
+            }
+
             const sprite = new Sprite(texture);
             sprite.tint = Config.PATH_COLOR;
             sprite.position.x = point.x;
@@ -50,7 +70,7 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
             sprite.scale.set(this.particleScale);
             this.addChild(sprite);
 
-            const particle = new Particle(sprite, this.age);
+            const particle = new Particle(sprite, this.particleAge);
             this.particles.set(particle.id, particle);
         }
     }
@@ -63,17 +83,10 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
             this.currentPathTime = t;
         }
 
-        // if (this.currentPathTime < 1) {
-        //     const t = Math.min(1, this.currentPathTime + time * this.timeFactor);
-        //     this.draw(this.currentPathTime, t);
-        //     this.currentPathTime = t;
-        // }
-        
-
         this.particles.forEach((particle, id) => {
             particle.age -= time;
             particle.sprite.alpha = particle.age * 10;
-            particle.sprite.scale.set(0.2 * particle.age / this.age)
+            particle.sprite.scale.set(0.2 * particle.age / this.particleAge)
             if (particle.age < 0) {
                 particle.sprite.destroy();
                 this.particles.delete(id);
