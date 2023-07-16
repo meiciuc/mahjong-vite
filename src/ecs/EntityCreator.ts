@@ -71,22 +71,28 @@ export class EntityCreator {
         const tile = throwIfNull(this.getTileNodeById(tileId));
         const entity = new Entity();
 
+        const transform = new Transform({ x: tile.transform.position.x, y: tile.transform.position.y });
         const view = new PathTileToggleView();
+        view.position.x = transform.position.x;
+        view.position.y = transform.position.y;
         entity
             .add(new TileToggleEffect(tileId))
             .add(new Display(view, this.gridView.effectsTilesUnder))
-            .add(new Transform({ x: tile.transform.position.x, y: tile.transform.position.y }));
+            .add(transform);
         this.engine.addEntity(entity);
     }
 
     public createTileHelpEffect(x: number, y: number) {
         const entity = new Entity();
 
+        const transform = new Transform({ x, y });
         const view = new PathAnimatedAroundTileView();
+        view.position.x = transform.position.x;
+        view.position.y = transform.position.y;
         entity
             .add(new TileHelpEffect())
             .add(new Display(view, this.gridView.effectsTilesAbove))
-            .add(new Transform({ x, y }))
+            .add(transform)
             .add(new AnimationComponent(view));
         this.engine.addEntity(entity);
     }

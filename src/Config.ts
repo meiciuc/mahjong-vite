@@ -4,7 +4,7 @@ export class Config {
     static readonly GAME_HEIGHT_DEFAULT = 1920;
     static GAME_WIDTH = Config.GAME_WIDTH_DEFAULT;
     static GAME_HEIGHT = Config.GAME_HEIGHT_DEFAULT;
-    static readonly APPLICATION_BACKGROUND_COLOR = 0xEFEEEE;
+    static readonly APPLICATION_BACKGROUND_COLOR = 0xFFFFFF;
 
     static ICON_IMAGE_WIDTH = 128;
     static ICON_IMAGE_HEIGHT = 128;
@@ -19,7 +19,7 @@ export class Config {
     static readonly CLICK_TIMEOUT = 300;
     static readonly GRID_BaCKGROUND_COLOR = Config.APPLICATION_BACKGROUND_COLOR;
     static PATH_HELP_COLOR = 0xFA4A0C;
-    static PATH_SELECT_COLOR = 0x6A6A6A;
+    static PATH_SELECT_COLOR = 0xCDCDCD;
     static get PATH_TILE_SVG() {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
