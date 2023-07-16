@@ -22,6 +22,10 @@ import { Tile, TileStateEnum } from './tiles/components/Tile';
 import { TileHelpEffect } from './tiles/components/TileHelpEffect';
 import { GridNode } from './tiles/nodes/GridNode';
 import { TileNode } from './tiles/nodes/TileNode';
+import { PathTileToggleView } from '../view/PathTileToggleView';
+import { TileToggleEffect } from './tiles/components/TileToggleEffect';
+import { throwIfNull } from '../utils/throwIfNull';
+import { Destroing } from './tiles/components/Destroing';
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
         const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
@@ -63,13 +67,25 @@ export class EntityCreator {
         this.engine.addEntity(entity);
     }
 
+    public createTileToggleEffect(tileId: number) {
+        const tile = throwIfNull(this.getTileNodeById(tileId));
+        const entity = new Entity();
+
+        const view = new PathTileToggleView();
+        entity
+            .add(new TileToggleEffect(tileId))
+            .add(new Display(view, this.gridView.effectsTilesUnder))
+            .add(new Transform({ x: tile.transform.position.x, y: tile.transform.position.y }));
+        this.engine.addEntity(entity);
+    }
+
     public createTileHelpEffect(x: number, y: number) {
         const entity = new Entity();
 
         const view = new PathAnimatedAroundTileView();
         entity
             .add(new TileHelpEffect())
-            .add(new Display(view, this.gridView.effects))
+            .add(new Display(view, this.gridView.effectsTilesAbove))
             .add(new Transform({ x, y }))
             .add(new AnimationComponent(view));
         this.engine.addEntity(entity);
@@ -89,21 +105,21 @@ export class EntityCreator {
         const fsm = new EntityStateMachine(entity);
 
         fsm.createState(TileStateEnum.IDLE).add(Object).withMethod(() => {
-            (entity.get(Display).view as Sprite).tint = 0xffffff;
+            // (entity.get(Display).view as Sprite).tint = 0xffffff;
             return {};
         });
 
         fsm.createState(TileStateEnum.SELECTED)
             .add(Selected).withMethod(() => {
-                (entity.get(Display).view as Sprite).tint = 0xff0000;
+                // (entity.get(Display).view as Sprite).tint = 0xff0000;
                 return new Selected();
             });
 
-        fsm.createState(TileStateEnum.NON_INTERACTIVE)
-            .add(Object).withMethod(() => {
+        fsm.createState(TileStateEnum.DESTROING)
+            .add(Destroing).withMethod(() => {
                 entity.remove(Interactive);
-                (entity.get(Display).view as Sprite).tint = 0x660000;
-                return {};
+                // (entity.get(Display).view as Sprite).tint = 0x660000;
+                return new Destroing();
             });
 
         entity
@@ -126,7 +142,7 @@ export class EntityCreator {
     }
 
     public nonInteractiveTile(tile: Tile) {
-        tile.fsm.changeState(TileStateEnum.NON_INTERACTIVE);
+        tile.fsm.changeState(TileStateEnum.DESTROING);
     }
 
     public shakeTile(tile: Tile, value: boolean) {
@@ -173,7 +189,7 @@ export class EntityCreator {
         entity
             .add(new TileHelpEffect())
             .add(new Transform())
-            .add(new Display(view, this.gridView.effects))
+            .add(new Display(view, this.gridView.effectsTilesAbove))
             .add(new AnimationComponent(view))
 
         this.engine.addEntity(entity);

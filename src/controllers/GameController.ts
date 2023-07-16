@@ -19,6 +19,7 @@ import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
 import { ModelHelper } from '../model/ModelHelper';
 import { AnimationSystem } from '../ecs/animation/AnimationSystem';
 import { TileShakingSystem } from '../ecs/tiles/TileShakingSystem';
+import { TileToggleSystem } from '../ecs/tiles/TileToggleSystem';
 
 export enum SystemPriorities {
     preUpdate = 1,
@@ -77,6 +78,7 @@ export class GameController extends BaseController {
 
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
         this.engine.addSystem(new TileShakingSystem(this.creator), SystemPriorities.animate);
+        this.engine.addSystem(new TileToggleSystem(this.creator), SystemPriorities.animate);
 
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
 

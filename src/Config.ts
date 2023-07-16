@@ -4,7 +4,7 @@ export class Config {
     static readonly GAME_HEIGHT_DEFAULT = 1920;
     static GAME_WIDTH = Config.GAME_WIDTH_DEFAULT;
     static GAME_HEIGHT = Config.GAME_HEIGHT_DEFAULT;
-    static readonly APPLICATION_BACKGROUND_COLOR = 0xF9F9F9;
+    static readonly APPLICATION_BACKGROUND_COLOR = 0xDCDCDC;
 
     static ICON_IMAGE_WIDTH = 128;
     static ICON_IMAGE_HEIGHT = 128;
@@ -17,6 +17,22 @@ export class Config {
     static readonly ASSETS_ICONS_NUMBER = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
 
     static readonly CLICK_TIMEOUT = 300;
-    static readonly GRID_BaCKGROUND_COLOR = 0xF9F9F9;
-    static PATH_COLOR = 0xFA4A0C;
+    static readonly GRID_BaCKGROUND_COLOR = Config.APPLICATION_BACKGROUND_COLOR;
+    static PATH_HELP_COLOR = 0xFFFFFF;
+    static PATH_SELECT_COLOR = 0xFFFFFF;
+    static get PATH_TILE_SVG() {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
+        
+        svg.appendChild(svgPath);
+
+        const start = 2;
+        const w = Config.ICON_IMAGE_WIDTH * .95 - 2 * start;
+        const h = Config.ICON_IMAGE_HEIGHT * .95 - 2 * start;
+        const r = Math.floor((w + h) / 2 * .25);
+        const d = `M ${r} ${start} L ${w - r} ${start} Q ${w} ${start} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${start} ${h} ${start} ${h - r} L ${start} ${r} Q ${start} ${start} ${r} ${start}`;
+        svgPath.setAttribute('d', d);
+        return svg;
+    }
 }

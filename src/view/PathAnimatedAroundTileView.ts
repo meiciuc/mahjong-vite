@@ -3,24 +3,9 @@ import { Animatable } from "../ecs/animation/components/Animatable";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 
-function createPath() {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
-    
-    svg.appendChild(svgPath);
-
-    const w = Config.ICON_IMAGE_WIDTH * .95;
-    const h = Config.ICON_IMAGE_HEIGHT * .95;
-    const r = Math.floor((Config.ICON_IMAGE_WIDTH + Config.ICON_IMAGE_HEIGHT) / 2 * .25);
-    const d = `M ${r} ${0} L ${w - r} ${0} Q ${w} ${0} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${0} ${h} ${0} ${h - r} L ${0} ${r} Q ${0} ${0} ${r} ${0}`;
-    svgPath.setAttribute('d', d);
-    return svg;
-}
-
 export class PathAnimatedAroundTileView extends Container implements Animatable {
-    private static svg: SVGElement;
-    private svg: SVGElement;
+    private svg = Config.PATH_TILE_SVG;
+    private color = Config.PATH_HELP_COLOR;
     private currentTime = 0;
     private currentPathTime = 0;
     private particleScale = 0.2;
@@ -28,10 +13,6 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
 
     constructor(private duration = .5) {
         super();
-        if (!PathAnimatedAroundTileView.svg) {
-            PathAnimatedAroundTileView.svg = createPath();
-        }
-        this.svg = PathAnimatedAroundTileView.svg;
     }
 
     private draw(from: number, to: number) {
@@ -52,7 +33,7 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
             }
             
             const sprite = new Sprite(texture);
-            sprite.tint = Config.PATH_COLOR;
+            sprite.tint = this.color;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             sprite.scale.set(this.particleScale);

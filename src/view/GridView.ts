@@ -3,8 +3,9 @@ import { Container } from 'pixi.js';
 export class GridView extends Container {
     public grid: Container;
     public background: Container;
+    public effectsTilesUnder: Container;
     public tiles: Container;
-    public effects: Container;
+    public effectsTilesAbove: Container;
 
     constructor() {
         super();
@@ -15,10 +16,13 @@ export class GridView extends Container {
         this.background = new Container();
         this.grid.addChild(this.background);
 
+        this.effectsTilesUnder = new Container();
+        this.grid.addChild(this.effectsTilesUnder);
+
         this.tiles = new Container();
         this.grid.addChild(this.tiles);
 
-        this.effects = new Container();
-        this.grid.addChild(this.effects);
+        this.effectsTilesAbove = new Container();
+        this.grid.addChild(this.effectsTilesAbove);
     }
 }

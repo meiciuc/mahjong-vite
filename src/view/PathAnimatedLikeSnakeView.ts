@@ -18,10 +18,12 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     private currentPathTime = 0;
     private particleScale = 0.2;
     private easing = easingsFunctions.easeInOutCirc;
-    private particleAge = .2;
+    private particleAge = .3;
 
     private particles: Map<number, Particle> = new Map();
     private masks: Rectangle[] = [];
+
+    private color = Config.PATH_HELP_COLOR;
 
     constructor(public svg: SVGElement, private duration = .5) {
         super();
@@ -64,7 +66,7 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
             }
 
             const sprite = new Sprite(texture);
-            sprite.tint = Config.PATH_COLOR;
+            sprite.tint = this.color;
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             this.addChild(sprite);
