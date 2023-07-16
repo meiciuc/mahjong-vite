@@ -23,7 +23,7 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     private particles: Map<number, Particle> = new Map();
     private masks: Rectangle[] = [];
 
-    private color = Config.PATH_HELP_COLOR;
+    private color = Config.PATH_SELECT_COLOR;
 
     constructor(public svg: SVGElement, private duration = .5) {
         super();
