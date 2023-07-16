@@ -7,7 +7,7 @@ export class GameTimerSystem extends System {
 
     addToEngine(engine: Engine): void {
         this.game = engine.getNodeList(GameNode);
-        this.game.head.game.model.data.gameStateTime = 0;
+        // this.game.head.game.model.data.gameStateTime = 0;
     }
 
     removeFromEngine(_engine: Engine): void {

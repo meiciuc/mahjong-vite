@@ -2,7 +2,6 @@ export enum GameStateEnum {
     NONE = 'none',
     PREPARE = 'prepare',
     CLICK_WAIT = 'clickWait',
-    GAME_PAUSE = 'gamePause',
     GAME_VICTORY = 'gameVictory',
     GAME_DEFEATE = 'gameDefeate',
     GAME_NO_MORE_MOVES = 'gameNoMoreMoves',
@@ -15,6 +14,7 @@ export enum AppStateEnum {
     GAME_VICTORY = 'gameVictoryScreen',
     GAME_DEFEATE = 'gameDefeateScreen',
     GAME_NO_MORE_MOVES = 'gameNoMoreMovesScreen',
+    PAUSE_WHILE_ADS = 'pauseWhileAds',
 }
 
 export interface IconState {

@@ -19,10 +19,10 @@
 </script>
 
 <template>
+    <HelpPanel></HelpPanel>
+    <Timer></Timer>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
-    <HelpPanel v-if="appState === AppStateEnum.GAME_SCREEN"></HelpPanel>
-    <Timer v-if="appState === AppStateEnum.GAME_SCREEN"></Timer>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 </template>

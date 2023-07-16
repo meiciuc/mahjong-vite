@@ -1,4 +1,4 @@
-import { Engine } from '@ash.ts/ash';
+import { Engine, EngineStateMachine } from '@ash.ts/ash';
 import { throwIfNull } from '../utils/throwIfNull';
 import { stageService } from '../core/services/StageService';
 import { DisplaySystem } from '../ecs/display/DisplaySystem';
@@ -14,7 +14,7 @@ import { LAYERS } from '../GameLayers';
 import { GridView } from '../view/GridView';
 import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
-import { GameModel, GameStateEnum } from '../model/GameModel';
+import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
 import { ModelHelper } from '../model/ModelHelper';
 import { AnimationSystem } from '../ecs/animation/AnimationSystem';
@@ -31,16 +31,33 @@ export enum SystemPriorities {
     audio = 7,
 }
 
+enum GameControllerStateEnum {
+    GAME = 'game',
+    PAUSE = 'pause',
+}
+
 export class GameController extends BaseController {
     private creator?: EntityCreator;
+    private fsm?: EngineStateMachine;
     private engine?: Engine;
     private gridView?: GridView;
     private gameLogic?: GameLogic;
+
+    constructor() {
+        super();
+        dataService.getRootModel<GameModel>().getSubModel(['appState']).subscribe((current) => {
+            this.fsm.changeState(current === AppStateEnum.GAME_SCREEN ? GameControllerStateEnum.GAME : GameControllerStateEnum.PAUSE);
+        }, ['appState'])
+    }
 
     destroy(): void {
         stageService.updateSignal.remove(this.update);
         this.engine?.removeAllSystems();
         this.gridView?.destroy();
+    }
+
+    pause(value: boolean) {
+        this.fsm.changeState(value ? GameControllerStateEnum.PAUSE : GameControllerStateEnum.GAME);
     }
 
     protected async doExecute() {
@@ -68,19 +85,28 @@ export class GameController extends BaseController {
             keys.push(icon.key);
         });
 
+        const timer = new GameTimerSystem();
+        timer.priority = SystemPriorities.update;
+
+        const help = new HelpSystem(this.creator, this.gameLogic);
+        help.priority = SystemPriorities.update;
+
+        this.fsm = new EngineStateMachine(this.engine);
+        this.fsm.createState(GameControllerStateEnum.GAME)
+            .addInstance(timer)
+            .addInstance(help);
+        this.fsm.createState(GameControllerStateEnum.PAUSE);
+
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
         this.engine.addSystem(new TilesGridSystem(), SystemPriorities.update);
-        this.engine.addSystem(new GameTimerSystem(), SystemPriorities.update);
-
         this.engine.addSystem(new TileInteractiveSystem(this.creator), SystemPriorities.move);
-        this.engine.addSystem(new HelpSystem(this.creator, this.gameLogic), SystemPriorities.move);
-
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
         this.engine.addSystem(new TileShakingSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new TileToggleSystem(this.creator), SystemPriorities.animate);
-
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
+
+        this.fsm.changeState(GameControllerStateEnum.GAME);
 
         stageService.updateSignal.add(this.update);
         ModelHelper.setGameState(GameStateEnum.NONE);

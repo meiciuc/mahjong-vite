@@ -1,6 +1,7 @@
 import { PrepareIconsCommand } from '../commands/PrepareIconsController';
 import { AppStateEnum, GameStateEnum } from '../model/GameModel';
 import { ModelHelper } from '../model/ModelHelper';
+import { TimeSkipper } from '../utils/TimeSkipper';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -8,6 +9,8 @@ import { GameController } from './GameController';
 
 export class ApplicationController extends BaseController {
     protected async doExecute() {
+        // this.setupSdkService();
+        
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
@@ -19,6 +22,10 @@ export class ApplicationController extends BaseController {
 
     private async nextCicle() {
         ModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+
+        // TODO внесение кастомных данных
+        ModelHelper.resetGameModel();
+
         const game = await new GameController().execute();
         const gameState = ModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
@@ -34,5 +41,16 @@ export class ApplicationController extends BaseController {
 
         ModelHelper.setApplicationState(AppStateEnum.NONE);
         this.nextCicle();
+    }
+
+    private async setupSdkService() {
+        await new TimeSkipper(10000).execute();
+        const appState = ModelHelper.getApplicationState();
+        ModelHelper.setApplicationState(AppStateEnum.PAUSE_WHILE_ADS);
+
+        await new TimeSkipper(3000).execute();
+        ModelHelper.setApplicationState(appState);
+
+        this.setupSdkService();
     }
 }

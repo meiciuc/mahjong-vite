@@ -23,7 +23,6 @@ export class HelpSystem extends System {
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
         
         vueService.signalHelpButton.on(this.handleHelpButton);
-        ModelHelper.setHelpsCount(3);
     }
 
     removeFromEngine(_engine: Engine): void {
