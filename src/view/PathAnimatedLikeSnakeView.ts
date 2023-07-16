@@ -25,7 +25,7 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
 
     private color = Config.PATH_SELECT_COLOR;
 
-    constructor(public svg: SVGElement, private duration = .3) {
+    constructor(public svg: SVGElement, private duration = Config.PATH_LIKE_SNAKE_DURATION) {
         super();
         this.particleAge = this.duration / 1.5;
 

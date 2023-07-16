@@ -87,13 +87,13 @@ export class GameSystem extends System {
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
-            const pathEntity = this.creator.showPath(arr);
+            const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
                 ids.push(node.tile.id);
                 this.creator.nonInteractiveTile(node.tile);
             });
-            await new TimeSkipper(1000).execute();
+            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000 * 1.5).execute();
             ids.forEach((id) => {
                 const node = this.creator.getTileNodeById(id);
                 if (node) {

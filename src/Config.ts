@@ -18,6 +18,7 @@ export class Config {
 
     static readonly CLICK_TIMEOUT = 300;
     static readonly GRID_BaCKGROUND_COLOR = Config.APPLICATION_BACKGROUND_COLOR;
+    static PATH_LIKE_SNAKE_DURATION = .3;
     static PATH_HELP_COLOR = 0xFA4A0C;
     static PATH_SELECT_COLOR = 0xCDCDCD;
     static get PATH_TILE_SVG() {

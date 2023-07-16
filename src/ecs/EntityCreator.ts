@@ -167,7 +167,7 @@ export class EntityCreator {
         }
     }
 
-    public showPath(arr: PointLike[]) {
+    public showPath(arr: PointLike[], duration = Config.PATH_LIKE_SNAKE_DURATION) {
         if (arr.length === 0) {
             return;
         }
@@ -190,8 +190,7 @@ export class EntityCreator {
 
         const entity = new Entity();
 
-        // const view = new PathAnimatedView(svg);
-        const view = new PathAnimatedLikeSnakeView(svg);
+        const view = new PathAnimatedLikeSnakeView(svg, duration);
         entity
             .add(new TileHelpEffect())
             .add(new Transform())
