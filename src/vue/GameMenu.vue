@@ -6,9 +6,10 @@
     const gameLevel = useModel(["gameLevel"]);
     const gameScore = useModel(["gameScore"]);
     const helpsCount = useModel(["helpsCount"]);
-    const data = useModel(["gameStateTime"]);
-    const minutes = computed(() => {return Math.floor(data.value / 60 % 60)});
-    const secundes = computed(() => {return Math.floor(data.value % 60)});
+    const stateTime = useModel(["gameStateTime"]);
+    const maxTime = useModel(["gameMaxTime"]);
+    const minutes = computed(() => {return Math.floor((maxTime.value - stateTime.value) / 60 % 60)});
+    const secundes = computed(() => {return Math.floor((maxTime.value - stateTime.value) % 60)});
 
     const handleClick = () => {
         vueService.signalHelpButton.dispatch();

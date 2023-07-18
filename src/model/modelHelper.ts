@@ -27,6 +27,7 @@ export class ModelHelper {
         gameModel.data.helpsCount = 3;
         gameModel.data.gameStateTime = 0;
         gameModel.data.gameLevel++;
+        gameModel.data.gameMaxTime = 60 * 8;
     }
 
     static getHelpsCount() {
@@ -68,6 +69,7 @@ export class ModelHelper {
             gameLevel: 0,
             gameScore: 0,
             gameStateTime: 0,
+            gameMaxTime: 60 * 8,
             helpsCount: 3,
         });
     }

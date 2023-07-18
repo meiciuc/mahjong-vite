@@ -5,6 +5,7 @@
     import GameMenu from './GameMenu.vue';
     import StartScreen from './StartScreen.vue';
     import GameVictoryScreen from './GameVictoryScreen.vue';
+    import GameDefeatedScreen from './GameDefeatedScreen.vue';
     import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
     import ModalBackground from './ModalBackground.vue';
     import { useModel } from '../model/useModel';
@@ -24,6 +25,7 @@
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
+    <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen> 
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 </template>
 

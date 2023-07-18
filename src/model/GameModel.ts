@@ -12,7 +12,7 @@ export enum AppStateEnum {
     START_SCREEN = 'startScreen',
     GAME_SCREEN = 'gameScreen',
     GAME_VICTORY = 'gameVictoryScreen',
-    GAME_DEFEATE = 'gameDefeateScreen',
+    GAME_DEFEATED = 'gameDefeateScreen',
     GAME_NO_MORE_MOVES = 'gameNoMoreMovesScreen',
     PAUSE_WHILE_ADS = 'pauseWhileAds',
 }
@@ -29,5 +29,6 @@ export interface GameModel {
     gameStateTime: number,
     gameLevel: number,
     gameScore: number,
+    gameMaxTime: number,
     helpsCount: number,
 }

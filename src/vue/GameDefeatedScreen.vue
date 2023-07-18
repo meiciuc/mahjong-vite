@@ -9,7 +9,7 @@ import { vueService } from './VueService';
     <div class="Background">
     </div>
     <div class="Container">
-        <div class="Text">DEFEAT</div>
+        <div class="Text">DEFEATED</div>
     </div>
     <div class="Container">
         <div class="Button" @click="handleClick">PLAY AGAIN</div>

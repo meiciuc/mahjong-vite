@@ -33,7 +33,7 @@ export class ApplicationController extends BaseController {
         if (gameState === GameStateEnum.GAME_VICTORY) {
             ModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
-            ModelHelper.setApplicationState(AppStateEnum.GAME_DEFEATE);
+            ModelHelper.setApplicationState(AppStateEnum.GAME_DEFEATED);
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             ModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }

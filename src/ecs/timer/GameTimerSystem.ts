@@ -7,7 +7,6 @@ export class GameTimerSystem extends System {
 
     addToEngine(engine: Engine): void {
         this.game = engine.getNodeList(GameNode);
-        // this.game.head.game.model.data.gameStateTime = 0;
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -16,7 +15,11 @@ export class GameTimerSystem extends System {
 
     update(time: number): void {
         if (this.game.head.game.model.data.gameState === GameStateEnum.CLICK_WAIT) {
-            this.game.head.game.model.data.gameStateTime += time;
+            this.game.head.game.model.data.gameStateTime = Math.min(this.game.head.game.model.data.gameStateTime + time, this.game.head.game.model.data.gameMaxTime);
+        }
+
+        if (this.game.head.game.model.data.gameStateTime >= this.game.head.game.model.data.gameMaxTime) {
+            this.game.head.game.model.data.gameState = GameStateEnum.GAME_DEFEATE;
         }
     }
 }
