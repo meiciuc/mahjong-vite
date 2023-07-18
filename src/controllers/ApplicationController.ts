@@ -25,7 +25,7 @@ export class ApplicationController extends BaseController {
 
         // TODO внесение кастомных данных
         const level = ModelHelper.getGameLevel();
-        ModelHelper.resetGameModel();
+        ModelHelper.resetGameModelForNextLevel();
         ModelHelper.setGameLevel(level + 1);
 
         const game = await new GameController().execute();

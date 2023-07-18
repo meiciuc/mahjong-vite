@@ -22,11 +22,11 @@ export class ModelHelper {
         return gameModel.data.gameState;
     }
 
-    static resetGameModel() {
+    static resetGameModelForNextLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.helpsCount = 3;
         gameModel.data.gameStateTime = 0;
-        gameModel.data.gameLevel = 0;
+        gameModel.data.gameLevel++;
     }
 
     static getHelpsCount() {
@@ -49,6 +49,16 @@ export class ModelHelper {
         gameModel.data.gameLevel = value;
     }
 
+    static getGameScore() {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.gameScore;
+    }
+
+    static setGameScore(value: number) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.gameScore = value;
+    }
+
     static createModel() {
         dataService.config<GameModel>({
             icons: [],
@@ -56,6 +66,7 @@ export class ModelHelper {
             appStateTime: 0,
             gameState: GameStateEnum.NONE,
             gameLevel: 0,
+            gameScore: 0,
             gameStateTime: 0,
             helpsCount: 3,
         });

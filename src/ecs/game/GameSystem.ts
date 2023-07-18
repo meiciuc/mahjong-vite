@@ -8,6 +8,7 @@ import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
 import { GameStateEnum } from '../../model/GameModel';
+import { ModelHelper } from '../../model/ModelHelper';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
@@ -87,6 +88,8 @@ export class GameSystem extends System {
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
+            // true move
+            ModelHelper.setGameScore(ModelHelper.getGameScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
@@ -104,11 +107,10 @@ export class GameSystem extends System {
                 this.creator.removeEntity(pathEntity);
             }
         } else {
+            // wrong move
+            ModelHelper.setGameScore(Math.max(0, ModelHelper.getGameScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileB.tile, false);
-            // tiles.forEach((node) => {
-            //     this.creator.selectTile(node.tile, false);
-            // });
         }
     }
 }

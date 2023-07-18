@@ -36,4 +36,7 @@ export class Config {
         svgPath.setAttribute('d', d);
         return svg;
     }
+
+    static ADD_SCORE_FOR_TRUE_MOVE = 200;
+    static ADD_SCORE_FOR_FALSE_MOVE = -50;
 }

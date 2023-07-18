@@ -4,6 +4,7 @@
     import { useModel } from '../model/useModel';
 
     const gameLevel = useModel(["gameLevel"]);
+    const gameScore = useModel(["gameScore"]);
     const helpsCount = useModel(["helpsCount"]);
     const data = useModel(["gameStateTime"]);
     const minutes = computed(() => {return Math.floor(data.value / 60 % 60)});
@@ -18,17 +19,17 @@
     <div class="MenuPanel">
         <div>
             <div class="GameLevel">{{ gameLevel }}</div>
-
-            <div class="HelpContainer">
-                <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
-                <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
-                <div class="HelpsCount">{{ helpsCount }}</div>
-            </div>
+            <div class="GameScore">{{ gameScore }}</div>
         </div>
         
-
         <div class="Timer">
             {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
+        </div>
+
+        <div class="HelpContainer">
+            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
+            <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
+            <div class="HelpsCount">{{ helpsCount }}</div>
         </div>
     </div>
     
@@ -43,6 +44,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
+        font-family: 'Inter-SemiBold';
     }
     .MenuPanel {
         position: absolute;
@@ -50,12 +52,11 @@
         top: 0px;
         right: 0px;
         background: rgba($color: $background_colored, $alpha: 1);
-        padding: 10px 20%;
-        justify-content: start;
+        padding: 10px 10%;
+        justify-content:space-between;
     }
 
     .GameLevel {
-        font-family: 'Inter-SemiBold';
         background: rgba($color: $button_background_colored, $alpha: 1);
         color: white;
         padding-top: calc($button_padding_vertical / 2);
@@ -64,16 +65,26 @@
         border-radius: $button_border_radius;
         border-color: $button_background_idle;
         border: solid;
-        margin-right: 2em;
+        margin-right: 1em;
+    }
+
+    .GameScore {
+        background: rgba($color: $button_background_colored, $alpha: 1);
+        color: white;
+        padding-top: calc($button_padding_vertical / 2);
+        padding-bottom: calc($button_padding_vertical / 2);
+        width: 6em;
+        border-radius: $button_border_radius;
+        border-color: $button_background_idle;
+        border: solid;
+        margin-right: 1em;
     }
 
     .HelpContainer {
         background-color: $background_colored_darken;
         border-radius: $button_border_radius;
-        margin-right: 4em;
     }
     .HelpButton {
-        font-family: 'Inter-SemiBold';
         color: $button_text_colored;
         background-color: $button_text_idle;
         cursor: pointer;
@@ -99,7 +110,6 @@
     }
     .HelpsCount {
         user-select: none;
-        font-family: 'Inter-SemiBold';
         color: $button_text_idle;
         padding-top: calc($button_padding_vertical / 2);
         padding-bottom: calc($button_padding_vertical / 2);
@@ -108,7 +118,6 @@
     }
 
     .Timer {
-        font-family: 'Inter-SemiBold';
         background: rgba($color: $button_background_colored, $alpha: 1);
         color: white;
         padding-top: calc($button_padding_vertical / 2);
