@@ -27,5 +27,6 @@ export interface GameModel {
     appStateTime: number,
     gameState: GameStateEnum,
     gameStateTime: number,
+    gameLevel: number,
     helpsCount: number,
 }

@@ -9,8 +9,7 @@ import { Config } from './Config';
 
 import WebFont from 'webfontloader';
 import { vueService } from './vue/VueService';
-import { dataService } from './core/services/DataService';
-import { AppStateEnum, GameStateEnum, GameModel } from './model/GameModel';
+import { ModelHelper } from './model/ModelHelper';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -25,7 +24,7 @@ window.onload = async (): Promise<void> => {
     await loadGameAssets();
     document.body.appendChild(app.view as unknown as Node);
     
-    createModel();
+    ModelHelper.createModel();
     await initStageService();
     vueService.init();
     
@@ -97,15 +96,4 @@ async function initStageService() {
         layerDefault: LAYERS.GAME,
     });
     await stageService.init(app);
-}
-
-function createModel() {
-    dataService.config<GameModel>({
-        icons: [],
-        appState: AppStateEnum.NONE,
-        appStateTime: 0,
-        gameState: GameStateEnum.NONE,
-        gameStateTime: 0,
-        helpsCount: 3,
-    });
 }

@@ -26,6 +26,7 @@ export class ModelHelper {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.helpsCount = 3;
         gameModel.data.gameStateTime = 0;
+        gameModel.data.gameLevel = 0;
     }
 
     static getHelpsCount() {
@@ -36,5 +37,27 @@ export class ModelHelper {
     static setHelpsCount(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.helpsCount = value;
+    }
+
+    static getGameLevel() {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.gameLevel;
+    }
+
+    static setGameLevel(value: number) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.gameLevel = value;
+    }
+
+    static createModel() {
+        dataService.config<GameModel>({
+            icons: [],
+            appState: AppStateEnum.NONE,
+            appStateTime: 0,
+            gameState: GameStateEnum.NONE,
+            gameLevel: 0,
+            gameStateTime: 0,
+            helpsCount: 3,
+        });
     }
 }

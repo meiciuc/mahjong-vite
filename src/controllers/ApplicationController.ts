@@ -24,7 +24,9 @@ export class ApplicationController extends BaseController {
         ModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
         // TODO внесение кастомных данных
+        const level = ModelHelper.getGameLevel();
         ModelHelper.resetGameModel();
+        ModelHelper.setGameLevel(level + 1);
 
         const game = await new GameController().execute();
         const gameState = ModelHelper.getGameState();
@@ -40,6 +42,7 @@ export class ApplicationController extends BaseController {
         game.destroy();
 
         ModelHelper.setApplicationState(AppStateEnum.NONE);
+
         this.nextCicle();
     }
 

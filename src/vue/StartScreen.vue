@@ -40,7 +40,7 @@ import { vueService } from './VueService';
         padding-left: $button_padding_horizontal;
         padding-right: $button_padding_horizontal;
 
-        margin-bottom: 20%;
+        margin-bottom: 10%;
     }
     .StartButton:hover {
         background-color: $button_background_colored;

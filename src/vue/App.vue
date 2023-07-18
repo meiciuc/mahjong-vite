@@ -1,7 +1,8 @@
 <script setup lang="ts">
     import { AppStateEnum } from '../model/GameModel';
-    import HelpPanel from './HelpPanel.vue';
-    import Timer from './Timer.vue';
+    // import HelpPanel from './HelpPanel.vue';
+    // import Timer from './Timer.vue';
+    import GameMenu from './GameMenu.vue';
     import StartScreen from './StartScreen.vue';
     import GameVictoryScreen from './GameVictoryScreen.vue';
     import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
@@ -19,8 +20,7 @@
 </script>
 
 <template>
-    <HelpPanel></HelpPanel>
-    <Timer></Timer>
+    <GameMenu></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
