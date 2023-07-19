@@ -5,7 +5,7 @@ import { BaseCommand } from '../utils/BaseCommand';
 export class PrepareIconsCommand extends BaseCommand {
     protected async doExecute() {
         const namePart = 'icons/image_part_';
-        const length = dataService.getRootModel<GameModel>().data.assetsIconsNumber;
+        const length = 100;
 
         const icons = dataService.getRootModel<GameModel>().data.icons
         icons.splice(0);
@@ -15,6 +15,7 @@ export class PrepareIconsCommand extends BaseCommand {
                 key: `${namePart}${part < 100 ? '0' : ''}${part < 10 ? '0' : ''}${part}`,
             });
         }
+
         this.complete();
     }
 }

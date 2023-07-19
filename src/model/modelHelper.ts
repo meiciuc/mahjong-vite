@@ -72,9 +72,9 @@ export class ModelHelper {
             helpsCount: 3,
 
             icons: [],
+            maxIconPaires: 2,
             gridWidth: 4,
             gridHeight: 5,
-            assetsIconsNumber: (4 * 5) / 2,
         });
     }
 }

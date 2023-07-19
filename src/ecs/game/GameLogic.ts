@@ -50,10 +50,11 @@ export class GameLogic {
         return this.getQueue()[index];
     }
 
-    public getQueue() {
+    private getQueue() {
         if (this.iconsQueue.length === 0) {
             this.generateIconsQueue();
         }
+
         return this.iconsQueue;
     }
 
@@ -84,18 +85,25 @@ export class GameLogic {
 
     // TODO переделать или вообще вынести из логики? лучше всё сюда занести, конечно
     private generateIconsQueue() {
-        this.iconsQueue = [];
+        const model = dataService.getRootModel<GameModel>().data;
+        const gw = model.gridWidth;
+        const gh = model.gridHeight;
 
-        const types = 10;
+        this.iconsQueue = [];
+        
+        const pares = model.maxIconPaires;
+        let maxc = pares * 2;
+        let count = gw * gh;
         let index = 0;
-        const paires = dataService.getRootModel<GameModel>().data.assetsIconsNumber;
-        for (let i = 0; i < paires; i++) {
-            this.iconsQueue.push(index);
-            this.iconsQueue.push(index);
+
+        while (count > 0) {
+            while (maxc > 0 && count > 0) {
+                this.iconsQueue.push(index);
+                maxc--;
+                count--;
+            }    
             index++;
-            if (index > types) {
-                index = 0;
-            }
+            maxc = pares * 2;
         }
 
         shuffle(this.iconsQueue, 'hello.');

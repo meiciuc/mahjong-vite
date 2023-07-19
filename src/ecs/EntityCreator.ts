@@ -101,7 +101,7 @@ export class EntityCreator {
 
     public createTile(index: number, gridX: number, gridY: number) {
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
-        const tex = this.icons[icon.key]; //this.getIconTexture(index);
+        const tex = this.icons[icon.key];
         const sprite = new Sprite(tex);
 
         const scale = Math.max(Config.ICON_IMAGE_WIDTH / sprite.width, Config.ICON_IMAGE_HEIGHT / sprite.height);
