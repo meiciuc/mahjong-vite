@@ -97,10 +97,13 @@ export class GameLogic {
         let index = 0;
 
         while (count > 0) {
-            while (maxc > 0 && count > 0) {
+            while (maxc > 0) {
                 this.iconsQueue.push(index);
                 maxc--;
                 count--;
+                if (count <= 0) {
+                    break;
+                }
             }    
             index++;
             maxc = pares * 2;

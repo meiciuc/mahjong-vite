@@ -72,7 +72,7 @@ export class ModelHelper {
             helpsCount: 3,
 
             icons: [],
-            maxIconPaires: 2,
+            maxIconPaires: 1,
             gridWidth: 4,
             gridHeight: 5,
         });
