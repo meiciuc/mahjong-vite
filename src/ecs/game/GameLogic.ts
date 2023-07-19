@@ -1,11 +1,12 @@
 import { Engine, NodeList } from '@ash.ts/ash';
 import { throwIfNull } from '../../utils/throwIfNull';
-import { Config } from '../../Config';
 import { CrossFinder } from '../../controllers/finder/CrossFinder';
 import { PointLike } from '../../utils/point';
 import { shuffle } from '../../utils/utils';
 import { GridNode } from '../tiles/nodes/GridNode';
 import { TileNode } from '../tiles/nodes/TileNode';
+import { dataService } from '../../core/services/DataService';
+import { GameModel } from '../../model/GameModel';
 
 export class GameLogic {
     private grid: NodeList<GridNode>;
@@ -81,12 +82,13 @@ export class GameLogic {
             });
     }
 
+    // TODO переделать или вообще вынести из логики? лучше всё сюда занести, конечно
     private generateIconsQueue() {
         this.iconsQueue = [];
 
         const types = 10;
         let index = 0;
-        const paires = (Config.GRID_WIDTH * Config.GRID_HEIGHT) / 2;
+        const paires = dataService.getRootModel<GameModel>().data.assetsIconsNumber;
         for (let i = 0; i < paires; i++) {
             this.iconsQueue.push(index);
             this.iconsQueue.push(index);

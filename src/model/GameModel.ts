@@ -1,3 +1,4 @@
+
 export enum GameStateEnum {
     NONE = 'none',
     PREPARE = 'prepare',
@@ -22,7 +23,6 @@ export interface IconState {
 }
 
 export interface GameModel {
-    icons: IconState[];
     appState: AppStateEnum;
     appStateTime: number,
     gameState: GameStateEnum,
@@ -31,4 +31,9 @@ export interface GameModel {
     gameScore: number,
     gameMaxTime: number,
     helpsCount: number,
+
+    icons: IconState[];
+    gridWidth: number,
+    gridHeight: number,
+    assetsIconsNumber: number,
 }

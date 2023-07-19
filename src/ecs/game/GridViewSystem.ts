@@ -3,6 +3,8 @@ import { Sprite, Texture } from 'pixi.js';
 import { Config } from '../../Config';
 import { GridView } from '../../view/GridView';
 import { TileNode } from '../tiles/nodes/TileNode';
+import { dataService } from '../../core/services/DataService';
+import { GameModel } from '../../model/GameModel';
 
 export class GridViewSystem extends System {
     private tiles?: NodeList<TileNode>;
@@ -34,8 +36,8 @@ export class GridViewSystem extends System {
     };
 
     private setupView() {
-        const w = (Config.GRID_WIDTH + 2) * Config.ICON_IMAGE_WIDTH;
-        const h = (Config.GRID_HEIGHT + 2) * Config.ICON_IMAGE_HEIGHT;
+        const w = (dataService.getRootModel<GameModel>().data.gridWidth + 2) * Config.ICON_IMAGE_WIDTH;
+        const h = (dataService.getRootModel<GameModel>().data.gridHeight + 2) * Config.ICON_IMAGE_HEIGHT;
 
         const bg = new Sprite(Texture.WHITE);
         bg.tint = Config.GRID_BaCKGROUND_COLOR;
@@ -45,8 +47,8 @@ export class GridViewSystem extends System {
     }
 
     private scaleUpdate() {
-        const w = (Config.GRID_WIDTH + 2) * Config.ICON_IMAGE_WIDTH;
-        const h = (Config.GRID_HEIGHT + 2) * Config.ICON_IMAGE_HEIGHT;
+        const w = (dataService.getRootModel<GameModel>().data.gridWidth + 2) * Config.ICON_IMAGE_WIDTH;
+        const h = (dataService.getRootModel<GameModel>().data.gridHeight + 2) * Config.ICON_IMAGE_HEIGHT;
 
         const scale = Math.min(Config.GAME_WIDTH / w, Config.GAME_HEIGHT / h);
 

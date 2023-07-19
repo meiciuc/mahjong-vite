@@ -62,7 +62,6 @@ export class ModelHelper {
 
     static createModel() {
         dataService.config<GameModel>({
-            icons: [],
             appState: AppStateEnum.NONE,
             appStateTime: 0,
             gameState: GameStateEnum.NONE,
@@ -71,6 +70,11 @@ export class ModelHelper {
             gameStateTime: 0,
             gameMaxTime: 60 * 8,
             helpsCount: 3,
+
+            icons: [],
+            gridWidth: 4,
+            gridHeight: 5,
+            assetsIconsNumber: (4 * 5) / 2,
         });
     }
 }

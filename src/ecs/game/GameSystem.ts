@@ -7,19 +7,22 @@ import { TileNode } from '../tiles/nodes/TileNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
-import { GameStateEnum } from '../../model/GameModel';
+import { GameModel, GameStateEnum } from '../../model/GameModel';
 import { ModelHelper } from '../../model/ModelHelper';
+import { dataService } from '../../core/services/DataService';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
     private selectedTiles?: NodeList<TileSelectedNode>;
     private tiles?: NodeList<TileNode>;
+    private gameModel?: GameModel;
 
     constructor(private creator: EntityCreator, private gameLogic: GameLogic) {
         super();
     }
 
     addToEngine(engine: Engine): void {
+        this.gameModel = dataService.getRootModel<GameModel>().data;
         this.tiles = engine.getNodeList(TileNode);
         this.selectedTiles = engine.getNodeList(TileSelectedNode);
         this.game = engine.getNodeList(GameNode);
@@ -37,16 +40,16 @@ export class GameSystem extends System {
             case GameStateEnum.NONE:
                 let index = 0;
                 const grid: number[][] = [];
-                for (let y = 0; y < Config.GRID_HEIGHT + 2; y++) {
+                for (let y = 0; y < this.gameModel.gridHeight + 2; y++) {
                     const row = grid[grid.push([]) - 1];
-                    for (let x = 0; x < Config.GRID_WIDTH + 2; x++) {
-                        if (y === 0 || x === 0 || y === Config.GRID_HEIGHT + 1 || x === Config.GRID_WIDTH + 1) {
+                    for (let x = 0; x < this.gameModel.gridWidth + 2; x++) {
+                        if (y === 0 || x === 0 || y === this.gameModel.gridHeight + 1 || x === this.gameModel.gridWidth + 1) {
                             // empty grid border for a-star
                             row.push(Config.GRID_EMPTY_VALUE);
                             continue;
                         }
 
-                        this.creator.createTile(this.gameLogic.getIcon(index % Config.ASSETS_ICONS_NUMBER), x, y);
+                        this.creator.createTile(this.gameLogic.getIcon(index % this.gameModel.assetsIconsNumber), x, y);
                         row.push(throwIfNull(this.tiles?.tail).tile.id);
 
                         index++;
