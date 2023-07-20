@@ -82,7 +82,7 @@ export class GameModelHelper {
                 gameLevel: 0,
                 gameScore: 0,
                 gameStateTime: 0,
-                gameMaxTime: 60 * 8,
+                gameMaxTime: GameModelHelper.getGameMaxTime(),
                 helpsCount: 3,
     
                 icons: [],
@@ -105,14 +105,10 @@ export class GameModelHelper {
             gameModel.data.gameLevel++;
             gameModel.data.helpsCount = 3;
             gameModel.data.gameStateTime = 0;
+
             gameModel.data.gridWidth = gridSize.x;
             gameModel.data.gridHeight = gridSize.y;
-            
-            if (gameModel.data.gameLevel % 2 === 0) {
-                gameModel.data.gameMaxTime = 60 * 6;
-            } else {
-                gameModel.data.maxIconPaires = Math.max(2, Math.floor(4 - gameModel.data.gameLevel / 2));
-            }
+            gameModel.data.gameMaxTime = GameModelHelper.getGameMaxTime();
         }
     }
 
@@ -172,5 +168,22 @@ export class GameModelHelper {
         }
 
         return <PointLike>{x: currentA, y: currentB};
+    }
+
+    static getGameMaxTime() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.easeInOutBack;
+
+        const endLevel = 20;
+
+        const startA = 8;
+        const endA = 5;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / endLevel;
+
+        const currentA = Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA);
+
+        return Math.floor(60 * currentA);
     }
 }
