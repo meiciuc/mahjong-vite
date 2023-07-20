@@ -1,10 +1,9 @@
-import { PrepareIconsCommand } from '../commands/PrepareIconsController';
+import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { TimeSkipper } from '../utils/TimeSkipper';
-import { throwIfNull } from '../utils/throwIfNull';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -55,8 +54,8 @@ export class ApplicationController extends BaseController {
         this.nextCicle();
     }
 
-    private update(time: number) {
-        throwIfNull(this.gameModel).appStateTime += time;
+    private update = (time: number) => {
+        this.gameModel.appStateTime += time;
     }
     
 

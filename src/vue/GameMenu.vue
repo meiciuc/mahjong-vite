@@ -2,6 +2,7 @@
     import { computed } from 'vue';
     import { vueService } from './VueService';
     import { useModel } from '../model/useModel';
+import { Localization } from '../utils/Localization';
 
     const gameLevel = useModel(["gameLevel"]);
     const gameScore = useModel(["gameScore"]);
@@ -28,7 +29,7 @@
         </div>
 
         <div class="HelpContainer">
-            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">HELP</div>
+            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
             <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
             <div class="HelpsCount">{{ helpsCount }}</div>
         </div>

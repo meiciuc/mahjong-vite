@@ -1,0 +1,20 @@
+{
+    "start" : {
+        "play" : "Play game"
+    },
+    "game" : {
+        "help" : "Help"
+    },
+    "victory" : {
+        "victory" : "Victory",
+        "next" : "Next game"
+    },
+    "defeated" : {
+        "defeated" : "Defeated",
+        "again" : "Play again"
+    },
+    "noMoreMoves" : {
+        "noMoreMoves" : "NO MORE MOVES AVALIABLE",
+        "again" : "Play again"
+    }
+}

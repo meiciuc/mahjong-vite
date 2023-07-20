@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Localization } from '../utils/Localization';
 import { vueService } from './VueService';
     const handleClick = () => {
         vueService.signalStartButton.dispatch();
@@ -8,7 +9,7 @@ import { vueService } from './VueService';
 <template>
     <div class="Background"></div>
     <div class="Container">
-        <div class="StartButton" @click="handleClick">START</div>
+        <div class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</div>
     </div>
     
 </template>

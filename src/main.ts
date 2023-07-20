@@ -10,6 +10,7 @@ import { Config } from './Config';
 import WebFont from 'webfontloader';
 import { vueService } from './vue/VueService';
 import { GameModelHelper } from './model/GameModelHelper';
+import { Localization } from './utils/Localization';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -20,6 +21,7 @@ const app = new Application({
 app.renderer.plugins.interaction.autoPreventDefault = true;
 
 window.onload = async (): Promise<void> => {
+    await loadLanguage();
     await loadFonts();
     await loadGameAssets();
     document.body.appendChild(app.view as unknown as Node);
@@ -36,9 +38,11 @@ window.onload = async (): Promise<void> => {
     app.stage.interactive = true;
 };
 
-async function loadFonts() {
-    
+async function loadLanguage() {
+    return Localization.setLanguage('ru');
+}
 
+async function loadFonts() {
     return new Promise((resolve) => {
         WebFont.load({
             custom: {

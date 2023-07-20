@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Localization } from '../utils/Localization';
 import { vueService } from './VueService';
     const handleClick = () => {
         vueService.signalGameEndButton.dispatch();
@@ -9,10 +10,10 @@ import { vueService } from './VueService';
     <div class="Background">
     </div>
     <div class="Container">
-        <div class="Text">VICTORY</div>
+        <div class="Text">{{ Localization.getText('victory.victory') }}</div>
     </div>
     <div class="Container">
-        <div class="Button" @click="handleClick">PLAY AGAIN</div>
+        <div class="Button" @click="handleClick">{{ Localization.getText('victory.next') }}</div>
     </div>
 </template>
 

@@ -52,3 +52,17 @@ export function shuffle(array: any[], seed = '') {
   
     return array;
 }
+
+export namespace Route {
+    export function searchParam(key: string): string {
+        const query = window.location.search.substring(1);
+        const params = query.split("&");
+        for (var i = 0; i < params.length; i++) {
+            var pair = params[i].split("=");
+            if (pair[0] === key) {
+                return pair[1];
+            }
+        }
+        return '';
+    }
+}
