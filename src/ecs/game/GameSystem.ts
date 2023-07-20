@@ -113,6 +113,7 @@ export class GameSystem extends System {
             // wrong move
             GameModelHelper.setGameScore(Math.max(0, GameModelHelper.getGameScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
+            this.creator.selectTile(tileA.tile, false);
             this.creator.selectTile(tileB.tile, false);
         }
     }
