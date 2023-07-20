@@ -37,5 +37,5 @@ export class Config {
     static ADD_SCORE_FOR_TRUE_MOVE = 200;
     static ADD_SCORE_FOR_FALSE_MOVE = -50;
 
-    static DEV_MODEL = true;
+    static DEV_MODEL = false;
 }

@@ -1,5 +1,7 @@
 import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
+import easingsFunctions from "../core/utils/easingsFunctions";
+import { PointLike } from "../utils/point";
 import { shuffle } from "../utils/utils";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
 
@@ -55,6 +57,7 @@ export class GameModelHelper {
     }
 
     static createModel() {
+        const gridSize = GameModelHelper.getGridSize();
         if (Config.DEV_MODEL) {
             dataService.config<GameModel>({
                 appState: AppStateEnum.NONE,
@@ -84,14 +87,15 @@ export class GameModelHelper {
     
                 icons: [],
                 maxIconPaires: 3,
-                gridWidth: 4,
-                gridHeight: 5,
+                gridWidth: gridSize.x,
+                gridHeight: gridSize.y,
             });
         }
     }
 
     static resetGameModelForNextLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
+        const gridSize = GameModelHelper.getGridSize();
 
         if (Config.DEV_MODEL) {
             gameModel.data.gameLevel++;
@@ -101,6 +105,8 @@ export class GameModelHelper {
             gameModel.data.gameLevel++;
             gameModel.data.helpsCount = 3;
             gameModel.data.gameStateTime = 0;
+            gameModel.data.gridWidth = gridSize.x;
+            gameModel.data.gridHeight = gridSize.y;
             
             if (gameModel.data.gameLevel % 2 === 0) {
                 gameModel.data.gameMaxTime = 60 * 6;
@@ -137,5 +143,34 @@ export class GameModelHelper {
         shuffle(iconsQueue, 'hello.');
 
         return iconsQueue;
+    }
+
+    static getGridSize() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.easeOutQuad;
+
+        const endLevel = 20;
+        const startA = 6;
+        const endA = 10;
+        const startB = 7;
+        const endB = 15;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / endLevel;
+        
+        let currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
+        let currentB = Math.floor(easing(scaleLevel) * (endB - startB) + startB);
+
+        if (currentA % 2 !== 0 && currentB % 2 !== 0) {
+            currentA++;
+        }
+
+        if (Config.GAME_HEIGHT < Config.GAME_WIDTH) {
+            const temp = currentA;
+            currentA = currentB;
+            currentB = temp;
+        }
+
+        return <PointLike>{x: currentA, y: currentB};
     }
 }
