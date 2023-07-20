@@ -2,6 +2,7 @@ import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { PointLike } from "../utils/point";
+import { throwIfNull } from "../utils/throwIfNull";
 import { shuffle } from "../utils/utils";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
 
@@ -114,16 +115,18 @@ export class GameModelHelper {
     }
 
     static generateIconsQueue() {
-        const model = dataService.getRootModel<GameModel>().data;
+        const model = throwIfNull(dataService.getRootModel<GameModel>().data);
         const gw = model.gridWidth;
         const gh = model.gridHeight;
+        const currentLevel = model.gameLevel;
+        const shift = 4;
 
         const iconsQueue = [];
 
         const pares = model.maxIconPaires;
         let maxc = pares * 2;
         let count = gw * gh;
-        let index = 0;
+        let index = currentLevel < shift ? 0 : currentLevel - shift;
         while (count > 0) {
             while (maxc > 0) {
                 iconsQueue.push(index);
@@ -133,11 +136,11 @@ export class GameModelHelper {
                     break;
                 }
             }    
-            index++;
+            index = (index + 1) % model.icons.length;
             maxc = pares * 2;
         }
 
-        shuffle(iconsQueue, 'hello.');
+        shuffle(iconsQueue, `${Math.random()}`);
 
         return iconsQueue;
     }
@@ -146,14 +149,13 @@ export class GameModelHelper {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 
-        const endLevel = 20;
         const startA = 6;
-        const endA = 10;
+        const endA = 15;
         const startB = 7;
-        const endB = 15;
+        const endB = 26;
 
         const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / endLevel;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
         
         let currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
         let currentB = Math.floor(easing(scaleLevel) * (endB - startB) + startB);
@@ -175,13 +177,11 @@ export class GameModelHelper {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeInOutBack;
 
-        const endLevel = 20;
-
         const startA = 8;
         const endA = 5;
 
         const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / endLevel;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const currentA = Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA);
 
@@ -192,15 +192,13 @@ export class GameModelHelper {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 
-        const endLevel = 20;
-
-        const startA = 4;
-        const endA = 2;
+        const startA = 3;
+        const endA = 4;
 
         const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / endLevel;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
-        const currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
+        const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
 
         return currentA;
     }
