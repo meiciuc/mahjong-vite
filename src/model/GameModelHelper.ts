@@ -1,5 +1,6 @@
+import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
-import { GameLevelHelper } from "./GameLevelHelper";
+import { shuffle } from "../utils/utils";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
 
 export class GameModelHelper {
@@ -21,10 +22,6 @@ export class GameModelHelper {
     static getGameState() {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.gameState;
-    }
-
-    static resetGameModelForNextLevel() {
-        new GameLevelHelper().nextLevel();
     }
 
     static getHelpsCount() {
@@ -58,6 +55,87 @@ export class GameModelHelper {
     }
 
     static createModel() {
-        new GameLevelHelper().createModel();
+        if (Config.DEV_MODEL) {
+            dataService.config<GameModel>({
+                appState: AppStateEnum.NONE,
+                appStateTime: 0,
+                gameState: GameStateEnum.NONE,
+                gameLevel: 0,
+                gameScore: 0,
+                gameStateTime: 0,
+                gameMaxTime: 60 * 1,
+                helpsCount: 3,
+    
+                icons: [],
+                maxIconPaires: 2,
+                gridWidth: 4,
+                gridHeight: 5,
+            });
+        } else {
+            dataService.config<GameModel>({
+                appState: AppStateEnum.NONE,
+                appStateTime: 0,
+                gameState: GameStateEnum.NONE,
+                gameLevel: 0,
+                gameScore: 0,
+                gameStateTime: 0,
+                gameMaxTime: 60 * 8,
+                helpsCount: 3,
+    
+                icons: [],
+                maxIconPaires: 3,
+                gridWidth: 4,
+                gridHeight: 5,
+            });
+        }
+    }
+
+    static resetGameModelForNextLevel() {
+        const gameModel = dataService.getRootModel<GameModel>();
+
+        if (Config.DEV_MODEL) {
+            gameModel.data.gameLevel++;
+            gameModel.data.helpsCount = 3;
+            gameModel.data.gameStateTime = 0;
+        } else {
+            gameModel.data.gameLevel++;
+            gameModel.data.helpsCount = 3;
+            gameModel.data.gameStateTime = 0;
+            
+            if (gameModel.data.gameLevel % 2 === 0) {
+                gameModel.data.gameMaxTime = 60 * 6;
+            } else {
+                gameModel.data.maxIconPaires = Math.max(2, Math.floor(4 - gameModel.data.gameLevel / 2));
+            }
+        }
+    }
+
+    static generateIconsQueue() {
+        const model = dataService.getRootModel<GameModel>().data;
+        const gw = model.gridWidth;
+        const gh = model.gridHeight;
+
+        const iconsQueue = [];
+
+        const pares = model.maxIconPaires;
+        let maxc = pares * 2;
+        let count = gw * gh;
+        let index = 0;
+        while (count > 0) {
+            while (maxc > 0) {
+                iconsQueue.push(index);
+                maxc--;
+                count--;
+                if (count <= 0) {
+                    break;
+                }
+            }    
+            index++;
+            maxc = pares * 2;
+        }
+
+        shuffle(iconsQueue, 'hello.');
+
+        return iconsQueue;
     }
 }

@@ -1,12 +1,10 @@
 import { Engine, NodeList } from '@ash.ts/ash';
-import { throwIfNull } from '../../utils/throwIfNull';
 import { CrossFinder } from '../../controllers/finder/CrossFinder';
 import { PointLike } from '../../utils/point';
-import { shuffle } from '../../utils/utils';
+import { throwIfNull } from '../../utils/throwIfNull';
 import { GridNode } from '../tiles/nodes/GridNode';
 import { TileNode } from '../tiles/nodes/TileNode';
-import { dataService } from '../../core/services/DataService';
-import { GameModel } from '../../model/GameModel';
+import { GameModelHelper } from '../../model/GameModelHelper';
 
 export class GameLogic {
     private grid: NodeList<GridNode>;
@@ -52,7 +50,7 @@ export class GameLogic {
 
     private getQueue() {
         if (this.iconsQueue.length === 0) {
-            this.generateIconsQueue();
+            this.iconsQueue = GameModelHelper.generateIconsQueue();
         }
 
         return this.iconsQueue;
@@ -81,33 +79,5 @@ export class GameLogic {
             .catch(() => {
                 return Promise.resolve([]);
             });
-    }
-
-    // TODO переделать или вообще вынести из логики? лучше всё сюда занести, конечно
-    private generateIconsQueue() {
-        const model = dataService.getRootModel<GameModel>().data;
-        const gw = model.gridWidth;
-        const gh = model.gridHeight;
-
-        this.iconsQueue = [];
-
-        const pares = model.maxIconPaires;
-        let maxc = pares * 2;
-        let count = gw * gh;
-        let index = 0;
-        while (count > 0) {
-            while (maxc > 0) {
-                this.iconsQueue.push(index);
-                maxc--;
-                count--;
-                if (count <= 0) {
-                    break;
-                }
-            }    
-            index++;
-            maxc = pares * 2;
-        }
-
-        shuffle(this.iconsQueue, 'hello.');
     }
 }
