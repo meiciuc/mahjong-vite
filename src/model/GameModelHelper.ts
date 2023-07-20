@@ -86,7 +86,7 @@ export class GameModelHelper {
                 helpsCount: 3,
     
                 icons: [],
-                maxIconPaires: 3,
+                maxIconPaires: GameModelHelper.getGameMaxIconPaires(),
                 gridWidth: gridSize.x,
                 gridHeight: gridSize.y,
             });
@@ -109,6 +109,7 @@ export class GameModelHelper {
             gameModel.data.gridWidth = gridSize.x;
             gameModel.data.gridHeight = gridSize.y;
             gameModel.data.gameMaxTime = GameModelHelper.getGameMaxTime();
+            gameModel.data.maxIconPaires = GameModelHelper.getGameMaxIconPaires();
         }
     }
 
@@ -185,5 +186,22 @@ export class GameModelHelper {
         const currentA = Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA);
 
         return Math.floor(60 * currentA);
+    }
+
+    static getGameMaxIconPaires() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.easeOutQuad;
+
+        const endLevel = 20;
+
+        const startA = 4;
+        const endA = 2;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / endLevel;
+
+        const currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
+
+        return currentA;
     }
 }
