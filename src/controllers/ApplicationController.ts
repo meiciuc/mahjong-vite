@@ -1,15 +1,24 @@
 import { PrepareIconsCommand } from '../commands/PrepareIconsController';
-import { AppStateEnum, GameStateEnum } from '../model/GameModel';
+import { dataService } from '../core/services/DataService';
+import { stageService } from '../core/services/StageService';
+import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { TimeSkipper } from '../utils/TimeSkipper';
+import { throwIfNull } from '../utils/throwIfNull';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 
 export class ApplicationController extends BaseController {
+
+    private gameModel?: GameModel;
+
     protected async doExecute() {
+        this.gameModel = dataService.getRootModel<GameModel>().data;
+
         // this.setupSdkService();
+        stageService.updateSignal.add(this.update);
         
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -45,6 +54,11 @@ export class ApplicationController extends BaseController {
 
         this.nextCicle();
     }
+
+    private update(time: number) {
+        throwIfNull(this.gameModel).appStateTime += time;
+    }
+    
 
     private async setupSdkService() {
         await new TimeSkipper(10000).execute();
