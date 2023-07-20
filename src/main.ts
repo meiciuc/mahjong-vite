@@ -9,7 +9,7 @@ import { Config } from './Config';
 
 import WebFont from 'webfontloader';
 import { vueService } from './vue/VueService';
-import { ModelHelper } from './model/ModelHelper';
+import { GameModelHelper } from './model/GameModelHelper';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -24,7 +24,7 @@ window.onload = async (): Promise<void> => {
     await loadGameAssets();
     document.body.appendChild(app.view as unknown as Node);
     
-    ModelHelper.createModel();
+    GameModelHelper.createModel();
     await initStageService();
     vueService.init();
     

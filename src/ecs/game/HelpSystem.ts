@@ -5,7 +5,7 @@ import { EntityCreator } from '../EntityCreator';
 import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
-import { ModelHelper } from '../../model/ModelHelper';
+import { GameModelHelper } from '../../model/GameModelHelper';
 import { GameStateEnum } from '../../model/GameModel';
 
 export class HelpSystem extends System {
@@ -57,14 +57,14 @@ export class HelpSystem extends System {
 
         const arr = await this.gameLogic.needHelp()
         if (arr.length === 0) {
-            ModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
+            GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
         } else {
             const nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeB = throwIfNull(this.creator.getTileNodeByGridPosition(arr[arr.length - 1].x, arr[arr.length - 1].y));
             this.creator.createTileHelpEffect(nodeA.transform.position.x, nodeA.transform.position.y);
             this.creator.createTileHelpEffect(nodeB.transform.position.x, nodeB.transform.position.y);
 
-            ModelHelper.setHelpsCount(Math.max(0, ModelHelper.getHelpsCount() - 1));
+            GameModelHelper.setHelpsCount(Math.max(0, GameModelHelper.getHelpsCount() - 1));
         }
     }
 }

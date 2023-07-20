@@ -8,7 +8,7 @@ import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
 import { GameModel, GameStateEnum } from '../../model/GameModel';
-import { ModelHelper } from '../../model/ModelHelper';
+import { GameModelHelper } from '../../model/GameModelHelper';
 import { dataService } from '../../core/services/DataService';
 
 export class GameSystem extends System {
@@ -92,7 +92,7 @@ export class GameSystem extends System {
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             // true move
-            ModelHelper.setGameScore(ModelHelper.getGameScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
+            GameModelHelper.setGameScore(GameModelHelper.getGameScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
@@ -111,7 +111,7 @@ export class GameSystem extends System {
             }
         } else {
             // wrong move
-            ModelHelper.setGameScore(Math.max(0, ModelHelper.getGameScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
+            GameModelHelper.setGameScore(Math.max(0, GameModelHelper.getGameScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileB.tile, false);
         }

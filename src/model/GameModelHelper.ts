@@ -1,7 +1,8 @@
 import { dataService } from "../core/services/DataService";
+import { GameLevelHelper } from "./GameLevelHelper";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
 
-export class ModelHelper {
+export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.appState = value;
@@ -23,11 +24,7 @@ export class ModelHelper {
     }
 
     static resetGameModelForNextLevel() {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.helpsCount = 3;
-        gameModel.data.gameStateTime = 0;
-        gameModel.data.gameLevel++;
-        gameModel.data.gameMaxTime = 60 * 8;
+        new GameLevelHelper().nextLevel();
     }
 
     static getHelpsCount() {
@@ -61,20 +58,6 @@ export class ModelHelper {
     }
 
     static createModel() {
-        dataService.config<GameModel>({
-            appState: AppStateEnum.NONE,
-            appStateTime: 0,
-            gameState: GameStateEnum.NONE,
-            gameLevel: 0,
-            gameScore: 0,
-            gameStateTime: 0,
-            gameMaxTime: 60 * 8,
-            helpsCount: 3,
-
-            icons: [],
-            maxIconPaires: 1,
-            gridWidth: 4,
-            gridHeight: 5,
-        });
+        new GameLevelHelper().createModel();
     }
 }

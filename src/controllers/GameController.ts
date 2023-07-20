@@ -16,7 +16,7 @@ import { BaseController } from './BaseController';
 import { dataService } from '../core/services/DataService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
-import { ModelHelper } from '../model/ModelHelper';
+import { GameModelHelper } from '../model/GameModelHelper';
 import { AnimationSystem } from '../ecs/animation/AnimationSystem';
 import { TileShakingSystem } from '../ecs/tiles/TileShakingSystem';
 import { TileToggleSystem } from '../ecs/tiles/TileToggleSystem';
@@ -109,7 +109,7 @@ export class GameController extends BaseController {
         this.fsm.changeState(GameControllerStateEnum.GAME);
 
         stageService.updateSignal.add(this.update);
-        ModelHelper.setGameState(GameStateEnum.NONE);
+        GameModelHelper.setGameState(GameStateEnum.NONE);
 
         this.creator.createGame();
     }

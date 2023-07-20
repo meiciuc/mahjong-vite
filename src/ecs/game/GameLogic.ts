@@ -90,12 +90,11 @@ export class GameLogic {
         const gh = model.gridHeight;
 
         this.iconsQueue = [];
-        
+
         const pares = model.maxIconPaires;
         let maxc = pares * 2;
         let count = gw * gh;
         let index = 0;
-
         while (count > 0) {
             while (maxc > 0) {
                 this.iconsQueue.push(index);
