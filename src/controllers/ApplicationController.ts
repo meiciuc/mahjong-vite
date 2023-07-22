@@ -3,7 +3,7 @@ import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
-import { TimeSkipper } from '../utils/TimeSkipper';
+// import { TimeSkipper } from '../utils/TimeSkipper';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -59,14 +59,14 @@ export class ApplicationController extends BaseController {
     }
     
 
-    private async setupSdkService() {
-        await new TimeSkipper(10000).execute();
-        const appState = GameModelHelper.getApplicationState();
-        GameModelHelper.setApplicationState(AppStateEnum.PAUSE_WHILE_ADS);
+    // private async setupSdkService() {
+    //     await new TimeSkipper(10000).execute();
+    //     const appState = GameModelHelper.getApplicationState();
+    //     GameModelHelper.setApplicationState(AppStateEnum.PAUSE_WHILE_ADS);
 
-        await new TimeSkipper(3000).execute();
-        GameModelHelper.setApplicationState(appState);
+    //     await new TimeSkipper(3000).execute();
+    //     GameModelHelper.setApplicationState(appState);
 
-        this.setupSdkService();
-    }
+    //     this.setupSdkService();
+    // }
 }

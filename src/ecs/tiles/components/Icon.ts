@@ -1,4 +1,4 @@
-import { IconState } from "../../../states/GameState";
+import { IconState } from "../../../model/GameModel";
 
 export class Icon {
     constructor(
