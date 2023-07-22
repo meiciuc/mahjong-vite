@@ -1,20 +1,22 @@
 {
     "start" : {
-        "play" : "Play game"
+        "play" : "Play"
     },
     "game" : {
         "help" : "Help"
     },
     "victory" : {
         "victory" : "Victory",
-        "next" : "Next game"
+        "next" : "Next"
     },
     "defeated" : {
         "defeated" : "Defeated",
-        "again" : "Play again"
+        "again" : "Try again",
+        "initialy" : "Initialy"
     },
     "noMoreMoves" : {
         "noMoreMoves" : "NO MORE MOVES AVALIABLE",
-        "again" : "Play again"
+        "again" : "Try again",
+        "initialy" : "Initialy"
     }
 }

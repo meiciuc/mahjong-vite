@@ -7,14 +7,16 @@
     },
     "victory" : {
         "victory" : "Победа",
-        "next" : "Следующая партия"
+        "next" : "Дальше"
     },
     "defeated" : {
-        "defeated" : "Вы проиграли",
-        "again" : "Попробовать снова"
+        "defeated" : "Проигрыш",
+        "again" : "Повторить",
+        "initialy" : "С начала"
     },
     "noMoreMoves" : {
         "noMoreMoves" : "Нет доступных ходов",
-        "again" : "Попробовать снова"
+        "again" : "Повторить",
+        "initialy" : "С начала"
     }
 }
