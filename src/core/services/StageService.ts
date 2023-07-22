@@ -21,6 +21,7 @@ class StageService {
     }
 
     private app?: Application;
+    private root?: Container;
 
     public readonly resizeSignal = new Signal3<number, number, number>(); // width, height, dpr
     public readonly updateSignal = new Signal1<number>();
@@ -32,12 +33,16 @@ class StageService {
         this.layerDefault = layerDefault;
 
         this.app = app;
-        this.resize();
+        this.root = new Container();
+        this.app.stage.addChild(this.root);
+        
 
         layers.sort();
         for (const layer of layers) {
-            this.layers.set(layer, this.app.stage.addChild(new Container()));
+            this.layers.set(layer, this.root.addChild(new Container()));
         }
+
+        this.resize();
 
         const tickProvider = new FrameTickProvider();
         tickProvider.add((delta: number) => this.updateSignal.dispatch(delta));
@@ -70,7 +75,7 @@ class StageService {
             this.app.view.width / Config.GAME_WIDTH / window.devicePixelRatio,
             this.app.view.height / Config.GAME_HEIGHT / window.devicePixelRatio,
         );
-        this.app.stage.scale.set(this.scale, this.scale);
+        this.root.scale.set(this.scale, this.scale);
 
         const RATIO = Config.GAME_WIDTH / Config.GAME_HEIGHT;
         const canvasRatio = this.app.view.width / this.app.view.height;
@@ -87,17 +92,10 @@ class StageService {
             offsetY = ((1 - scaleY) * window.innerHeight) / 2;
         }
 
-        this.app.stage.position.set(offsetX, offsetY);
+        this.root.position.set(offsetX, offsetY);
 
         this.resizeSignal.dispatch(this.app.view.width, this.app.view.height, window.devicePixelRatio);
     };
-
-    public get stage(): Application {
-        if (!this.app) {
-            throw new Error('Error: Application is undefined!');
-        }
-        return this.app;
-    }
 
     public getLayer(layerId: number) {
         return this.layers.get(layerId) || (this.layers.get(this.layerDefault) as Container);
