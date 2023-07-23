@@ -1,19 +1,12 @@
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 
 html, body {
   height: 100%;
   padding: 0;
   overflow: hidden;
-}
-
-body {
-  display: fixed;
-  place-items: center;
-  background-color: #FA4A0C;
-  width: 100vw;
-  height: 100vh;
 }
 
 @font-face {

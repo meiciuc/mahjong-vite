@@ -3,7 +3,7 @@
         "play" : "Играть"
     },
     "game" : {
-        "help" : "Помощь"
+        "help" : "?"
     },
     "victory" : {
         "victory" : "Победа",

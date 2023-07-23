@@ -30,7 +30,7 @@ import { Localization } from '../utils/Localization';
 
         <div class="HelpContainer">
             <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
-            <div v-else class="HelpButton HelpButtonDisabled">HELP</div>
+            <div v-else class="HelpButton HelpButtonDisabled">{{ Localization.getText('game.help') }}</div>
             <div class="HelpsCount">{{ helpsCount }}</div>
         </div>
     </div>
@@ -54,32 +54,30 @@ import { Localization } from '../utils/Localization';
         top: 0px;
         right: 0px;
         background: rgba($color: $background_colored, $alpha: 1);
-        padding: 10px 10%;
-        justify-content:space-between;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
     }
 
     .GameLevel {
         background: rgba($color: $button_background_colored, $alpha: 1);
         color: white;
-        padding-top: calc($button_padding_vertical / 2);
-        padding-bottom: calc($button_padding_vertical / 2);
-        width: 4em;
+        padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+        min-width: 4em;
         border-radius: $button_border_radius;
         border-color: $button_background_idle;
         border: solid;
-        margin-right: 1em;
+        margin-right: 0.3em;
     }
 
     .GameScore {
         background: rgba($color: $button_background_colored, $alpha: 1);
         color: white;
-        padding-top: calc($button_padding_vertical / 2);
-        padding-bottom: calc($button_padding_vertical / 2);
-        width: 6em;
+        padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+        min-width: 6em;
         border-radius: $button_border_radius;
         border-color: $button_background_idle;
         border: solid;
-        margin-right: 1em;
     }
 
     .HelpContainer {
@@ -91,10 +89,7 @@ import { Localization } from '../utils/Localization';
         background-color: $button_text_idle;
         cursor: pointer;
         user-select: none;
-        padding-top: calc($button_padding_vertical / 2);
-        padding-bottom: calc($button_padding_vertical / 2);
-        padding-left: calc($button_padding_horizontal / 2);
-        padding-right: calc($button_padding_horizontal / 2);
+        padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
         border-radius: $button_border_radius;
         border-color: $button_text_idle;
         border: solid;
@@ -113,10 +108,8 @@ import { Localization } from '../utils/Localization';
     .HelpsCount {
         user-select: none;
         color: $button_text_idle;
-        padding-top: calc($button_padding_vertical / 2);
-        padding-bottom: calc($button_padding_vertical / 2);
-        padding-left: calc($button_padding_horizontal / 2);
-        padding-right: calc($button_padding_horizontal / 2);
+        padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+        width: 3em;
     }
 
     .Timer {
