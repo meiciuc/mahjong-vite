@@ -11,6 +11,7 @@ import WebFont from 'webfontloader';
 import { vueService } from './vue/VueService';
 import { GameModelHelper } from './model/GameModelHelper';
 import { Localization } from './utils/Localization';
+import { PreloaderController } from './controllers/PreloaderController';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -21,15 +22,19 @@ const app = new Application({
 app.renderer.plugins.interaction.autoPreventDefault = true;
 
 window.onload = async (): Promise<void> => {
+    await initStageService();
+
+    const preloader = await new PreloaderController().execute();
+    preloader.destroy();
+
     await loadLanguage();
     await loadFonts();
     await loadGameAssets();
     document.body.appendChild(app.view as unknown as Node);
-    
+
     GameModelHelper.createModel();
-    await initStageService();
     vueService.init();
-    
+
     setupTweens();
     // addStats();
 
@@ -86,7 +91,7 @@ function addStats() {
     stats.dom.style.bottom = '0px';
     stats.dom.style.left = '100px';
     stats.dom.style.marginLeft = `-${stats.dom.getBoundingClientRect().width / 2}px`;
-    
+
     const animate = function () {
         requestAnimationFrame(animate);
         stats.update();

@@ -56,18 +56,25 @@
     </div>
   </div>
 
-  <script>
-    let preloaded = 0;
+  <script type="text/javascript" id="preloader" preloaded="0">
 
-    const preloader = document.querySelector('.preloader');
-    const bar = document.querySelector(".bar");
-    const images = document.querySelectorAll(".images img");
-
-    const image = images[0];
-
+    function getScript() {
+      return document.querySelector('#preloader');
+    }
 
     function update() {
-      preloader.style.visibility = "visible";
+      const preloader = document.querySelector('.preloader');
+
+      if (!preloader) {
+        return;
+      }
+
+      const bar = document.querySelector(".bar");
+      const images = document.querySelectorAll(".images img");
+      const image = images[0];
+
+      const preloaded = parseInt(getScript().getAttribute('preloaded'));
+
       bar.style.width = `${preloaded}%`;
       const length = Math.min(Math.floor(images.length / 100 * (preloaded + 30)), images.length);
       for (let i = 0; i < length; i++) {
@@ -76,24 +83,18 @@
         image.style.transform = `translate(${Math.random() * factor}px, ${Math.random() * factor}px)`;
       }
 
+      if (preloaded > 0) {
+        preloader.style.visibility = "visible";
+      }
+
       requestAnimationFrame(update);
     }
 
     requestAnimationFrame(update);
 
-    let interval = setInterval(() => {
-      preloaded += 1;
-      preloaded = Math.min(preloaded, 100)
-
-      if (preloaded === 100) {
-        clearInterval(interval);
-      }
-    }, 100);
-
-
   </script>
 
-  <!-- <script type="module" src="/src/main.ts"></script> -->
+  <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
