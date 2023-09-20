@@ -1,12 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
-  </head>
-  <body>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + Vue + TS</title>
+  <style type="text/css">
+    .screen {
+      height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .images {
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      scale: 0.5;
+    }
+
+    .images img {
+      display: inline-block;
+    }
+
+    .preloader {
+      display: flex;
+      justify-content: start;
+      width: 30vw;
+      height: 1.2em;
+      border: 1px solid #000000;
+      visibility: hidden;
+    }
+
+    .bar {
+      background-color: #ff0000;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="screen">
+    <div class="images">
+      <img src="assets/__image_part_010.png" />
+      <img src="assets/__image_part_017.png" />
+      <img src="assets/__image_part_028.png" />
+      <img src="assets/__image_part_089.png" />
+      <img src="assets/__image_part_096.png" />
+    </div>
+    <div class="preloader">
+      <div class="bar" style="width: 33%;"></div>
+    </div>
+  </div>
+
+  <script>
+    let preloaded = 0;
+
+    const preloader = document.querySelector('.preloader');
+    const bar = document.querySelector(".bar");
+    const images = document.querySelectorAll(".images img");
+
+    const image = images[0];
+
+
+    function update() {
+      preloader.style.visibility = "visible";
+      bar.style.width = `${preloaded}%`;
+      const length = Math.min(Math.floor(images.length / 100 * (preloaded + 30)), images.length);
+      for (let i = 0; i < length; i++) {
+        const image = images[i];
+        const factor = Math.random() * preloaded / 100 * (length) * 2;
+        image.style.transform = `translate(${Math.random() * factor}px, ${Math.random() * factor}px)`;
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+
+    let interval = setInterval(() => {
+      preloaded += 1;
+      preloaded = Math.min(preloaded, 100)
+
+      if (preloaded === 100) {
+        clearInterval(interval);
+      }
+    }, 100);
+
+
+  </script>
+
+  <!-- <script type="module" src="/src/main.ts"></script> -->
+</body>
+
 </html>

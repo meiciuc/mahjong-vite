@@ -33,4 +33,5 @@ $background_idle: $first_color;
     padding-bottom: $button_padding_vertical;
     padding-left: $button_padding_horizontal;
     padding-right: $button_padding_horizontal;
+    transition: all 100ms ease-out;
 }

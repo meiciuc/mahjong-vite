@@ -85,10 +85,9 @@ import { Localization } from '../utils/Localization';
         border-radius: $button_border_radius;
     }
     .HelpButton {
+        @include scene-button;
         color: $button_text_colored;
         background-color: $button_text_idle;
-        cursor: pointer;
-        user-select: none;
         padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
         border-radius: $button_border_radius;
         border-color: $button_text_idle;

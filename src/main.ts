@@ -31,7 +31,7 @@ window.onload = async (): Promise<void> => {
     vueService.init();
     
     setupTweens();
-    addStats();
+    // addStats();
 
     // start application
     new ApplicationController().execute();
