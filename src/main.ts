@@ -1,17 +1,15 @@
 import TWEEN from '@tweenjs/tween.js';
-import { Application, Assets } from 'pixi.js';
+import { Application } from 'pixi.js';
 import Stats from 'stats.js';
+import { Config } from './Config';
 import { LAYERS } from './GameLayers';
 import { ApplicationController } from './controllers/ApplicationController';
 import { stageService } from './core/services/StageService';
 import './style.css';
-import { Config } from './Config';
 
-import WebFont from 'webfontloader';
-import { vueService } from './vue/VueService';
-import { GameModelHelper } from './model/GameModelHelper';
-import { Localization } from './utils/Localization';
 import { PreloaderController } from './controllers/PreloaderController';
+import { GameModelHelper } from './model/GameModelHelper';
+import { vueService } from './vue/VueService';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -27,52 +25,23 @@ window.onload = async (): Promise<void> => {
     const preloader = await new PreloaderController().execute();
     preloader.destroy();
 
-    await loadLanguage();
-    await loadFonts();
-    await loadGameAssets();
     document.body.appendChild(app.view as unknown as Node);
 
     GameModelHelper.createModel();
     vueService.init();
 
     setupTweens();
-    // addStats();
 
     // start application
     new ApplicationController().execute();
     app.stage.interactive = true;
+
+    if (Config.DEV_SHOW_STATS) {
+        addStats();
+    }
 };
 
-async function loadLanguage() {
-    return Localization.setLanguage('ru');
-}
 
-async function loadFonts() {
-    return new Promise((resolve) => {
-        WebFont.load({
-            custom: {
-                families: [
-                    'Inter-SemiBold',
-                ],
-            },
-            timeout: 1000,
-            active: () => {
-                resolve(true);
-            },
-        });
-    })
-        .catch((error: Error) => {
-            console.log('Error: ', error);
-        })
-        .finally(() => {
-            return Promise.resolve(true);
-        });
-}
-
-async function loadGameAssets() {
-    await Assets.load([`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`]);
-    await Assets.load([`./assets/particle.png`]);
-}
 
 function setupTweens() {
     const animate = function (time: number) {

@@ -12,7 +12,7 @@ export class Config {
     static GRID_EMPTY_VALUE = -1;
 
     static readonly ASSETST_ICONS_VERSION = 'v2';
-    
+
     static readonly CLICK_TIMEOUT = 300;
     static readonly GRID_BaCKGROUND_COLOR = Config.APPLICATION_BACKGROUND_COLOR;
     static PATH_LIKE_SNAKE_DURATION = .3;
@@ -22,7 +22,7 @@ export class Config {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
-        
+
         svg.appendChild(svgPath);
 
         const start = 2;
@@ -39,4 +39,9 @@ export class Config {
     static MAX_GAME_LEVEL = 100;
 
     static DEV_MODEL = false;
+
+    static DEV = true;
+    static get DEV_SHOW_STATS() {
+        return Config.DEV;
+    }
 }
