@@ -1,26 +1,28 @@
+import { Signal1 } from '@ash.ts/ash';
 import { stageService } from '../core/services/StageService';
 import { BaseController } from './BaseController';
-import { Assets } from 'pixi.js';
-import { Config } from '../Config';
-import { Localization } from '../utils/Localization';
-import WebFont from 'webfontloader';
 
 export class PreloaderController extends BaseController {
     private scaled = 0;
     private preloaded = 0;
 
+    constructor(private signal: Signal1<number>) {
+        super();
+    }
+
     destroy(): void {
         this.getPreloader()?.remove();
+        this.signal.remove(this.handleSignal);
         stageService.updateSignal.remove(this.update);
     }
 
     protected async doExecute() {
-        await this.loadLanguage();
-        await this.loadFonts();
-
+        this.signal.add(this.handleSignal);
         stageService.updateSignal.add(this.update);
+    }
 
-        await this.loadAssest();
+    private handleSignal = (value: number) => {
+        this.preloaded = value;
     }
 
     private update = () => {
@@ -38,42 +40,6 @@ export class PreloaderController extends BaseController {
         if (this.scaled > 0.9999) {
             this.complete();
         }
-    }
-
-    async loadAssest() {
-        this.preloaded = 0;
-        await Assets.load([
-            `./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`,
-            `./assets/particle.png`
-        ], (value: number) => {
-            this.preloaded = value;
-        });
-    }
-
-    async loadLanguage() {
-        return Localization.setLanguage('ru');
-    }
-
-    async loadFonts() {
-        return new Promise((resolve) => {
-            WebFont.load({
-                custom: {
-                    families: [
-                        'Inter-SemiBold',
-                    ],
-                },
-                timeout: 500,
-                active: () => {
-                    resolve(true);
-                },
-            });
-        })
-            .catch((error: Error) => {
-                console.log('Error: ', error);
-            })
-            .finally(() => {
-                return Promise.resolve(true);
-            });
     }
 
     private getPreloader() {

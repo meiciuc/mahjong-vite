@@ -44,4 +44,6 @@ export class Config {
     static get DEV_SHOW_STATS() {
         return Config.DEV;
     }
+
+    static DEV_USE_PRELOADER = true;
 }

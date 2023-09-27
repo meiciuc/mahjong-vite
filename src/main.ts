@@ -10,6 +10,7 @@ import './style.css';
 import { PreloaderController } from './controllers/PreloaderController';
 import { GameModelHelper } from './model/GameModelHelper';
 import { vueService } from './vue/VueService';
+import { AssetsController } from './controllers/AssetsController';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
@@ -22,8 +23,17 @@ app.renderer.plugins.interaction.autoPreventDefault = true;
 window.onload = async (): Promise<void> => {
     await initStageService();
 
-    const preloader = await new PreloaderController().execute();
-    preloader.destroy();
+    if (Config.DEV_USE_PRELOADER) {
+        const assetsController = new AssetsController();
+        assetsController.execute();
+        const preloader = await new PreloaderController(assetsController.signal).execute();
+        preloader.destroy();
+        assetsController.destroy();
+    } else {
+        const assetsController = new AssetsController();
+        await assetsController.execute();
+        assetsController.destroy();
+    }
 
     document.body.appendChild(app.view as unknown as Node);
 
