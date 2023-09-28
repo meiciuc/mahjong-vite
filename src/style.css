@@ -3,7 +3,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   padding: 0;
   overflow: hidden;
@@ -15,5 +16,4 @@ html, body {
   src: url('../fonts/Inter-SemiBold.woff') format('woff');
 }
 
-@media (prefers-color-scheme: light) {
-}
+@media (prefers-color-scheme: light) {}

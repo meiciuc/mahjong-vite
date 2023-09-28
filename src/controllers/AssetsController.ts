@@ -1,5 +1,5 @@
 import WebFont from "webfontloader";
-import { Localization } from "../utils/Localization";
+import { Languages, Localization } from "../utils/Localization";
 import { BaseController } from "./BaseController";
 import { Signal1 } from "@ash.ts/ash";
 import { Assets } from "pixi.js";
@@ -26,7 +26,7 @@ export class AssetsController extends BaseController {
     }
 
     async loadLanguage() {
-        return Localization.setLanguage('ru');
+        return Localization.setLanguage(Languages.en);
     }
 
     async loadFonts() {
