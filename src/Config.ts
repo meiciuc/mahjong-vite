@@ -36,7 +36,7 @@ export class Config {
 
     static ADD_SCORE_FOR_TRUE_MOVE = 200;
     static ADD_SCORE_FOR_FALSE_MOVE = -50;
-    static MAX_GAME_LEVEL = 100;
+    static MAX_GAME_LEVEL = 92;
 
     static DEV_MODEL = false;
 
