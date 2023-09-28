@@ -2,6 +2,7 @@ import { FrameTickProvider, Signal1, Signal3 } from '@ash.ts/ash';
 import { debounce, throttle } from 'lodash';
 import { Application, Container } from 'pixi.js';
 import { Config } from '../../Config';
+import { MenuPosition, vueService } from '../../vue/VueService';
 
 export interface RootConfig {
     gameTitle?: string;
@@ -35,7 +36,7 @@ class StageService {
         this.app = app;
         this.root = new Container();
         this.app.stage.addChild(this.root);
-        
+
 
         layers.sort();
         for (const layer of layers) {
@@ -54,9 +55,7 @@ class StageService {
         return Promise.resolve(this);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private handleOrientation = (event: any) => {
-        console.log('handleOrientation', event);
+    private handleOrientation = () => {
         this.resize();
     };
 
@@ -65,31 +64,37 @@ class StageService {
             return;
         }
 
+        const padding = 30;
+        const appWidth = this.app.view.width - padding;
+        const appHeight = this.app.view.height - padding;
+        const shiftX = vueService.menuPosition === MenuPosition.TOP ? padding / 2 : padding;
+        const shiftY = vueService.menuPosition === MenuPosition.LEFT ? padding : padding;
+
         const sideMax = Math.max(Config.GAME_WIDTH_DEFAULT, Config.GAME_HEIGHT_DEFAULT);
-        const scaleH = this.app.view.width / sideMax;
-        const scaleV = this.app.view.height / sideMax;
+        const scaleH = appWidth / sideMax;
+        const scaleV = appHeight / sideMax;
         Config.GAME_WIDTH = sideMax * scaleH;
         Config.GAME_HEIGHT = sideMax * scaleV;
 
         this.scale = Math.min(
-            this.app.view.width / Config.GAME_WIDTH / window.devicePixelRatio,
-            this.app.view.height / Config.GAME_HEIGHT / window.devicePixelRatio,
+            appWidth / Config.GAME_WIDTH / window.devicePixelRatio,
+            appHeight / Config.GAME_HEIGHT / window.devicePixelRatio,
         );
         this.root.scale.set(this.scale, this.scale);
 
         const RATIO = Config.GAME_WIDTH / Config.GAME_HEIGHT;
-        const canvasRatio = this.app.view.width / this.app.view.height;
+        const canvasRatio = appWidth / appHeight;
 
         let offsetX = 1;
         let offsetY = 1;
         if (canvasRatio > RATIO) {
             const scaleX = RATIO / canvasRatio;
-            offsetX = ((1 - scaleX) * window.innerWidth) / 2;
-            offsetY = 0;
+            offsetX = ((1 - scaleX) * window.innerWidth) / 2 + shiftX;
+            offsetY = shiftY;
         } else {
             const scaleY = canvasRatio / RATIO;
-            offsetX = 0;
-            offsetY = ((1 - scaleY) * window.innerHeight) / 2;
+            offsetX = shiftX;
+            offsetY = ((1 - scaleY) * window.innerHeight) / 2 + shiftY;
         }
 
         this.root.position.set(offsetX, offsetY);

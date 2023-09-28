@@ -69,7 +69,7 @@ export class GameModelHelper {
                 gameStateTime: 0,
                 gameMaxTime: 60 * 1,
                 helpsCount: 3,
-    
+
                 icons: [],
                 maxIconPaires: 2,
                 gridWidth: 4,
@@ -85,7 +85,7 @@ export class GameModelHelper {
                 gameStateTime: 0,
                 gameMaxTime: GameModelHelper.getGameMaxTime(),
                 helpsCount: 3,
-    
+
                 icons: [],
                 maxIconPaires: GameModelHelper.getGameMaxIconPaires(),
                 gridWidth: gridSize.x,
@@ -135,7 +135,7 @@ export class GameModelHelper {
                 if (count <= 0) {
                     break;
                 }
-            }    
+            }
             index = (index + 1) % model.icons.length;
             maxc = pares * 2;
         }
@@ -149,14 +149,14 @@ export class GameModelHelper {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 
-        const startA = 6;
-        const endA = 15;
-        const startB = 7;
+        const startA = 8;
+        const endA = 21;
+        const startB = 10;
         const endB = 26;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-        
+
         let currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
         let currentB = Math.floor(easing(scaleLevel) * (endB - startB) + startB);
 
@@ -170,21 +170,20 @@ export class GameModelHelper {
             currentB = temp;
         }
 
-        return <PointLike>{x: currentA, y: currentB};
+        return <PointLike>{ x: currentA, y: currentB };
     }
 
     static getGameMaxTime() {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeInOutBack;
 
-        const startA = 8;
-        const endA = 5;
+        const startA = 4;
+        const endA = 2;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
-        const currentA = Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA);
-
+        const currentA = Math.max(1, Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA));
         return Math.floor(60 * currentA);
     }
 
@@ -193,7 +192,7 @@ export class GameModelHelper {
         const easing = easingsFunctions.easeOutQuad;
 
         const startA = 3;
-        const endA = 4;
+        const endA = 3;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
