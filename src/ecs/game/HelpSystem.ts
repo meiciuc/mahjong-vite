@@ -21,7 +21,7 @@ export class HelpSystem extends System {
         this.helpEffectNodes = engine.getNodeList(TileHelpEffectNode);
         this.selectedNodes = engine.getNodeList(TileSelectedNode);
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
-        
+
         vueService.signalHelpButton.on(this.handleHelpButton);
     }
 
@@ -55,7 +55,7 @@ export class HelpSystem extends System {
             return;
         }
 
-        const arr = await this.gameLogic.needHelp()
+        const arr = await this.gameLogic.needHelp();
         if (arr.length === 0) {
             GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
         } else {

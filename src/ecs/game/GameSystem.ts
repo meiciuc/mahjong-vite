@@ -29,7 +29,7 @@ export class GameSystem extends System {
         this.creator.createGame();
     }
 
-    removeFromEngine(_engine: Engine): void {}
+    removeFromEngine(_engine: Engine): void { }
 
     update = (): void => {
         if (!this.game?.head) {
@@ -78,10 +78,20 @@ export class GameSystem extends System {
         }
     };
 
-    private setState(state: GameStateEnum) {
-        if (this.game?.head) {
-            this.game.head.game.model.data.gameState = state;
+    private async setState(state: GameStateEnum) {
+        if (!this.game?.head) {
+            return;
         }
+
+        if (state === GameStateEnum.CLICK_WAIT) {
+            const arr = await this.gameLogic.needHelp();
+            if (arr.length === 0) {
+                GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
+                return;
+            }
+        }
+
+        this.game.head.game.model.data.gameState = state;
     }
 
     private async handleTwoSelected(tiles: TileSelectedNode[]) {
