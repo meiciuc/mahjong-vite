@@ -174,6 +174,11 @@ export class GameModelHelper {
     }
 
     static getGameMaxTime() {
+        if (Config.DEV_GAME_TIME_BY_GRID_SIZE) {
+            const grid = GameModelHelper.getGridSize();
+            return Math.floor(grid.x * grid.y * 2);
+        }
+
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeInOutBack;
 

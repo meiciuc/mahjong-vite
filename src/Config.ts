@@ -39,6 +39,7 @@ export class Config {
     static MAX_GAME_LEVEL = 92;
 
     static DEV_MODEL = false;
+    static DEV_GAME_TIME_BY_GRID_SIZE = true;
 
     static DEV = true;
     static get DEV_SHOW_STATS() {
