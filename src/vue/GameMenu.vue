@@ -106,15 +106,4 @@ div {
     padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
     width: 3em;
 }
-
-.Timer {
-    background: rgba($color: $button_background_colored, $alpha: 1);
-    color: white;
-    padding-top: calc($button_padding_vertical / 2);
-    padding-bottom: calc($button_padding_vertical / 2);
-    width: 6em;
-    border-radius: $button_border_radius;
-    border-color: $button_background_idle;
-    border: solid;
-}
 </style>

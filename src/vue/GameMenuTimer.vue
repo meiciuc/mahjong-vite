@@ -9,7 +9,7 @@ const secundes = computed(() => { return Math.floor((maxTime.value - stateTime.v
 const blinking = computed(() => {
     const startBlinking = 30;
     const steps = [.9, .8, .7, .6, .5, .4, .3, .2];
-    if (secundes.value > startBlinking) {
+    if (minutes.value !== 0 || secundes.value > startBlinking) {
         return '';
     }
 
