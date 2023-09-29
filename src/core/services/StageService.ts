@@ -1,8 +1,7 @@
 import { FrameTickProvider, Signal1, Signal3 } from '@ash.ts/ash';
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
 import { Application, Container } from 'pixi.js';
 import { Config } from '../../Config';
-import { MenuPosition, vueService } from '../../vue/VueService';
 
 export interface RootConfig {
     gameTitle?: string;
@@ -49,7 +48,7 @@ class StageService {
         tickProvider.add((delta: number) => this.updateSignal.dispatch(delta));
         tickProvider.start();
 
-        window.addEventListener('resize', throttle(this.resize, 50));
+        window.addEventListener('resize', debounce(this.resize, 50));
         window.addEventListener('deviceorientation', debounce(this.handleOrientation, 100), true);
 
         return Promise.resolve(this);
@@ -64,11 +63,19 @@ class StageService {
             return;
         }
 
-        const padding = 30;
-        const appWidth = this.app.view.width - padding;
-        const appHeight = this.app.view.height - padding;
-        const shiftX = vueService.menuPosition === MenuPosition.TOP ? padding / 2 : padding;
-        const shiftY = vueService.menuPosition === MenuPosition.LEFT ? padding : padding;
+        const menuPadding = 60
+
+        const appWidth = window.innerWidth;
+        const appHeight = window.innerHeight - menuPadding;
+        this.app.view.width = appWidth;
+        this.app.view.height = appHeight;
+        const canvas = (this.app.view as HTMLCanvasElement);
+        canvas.style.position = 'absolute';
+        canvas.style.top = `${menuPadding}px`;
+        canvas.style.width = `${appWidth}px`;
+        canvas.style.height = `${appHeight}px`;
+
+
 
         const sideMax = Math.max(Config.GAME_WIDTH_DEFAULT, Config.GAME_HEIGHT_DEFAULT);
         const scaleH = appWidth / sideMax;
@@ -89,17 +96,17 @@ class StageService {
         let offsetY = 1;
         if (canvasRatio > RATIO) {
             const scaleX = RATIO / canvasRatio;
-            offsetX = ((1 - scaleX) * window.innerWidth) / 2 + shiftX;
-            offsetY = shiftY;
+            offsetX = ((1 - scaleX) * appWidth) / 2;
+            offsetY = 0;
         } else {
             const scaleY = canvasRatio / RATIO;
-            offsetX = shiftX;
-            offsetY = ((1 - scaleY) * window.innerHeight) / 2 + shiftY;
+            offsetX = 0;
+            offsetY = ((1 - scaleY) * appHeight) / 2;
         }
 
         this.root.position.set(offsetX, offsetY);
 
-        this.resizeSignal.dispatch(this.app.view.width, this.app.view.height, window.devicePixelRatio);
+        this.resizeSignal.dispatch(appWidth, appHeight, window.devicePixelRatio);
     };
 
     public getLayer(layerId: number) {

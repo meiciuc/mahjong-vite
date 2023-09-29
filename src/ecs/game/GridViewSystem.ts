@@ -53,6 +53,6 @@ export class GridViewSystem extends System {
         const scale = Math.min(Config.GAME_WIDTH / w, Config.GAME_HEIGHT / h);
 
         this.gridView.grid.scale.set(scale);
-        this.gridView.grid.position.set((Config.GAME_WIDTH - w * scale) / 2, (Config.GAME_HEIGHT - h * scale) / 2 + Config.ICON_IMAGE_HEIGHT / 3 * scale);
+        this.gridView.grid.position.set((Config.GAME_WIDTH - w * scale) / 2, (Config.GAME_HEIGHT - h * scale) / 2);
     }
 }
