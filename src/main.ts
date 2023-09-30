@@ -14,9 +14,7 @@ import { AssetsController } from './controllers/AssetsController';
 
 const app = new Application({
     backgroundColor: Config.APPLICATION_BACKGROUND_COLOR,
-    resizeTo: window,
     resolution: window.devicePixelRatio,
-    autoDensity: true,
 });
 app.renderer.plugins.interaction.autoPreventDefault = true;
 

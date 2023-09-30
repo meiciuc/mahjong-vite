@@ -48,7 +48,7 @@ class StageService {
         tickProvider.add((delta: number) => this.updateSignal.dispatch(delta));
         tickProvider.start();
 
-        window.addEventListener('resize', debounce(this.resize, 50));
+        window.addEventListener('resize', this.resize);
         window.addEventListener('deviceorientation', debounce(this.handleOrientation, 100), true);
 
         return Promise.resolve(this);
@@ -63,10 +63,16 @@ class StageService {
             return;
         }
 
+        // TODO refactoring
         const menuPadding = 60
 
         const appWidth = window.innerWidth;
         const appHeight = window.innerHeight - menuPadding;
+
+        if (this.app.view.width === appWidth && this.app.view.height === appHeight) {
+            return;
+        }
+
         this.app.view.width = appWidth;
         this.app.view.height = appHeight;
         const canvas = (this.app.view as HTMLCanvasElement);
@@ -74,8 +80,6 @@ class StageService {
         canvas.style.top = `${menuPadding}px`;
         canvas.style.width = `${appWidth}px`;
         canvas.style.height = `${appHeight}px`;
-
-
 
         const sideMax = Math.max(Config.GAME_WIDTH_DEFAULT, Config.GAME_HEIGHT_DEFAULT);
         const scaleH = appWidth / sideMax;
