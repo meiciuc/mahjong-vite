@@ -49,7 +49,7 @@ class StageService {
         tickProvider.start();
 
         window.addEventListener('resize', this.resize);
-        window.addEventListener('deviceorientation', debounce(this.handleOrientation, 100), true);
+        window.addEventListener('orientationchange', debounce(this.handleOrientation, 100), true);
 
         return Promise.resolve(this);
     }
