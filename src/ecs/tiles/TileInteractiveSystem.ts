@@ -13,7 +13,7 @@ export class TileInteractiveNode extends defineNode({
     tile: Tile,
     display: Display,
     interactive: Interactive,
-}) {}
+}) { }
 
 export class TileInteractiveSystem extends System {
 
@@ -43,7 +43,7 @@ export class TileInteractiveSystem extends System {
         this.tiles.nodeAdded.remove(this.handleTileAdded);
         this.tiles.nodeRemoved.remove(this.handleTileRemoved);
         this.tiles = undefined;
-        
+
 
         this.tilesSelected = undefined;
     }
@@ -57,13 +57,13 @@ export class TileInteractiveSystem extends System {
         node.display.view.hitArea = new Rectangle(width * 0.1, height * 0.1, width * 0.8, height * 0.8);
         node.display.view.interactive = true;
         node.display.view.cursor = 'pointer';
-        node.display.view.on('click', this.handleClick);
+        node.display.view.on('pointerdown', this.handleClick);
     }
 
     private handleTileRemoved = (node: TileInteractiveNode) => {
         node.display.view.interactive = false;
         node.display.view.cursor = 'auto';
-        node.display.view.off('click', this.handleClick);
+        node.display.view.off('pointerdown', this.handleClick);
     }
 
     private handleClick = (e: any) => {
@@ -98,5 +98,5 @@ export class TileInteractiveSystem extends System {
 
         return Date.now() - this.clickLastTime > Config.CLICK_TIMEOUT;
     }
-    
+
 }
