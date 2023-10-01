@@ -17,7 +17,7 @@ export class AssetsController extends BaseController {
     }
 
     async loadAssest() {
-        await Assets.load([
+        return await Assets.load([
             `./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`,
             `./assets/particle.png`
         ], (value: number) => {
@@ -37,17 +37,19 @@ export class AssetsController extends BaseController {
                         'Inter-SemiBold',
                     ],
                 },
-                timeout: 500,
+                timeout: 2000,
                 active: () => {
                     resolve(true);
                 },
+                loading: () => {
+                    resolve(true);
+                },
+                inactive: () => {
+                    console.error('WebFont: font is inactive');
+                    ('inactive')
+                    resolve(true);
+                },
             });
-        })
-            .catch((error: Error) => {
-                console.log('Error: ', error);
-            })
-            .finally(() => {
-                return Promise.resolve(true);
-            });
+        });
     }
 }

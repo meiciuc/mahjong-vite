@@ -23,8 +23,10 @@ window.onload = async (): Promise<void> => {
 
     if (Config.DEV_USE_PRELOADER) {
         const assetsController = new AssetsController();
-        assetsController.execute();
-        const preloader = await new PreloaderController(assetsController.signal).execute();
+        const preloader = new PreloaderController(assetsController.signal);
+
+        await Promise.race([preloader.execute(), assetsController.execute()])
+
         preloader.destroy();
         assetsController.destroy();
     } else {
