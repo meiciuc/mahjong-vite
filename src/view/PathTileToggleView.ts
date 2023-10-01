@@ -1,7 +1,8 @@
-import { Assets, Container, Sprite } from "pixi.js";
+import { ParticleContainer, Sprite } from "pixi.js";
 import { Config } from "../Config";
+import { PathViewHelper } from "./PathViewHelper";
 
-export class PathTileToggleView extends Container {
+export class PathTileToggleView extends ParticleContainer {
     private svg = Config.PATH_TILE_SVG;
     private color = Config.PATH_SELECT_COLOR;
 
@@ -11,10 +12,10 @@ export class PathTileToggleView extends Container {
     }
 
     private draw() {
-        const texture = Assets.cache.get(`./assets/particle.png`);
+        const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
         const path = this.svg.querySelector('path');
         const totalLength = path.getTotalLength();
-        const length = Math.floor(totalLength / 2 );
+        const length = Math.floor(totalLength / 2);
         const k = 1 / length;// 100 / length;
         let time = 0;
         for (let i = 0; i < length; i++) {

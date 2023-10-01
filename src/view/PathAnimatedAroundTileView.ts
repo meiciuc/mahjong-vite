@@ -1,9 +1,10 @@
-import { Assets, Container, Sprite } from "pixi.js";
-import { Animatable } from "../ecs/animation/components/Animatable";
+import { ParticleContainer, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
+import { Animatable } from "../ecs/animation/components/Animatable";
+import { PathViewHelper } from "./PathViewHelper";
 
-export class PathAnimatedAroundTileView extends Container implements Animatable {
+export class PathAnimatedAroundTileView extends ParticleContainer implements Animatable {
     private svg = Config.PATH_TILE_SVG;
     private color = Config.PATH_HELP_COLOR;
     private currentTime = 0;
@@ -16,10 +17,10 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     }
 
     private draw(from: number, to: number) {
-        const texture = Assets.cache.get(`./assets/particle.png`);
+        const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
         const path = this.svg.querySelector('path');
         const totalLength = path.getTotalLength();
-        
+
         const length = Math.ceil(totalLength);
         const k = 1 / length;
         let time = from;
@@ -27,11 +28,11 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
             const prev = this.children[this.children.length - 1];
             const point = path.getPointAtLength(time * totalLength);
             time += k;
-            
+
             if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
                 continue;
             }
-            
+
             const sprite = new Sprite(texture);
             sprite.tint = this.color;
             sprite.position.x = point.x;

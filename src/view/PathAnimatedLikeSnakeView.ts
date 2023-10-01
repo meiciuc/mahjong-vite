@@ -1,7 +1,8 @@
-import { Assets, Container, Rectangle, Sprite } from "pixi.js";
-import { Animatable } from "../ecs/animation/components/Animatable";
+import { ParticleContainer, Rectangle, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
+import { Animatable } from "../ecs/animation/components/Animatable";
+import { PathViewHelper } from "./PathViewHelper";
 
 class Particle {
     private static count = 0;
@@ -10,10 +11,10 @@ class Particle {
     constructor(
         public sprite: Sprite,
         public age: number,
-    ) {}
+    ) { }
 }
 
-export class PathAnimatedLikeSnakeView extends Container implements Animatable {
+export class PathAnimatedLikeSnakeView extends ParticleContainer implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
     private particleScale = 0.25;
@@ -38,10 +39,10 @@ export class PathAnimatedLikeSnakeView extends Container implements Animatable {
     }
 
     private draw(from: number, to: number) {
-        const texture = Assets.cache.get(`./assets/particle.png`);
+        const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
         const path = this.svg.querySelector('path');
         const totalLength = path.getTotalLength();
-        
+
         const length = Math.ceil(totalLength);
         const k = 1 / length;
         let time = from;
