@@ -1,6 +1,5 @@
 import { FrameTickProvider, Signal1, Signal3 } from '@ash.ts/ash';
 import { Application, Container } from 'pixi.js';
-import { Config } from '../../Config';
 
 export interface RootConfig {
     gameTitle?: string;
@@ -22,7 +21,8 @@ class StageService {
     private app?: Application;
     private root?: Container;
 
-    public readonly resizeSignal = new Signal3<number, number, number>(); // width, height, dpr
+    // width, height, dpr
+    public readonly resizeSignal = new Signal3<number, number, number>();
     public readonly updateSignal = new Signal1<number>();
     public scale = 1;
 
@@ -57,57 +57,17 @@ class StageService {
         this.resize();
     };
 
+    // TODO window.devicePixelRatio
     private resize = () => {
         if (!this.app) {
             return;
         }
 
-        // TODO refactoring
-        const menuPadding = 60
+        const parent = this.app.view.parentNode as HTMLHtmlElement;
+        this.app.renderer.resize(parent.clientWidth, parent.clientHeight);
 
-        const appWidth = window.innerWidth;
-        const appHeight = window.innerHeight - menuPadding;
-
-        if (this.app.view.width === appWidth && this.app.view.height === appHeight) {
-            return;
-        }
-
-        this.app.view.width = appWidth;
-        this.app.view.height = appHeight;
-        const canvas = (this.app.view as HTMLCanvasElement);
-        canvas.style.position = 'absolute';
-        canvas.style.top = `${menuPadding}px`;
-        canvas.style.width = `${appWidth}px`;
-        canvas.style.height = `${appHeight}px`;
-
-        const sideMax = Math.max(Config.GAME_WIDTH_DEFAULT, Config.GAME_HEIGHT_DEFAULT);
-        const scaleH = appWidth / sideMax;
-        const scaleV = appHeight / sideMax;
-        Config.GAME_WIDTH = sideMax * scaleH;
-        Config.GAME_HEIGHT = sideMax * scaleV;
-
-        this.scale = Math.min(
-            appWidth / Config.GAME_WIDTH / window.devicePixelRatio,
-            appHeight / Config.GAME_HEIGHT / window.devicePixelRatio,
-        );
-        this.root.scale.set(this.scale, this.scale);
-
-        const RATIO = Config.GAME_WIDTH / Config.GAME_HEIGHT;
-        const canvasRatio = appWidth / appHeight;
-
-        let offsetX = 1;
-        let offsetY = 1;
-        if (canvasRatio > RATIO) {
-            const scaleX = RATIO / canvasRatio;
-            offsetX = ((1 - scaleX) * appWidth) / 2;
-            offsetY = 0;
-        } else {
-            const scaleY = canvasRatio / RATIO;
-            offsetX = 0;
-            offsetY = ((1 - scaleY) * appHeight) / 2;
-        }
-
-        this.root.position.set(offsetX, offsetY);
+        const appWidth = this.app.screen.width;
+        const appHeight = this.app.screen.height;
 
         this.resizeSignal.dispatch(appWidth, appHeight, window.devicePixelRatio);
     };
@@ -117,11 +77,11 @@ class StageService {
     }
 
     public get width(): number {
-        return this.app ? this.app.renderer.width : Config.GAME_WIDTH;
+        return this.app.screen.width;
     }
 
     public get height(): number {
-        return this.app ? this.app.renderer.height : Config.GAME_HEIGHT;
+        return this.app.screen.height;
     }
 
     public get dpr(): number {

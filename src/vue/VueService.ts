@@ -2,13 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { Signal } from '../core/utils/signal';
 
-export enum MenuPosition {
-    LEFT,
-    TOP
-}
-
 class VueService {
-
     signalStartButton = new Signal()
     signalHelpButton = new Signal();
     signalGameEndButton = new Signal();
@@ -17,9 +11,8 @@ class VueService {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));
     }
 
-    get menuPosition() {
-        return MenuPosition.LEFT;
+    getCanvasParent() {
+        return document.body.querySelector('#canvas');
     }
-
 }
 export const vueService = new VueService();
