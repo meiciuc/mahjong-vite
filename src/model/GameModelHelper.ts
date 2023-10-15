@@ -1,5 +1,6 @@
 import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
+import { stageService } from "../core/services/StageService";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { PointLike } from "../utils/point";
 import { throwIfNull } from "../utils/throwIfNull";
@@ -58,60 +59,41 @@ export class GameModelHelper {
     }
 
     static createModel() {
+        dataService.config<GameModel>({
+            appState: AppStateEnum.NONE,
+            appStateTime: 0,
+            gameState: GameStateEnum.NONE,
+            gameLevel: 0,
+            gameScore: 0,
+            gameStateTime: 0,
+            gameMaxTime: 0,
+            helpsCount: 3,
+
+            icons: [],
+            maxIconPaires: 0,
+            gridWidth: 0,
+            gridHeight: 0,
+        });
+    }
+
+    static initModel() {
+        const gameModel = dataService.getRootModel<GameModel>();
         const gridSize = GameModelHelper.getGridSize();
-        if (Config.DEV_MODEL) {
-            dataService.config<GameModel>({
-                appState: AppStateEnum.NONE,
-                appStateTime: 0,
-                gameState: GameStateEnum.NONE,
-                gameLevel: 0,
-                gameScore: 0,
-                gameStateTime: 0,
-                gameMaxTime: 60 * 1,
-                helpsCount: 3,
 
-                icons: [],
-                maxIconPaires: 2,
-                gridWidth: 4,
-                gridHeight: 5,
-            });
-        } else {
-            dataService.config<GameModel>({
-                appState: AppStateEnum.NONE,
-                appStateTime: 0,
-                gameState: GameStateEnum.NONE,
-                gameLevel: 0,
-                gameScore: 0,
-                gameStateTime: 0,
-                gameMaxTime: GameModelHelper.getGameMaxTime(),
-                helpsCount: 3,
+        gameModel.data.helpsCount = 3;
+        gameModel.data.gameStateTime = 0;
 
-                icons: [],
-                maxIconPaires: GameModelHelper.getGameMaxIconPaires(),
-                gridWidth: gridSize.x,
-                gridHeight: gridSize.y,
-            });
-        }
+        gameModel.data.gridWidth = gridSize.x;
+        gameModel.data.gridHeight = gridSize.y;
+        gameModel.data.gameMaxTime = GameModelHelper.getGameMaxTime();
+        gameModel.data.maxIconPaires = GameModelHelper.getGameMaxIconPaires();
     }
 
     static resetGameModelForNextLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
-        const gridSize = GameModelHelper.getGridSize();
+        gameModel.data.gameLevel++;
 
-        if (Config.DEV_MODEL) {
-            gameModel.data.gameLevel++;
-            gameModel.data.helpsCount = 3;
-            gameModel.data.gameStateTime = 0;
-        } else {
-            gameModel.data.gameLevel++;
-            gameModel.data.helpsCount = 3;
-            gameModel.data.gameStateTime = 0;
-
-            gameModel.data.gridWidth = gridSize.x;
-            gameModel.data.gridHeight = gridSize.y;
-            gameModel.data.gameMaxTime = GameModelHelper.getGameMaxTime();
-            gameModel.data.maxIconPaires = GameModelHelper.getGameMaxIconPaires();
-        }
+        GameModelHelper.initModel();
     }
 
     static generateIconsQueue() {
@@ -145,54 +127,36 @@ export class GameModelHelper {
         return iconsQueue;
     }
 
-    static getGridSize() {
+    private static getGridSize() {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 
-        const startA = 8;
-        const endA = 21;
-        const startB = 10;
-        const endB = 26;
+        const start = 9;
+        const end = 23;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
-        let currentA = Math.floor(easing(scaleLevel) * (endA - startA) + startA);
-        let currentB = Math.floor(easing(scaleLevel) * (endB - startB) + startB);
+        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
+        const commonCount = size + size;
+        const scale = stageService.height / (stageService.width + stageService.height);
 
-        if (currentA % 2 !== 0 && currentB % 2 !== 0) {
-            currentA++;
+        let gridHeight = Math.floor(commonCount * scale);
+        const gridWidth = Math.round(commonCount - gridHeight);
+
+        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
+            gridHeight++;
         }
 
-        if (Config.GAME_HEIGHT < Config.GAME_WIDTH) {
-            const temp = currentA;
-            currentA = currentB;
-            currentB = temp;
-        }
-
-        return <PointLike>{ x: currentA, y: currentB };
+        return <PointLike>{ x: gridWidth, y: gridHeight };
     }
 
-    static getGameMaxTime() {
-        if (Config.DEV_GAME_TIME_BY_GRID_SIZE) {
-            const grid = GameModelHelper.getGridSize();
-            return Math.floor(grid.x * grid.y * 2);
-        }
-
+    private static getGameMaxTime() {
         const model = dataService.getRootModel<GameModel>();
-        const easing = easingsFunctions.easeInOutBack;
-
-        const startA = 4;
-        const endA = 2;
-
-        const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-
-        const currentA = Math.max(1, Math.floor(easing(scaleLevel) * 2 * (endA - startA) + startA));
-        return Math.floor(60 * currentA);
+        return Math.floor(model.raw.gridWidth * model.raw.gridHeight * 2);
     }
 
-    static getGameMaxIconPaires() {
+    private static getGameMaxIconPaires() {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 

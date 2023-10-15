@@ -1,9 +1,4 @@
 export class Config {
-    static readonly GAME_SIDES_MIN_SCALE = 4 / 5;
-    static readonly GAME_WIDTH_DEFAULT = 1080;
-    static readonly GAME_HEIGHT_DEFAULT = 1920;
-    static GAME_WIDTH = Config.GAME_WIDTH_DEFAULT;
-    static GAME_HEIGHT = Config.GAME_HEIGHT_DEFAULT;
     static readonly APPLICATION_BACKGROUND_COLOR = 0xFFFFFF;
 
     static ICON_IMAGE_WIDTH = 128;
@@ -14,7 +9,7 @@ export class Config {
     static readonly ASSETST_ICONS_VERSION = 'v2';
 
     static readonly CLICK_TIMEOUT = 300;
-    static readonly GRID_BaCKGROUND_COLOR = 0x660000;//Config.APPLICATION_BACKGROUND_COLOR;
+    static readonly GRID_BaCKGROUND_COLOR = Config.APPLICATION_BACKGROUND_COLOR;
     static PATH_LIKE_SNAKE_DURATION = .3;
     static PATH_HELP_COLOR = 0xFA4A0C;
     static PATH_SELECT_COLOR = 0xCDCDCD;
@@ -37,9 +32,6 @@ export class Config {
     static ADD_SCORE_FOR_TRUE_MOVE = 200;
     static ADD_SCORE_FOR_FALSE_MOVE = -50;
     static MAX_GAME_LEVEL = 92;
-
-    static DEV_MODEL = false;
-    static DEV_GAME_TIME_BY_GRID_SIZE = true;
 
     static DEV = true;
     static get DEV_SHOW_STATS() {

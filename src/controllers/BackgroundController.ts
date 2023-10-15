@@ -30,7 +30,7 @@ export class BackgroundController extends BaseController {
             return;
         }
 
-        this.view.width = Config.GAME_WIDTH;
-        this.view.height = Config.GAME_HEIGHT;
+        this.view.width = stageService.width;
+        this.view.height = stageService.height;
     };
 }

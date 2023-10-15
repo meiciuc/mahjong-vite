@@ -31,10 +31,10 @@ const showModalBackground = computed(() => {
 <style lang="scss" scoped>
 #canvas {
     position: absolute;
-    margin-top: 100px;
-    margin-left: 100px;
+    margin-top: 0px;
+    margin-left: 0px;
 
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
 }
 </style>
