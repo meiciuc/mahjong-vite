@@ -1,7 +1,11 @@
-import { Engine, NodeList, System } from "@ash.ts/ash";
+import { Engine, NodeList, System, defineNode } from "@ash.ts/ash";
 import { Config } from "../../Config";
 import { GridNode } from "./nodes/GridNode";
-import { TileNode } from "./nodes/TileNode";
+import { Tile } from "./components/Tile";
+
+export class TileNode extends defineNode({
+    tile: Tile,
+}) { }
 
 export class TilesGridSystem extends System {
     private tiles?: NodeList<TileNode>;
@@ -19,7 +23,7 @@ export class TilesGridSystem extends System {
     }
 
     update(_time: number): void {
-        
+
     }
 
     private handleTileRemoved = (node: TileNode) => {
@@ -27,11 +31,16 @@ export class TilesGridSystem extends System {
             return;
         }
 
-        for (let i = 0; i < this.grid.head.grid.grid.length; i++) {
+        this.removeTileFromGrid(node.tile.id, this.grid.head.grid.portrait);
+        this.removeTileFromGrid(node.tile.id, this.grid.head.grid.landscape);
+    }
+
+    private removeTileFromGrid(id: number, grid: number[][]) {
+        for (let i = 0; i < grid.length; i++) {
             let br = false;
-            for (let j = 0; j < this.grid.head.grid.grid[i].length; j++) {
-                if (this.grid.head.grid.grid[i][j] === node.tile.id) {
-                    this.grid.head.grid.grid[i][j] = Config.GRID_EMPTY_VALUE;
+            for (let j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] === id) {
+                    grid[i][j] = Config.GRID_EMPTY_VALUE;
                     br = true;
                     break;
                 }
@@ -41,5 +50,5 @@ export class TilesGridSystem extends System {
             }
         }
     }
-    
+
 }

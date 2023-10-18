@@ -1,5 +1,7 @@
 export class Grid {
     constructor(
-        public grid: number[][]
-    ) {}
+        public current: number[][],
+        public portrait: number[][],
+        public landscape: number[][],
+    ) { }
 }

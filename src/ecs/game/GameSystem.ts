@@ -10,12 +10,20 @@ import { GameNode } from './nodes/GameNode';
 import { GameModel, GameStateEnum } from '../../model/GameModel';
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { dataService } from '../../core/services/DataService';
+import { rotate270 } from "2d-array-rotation";
+import { stageService } from '../../core/services/StageService';
+import { GridNode } from '../tiles/nodes/GridNode';
+import { GridPosition } from '../tiles/components/GridPosition';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
     private selectedTiles?: NodeList<TileSelectedNode>;
     private tiles?: NodeList<TileNode>;
+    private grid?: NodeList<GridNode>;
     private gameModel?: GameModel;
+
+    private portrait: number[][];
+    private landscape: number[][];
 
     constructor(private creator: EntityCreator, private gameLogic: GameLogic) {
         super();
@@ -26,7 +34,10 @@ export class GameSystem extends System {
         this.tiles = engine.getNodeList(TileNode);
         this.selectedTiles = engine.getNodeList(TileSelectedNode);
         this.game = engine.getNodeList(GameNode);
+        this.grid = engine.getNodeList(GridNode);
         this.creator.createGame();
+
+        stageService.resizeSignal.add(this.handleResize);
     }
 
     removeFromEngine(_engine: Engine): void { }
@@ -55,7 +66,16 @@ export class GameSystem extends System {
                         index++;
                     }
                 }
-                this.creator.createGrid(grid);
+
+                // rotation
+                const newGrid = rotate270(grid);
+                this.portrait = grid.length > newGrid.length ? grid : newGrid;
+                this.landscape = this.portrait === grid ? newGrid : grid;
+
+                // create grid
+                this.creator.createGrid(grid, this.portrait, this.landscape);
+
+                // set game state
                 this.setState(GameStateEnum.PREPARE);
                 break;
             case GameStateEnum.PREPARE:
@@ -125,6 +145,38 @@ export class GameSystem extends System {
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileA.tile, false);
             this.creator.selectTile(tileB.tile, false);
+        }
+    }
+
+    private handleResize = () => {
+        const grid = this.grid.head.grid.current;
+        if (!grid) {
+            return;
+        }
+
+        if (this.portrait === this.landscape) {
+            return;
+        }
+
+        const appPortrait = stageService.width < stageService.height;
+        const gridPortrait = grid.length > grid[0].length;
+        if (appPortrait === gridPortrait) {
+            return;
+        }
+
+        // update grid orientation
+        this.creator.createGrid(appPortrait ? this.portrait : this.landscape, this.portrait, this.landscape);
+
+        // update tiles position
+        const current = appPortrait ? this.portrait : this.landscape;
+        for (let y = 0; y < current.length; y++) {
+            for (let x = 0; x < current[y].length; x++) {
+                const tile = this.creator.getTileNodeById(current[y][x]);
+                if (!tile) {
+                    continue;
+                }
+                tile.entity.add(new GridPosition(x, y));
+            }
         }
     }
 }

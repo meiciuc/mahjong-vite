@@ -71,9 +71,5 @@ export class GridViewSystem extends System {
         const sizeX = gridWidth * scale;
         const sizeY = gridHeight * scale;
         this.gridView.grid.position.set((appWidth - sizeX) / 2, (appHeight - sizeY) / 2);
-
-        console.log('appWidth - gridWidth * scale', appWidth, gridWidth * scale)
-
-
     }
 }

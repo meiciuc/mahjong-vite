@@ -171,11 +171,11 @@ export class EntityCreator {
         if (arr.length === 0) {
             return;
         }
-        
+
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         svgPath.setAttribute('style', "fill: none; stroke: #fff; stroke-width: 1");
-        
+
         svg.appendChild(svgPath);
 
         const w = Config.ICON_IMAGE_WIDTH;
@@ -202,14 +202,14 @@ export class EntityCreator {
         return entity;
     }
 
-    public createGrid(grid: number[][]) {
+    public createGrid(current: number[][], portrait: number[][], landscape: number[][]) {
         const list = this.engine.getNodeList(GridNode);
         while (list.head) {
             this.engine.removeEntity(list.head.entity);
         }
 
         const entity = new Entity();
-        entity.add(new Grid(grid));
+        entity.add(new Grid(current, portrait, landscape));
         this.engine.addEntity(entity);
     }
 
@@ -219,11 +219,11 @@ export class EntityCreator {
 
     public getGrid() {
         const list = this.engine.getNodeList(GridNode);
-        return list.head?.grid.grid;
+        return list.head?.grid.current;
     }
 
     public getGridMatrix() {
         const list = this.engine.getNodeList(GridNode);
-        return list.head?.grid.grid;
+        return list.head?.grid.current;
     }
 }

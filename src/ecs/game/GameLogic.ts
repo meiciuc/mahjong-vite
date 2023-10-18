@@ -58,7 +58,7 @@ export class GameLogic {
 
     public async findCross(A: PointLike, B: PointLike) {
         // create matrix
-        const grid = throwIfNull(this.grid.head).grid.grid;
+        const grid = throwIfNull(this.grid.head).grid.current;
         const aMatrix: number[][] = [];
         for (let i = 0; i < grid.length; i++) {
             aMatrix.push([]);
