@@ -4,7 +4,11 @@ import { PointLike } from '../../utils/point';
 import { throwIfNull } from '../../utils/throwIfNull';
 import { GridNode } from '../tiles/nodes/GridNode';
 import { TileNode } from '../tiles/nodes/TileNode';
-import { GameModelHelper } from '../../model/GameModelHelper';
+import { dataService } from '../../core/services/DataService';
+import { GameModel } from '../../model/GameModel';
+import { shuffle } from '../../utils/utils';
+import easingsFunctions from '../../core/utils/easingsFunctions';
+import { Config } from '../../Config';
 
 export class GameLogic {
     private grid: NodeList<GridNode>;
@@ -16,8 +20,39 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
+    public getGameMaxTime(iconsQueueLength: number) {
+        return iconsQueueLength * 2;
+    }
+
     public generateIconsQueue(gridWidth: number, gridHeight: number) {
-        this.iconsQueue = GameModelHelper.generateIconsQueue(gridWidth, gridHeight);
+        const model = dataService.getRootModel<GameModel>().data
+        const gw = gridWidth;
+        const gh = gridHeight;
+        const currentLevel = model.gameLevel;
+        const shift = 4;
+
+        const iconsQueue = [];
+
+        const pares = this.getGameMaxIconPaires();
+        let maxc = pares * 2;
+        let count = gw * gh;
+        let index = currentLevel < shift ? 0 : currentLevel - shift;
+        while (count > 0) {
+            while (maxc > 0) {
+                iconsQueue.push(index);
+                maxc--;
+                count--;
+                if (count <= 0) {
+                    break;
+                }
+            }
+            index = (index + 1) % model.icons.length;
+            maxc = pares * 2;
+        }
+
+        shuffle(iconsQueue, `${Math.random()}`);
+
+        this.iconsQueue = iconsQueue;
     }
 
     public async needHelp() {
@@ -75,5 +110,20 @@ export class GameLogic {
             .catch(() => {
                 return Promise.resolve([]);
             });
+    }
+
+    private getGameMaxIconPaires() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.easeOutQuad;
+
+        const startA = 3;
+        const endA = 3;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+
+        const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
+
+        return currentA;
     }
 }

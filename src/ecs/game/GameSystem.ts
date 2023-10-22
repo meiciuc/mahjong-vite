@@ -46,7 +46,9 @@ export class GameSystem extends System {
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
                 const { gridWidth, gridHeight } = this.setupModel();
+
                 this.gameLogic.generateIconsQueue(gridWidth, gridHeight);
+                GameModelHelper.initModel(gridWidth, gridHeight, this.gameLogic.getGameMaxTime(gridWidth * gridHeight));
 
                 let index = 0;
                 const grid: number[][] = [];
@@ -122,8 +124,6 @@ export class GameSystem extends System {
         if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
             gridHeight++;
         }
-
-        GameModelHelper.initModel(gridWidth, gridHeight);
 
         return { gridWidth, gridHeight };
     }

@@ -33,6 +33,5 @@ export interface GameModel {
     helpsCount: number,
 
     icons: IconState[];
-    maxIconPaires: number,
     maxGridItems: number,
 }
