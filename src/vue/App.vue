@@ -15,7 +15,7 @@ const appState = computed(() => { return data.value });
 const showModalBackground = computed(() => {
     return data.value !== AppStateEnum.GAME_SCREEN;
 });
-
+// https://html5up.net/uploads/demos/dimension/#
 </script>
 
 <template>

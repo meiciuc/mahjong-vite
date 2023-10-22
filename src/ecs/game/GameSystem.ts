@@ -14,13 +14,13 @@ import { rotate270 } from "2d-array-rotation";
 import { stageService } from '../../core/services/StageService';
 import { GridNode } from '../tiles/nodes/GridNode';
 import { GridPosition } from '../tiles/components/GridPosition';
+import easingsFunctions from '../../core/utils/easingsFunctions';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
     private selectedTiles?: NodeList<TileSelectedNode>;
     private tiles?: NodeList<TileNode>;
     private grid?: NodeList<GridNode>;
-    private gameModel?: GameModel;
 
     private portrait: number[][];
     private landscape: number[][];
@@ -30,31 +30,30 @@ export class GameSystem extends System {
     }
 
     addToEngine(engine: Engine): void {
-        this.gameModel = dataService.getRootModel<GameModel>().data;
         this.tiles = engine.getNodeList(TileNode);
         this.selectedTiles = engine.getNodeList(TileSelectedNode);
         this.game = engine.getNodeList(GameNode);
         this.grid = engine.getNodeList(GridNode);
-        this.creator.createGame();
 
         stageService.resizeSignal.add(this.handleResize);
+
+        this.creator.createGame();
     }
 
     removeFromEngine(_engine: Engine): void { }
 
     update = (): void => {
-        if (!this.game?.head) {
-            return;
-        }
-
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
+                const { gridWidth, gridHeight } = this.setupModel();
+                this.gameLogic.generateIconsQueue(gridWidth, gridHeight);
+
                 let index = 0;
                 const grid: number[][] = [];
-                for (let y = 0; y < this.gameModel.gridHeight + 2; y++) {
+                for (let y = 0; y < gridHeight + 2; y++) {
                     const row = grid[grid.push([]) - 1];
-                    for (let x = 0; x < this.gameModel.gridWidth + 2; x++) {
-                        if (y === 0 || x === 0 || y === this.gameModel.gridHeight + 1 || x === this.gameModel.gridWidth + 1) {
+                    for (let x = 0; x < gridWidth + 2; x++) {
+                        if (y === 0 || x === 0 || y === gridHeight + 1 || x === gridWidth + 1) {
                             // empty grid border for a-star
                             row.push(Config.GRID_EMPTY_VALUE);
                             continue;
@@ -102,6 +101,32 @@ export class GameSystem extends System {
                 break;
         }
     };
+
+    private setupModel() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.easeOutQuad;
+
+        const start = 9;
+        const end = 23;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+
+        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
+        const commonCount = size + size;
+        const scale = stageService.height / (stageService.width + stageService.height);
+
+        let gridHeight = Math.floor(commonCount * scale);
+        const gridWidth = Math.round(commonCount - gridHeight);
+
+        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
+            gridHeight++;
+        }
+
+        GameModelHelper.initModel(gridWidth, gridHeight);
+
+        return { gridWidth, gridHeight };
+    }
 
     private async setState(state: GameStateEnum) {
         if (!this.game?.head) {

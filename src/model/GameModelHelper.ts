@@ -1,8 +1,6 @@
 import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
-import { stageService } from "../core/services/StageService";
 import easingsFunctions from "../core/utils/easingsFunctions";
-import { PointLike } from "../utils/point";
 import { throwIfNull } from "../utils/throwIfNull";
 import { shuffle } from "../utils/utils";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
@@ -71,35 +69,32 @@ export class GameModelHelper {
 
             icons: [],
             maxIconPaires: 0,
-            gridWidth: 0,
-            gridHeight: 0,
+            maxGridItems: 0,
         });
     }
 
-    static initModel() {
+    static initModel(gridWidth: number, gridHeight: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        const gridSize = GameModelHelper.getGridSize();
+        gameModel.data.maxGridItems = gridWidth * gridHeight;
 
         gameModel.data.helpsCount = 3;
         gameModel.data.gameStateTime = 0;
 
-        gameModel.data.gridWidth = gridSize.x;
-        gameModel.data.gridHeight = gridSize.y;
         gameModel.data.gameMaxTime = GameModelHelper.getGameMaxTime();
         gameModel.data.maxIconPaires = GameModelHelper.getGameMaxIconPaires();
     }
 
-    static resetGameModelForNextLevel() {
+    static resetGameModelForNextLevel(gridWidth: number, gridHeight: number) {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.gameLevel++;
 
-        GameModelHelper.initModel();
+        GameModelHelper.initModel(gridWidth, gridHeight);
     }
 
-    static generateIconsQueue() {
+    static generateIconsQueue(gridWidth: number, gridHeight: number) {
         const model = throwIfNull(dataService.getRootModel<GameModel>().data);
-        const gw = model.gridWidth;
-        const gh = model.gridHeight;
+        const gw = gridWidth;
+        const gh = gridHeight;
         const currentLevel = model.gameLevel;
         const shift = 4;
 
@@ -127,33 +122,9 @@ export class GameModelHelper {
         return iconsQueue;
     }
 
-    private static getGridSize() {
-        const model = dataService.getRootModel<GameModel>();
-        const easing = easingsFunctions.easeOutQuad;
-
-        const start = 9;
-        const end = 23;
-
-        const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-
-        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
-        const commonCount = size + size;
-        const scale = stageService.height / (stageService.width + stageService.height);
-
-        let gridHeight = Math.floor(commonCount * scale);
-        const gridWidth = Math.round(commonCount - gridHeight);
-
-        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
-            gridHeight++;
-        }
-
-        return <PointLike>{ x: gridWidth, y: gridHeight };
-    }
-
     private static getGameMaxTime() {
         const model = dataService.getRootModel<GameModel>();
-        return Math.floor(model.raw.gridWidth * model.raw.gridHeight * 2);
+        return Math.floor(model.raw.maxGridItems * 2);
     }
 
     private static getGameMaxIconPaires() {

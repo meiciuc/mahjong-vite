@@ -16,6 +16,10 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
+    public generateIconsQueue(gridWidth: number, gridHeight: number) {
+        this.iconsQueue = GameModelHelper.generateIconsQueue(gridWidth, gridHeight);
+    }
+
     public async needHelp() {
         const paires: { [key: string]: boolean } = {};
 
@@ -45,15 +49,7 @@ export class GameLogic {
     }
 
     public getIcon(index: number) {
-        return this.getQueue()[index];
-    }
-
-    private getQueue() {
-        if (this.iconsQueue.length === 0) {
-            this.iconsQueue = GameModelHelper.generateIconsQueue();
-        }
-
-        return this.iconsQueue;
+        return this.iconsQueue[index];
     }
 
     public async findCross(A: PointLike, B: PointLike) {

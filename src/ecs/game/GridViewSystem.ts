@@ -3,12 +3,12 @@ import { Sprite, Texture } from 'pixi.js';
 import { Config } from '../../Config';
 import { GridView } from '../../view/GridView';
 import { TileNode } from '../tiles/nodes/TileNode';
-import { dataService } from '../../core/services/DataService';
-import { GameModel } from '../../model/GameModel';
 import { stageService } from '../../core/services/StageService';
+import { GridNode } from '../tiles/nodes/GridNode';
 
 export class GridViewSystem extends System {
     private tiles?: NodeList<TileNode>;
+    private grid?: NodeList<GridNode>;
     private oResized = false;
 
     constructor(public gridView: GridView) {
@@ -16,11 +16,20 @@ export class GridViewSystem extends System {
     }
 
     addToEngine(engine: Engine): void {
+        this.grid = engine.getNodeList(GridNode);
+        if (this.grid.head) {
+            this.setupView();
+        }
+        this.grid.nodeAdded.add(this.handleGridAdded);
+
         this.tiles = engine.getNodeList(TileNode);
+        if (this.tiles.head) {
+            for (let node = this.tiles.head; node; node = node.next) {
+                this.handleTileAdded(node);
+            }
+        }
         this.tiles.nodeAdded.add(this.handleTileAdded);
 
-        this.setupView();
-        this.scaleUpdate();
         stageService.resizeSignal.add(this.handleStageServiceResize);
     }
 
@@ -37,6 +46,11 @@ export class GridViewSystem extends System {
         }
     }
 
+    private handleGridAdded = () => {
+        this.setupView();
+        this.scaleUpdate();
+    }
+
     private handleTileAdded = (node: TileNode) => {
         node.transform.position.x = node.gridPosition.x * Config.ICON_IMAGE_WIDTH;
         node.transform.position.y = node.gridPosition.y * Config.ICON_IMAGE_HEIGHT;
@@ -47,8 +61,8 @@ export class GridViewSystem extends System {
     }
 
     private setupView() {
-        const w = (dataService.getRootModel<GameModel>().data.gridWidth + 2) * Config.ICON_IMAGE_WIDTH;
-        const h = (dataService.getRootModel<GameModel>().data.gridHeight + 2) * Config.ICON_IMAGE_HEIGHT;
+        const w = this.gridWidth * Config.ICON_IMAGE_WIDTH;
+        const h = this.gridHeight * Config.ICON_IMAGE_HEIGHT;
 
         const bg = new Sprite(Texture.WHITE);
         bg.tint = Config.GRID_BaCKGROUND_COLOR;
@@ -58,10 +72,9 @@ export class GridViewSystem extends System {
     }
 
     private scaleUpdate() {
-        const gridWidth = (dataService.getRootModel<GameModel>().data.gridWidth + 2) * Config.ICON_IMAGE_WIDTH;
-        const gridHeight = (dataService.getRootModel<GameModel>().data.gridHeight + 2) * Config.ICON_IMAGE_HEIGHT;
+        const gridWidth = this.gridWidth * Config.ICON_IMAGE_WIDTH;
+        const gridHeight = this.gridHeight * Config.ICON_IMAGE_HEIGHT;
 
-        // const scale = Math.min(Config.GAME_WIDTH / w, Config.GAME_HEIGHT / h);
         const appWidth = stageService.width;
         const appHeight = stageService.height;
 
@@ -71,5 +84,13 @@ export class GridViewSystem extends System {
         const sizeX = gridWidth * scale;
         const sizeY = gridHeight * scale;
         this.gridView.grid.position.set((appWidth - sizeX) / 2, (appHeight - sizeY) / 2);
+    }
+
+    private get gridWidth() {
+        return this.grid.head.grid.current[0].length;
+    }
+
+    private get gridHeight() {
+        return this.grid.head.grid.current.length;
     }
 }

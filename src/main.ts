@@ -17,7 +17,6 @@ window.onload = async (): Promise<void> => {
     initModel();
     initVueService();
     await initStageService();
-    GameModelHelper.initModel();
     setupTweens();
     initDebug();
 

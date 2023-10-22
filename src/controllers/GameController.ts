@@ -79,6 +79,8 @@ export class GameController extends BaseController {
         this.gameLogic = new GameLogic(this.engine);
         this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
 
+        this.creator.createGame();
+
         const keys: string[] = [];
         const icons = dataService.getRootModel<GameModel>().data.icons;
         icons.forEach((icon) => {
@@ -110,8 +112,6 @@ export class GameController extends BaseController {
 
         stageService.updateSignal.add(this.update);
         GameModelHelper.setGameState(GameStateEnum.NONE);
-
-        this.creator.createGame();
     }
 
     update = (time: number) => {
