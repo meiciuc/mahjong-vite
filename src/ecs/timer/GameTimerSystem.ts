@@ -17,9 +17,5 @@ export class GameTimerSystem extends System {
         if (this.game.head.game.model.data.gameState === GameStateEnum.CLICK_WAIT) {
             this.game.head.game.model.data.gameStateTime = Math.min(this.game.head.game.model.data.gameStateTime + time, this.game.head.game.model.data.gameMaxTime);
         }
-
-        if (this.game.head.game.model.data.gameStateTime >= this.game.head.game.model.data.gameMaxTime) {
-            this.game.head.game.model.data.gameState = GameStateEnum.GAME_DEFEATE;
-        }
     }
 }

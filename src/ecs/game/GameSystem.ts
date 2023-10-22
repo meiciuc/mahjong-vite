@@ -86,6 +86,11 @@ export class GameSystem extends System {
                     this.setState(GameStateEnum.GAME_VICTORY);
                     return;
                 }
+
+                if (this.game.head.game.model.data.gameStateTime >= this.game.head.game.model.data.gameMaxTime) {
+                    this.game.head.game.model.data.gameState = GameStateEnum.GAME_DEFEATE;
+                }
+
                 const arr: TileSelectedNode[] = [];
                 for (let node = this.selectedTiles?.head; node; node = node.next) {
                     arr.push(node);
