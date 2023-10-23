@@ -42,10 +42,6 @@ div {
 }
 
 .MenuPanel {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    right: 0px;
     background: rgba($color: $background_colored, $alpha: 1);
     padding: 10px 0;
     display: flex;

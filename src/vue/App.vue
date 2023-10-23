@@ -19,8 +19,8 @@ const showModalBackground = computed(() => {
 </script>
 
 <template>
-    <div id="canvas"></div>
-    <GameMenu></GameMenu>
+    <div id="canvas" class="t-canvas"></div>
+    <GameMenu class="t-menu"></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
@@ -29,12 +29,47 @@ const showModalBackground = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-#canvas {
-    position: absolute;
-    margin-top: 0px;
-    margin-left: 0px;
+// https://stackoverflow.com/questions/23870696/vertical-navigation-with-rotated-text
 
-    width: 100%;
-    height: 100%;
+// menu-left
+// @media only screen and (min-width: 600px) and (orientation: landscape) {
+.l-menu {
+    width: 100vh;
+    height: 45px;
+    position: fixed;
+    background: #4c4c4c;
+    transform-origin: left top;
+    transform: rotate(-90deg) translateX(-100%);
 }
+
+.l-canvas {
+    position: fixed;
+    left: 45px;
+    top: 0px;
+    width: calc(100vw - 45px);
+    height: 100vh;
+}
+
+// }
+
+// menu-top
+// @media not screen and (min-width: 600px) and (orientation: landscape) {
+.t-menu {
+    width: 100vw;
+    height: 45px;
+    position: fixed;
+    background: #4c4c4c;
+    transform-origin: left top;
+    transform: rotate(0deg) translateX(0%);
+}
+
+.t-canvas {
+    position: fixed;
+    left: 0px;
+    top: 45px;
+    width: 100vw;
+    height: calc(100vh - 45px);
+}
+
+// }
 </style>
