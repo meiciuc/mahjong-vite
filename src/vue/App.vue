@@ -7,7 +7,8 @@ import GameDefeatedScreen from './GameDefeatedScreen.vue';
 import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
 import ModalBackground from './ModalBackground.vue';
 import { useModel } from '../model/useModel';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import isMobile from 'is-mobile';
 
 const data = useModel(["appState"]);
 const appState = computed(() => { return data.value });
@@ -15,12 +16,19 @@ const appState = computed(() => { return data.value });
 const showModalBackground = computed(() => {
     return data.value !== AppStateEnum.GAME_SCREEN;
 });
+
+const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
+
+window.addEventListener('resize', () => {
+    isLeftMenu.value = isMobile() && (window.innerWidth > window.innerHeight);
+})
+
 // https://html5up.net/uploads/demos/dimension/#
 </script>
 
 <template>
-    <div id="canvas" class="t-canvas"></div>
-    <GameMenu class="t-menu"></GameMenu>
+    <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
+    <GameMenu :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
@@ -32,7 +40,6 @@ const showModalBackground = computed(() => {
 // https://stackoverflow.com/questions/23870696/vertical-navigation-with-rotated-text
 
 // menu-left
-// @media only screen and (min-width: 600px) and (orientation: landscape) {
 .l-menu {
     width: 100vh;
     height: 45px;
@@ -50,10 +57,7 @@ const showModalBackground = computed(() => {
     height: 100vh;
 }
 
-// }
-
 // menu-top
-// @media not screen and (min-width: 600px) and (orientation: landscape) {
 .t-menu {
     width: 100vw;
     height: 45px;
@@ -70,6 +74,4 @@ const showModalBackground = computed(() => {
     width: 100vw;
     height: calc(100vh - 45px);
 }
-
-// }
 </style>
