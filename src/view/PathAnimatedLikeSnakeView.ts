@@ -43,11 +43,11 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
 
         this.currentPathTime = this.deltaDistance / this.totalLength;
         this.finishPathTime = 1 - this.currentPathTime;
+        this.currentTime = this.currentPathTime;
     }
 
     private draw(from: number, to: number) {
         let time = from;
-        let count = 0;
         while (time < to && time >= from) {
             const prev = this.children[this.children.length - 1];
             const point = this.path.getPointAtLength(time * this.totalLength);
@@ -56,8 +56,6 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
             if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
                 continue;
             }
-
-            // console.log((prev ? [Math.abs(prev.x - point.x), Math.abs(prev.y - point.y)] : ''), point)
 
             const sprite = new Sprite(this.texture);
             sprite.tint = this.color;
@@ -68,11 +66,7 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
 
             const particle = new Particle(sprite, this.particleAge);
             this.particles.set(particle.id, particle);
-
-            count++;
         }
-
-        // console.log(count)
     }
 
     animate(time: number): void {
@@ -85,14 +79,12 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
 
         this.particles.forEach((particle, id) => {
             particle.age -= time;
-            particle.sprite.alpha = particle.age * 10;
-            // particle.sprite.scale.set(this.particleScale * particle.age / this.particleAge);
+            particle.sprite.alpha = particle.age / this.particleAge;
+
             if (particle.age < 0) {
                 particle.sprite.destroy();
                 this.particles.delete(id);
             }
-        })
-
-        console.log(this.particles.size)
+        });
     }
 }
