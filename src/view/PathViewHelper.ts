@@ -13,11 +13,10 @@ export class PathViewHelper {
     }
 
     static async getTileToggleTexture(key: string) {
-        console.log('getTileToggleTexture')
         const name = 'toggle' + key;
         if (!PathViewHelper.textures[name]) {
             const color = Config.PATH_SELECT_COLOR;
-            const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
+            const texture = Texture.from(key);
             const svg = Config.PATH_TILE_SVG
             const path = svg.querySelector('path');
             const totalLength = path.getTotalLength();
@@ -35,7 +34,6 @@ export class PathViewHelper {
                 sprite.scale.set(0.2)
                 container.addChild(sprite);
             }
-            console.log('container.children', container.children.length)
             let image = await stageService.stage.renderer.plugins.extract.image(container);
             PathViewHelper.textures[name] = Texture.from(image);
         }
