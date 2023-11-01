@@ -1,4 +1,4 @@
-import { ParticleContainer, Sprite } from "pixi.js";
+import { ParticleContainer, Rectangle, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
@@ -26,10 +26,9 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     private totalLength: number;
     private k: number;
 
-    private deltaDistance = 60;
-    private finishPathTime: number;
-
     private particles: Map<number, Particle> = new Map();
+    private startRectangle: Rectangle;
+    private finishRectangle: Rectangle;
 
     private color = Config.PATH_SELECT_COLOR;
 
@@ -41,19 +40,25 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
         this.totalLength = this.path.getTotalLength();
         this.k = 1 / Math.ceil(this.totalLength);
 
-        this.currentPathTime = this.deltaDistance / this.totalLength;
-        this.finishPathTime = 1 - this.currentPathTime;
-        this.currentTime = this.currentPathTime;
+        const size = Config.ICON_IMAGE_WIDTH;
+        const startPoint = this.path.getPointAtLength(0);
+        const finishPoint = this.path.getPointAtLength(this.totalLength);
+        this.startRectangle = new Rectangle(startPoint.x - size / 2, startPoint.y - size / 2, size * .9, size * .9);
+        this.finishRectangle = new Rectangle(finishPoint.x - size / 2, finishPoint.y - size / 2, size * .9, size * .9);
     }
 
     private draw(from: number, to: number) {
         let time = from;
-        while (time < to && time >= from) {
+        while (time < to) {
             const prev = this.children[this.children.length - 1];
             const point = this.path.getPointAtLength(time * this.totalLength);
             time += this.k;
 
-            if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
+            if (
+                (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1))
+                || this.startRectangle.contains(point.x, point.y)
+                || this.finishRectangle.contains(point.x, point.y)
+            ) {
                 continue;
             }
 
@@ -71,8 +76,8 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
 
     animate(time: number): void {
         this.currentTime += time;
-        if (this.currentPathTime < this.finishPathTime) {
-            const t = this.easing(this.currentTime / this.duration);
+        const t = this.easing(this.currentTime / this.duration);
+        if (this.currentPathTime < 1) {
             this.draw(this.currentPathTime, t);
             this.currentPathTime = t;
         }
