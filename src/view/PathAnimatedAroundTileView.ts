@@ -12,28 +12,27 @@ export class PathAnimatedAroundTileView extends ParticleContainer implements Ani
     private particleScale = 0.2;
     private easing = easingsFunctions.easeOutSine;
 
+    private path = this.svg.querySelector('path');
+    private totalLength = this.path.getTotalLength();
+    private k = 1 / Math.ceil(this.totalLength);
+    private texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
+
     constructor(private duration = .5) {
         super();
     }
 
     private draw(from: number, to: number) {
-        const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
-        const path = this.svg.querySelector('path');
-        const totalLength = path.getTotalLength();
-
-        const length = Math.ceil(totalLength);
-        const k = 1 / length;
         let time = from;
         while (time < to) {
             const prev = this.children[this.children.length - 1];
-            const point = path.getPointAtLength(time * totalLength);
-            time += k;
+            const point = this.path.getPointAtLength(time * this.totalLength);
+            time += this.k;
 
             if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
                 continue;
             }
 
-            const sprite = new Sprite(texture);
+            const sprite = new Sprite(this.texture);
             sprite.tint = this.color;
             sprite.position.x = point.x;
             sprite.position.y = point.y;

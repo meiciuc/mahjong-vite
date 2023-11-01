@@ -1,4 +1,4 @@
-import { ParticleContainer, Rectangle, Sprite } from "pixi.js";
+import { ParticleContainer, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
@@ -21,8 +21,15 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     private easing = easingsFunctions.easeInOutCirc;
     private particleAge = .3;
 
+    private texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
+    private path: SVGPathElement;
+    private totalLength: number;
+    private k: number;
+
+    private deltaDistance = 60;
+    private finishPathTime: number;
+
     private particles: Map<number, Particle> = new Map();
-    private masks: Rectangle[] = [];
 
     private color = Config.PATH_SELECT_COLOR;
 
@@ -30,57 +37,48 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
         super();
         this.particleAge = this.duration / 1.5;
 
-        const hitzone = Config.ICON_IMAGE_WIDTH * .9;
-        const path = this.svg.querySelector('path');
-        let point = path.getPointAtLength(0);
-        this.masks.push(new Rectangle(point.x - hitzone / 2, point.y - hitzone / 2, hitzone, hitzone));
-        point = path.getPointAtLength(path.getTotalLength());
-        this.masks.push(new Rectangle(point.x - hitzone / 2, point.y - hitzone / 2, hitzone, hitzone));
+        this.path = this.svg.querySelector('path');
+        this.totalLength = this.path.getTotalLength();
+        this.k = 1 / Math.ceil(this.totalLength);
+
+        this.currentPathTime = this.deltaDistance / this.totalLength;
+        this.finishPathTime = 1 - this.currentPathTime;
     }
 
     private draw(from: number, to: number) {
-        const texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
-        const path = this.svg.querySelector('path');
-        const totalLength = path.getTotalLength();
-
-        const length = Math.ceil(totalLength);
-        const k = 1 / length;
         let time = from;
-        while (time < to) {
+        let count = 0;
+        while (time < to && time >= from) {
             const prev = this.children[this.children.length - 1];
-            const point = path.getPointAtLength(time * totalLength);
-            time += k;
+            const point = this.path.getPointAtLength(time * this.totalLength);
+            time += this.k;
 
             if (prev && (Math.abs(prev.x - point.x) < 1 && Math.abs(prev.y - point.y) < 1)) {
                 continue;
             }
 
-            let cont = false;
-            for (const rect of this.masks) {
-                if (rect.contains(point.x, point.y)) {
-                    cont = true;
-                }
-            }
+            // console.log((prev ? [Math.abs(prev.x - point.x), Math.abs(prev.y - point.y)] : ''), point)
 
-            if (cont) {
-                continue;
-            }
-
-            const sprite = new Sprite(texture);
+            const sprite = new Sprite(this.texture);
             sprite.tint = this.color;
+            sprite.scale.set(this.particleScale);
             sprite.position.x = point.x;
             sprite.position.y = point.y;
             this.addChild(sprite);
 
             const particle = new Particle(sprite, this.particleAge);
             this.particles.set(particle.id, particle);
+
+            count++;
         }
+
+        // console.log(count)
     }
 
     animate(time: number): void {
         this.currentTime += time;
-        const t = this.easing(this.currentTime / this.duration);
-        if (this.currentPathTime < 1) {
+        if (this.currentPathTime < this.finishPathTime) {
+            const t = this.easing(this.currentTime / this.duration);
             this.draw(this.currentPathTime, t);
             this.currentPathTime = t;
         }
@@ -88,11 +86,13 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
         this.particles.forEach((particle, id) => {
             particle.age -= time;
             particle.sprite.alpha = particle.age * 10;
-            particle.sprite.scale.set(this.particleScale * particle.age / this.particleAge);
+            // particle.sprite.scale.set(this.particleScale * particle.age / this.particleAge);
             if (particle.age < 0) {
                 particle.sprite.destroy();
                 this.particles.delete(id);
             }
         })
+
+        console.log(this.particles.size)
     }
 }

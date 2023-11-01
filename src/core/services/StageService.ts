@@ -72,20 +72,24 @@ class StageService {
         this.resizeSignal.dispatch(appWidth, appHeight, window.devicePixelRatio);
     };
 
-    public getLayer(layerId: number) {
+    public getLayer(layerId) {
         return this.layers.get(layerId) || (this.layers.get(this.layerDefault) as Container);
     }
 
-    public get width(): number {
+    public get width() {
         return this.app.screen.width;
     }
 
-    public get height(): number {
+    public get height() {
         return this.app.screen.height;
     }
 
-    public get dpr(): number {
+    public get dpr() {
         return window.devicePixelRatio;
+    }
+
+    public get stage() {
+        return this.app;
     }
 }
 
