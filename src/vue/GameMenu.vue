@@ -3,6 +3,7 @@ import { vueService } from './VueService';
 import { useModel } from '../model/useModel';
 import { Localization } from '../utils/Localization';
 import GameMenuTimer from './GameMenuTimer.vue';
+import GameMenuPauseButton from './GameMenuPauseButton.vue';
 
 const gameLevel = useModel(["gameLevel"]);
 const gameScore = useModel(["gameScore"]);
@@ -20,7 +21,11 @@ const handleClick = () => {
             <div class="GameScore">{{ gameScore }}</div>
         </div>
 
-        <GameMenuTimer></GameMenuTimer>
+        <div>
+            <GameMenuPauseButton></GameMenuPauseButton>
+            <GameMenuTimer></GameMenuTimer>
+        </div>
+
 
         <div class="HelpContainer">
             <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>

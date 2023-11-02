@@ -34,4 +34,6 @@ export interface GameModel {
 
     icons: IconState[];
     maxGridItems: number,
+
+    pause: boolean,
 }

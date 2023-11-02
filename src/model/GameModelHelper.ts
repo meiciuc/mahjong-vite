@@ -65,6 +65,7 @@ export class GameModelHelper {
 
             icons: [],
             maxGridItems: 0,
+            pause: false,
         });
     }
 

@@ -5,6 +5,7 @@ import { Signal } from '../core/utils/signal';
 class VueService {
     signalStartButton = new Signal()
     signalHelpButton = new Signal();
+    signalPauseButton = new Signal();
     signalGameEndButton = new Signal();
 
     init() {
