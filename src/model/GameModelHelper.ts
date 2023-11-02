@@ -78,10 +78,8 @@ export class GameModelHelper {
         gameModel.data.gameMaxTime = gameMaxTime;
     }
 
-    static resetGameModelForNextLevel(gridWidth: number, gridHeight: number, gameMaxTime: number) {
+    static resetGameModelForNextLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.gameLevel++;
-
-        GameModelHelper.initModel(gridWidth, gridHeight, gameMaxTime);
     }
 }

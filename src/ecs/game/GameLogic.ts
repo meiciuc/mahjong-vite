@@ -24,7 +24,10 @@ export class GameLogic {
         return iconsQueueLength * 2;
     }
 
-    public generateIconsQueue(gridWidth: number, gridHeight: number) {
+    public generateIconsQueue(gridWidth: number, gridHeight: number, seed: string | undefined = undefined) {
+        if (!seed) {
+            seed = `${Math.random()}`
+        }
         const model = dataService.getRootModel<GameModel>().data
         const gw = gridWidth;
         const gh = gridHeight;
@@ -50,7 +53,9 @@ export class GameLogic {
             maxc = pares * 2;
         }
 
-        shuffle(iconsQueue, `${Math.random()}`);
+        shuffle(iconsQueue, seed);
+
+        console.log('generated', gridWidth, gridHeight, seed)
 
         this.iconsQueue = iconsQueue;
     }
@@ -73,6 +78,7 @@ export class GameLogic {
 
                 const result = await this.findCross(nodeA.gridPosition, nodeB.gridPosition);
                 if (result.length) {
+                    console.log('needHelp', result)
                     return result;
                 }
 
@@ -80,6 +86,7 @@ export class GameLogic {
             }
         }
 
+        console.log('needHelp', [])
         return [];
     }
 
@@ -108,7 +115,8 @@ export class GameLogic {
                 return Promise.resolve(cross.result);
             })
             .catch(() => {
-                return Promise.resolve([]);
+                const result: PointLike[] = [];
+                return Promise.resolve(result);
             });
     }
 

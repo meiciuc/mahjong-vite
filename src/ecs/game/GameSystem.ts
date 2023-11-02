@@ -45,8 +45,10 @@ export class GameSystem extends System {
     update = (): void => {
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
-                const { gridWidth, gridHeight } = this.setupModel();
+                // const { gridWidth, gridHeight, seed } = { gridWidth: 10, gridHeight: 8, seed: '0.7295712101691723' }
+                // this.gameLogic.generateIconsQueue(gridWidth, gridHeight, seed);
 
+                const { gridWidth, gridHeight } = this.setupModel();
                 this.gameLogic.generateIconsQueue(gridWidth, gridHeight);
                 GameModelHelper.initModel(gridWidth, gridHeight, this.gameLogic.getGameMaxTime(gridWidth * gridHeight));
 
@@ -98,7 +100,10 @@ export class GameSystem extends System {
                 }
 
                 if (arr.length > 1) {
-                    this.handleTwoSelected(arr);
+                    this.handleTwoSelected(arr)
+                        .then(() => {
+                            this.setState(GameStateEnum.CLICK_WAIT);
+                        });
                 }
                 break;
         }
@@ -133,10 +138,10 @@ export class GameSystem extends System {
             return;
         }
 
-        if (state === GameStateEnum.CLICK_WAIT) {
+        if (state === GameStateEnum.CLICK_WAIT && this.tiles?.head) {
             const arr = await this.gameLogic.needHelp();
             if (arr.length === 0) {
-                GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
+                GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES);
                 return;
             }
         }
