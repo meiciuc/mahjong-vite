@@ -19,7 +19,7 @@ export class FadeInSystem extends System {
             return;
         }
 
-        game.alpha = Math.min(game.alpha + time * game.alpha * 50, this.endAlpha);
+        game.alpha = Math.max(game.alpha + time * game.alpha * 50, this.endAlpha);
         stageService.getLayer(LAYERS.EFFECTS).alpha = game.alpha;
     }
 

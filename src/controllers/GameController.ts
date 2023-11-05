@@ -47,6 +47,8 @@ export class GameController extends BaseController {
     private gameLogic?: GameLogic;
 
     destroy(): void {
+        window.removeEventListener('focus', this.handleWindowFocusIn);
+        window.removeEventListener('blur', this.handleWindowFocusOut);
         vueService.signalPauseButton.off(this.handlePauseButton);
         stageService.updateSignal.remove(this.update);
         this.engine?.removeAllSystems();
@@ -118,6 +120,9 @@ export class GameController extends BaseController {
         GameModelHelper.setGameState(GameStateEnum.NONE);
 
         vueService.signalPauseButton.on(this.handlePauseButton);
+
+        window.addEventListener('focus', this.handleWindowFocusIn);
+        window.addEventListener('blur', this.handleWindowFocusOut);
     }
 
     update = (time: number) => {
@@ -143,5 +148,11 @@ export class GameController extends BaseController {
     private handlePauseButton = () => {
         const model = dataService.getRootModel<GameModel>();
         this.pause(!model.raw.pause);
+    }
+
+    private handleWindowFocusIn = () => { }
+
+    private handleWindowFocusOut = () => {
+        this.pause(true);
     }
 }

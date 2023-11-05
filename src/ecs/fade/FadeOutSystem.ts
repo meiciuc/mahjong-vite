@@ -6,7 +6,6 @@ export class FadeOutSystem extends System {
     private endAlpha = 0;
 
     addToEngine(_engine: Engine): void {
-
     }
 
     removeFromEngine(_engine: Engine): void {
