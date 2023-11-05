@@ -21,6 +21,8 @@ import { throwIfNull } from '../utils/throwIfNull';
 import { GridView } from '../view/GridView';
 import { vueService } from '../vue/VueService';
 import { BaseController } from './BaseController';
+import { FadeOutSystem } from '../ecs/fade/FadeOutSystem';
+import { FadeInSystem } from '../ecs/fade/FadeInSystem';
 
 export enum SystemPriorities {
     preUpdate = 1,
@@ -98,7 +100,9 @@ export class GameController extends BaseController {
             .addInstance(timer)
             .addInstance(help)
             .addInstance(interactive)
-        this.fsm.createState(GameControllerStateEnum.PAUSE);
+            .addInstance(new FadeInSystem())
+        this.fsm.createState(GameControllerStateEnum.PAUSE)
+            .addInstance(new FadeOutSystem())
 
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
