@@ -1,3 +1,4 @@
+import { Languages } from "../utils/Localization";
 
 export enum GameStateEnum {
     NONE = 'none',
@@ -36,4 +37,5 @@ export interface GameModel {
     maxGridItems: number,
 
     pause: boolean,
+    language: Languages,
 }

@@ -1,9 +1,11 @@
 import WebFont from "webfontloader";
-import { Languages, Localization } from "../utils/Localization";
+import { Localization } from "../utils/Localization";
 import { BaseController } from "./BaseController";
 import { Signal1 } from "@ash.ts/ash";
 import { Assets } from "pixi.js";
 import { Config } from "../Config";
+import { dataService } from "../core/services/DataService";
+import { GameModel } from "../model/GameModel";
 
 export class AssetsController extends BaseController {
 
@@ -26,7 +28,7 @@ export class AssetsController extends BaseController {
     }
 
     async loadLanguage() {
-        return Localization.setLanguage(Languages.en);
+        return Localization.setLanguage(dataService.getRootModel<GameModel>().raw.language);
     }
 
     async loadFonts() {
