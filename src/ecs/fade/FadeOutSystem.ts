@@ -19,7 +19,6 @@ export class FadeOutSystem extends System {
         }
 
         game.alpha = Math.max(game.alpha - time * game.alpha * 10, this.endAlpha);
-        stageService.getLayer(LAYERS.EFFECTS).alpha = game.alpha;
     }
 
 }

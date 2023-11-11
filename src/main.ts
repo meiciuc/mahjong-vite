@@ -85,12 +85,11 @@ async function initStageService() {
     });
     app.renderer.plugins.interaction.autoPreventDefault = true;
     app.stage.interactive = true;
-    // document.body.appendChild(app.view as unknown as Node);
 
     parent.appendChild(app.view as unknown as Node);
 
     stageService.config({
-        layers: [LAYERS.BACKGROUND, LAYERS.GAME, LAYERS.EFFECTS],
+        layers: [LAYERS.BACKGROUND, LAYERS.GAME, LAYERS.TUTORIAL],
         layerDefault: LAYERS.GAME,
     });
     await stageService.init(app);

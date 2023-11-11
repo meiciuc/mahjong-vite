@@ -55,8 +55,6 @@ export class GameLogic {
 
         shuffle(iconsQueue, seed);
 
-        console.log('generated', gridWidth, gridHeight, seed)
-
         this.iconsQueue = iconsQueue;
     }
 
