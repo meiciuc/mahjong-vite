@@ -1,24 +1,24 @@
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
+import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
-// import { TimeSkipper } from '../utils/TimeSkipper';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
+import { TutorialController } from './TutorialController';
 
 export class ApplicationController extends BaseController {
 
-    private gameModel?: GameModel;
+    private gameModel?: Model<GameModel>;
 
     protected async doExecute() {
-        this.gameModel = dataService.getRootModel<GameModel>().data;
+        this.setupGameModel();
 
-        // this.setupSdkService();
         stageService.updateSignal.add(this.update);
-        
+
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
@@ -31,10 +31,11 @@ export class ApplicationController extends BaseController {
     private async nextCicle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-        // TODO внесение кастомных данных
         const level = GameModelHelper.getGameLevel();
         GameModelHelper.resetGameModelForNextLevel();
         GameModelHelper.setGameLevel(level + 1);
+
+        await new TutorialController().execute();
 
         const game = await new GameController().execute();
         const gameState = GameModelHelper.getGameState();
@@ -54,10 +55,20 @@ export class ApplicationController extends BaseController {
         this.nextCicle();
     }
 
-    private update = (time: number) => {
-        this.gameModel.appStateTime += time;
+    private setupGameModel() {
+        // TODO внесение кастомных данных
+        this.gameModel = dataService.getRootModel<GameModel>();
+        const keys: string[] = [];
+        const icons = this.gameModel.data.icons;
+        icons.forEach((icon) => {
+            keys.push(icon.key);
+        });
     }
-    
+
+    private update = (time: number) => {
+        this.gameModel.data.appStateTime += time;
+    }
+
 
     // private async setupSdkService() {
     //     await new TimeSkipper(10000).execute();

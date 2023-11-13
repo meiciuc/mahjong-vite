@@ -76,7 +76,6 @@ export class GameLogic {
 
                 const result = await this.findCross(nodeA.gridPosition, nodeB.gridPosition);
                 if (result.length) {
-                    console.log('needHelp', result)
                     return result;
                 }
 
@@ -84,7 +83,6 @@ export class GameLogic {
             }
         }
 
-        console.log('needHelp', [])
         return [];
     }
 

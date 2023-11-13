@@ -82,12 +82,6 @@ export class GameController extends BaseController {
 
         this.creator.createGame();
 
-        const keys: string[] = [];
-        const icons = dataService.getRootModel<GameModel>().data.icons;
-        icons.forEach((icon) => {
-            keys.push(icon.key);
-        });
-
         const timer = new GameTimerSystem();
         timer.priority = SystemPriorities.update;
 

@@ -3,7 +3,7 @@ import { Config } from "../../Config";
 import { GridNode } from "./nodes/GridNode";
 import { Tile } from "./components/Tile";
 
-export class TileNode extends defineNode({
+class TileNode extends defineNode({
     tile: Tile,
 }) { }
 
