@@ -194,7 +194,7 @@ export class EntityCreator {
         entity
             .add(new TileHelpEffect())
             .add(new Transform())
-            .add(new Display(view, this.gridView.effectsTilesAbove))
+            .add(new Display(view, this.gridView.effectsPathesAbove))
             .add(new AnimationComponent(view))
 
         this.engine.addEntity(entity);

@@ -5,6 +5,7 @@ export class GridView extends Container {
     public background: Container;
     public effectsTilesUnder: Container;
     public tiles: Container;
+    public effectsPathesAbove: Container;
     public effectsTilesAbove: Container;
 
     constructor() {
@@ -15,6 +16,9 @@ export class GridView extends Container {
 
         this.background = new Container();
         this.grid.addChild(this.background);
+
+        this.effectsPathesAbove = new Container();
+        this.grid.addChild(this.effectsPathesAbove);
 
         this.effectsTilesUnder = new Container();
         this.grid.addChild(this.effectsTilesUnder);

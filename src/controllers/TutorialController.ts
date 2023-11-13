@@ -19,6 +19,8 @@ import { GameModel } from "../model/GameModel";
 import { PointLike } from "../utils/point";
 import { PathAnimatedLikeSnakeView } from "../view/PathAnimatedLikeSnakeView";
 import { GameLogic } from "../ecs/game/GameLogic";
+import { TileHelpEffectNode } from "../ecs/tiles/nodes/TileHelpEffectNode";
+import { TileShakingSystem } from "../ecs/tiles/TileShakingSystem";
 
 class AnimationQueueItem {
     constructor(
@@ -34,6 +36,7 @@ export class TutorialController extends BaseController {
     private gameLogic?: GameLogic;
     private gridView?: GridView;
     private tiles?: NodeList<TileNode>;
+    private helpEffectNodes?: NodeList<TileHelpEffectNode>;
 
     private portrait: number[][];
     private landscape: number[][];
@@ -62,10 +65,12 @@ export class TutorialController extends BaseController {
         this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
 
         this.tiles = this.engine.getNodeList(TileNode);
+        this.helpEffectNodes = this.engine.getNodeList(TileHelpEffectNode);
 
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
         this.engine.addSystem(new TilesGridSystem(), SystemPriorities.update);
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
+        this.engine.addSystem(new TileShakingSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new TileToggleSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
 
@@ -127,12 +132,18 @@ export class TutorialController extends BaseController {
     }
 
     private async nextCircle() {
+        const selectTiming = .2;
+        const pathTiminig = .7;
+        const pauseTiming = .5;
+        const errorTiming = .5;
+        const shakingTiming = .5;
+
         const order = [this.icons[1], this.icons[2], this.icons[0], this.icons[3], this.icons[4]];
 
         this.currentCircle++;
         this.currentCircle = this.currentCircle >= order.length ? 0 : this.currentCircle;
-        console.log('this.currentCircle', this.currentCircle)
 
+        const showRed = this.currentCircle === order.length - 1;
 
         const iconState = dataService.getRootModel<GameModel>().raw.icons[order[this.currentCircle]];
         const positions: PointLike[] = [];
@@ -140,22 +151,35 @@ export class TutorialController extends BaseController {
         for (let node = this.tiles.head; node; node = node.next) {
             if (node.icon.state.key === iconState.key) {
                 positions.push({ x: node.gridPosition.x, y: node.gridPosition.y });
-                this.animationQueue.push(new AnimationQueueItem(
-                    () => { this.creator.selectTile(node.tile, true) },
-                    .2
-                ));
+
+                if (showRed && positions.length > 1) {
+                    this.animationQueue.push(new AnimationQueueItem(
+                        () => { this.creator.createTileHelpEffect(node.transform.position.x, node.transform.position.y); },
+                        errorTiming
+                    ));
+                    this.animationQueue.push(new AnimationQueueItem(
+                        () => { this.creator.shakeTile(node.tile, true) },
+                        shakingTiming
+                    ));
+                } else {
+                    this.animationQueue.push(new AnimationQueueItem(
+                        () => { this.creator.selectTile(node.tile, true) },
+                        selectTiming
+                    ));
+                }
             }
         }
 
-        const path = await this.gameLogic.findCross(positions[0], positions[1]);
-
         // show path
-        this.animationQueue.push(new AnimationQueueItem(
-            () => {
-                this.creator.showPath(path, Config.PATH_LIKE_SNAKE_DURATION);
-            },
-            1
-        ));
+        const path = await this.gameLogic.findCross(positions[0], positions[1]);
+        if (path.length) {
+            this.animationQueue.push(new AnimationQueueItem(
+                () => {
+                    this.creator.showPath(path, Config.PATH_LIKE_SNAKE_DURATION * 3);
+                },
+                pathTiminig
+            ));
+        }
 
         // hide path
         this.animationQueue.push(new AnimationQueueItem(
@@ -174,7 +198,7 @@ export class TutorialController extends BaseController {
         // pause
         this.animationQueue.push(new AnimationQueueItem(
             () => { },
-            1
+            pauseTiming
         ))
 
         // clear pair
@@ -183,14 +207,19 @@ export class TutorialController extends BaseController {
                 for (let node = this.tiles.head; node; node = node.next) {
                     this.creator.selectTile(node.tile, false);
                 }
+                if (showRed) {
+                    while (this.helpEffectNodes?.head) {
+                        this.creator.removeEntity(this.helpEffectNodes.head.entity);
+                    }
+                }
             },
-            .7
+            0
         ));
 
         // next circle
         this.animationQueue.push(new AnimationQueueItem(
             () => { this.nextCircle(); },
-            0
+            pauseTiming
         ))
     }
 
