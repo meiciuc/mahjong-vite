@@ -1,22 +1,24 @@
 {
-    "start" : {
-        "play" : "Играть"
+    "start": {
+        "play": "Играть"
     },
-    "game" : {
-        "help" : "?"
+    "game": {
+        "help": "?",
+        "level": "Уровень",
+        "points": "Очки"
     },
-    "victory" : {
-        "victory" : "Победа",
-        "next" : "Дальше"
+    "victory": {
+        "victory": "Победа",
+        "next": "Дальше"
     },
-    "defeated" : {
-        "defeated" : "Проигрыш",
-        "again" : "Повторить",
-        "initialy" : "С начала"
+    "defeated": {
+        "defeated": "Проигрыш",
+        "again": "Повторить",
+        "initialy": "С начала"
     },
-    "noMoreMoves" : {
-        "noMoreMoves" : "Нет доступных ходов",
-        "again" : "Повторить",
-        "initialy" : "С начала"
+    "noMoreMoves": {
+        "noMoreMoves": "Нет доступных ходов",
+        "again": "Повторить",
+        "initialy": "С начала"
     }
 }

@@ -35,7 +35,7 @@ export class ApplicationController extends BaseController {
         GameModelHelper.resetGameModelForNextLevel();
         GameModelHelper.setGameLevel(level + 1);
 
-        await new TutorialController().execute();
+        // await new TutorialController().execute();
 
         const game = await new GameController().execute();
         const gameState = GameModelHelper.getGameState();

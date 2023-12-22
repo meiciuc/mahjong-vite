@@ -1,22 +1,24 @@
 {
-    "start" : {
-        "play" : "Play"
+    "start": {
+        "play": "Play"
     },
-    "game" : {
-        "help" : "?"
+    "game": {
+        "help": "?",
+        "level": "Level",
+        "points": "Points"
     },
-    "victory" : {
-        "victory" : "Victory",
-        "next" : "Next"
+    "victory": {
+        "victory": "Victory",
+        "next": "Next"
     },
-    "defeated" : {
-        "defeated" : "Defeated",
-        "again" : "Try again",
-        "initialy" : "Initialy"
+    "defeated": {
+        "defeated": "Defeated",
+        "again": "Try again",
+        "initialy": "Initialy"
     },
-    "noMoreMoves" : {
-        "noMoreMoves" : "NO MORE MOVES AVALIABLE",
-        "again" : "Try again",
-        "initialy" : "Initialy"
+    "noMoreMoves": {
+        "noMoreMoves": "NO MORE MOVES AVALIABLE",
+        "again": "Try again",
+        "initialy": "Initialy"
     }
 }

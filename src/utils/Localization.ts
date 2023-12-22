@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import HttpApi from 'i18next-http-backend';
+import Backend from 'i18next-http-backend';
 import { Route } from './utils';
 
 export enum Languages {
@@ -16,7 +16,7 @@ export class Localization {
 
         console.log('lang', lang)
 
-        await i18n.use(HttpApi).init({
+        await i18n.use(Backend).init({
             lng: lang,
             fallbackLng: 'en',
             debug: true,

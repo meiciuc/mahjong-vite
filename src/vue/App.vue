@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AppStateEnum } from '../model/GameModel';
 import GameMenu from './GameMenu.vue';
+import GameMenuMain from './GameMenuMain.vue';
 import StartScreen from './StartScreen.vue';
 import GameVictoryScreen from './GameVictoryScreen.vue';
 import GameDefeatedScreen from './GameDefeatedScreen.vue';
@@ -28,6 +29,7 @@ window.addEventListener('resize', () => {
 
 <template>
     <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
+    <GameMenuMain :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']"></GameMenuMain>
     <GameMenu :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
@@ -40,6 +42,15 @@ window.addEventListener('resize', () => {
 // https://stackoverflow.com/questions/23870696/vertical-navigation-with-rotated-text
 
 // menu-left
+.l-menu-main {
+    width: 100vh;
+    height: 45px;
+    position: fixed;
+    background: #4c4c4c;
+    transform-origin: left top;
+    transform: rotate(-90deg) translateX(-100%);
+}
+
 .l-menu {
     width: 100vh;
     height: 45px;
@@ -47,6 +58,7 @@ window.addEventListener('resize', () => {
     background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
+    left: 45px;
 }
 
 .l-canvas {
@@ -58,6 +70,15 @@ window.addEventListener('resize', () => {
 }
 
 // menu-top
+.t-menu-main {
+    width: 100vw;
+    height: 45px;
+    position: fixed;
+    background: #4c4c4c;
+    transform-origin: left top;
+    transform: rotate(0deg) translateX(0%);
+}
+
 .t-menu {
     width: 100vw;
     height: 45px;
@@ -65,6 +86,7 @@ window.addEventListener('resize', () => {
     background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(0deg) translateX(0%);
+    top: 45px;
 }
 
 .t-canvas {
