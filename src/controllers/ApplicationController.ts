@@ -4,7 +4,7 @@ import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
-import { addService } from '../services/AddService';
+import { adsService } from '../services/AdsService';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -25,11 +25,11 @@ export class ApplicationController extends BaseController {
 
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN);
 
-        addService.showLeaderboard(true);
+        // adsService.showLeaderboard(true);
 
-        addService.showSticky(true);
+        adsService.showSticky(true);
         await vueService.signalStartButton.future();
-        addService.showSticky(false);
+        adsService.showSticky(false);
 
         await this.nextCicle();
     }
@@ -46,16 +46,13 @@ export class ApplicationController extends BaseController {
         const game = await new GameController().execute();
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
-            addService.showSticky(true);
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
-            addService.showSticky(true);
             GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEATED);
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
         await vueService.signalGameEndButton.future();
-        addService.showSticky(false);
 
         game.destroy();
 
@@ -72,21 +69,22 @@ export class ApplicationController extends BaseController {
         icons.forEach((icon) => {
             keys.push(icon.key);
         });
+
+        this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
     }
 
     private update = (time: number) => {
-        this.gameModel.data.appStateTime += time;
+
     }
 
-
-    // private async setupSdkService() {
-    //     await new TimeSkipper(10000).execute();
-    //     const appState = GameModelHelper.getApplicationState();
-    //     GameModelHelper.setApplicationState(AppStateEnum.PAUSE_WHILE_ADS);
-
-    //     await new TimeSkipper(3000).execute();
-    //     GameModelHelper.setApplicationState(appState);
-
-    //     this.setupSdkService();
-    // }
+    private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
+        switch (currenState) {
+            case AppStateEnum.GAME_SCREEN_PAUSE:
+                adsService.showSticky(true);
+                break;
+            case AppStateEnum.GAME_SCREEN:
+                adsService.showSticky(false);
+                break;
+        }
+    }
 }

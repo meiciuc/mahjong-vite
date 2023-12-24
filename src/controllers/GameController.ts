@@ -15,7 +15,7 @@ import { TileShakingSystem } from '../ecs/tiles/TileShakingSystem';
 import { TileToggleSystem } from '../ecs/tiles/TileToggleSystem';
 import { TilesGridSystem } from '../ecs/tiles/TilesGridSystem';
 import { GameTimerSystem } from '../ecs/timer/GameTimerSystem';
-import { GameModel, GameStateEnum } from '../model/GameModel';
+import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { throwIfNull } from '../utils/throwIfNull';
 import { GridView } from '../view/GridView';
@@ -91,14 +91,23 @@ export class GameController extends BaseController {
         const interactive = new TileInteractiveSystem(this.creator);
         interactive.priority = SystemPriorities.move;
 
+        const fadeIn = new FadeInSystem();
+        const fadeOut = new FadeOutSystem();
+
         this.fsm = new EngineStateMachine(this.engine);
         this.fsm.createState(GameControllerStateEnum.GAME)
             .addInstance(timer)
             .addInstance(help)
             .addInstance(interactive)
-            .addInstance(new FadeInSystem())
+            .addMethod(() => {
+                GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                return fadeIn;
+            })
         this.fsm.createState(GameControllerStateEnum.PAUSE)
-            .addInstance(new FadeOutSystem())
+            .addMethod(() => {
+                GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+                return fadeOut;
+            })
 
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);

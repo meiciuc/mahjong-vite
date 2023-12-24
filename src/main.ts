@@ -11,7 +11,7 @@ import { PreloaderController } from './controllers/PreloaderController';
 import { GameModelHelper } from './model/GameModelHelper';
 import { vueService } from './vue/VueService';
 import { AssetsController } from './controllers/AssetsController';
-import { addService } from './services/AddService';
+import { adsService } from './services/AdsService';
 
 window.onload = async (): Promise<void> => {
     initModel();
@@ -78,7 +78,7 @@ function initVueService() {
 }
 
 async function initAddService() {
-    return addService.init();
+    return adsService.init();
 }
 
 async function initStageService() {

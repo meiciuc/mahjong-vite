@@ -15,7 +15,7 @@ const data = useModel(["appState"]);
 const appState = computed(() => { return data.value });
 
 const showModalBackground = computed(() => {
-    return data.value !== AppStateEnum.GAME_SCREEN;
+    return data.value !== AppStateEnum.GAME_SCREEN && data.value !== AppStateEnum.GAME_SCREEN_PAUSE;
 });
 
 const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));

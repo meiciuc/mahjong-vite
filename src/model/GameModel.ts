@@ -37,7 +37,6 @@ export interface IconState {
 
 export interface GameModel {
     appState: AppStateEnum;
-    appStateTime: number,
     gameState: GameStateEnum,
     gameStateTime: number,
     gameLevel: number,

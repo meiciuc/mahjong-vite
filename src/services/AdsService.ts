@@ -66,4 +66,4 @@ class GpService {
     }
 }
 
-export const addService = new GpService();
+export const adsService = new GpService();

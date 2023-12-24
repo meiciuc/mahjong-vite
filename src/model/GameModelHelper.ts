@@ -56,7 +56,6 @@ export class GameModelHelper {
     static createModel() {
         dataService.config<GameModel>({
             appState: AppStateEnum.NONE,
-            appStateTime: 0,
             gameState: GameStateEnum.NONE,
             gameLevel: 0,
             gameScore: 0,
