@@ -11,10 +11,12 @@ import { PreloaderController } from './controllers/PreloaderController';
 import { GameModelHelper } from './model/GameModelHelper';
 import { vueService } from './vue/VueService';
 import { AssetsController } from './controllers/AssetsController';
+import { addService } from './services/AddService';
 
 window.onload = async (): Promise<void> => {
-    await initAssets();
     initModel();
+    await initAddService();
+    await initAssets();
     initVueService();
     await initStageService();
     setupTweens();
@@ -75,6 +77,10 @@ function initVueService() {
     vueService.init();
 }
 
+async function initAddService() {
+    return addService.init();
+}
+
 async function initStageService() {
     const parent = vueService.getCanvasParent() as HTMLElement;
     const app = new Application({
@@ -85,7 +91,6 @@ async function initStageService() {
     });
     app.renderer.plugins.interaction.autoPreventDefault = true;
     app.stage.interactive = true;
-
     parent.appendChild(app.view as unknown as Node);
 
     stageService.config({

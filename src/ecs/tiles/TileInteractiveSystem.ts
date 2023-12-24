@@ -31,6 +31,11 @@ export class TileInteractiveSystem extends System {
 
     addToEngine(engine: Engine): void {
         this.tiles = engine.getNodeList(TileInteractiveNode);
+
+        for (let node = this.tiles.head; node; node = node.next) {
+            this.handleTileAdded(node);
+        }
+
         this.tiles.nodeAdded.add(this.handleTileAdded);
         this.tiles.nodeRemoved.add(this.handleTileRemoved);
 
@@ -42,6 +47,11 @@ export class TileInteractiveSystem extends System {
     removeFromEngine(_engine: Engine): void {
         this.tiles.nodeAdded.remove(this.handleTileAdded);
         this.tiles.nodeRemoved.remove(this.handleTileRemoved);
+
+        for (let node = this.tiles.head; node; node = node.next) {
+            this.handleTileRemoved(node);
+        }
+
         this.tiles = undefined;
 
 

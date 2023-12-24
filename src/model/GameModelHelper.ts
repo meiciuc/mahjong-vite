@@ -1,4 +1,5 @@
 import { dataService } from "../core/services/DataService";
+import { Languages } from "../utils/Localization";
 import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
 
 export class GameModelHelper {
@@ -66,6 +67,7 @@ export class GameModelHelper {
             icons: [],
             maxGridItems: 0,
             pause: false,
+            language: Languages.en,
         });
     }
 

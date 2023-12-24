@@ -4,6 +4,7 @@ import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
+import { addService } from '../services/AddService';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -23,7 +24,12 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN);
+
+        addService.showLeaderboard(true);
+
+        addService.showSticky(true);
         await vueService.signalStartButton.future();
+        addService.showSticky(false);
 
         await this.nextCicle();
     }
@@ -40,13 +46,16 @@ export class ApplicationController extends BaseController {
         const game = await new GameController().execute();
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
+            addService.showSticky(true);
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
+            addService.showSticky(true);
             GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEATED);
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
         await vueService.signalGameEndButton.future();
+        addService.showSticky(false);
 
         game.destroy();
 
