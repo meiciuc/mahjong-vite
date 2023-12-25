@@ -15,13 +15,14 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => {
-    vueService.signalStartButton.dispatch();
+    vueService.signalPauseButton.dispatch();
 }
 </script>
 
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
+            <div>Click any place</div>
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
         </div>
     </div>

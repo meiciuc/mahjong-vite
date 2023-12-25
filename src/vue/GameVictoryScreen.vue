@@ -1,65 +1,78 @@
 <script setup lang="ts">
 import { Localization } from '../utils/Localization';
 import { vueService } from './VueService';
-    const handleClick = () => {
-        vueService.signalGameEndButton.dispatch();
-    }
+import { computed, ref } from 'vue';
+
+
+const Popup = ref(null);
+
+const marginLeft = computed(() => {
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
+});
+
+const marginTop = computed(() => {
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
+});
+
+const handleClick = () => {
+    vueService.signalGameEndButton.dispatch();
+}
 </script>
 
 <template>
-    <div class="Background">
-    </div>
     <div class="Container">
-        <div class="Text">{{ Localization.getText('victory.victory') }}</div>
-    </div>
-    <div class="Container">
-        <div class="Button" @click="handleClick">{{ Localization.getText('victory.next') }}</div>
+        <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
+            <div class="Text">VICTORY</div>
+            <button class="StartButton" @click="handleClick">{{ Localization.getText('victory.next') }}</button>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-    @import './global.scss';
+@import './global.scss';
 
-    .Background {
-        background-color: $background_colored;
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-    }
-    .Container {
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        display: flex;
-        justify-content: center;
-        align-items: end;
-        overflow: hidden;
-    }
-    .Text {
-        font-family: 'Inter-SemiBold';
-        text-align: center;
-        font-size: 4em;
-        color: white;
-        user-select: none;
-        margin-bottom: 30%;
-    }
-    .Button {
-        font-family: 'Inter-SemiBold';
-        color: $button_text_colored;
-        border-radius: $button_border_radius;
-        background-color: $button_background_idle;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        padding-top: $button_padding_vertical;
-        padding-bottom: $button_padding_vertical;
-        padding-left: $button_padding_horizontal;
-        padding-right: $button_padding_horizontal;
+.Container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
 
-        margin-bottom: 20%;
-    }   
+.Popup {
+    position: relative;
+    width: fit-content;
+    block-size: fit-content;
+    left: 50%;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.StartButton {
+    @include scene-button;
+    color: $button_text_colored;
+    background-color: $button_text_idle;
+    border: solid;
+    border-radius: $button_border_radius;
+    border-color: $button_text_idle;
+}
+
+.StartButton:hover {
+    background-color: $button_background_colored;
+    color: $button_text_idle;
+    border-color: $button_text_idle;
+    border: solid;
+}
+
+.Text {
+    font-family: 'Inter-SemiBold';
+    text-align: center;
+    font-size: 4em;
+    color: white;
+    user-select: none;
+    margin-bottom: 30%;
+}
 </style>
+

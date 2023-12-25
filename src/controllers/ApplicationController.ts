@@ -23,7 +23,7 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
-        GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN);
+        GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
 
         await vueService.signalStartButton.future();
 
@@ -48,9 +48,9 @@ export class ApplicationController extends BaseController {
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
-        await vueService.signalGameEndButton.future();
-
         game.destroy();
+
+        await vueService.signalGameEndButton.future();
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 

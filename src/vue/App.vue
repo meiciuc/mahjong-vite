@@ -2,7 +2,10 @@
 import { AppStateEnum } from '../model/GameModel';
 import GameMenu from './GameMenu.vue';
 import GameMenuMain from './GameMenuMain.vue';
-import StartScreenNew from './StartScreenNew.vue';
+import StartScreen from './StartScreen.vue';
+import StartScreenFirst from './StartScreenFirst.vue';
+import StartScreenNovice from './StartScreenNovice.vue';
+import GamePause from './GamePause.vue';
 import GameVictoryScreen from './GameVictoryScreen.vue';
 import GameDefeatedScreen from './GameDefeatedScreen.vue';
 import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
@@ -39,14 +42,23 @@ window.addEventListener('resize', () => {
 
 <template>
     <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
-    <GameMenuMain :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']"></GameMenuMain>
+
+    <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
     <GameMenu v-show="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
+
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <ModalBackgroundColored v-show="showBackgroundColored"></ModalBackgroundColored>
-    <StartScreenNew v-if="appState === AppStateEnum.START_SCREEN"></StartScreenNew>
+
+    <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
+    <StartScreenFirst v-if="appState === AppStateEnum.START_SCREEN_FIRST"></StartScreenFirst>
+    <StartScreenNovice v-if="appState === AppStateEnum.START_SCREEN_NOVICE"></StartScreenNovice>
+
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
+
+    <GameMenuMain v-if="appState !== AppStateEnum.START_SCREEN_FIRST" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
+    </GameMenuMain>
 </template>
 
 <style lang="scss" scoped>

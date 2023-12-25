@@ -16,6 +16,8 @@ $background_colored_darken: $second_color_darken;
 $background_idle: $first_color;
 
 @mixin scene-button {
+    width: fit-content;
+    block-size: fit-content;
     font-family: 'Inter-SemiBold';
     cursor: pointer;
     padding-top: $button_padding_vertical;

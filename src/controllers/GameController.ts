@@ -47,6 +47,7 @@ export class GameController extends BaseController {
     private gameLogic?: GameLogic;
 
     destroy(): void {
+        console.log('GameController DESTROY')
         window.removeEventListener('focus', this.handleWindowFocusIn);
         window.removeEventListener('blur', this.handleWindowFocusOut);
         vueService.signalPauseButton.off(this.handlePauseButton);
@@ -56,12 +57,14 @@ export class GameController extends BaseController {
     }
 
     pause(value: boolean) {
+        console.log('GameController PAUSE')
         const model = dataService.getRootModel<GameModel>();
         model.data.pause = value;
         this.fsm.changeState(value ? GameControllerStateEnum.PAUSE : GameControllerStateEnum.GAME);
     }
 
     protected async doExecute() {
+        console.log('GameController EXECUTE')
         this.setupView();
         this.setupEngine();
     }

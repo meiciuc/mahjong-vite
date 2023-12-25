@@ -130,7 +130,8 @@ export class GameSystem extends System {
             gridHeight++;
         }
 
-        return { gridWidth, gridHeight };
+        // return { gridWidth, gridHeight };
+        return { gridWidth: 3, gridHeight: 2 };
     }
 
     private async setState(state: GameStateEnum) {
