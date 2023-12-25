@@ -2,10 +2,13 @@
 import { vueService } from './VueService';
 import { useModel } from '../model/useModel';
 import { Localization } from '../utils/Localization';
+import { computed } from 'vue';
 
 const gameLevel = useModel(["gameLevel"]);
-const gameScore = useModel(["gameScore"]);
+const gameTotalScore = useModel(["gameTotalScore"]);
 const helpsCount = useModel(["helpsCount"]);
+
+const isVisibleTotalScore = computed(() => { return gameTotalScore.value > 0; });
 
 const handleClick = () => {
     vueService.signalHelpButton.dispatch();
@@ -14,9 +17,9 @@ const handleClick = () => {
 
 <template>
     <div class="MenuPanel">
-        <div>
+        <div :class="[isVisibleTotalScore ? '' : 'invisible']">
             {{ Localization.getText('game.level') }}<div class="GameLevel">{{ gameLevel }}</div>
-            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameScore }}</div>
+            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
         </div>
 
         <div class="HelpContainer">

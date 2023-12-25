@@ -43,14 +43,24 @@ export class GameModelHelper {
         gameModel.data.gameLevel = value;
     }
 
-    static getGameScore() {
+    static getGameTotalScore() {
         const gameModel = dataService.getRootModel<GameModel>();
-        return gameModel.data.gameScore;
+        return gameModel.data.gameTotalScore;
     }
 
-    static setGameScore(value: number) {
+    static setGameTotalScore(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameScore = value;
+        gameModel.data.gameTotalScore = value;
+    }
+
+    static getGameCurrentScore() {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.gameCurrentScore;
+    }
+
+    static setGameCurrentScore(value: number) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.gameCurrentScore = value;
     }
 
     static createModel() {
@@ -58,7 +68,8 @@ export class GameModelHelper {
             appState: AppStateEnum.NONE,
             gameState: GameStateEnum.NONE,
             gameLevel: 0,
-            gameScore: 0,
+            gameTotalScore: 0,
+            gameCurrentScore: 0,
             gameStateTime: 0,
             gameMaxTime: 0,
             helpsCount: 3,
@@ -76,6 +87,7 @@ export class GameModelHelper {
 
         gameModel.data.helpsCount = 3;
         gameModel.data.gameStateTime = 0;
+        gameModel.data.gameCurrentScore = 0;
 
         gameModel.data.gameMaxTime = gameMaxTime;
     }

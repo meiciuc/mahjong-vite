@@ -40,7 +40,8 @@ export interface GameModel {
     gameState: GameStateEnum,
     gameStateTime: number,
     gameLevel: number,
-    gameScore: number,
+    gameTotalScore: number,
+    gameCurrentScore: number,
     gameMaxTime: number,
     helpsCount: number,
 

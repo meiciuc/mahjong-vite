@@ -158,7 +158,7 @@ export class GameSystem extends System {
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             // true move
-            GameModelHelper.setGameScore(GameModelHelper.getGameScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
+            GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
@@ -177,7 +177,7 @@ export class GameSystem extends System {
             }
         } else {
             // wrong move
-            GameModelHelper.setGameScore(Math.max(0, GameModelHelper.getGameScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
+            GameModelHelper.setGameCurrentScore(Math.max(0, GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileA.tile, false);
             this.creator.selectTile(tileB.tile, false);

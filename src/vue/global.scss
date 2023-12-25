@@ -26,3 +26,7 @@ $background_idle: $first_color;
     padding-right: $button_padding_horizontal;
     transition: all 100ms ease-out;
 }
+
+:global(.invisible) {
+    opacity: 0;
+}
