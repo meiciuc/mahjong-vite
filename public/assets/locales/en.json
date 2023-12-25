@@ -5,7 +5,8 @@
     "game": {
         "help": "?",
         "level": "Level",
-        "points": "Points"
+        "points": "Points",
+        "clickAnyPlace": "Click any place"
     },
     "victory": {
         "victory": "Victory",

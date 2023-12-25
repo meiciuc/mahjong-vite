@@ -5,7 +5,8 @@
     "game": {
         "help": "?",
         "level": "Уровень",
-        "points": "Очки"
+        "points": "Очки",
+        "clickAnyPlace": "Клик в любое место"
     },
     "victory": {
         "victory": "Победа",

@@ -20,10 +20,9 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="Container">
+    <div class="Container" @click="handleClick">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div>Click any place</div>
-            <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
+            <div>{{ Localization.getText('game.clickAnyPlace') }}</div>
         </div>
     </div>
 </template>
