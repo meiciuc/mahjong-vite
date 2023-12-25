@@ -19,6 +19,7 @@ const showModalBackground = computed(() => {
 });
 
 const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
+const showGameMenu = computed(() => { return (appState.value === AppStateEnum.GAME_SCREEN || appState.value === AppStateEnum.GAME_SCREEN_PAUSE); });
 
 window.addEventListener('resize', () => {
     isLeftMenu.value = isMobile() && (window.innerWidth > window.innerHeight);
@@ -30,7 +31,7 @@ window.addEventListener('resize', () => {
 <template>
     <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
     <GameMenuMain :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']"></GameMenuMain>
-    <GameMenu :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
+    <GameMenu v-show="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
