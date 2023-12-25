@@ -2,11 +2,12 @@
 import { AppStateEnum } from '../model/GameModel';
 import GameMenu from './GameMenu.vue';
 import GameMenuMain from './GameMenuMain.vue';
-import StartScreen from './StartScreen.vue';
+import StartScreenNew from './StartScreenNew.vue';
 import GameVictoryScreen from './GameVictoryScreen.vue';
 import GameDefeatedScreen from './GameDefeatedScreen.vue';
 import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
 import ModalBackground from './ModalBackground.vue';
+import ModalBackgroundColored from './ModalBackgroundColored.vue';
 import { useModel } from '../model/useModel';
 import { computed, ref } from 'vue';
 import isMobile from 'is-mobile';
@@ -14,12 +15,20 @@ import isMobile from 'is-mobile';
 const data = useModel(["appState"]);
 const appState = computed(() => { return data.value });
 
+const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
+const showGameMenu = computed(() => { return (appState.value === AppStateEnum.GAME_SCREEN || appState.value === AppStateEnum.GAME_SCREEN_PAUSE); });
 const showModalBackground = computed(() => {
     return data.value !== AppStateEnum.GAME_SCREEN && data.value !== AppStateEnum.GAME_SCREEN_PAUSE;
 });
-
-const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
-const showGameMenu = computed(() => { return (appState.value === AppStateEnum.GAME_SCREEN || appState.value === AppStateEnum.GAME_SCREEN_PAUSE); });
+const showBackgroundColored = computed(() => {
+    switch (appState.value) {
+        case AppStateEnum.START_SCREEN:
+        case AppStateEnum.START_SCREEN_FIRST:
+        case AppStateEnum.START_SCREEN_NOVICE:
+            return true;
+    }
+    return false;
+});
 
 window.addEventListener('resize', () => {
     isLeftMenu.value = isMobile() && (window.innerWidth > window.innerHeight);
@@ -33,7 +42,8 @@ window.addEventListener('resize', () => {
     <GameMenuMain :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']"></GameMenuMain>
     <GameMenu v-show="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
     <ModalBackground v-show="showModalBackground"></ModalBackground>
-    <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
+    <ModalBackgroundColored v-show="showBackgroundColored"></ModalBackgroundColored>
+    <StartScreenNew v-if="appState === AppStateEnum.START_SCREEN"></StartScreenNew>
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>

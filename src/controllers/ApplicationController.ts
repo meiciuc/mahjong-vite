@@ -25,11 +25,7 @@ export class ApplicationController extends BaseController {
 
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN);
 
-        // adsService.showLeaderboard(true);
-
-        adsService.showSticky(true);
         await vueService.signalStartButton.future();
-        adsService.showSticky(false);
 
         await this.nextCicle();
     }
@@ -79,6 +75,7 @@ export class ApplicationController extends BaseController {
 
     private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
         switch (currenState) {
+            case AppStateEnum.START_SCREEN:
             case AppStateEnum.GAME_SCREEN_PAUSE:
                 adsService.showSticky(true);
                 break;

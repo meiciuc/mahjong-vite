@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import { Localization } from '../utils/Localization';
 import { vueService } from './VueService';
+import { computed, ref } from 'vue';
+
+
+const Popup = ref(null);
+
+const marginLeft = computed(() => {
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
+});
+
+const marginTop = computed(() => {
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
+});
+
 const handleClick = () => {
     vueService.signalStartButton.dispatch();
 }
 </script>
 
 <template>
-    <div class="Background"></div>
     <div class="Container">
-        <div class="Flex">
+        <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
         </div>
     </div>
@@ -18,11 +30,20 @@ const handleClick = () => {
 <style lang="scss" scoped>
 @import './global.scss';
 
-.Flex {
-    grid-column-start: 2;
-    grid-row-start: 4;
-    justify-self: center;
-    display: flex;
+.Container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.Popup {
+    position: relative;
+    width: fit-content;
+    block-size: fit-content;
+    left: 50%;
+    top: 50%;
 }
 
 .StartButton {
@@ -39,14 +60,5 @@ const handleClick = () => {
     color: $button_text_idle;
     border-color: $button_text_idle;
     border: solid;
-}
-
-.Background {
-    background-color: $background_colored;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
 }
 </style>

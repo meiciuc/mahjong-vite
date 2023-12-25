@@ -15,18 +15,7 @@ $background_colored: $second_color;
 $background_colored_darken: $second_color_darken;
 $background_idle: $first_color;
 
-@mixin scene-grid {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    overflow: hidden;
-    display: grid;
-}
-
 @mixin scene-button {
-    margin: auto;
     font-family: 'Inter-SemiBold';
     cursor: pointer;
     padding-top: $button_padding_vertical;
