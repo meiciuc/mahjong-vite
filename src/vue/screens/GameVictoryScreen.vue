@@ -43,7 +43,7 @@ const handleClick = () => {
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div class="Text">VICTORY</div>
+            <div class="Text">{{ Localization.getText('victory.victory') }}</div>
             <button class="StartButton" @click="handleClick">{{
                 Localization.getText('victory.next') }}</button>
         </div>

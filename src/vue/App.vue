@@ -23,6 +23,7 @@ const showGameMenu = computed(() => {
         case AppStateEnum.GAME_SCREEN:
         case AppStateEnum.GAME_SCREEN_PAUSE:
         case AppStateEnum.GAME_VICTORY:
+        case AppStateEnum.GAME_DEFEATED:
             return true;
     }
     return false;
