@@ -16,6 +16,7 @@
         "defeated": "Defeated",
         "again": "Try again",
         "reset": "Reset",
+        "previous": "One level below",
         "initialy": "Initialy"
     },
     "noMoreMoves": {

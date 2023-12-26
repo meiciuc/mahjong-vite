@@ -4,6 +4,7 @@ export enum UserActionAfterTheLastGame {
     DEFAULT = 'default',
     RETRY = 'retry',
     RESET = 'reset',
+    PREVIOUS = 'previous',
 }
 
 export enum GameStateEnum {

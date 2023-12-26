@@ -34,24 +34,24 @@ const marginTop = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
 });
 
-const handleClickRetry = () => {
-    GameModelHelper.setUserActionAfterTheLastGame(UserActionAfterTheLastGame.RETRY);
+const handleClick = (value: UserActionAfterTheLastGame) => {
+    GameModelHelper.setUserActionAfterTheLastGame(value);
     vueService.signalGameEndButton.dispatch();
 }
 
-const handleClickReset = () => {
-    GameModelHelper.setUserActionAfterTheLastGame(UserActionAfterTheLastGame.RESET);
-    vueService.signalGameEndButton.dispatch();
-}
 </script>
 
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
-            <button class="StartButton" @click="handleClickRetry">{{ Localization.getText('defeated.again') }}</button>
-            <button class="StartButton" @click="handleClickReset">{{ Localization.getText('defeated.reset') }}</button>
-
+            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
+                Localization.getText('defeated.again') }}</button>
+            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
+                Localization.getText('defeated.reset') }}</button>
+            <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
+                @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
+                    Localization.getText('defeated.previous') }}</button>
         </div>
     </div>
 </template>

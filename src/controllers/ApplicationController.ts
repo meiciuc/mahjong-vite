@@ -59,12 +59,6 @@ export class ApplicationController extends BaseController {
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
         switch (this.gameModel.raw.userActionAfterTheLastGame) {
-            case UserActionAfterTheLastGame.RESET: {
-                this.resetGameModelForNext();
-                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
-                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
-                break;
-            }
             case UserActionAfterTheLastGame.RETRY: {
                 const level = this.gameModel.raw.gameLevel;
                 const gridWidth = this.gameModel.raw.gridWidth;
@@ -73,6 +67,18 @@ export class ApplicationController extends BaseController {
 
                 this.resetGameModelForNext();
                 this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                break;
+            }
+            case UserActionAfterTheLastGame.RESET: {
+                this.resetGameModelForNext();
+                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                break;
+            }
+            case UserActionAfterTheLastGame.PREVIOUS: {
+                this.resetGameModelForNext();
+                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
                 this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
                 break;
             }

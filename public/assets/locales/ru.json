@@ -16,6 +16,7 @@
         "defeated": "Проигрыш",
         "again": "Повторить",
         "reset": "Ещё раз",
+        "previous": "Уровень раньше",
         "initialy": "С начала"
     },
     "noMoreMoves": {
