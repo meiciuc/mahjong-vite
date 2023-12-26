@@ -15,6 +15,7 @@
     "defeated": {
         "defeated": "Defeated",
         "again": "Try again",
+        "reset": "Reset",
         "initialy": "Initialy"
     },
     "noMoreMoves": {

@@ -45,7 +45,10 @@ export interface GameModel {
     helpsCount: number,
 
     icons: IconState[];
-    maxGridItems: number,
+
+    gridWidth: number,
+    gridHeight: number,
+    seed: string,
 
     pause: boolean,
     language: Languages,

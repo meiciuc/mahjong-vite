@@ -15,6 +15,7 @@
     "defeated": {
         "defeated": "Проигрыш",
         "again": "Повторить",
+        "reset": "Ещё раз",
         "initialy": "С начала"
     },
     "noMoreMoves": {

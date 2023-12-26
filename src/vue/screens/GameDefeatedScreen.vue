@@ -33,7 +33,11 @@ const marginTop = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
 });
 
-const handleClick = () => {
+const handleClickRetry = () => {
+    vueService.signalGameEndButton.dispatch();
+}
+
+const handleClickReset = () => {
     vueService.signalGameEndButton.dispatch();
 }
 </script>
@@ -42,8 +46,9 @@ const handleClick = () => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
-            <button class="StartButton" @click="handleClick">{{
-                Localization.getText('defeated.again') }}</button>
+            <button class="StartButton" @click="handleClickRetry">{{ Localization.getText('defeated.again') }}</button>
+            <button class="StartButton" @click="handleClickReset">{{ Localization.getText('defeated.reset') }}</button>
+
         </div>
     </div>
 </template>

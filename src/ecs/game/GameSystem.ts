@@ -1,20 +1,18 @@
+import { rotate270 } from "2d-array-rotation";
 import { Engine, NodeList, System } from '@ash.ts/ash';
-import { throwIfNull } from '../../utils/throwIfNull';
 import { Config } from '../../Config';
+import { stageService } from '../../core/services/StageService';
+import { GameStateEnum } from '../../model/GameModel';
+import { GameModelHelper } from '../../model/GameModelHelper';
 import { TimeSkipper } from '../../utils/TimeSkipper';
+import { throwIfNull } from '../../utils/throwIfNull';
 import { EntityCreator } from '../EntityCreator';
+import { GridPosition } from '../tiles/components/GridPosition';
+import { GridNode } from '../tiles/nodes/GridNode';
 import { TileNode } from '../tiles/nodes/TileNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
-import { GameModel, GameStateEnum } from '../../model/GameModel';
-import { GameModelHelper } from '../../model/GameModelHelper';
-import { dataService } from '../../core/services/DataService';
-import { rotate270 } from "2d-array-rotation";
-import { stageService } from '../../core/services/StageService';
-import { GridNode } from '../tiles/nodes/GridNode';
-import { GridPosition } from '../tiles/components/GridPosition';
-import easingsFunctions from '../../core/utils/easingsFunctions';
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
@@ -45,12 +43,11 @@ export class GameSystem extends System {
     update = (): void => {
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
-                // const { gridWidth, gridHeight, seed } = { gridWidth: 10, gridHeight: 8, seed: '0.7295712101691723' }
-                // this.gameLogic.generateIconsQueue(gridWidth, gridHeight, seed);
+                const gridWidth = this.game.head.game.model.raw.gridWidth;
+                const gridHeight = this.game.head.game.model.raw.gridHeight;
+                const seed = this.game.head.game.model.raw.seed;
 
-                const { gridWidth, gridHeight } = this.setupModel();
-                this.gameLogic.generateIconsQueue(gridWidth, gridHeight);
-                GameModelHelper.initModel(gridWidth, gridHeight, this.gameLogic.getGameMaxTime(gridWidth * gridHeight));
+                this.gameLogic.generateIconsQueue(gridWidth, gridHeight, seed);
 
                 let index = 0;
                 const grid: number[][] = [];
@@ -108,31 +105,6 @@ export class GameSystem extends System {
                 break;
         }
     };
-
-    private setupModel() {
-        const model = dataService.getRootModel<GameModel>();
-        const easing = easingsFunctions.easeOutQuad;
-
-        const start = 9;
-        const end = 23;
-
-        const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-
-        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
-        const commonCount = size + size;
-        const scale = stageService.height / (stageService.width + stageService.height);
-
-        let gridHeight = Math.floor(commonCount * scale);
-        const gridWidth = Math.round(commonCount - gridHeight);
-
-        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
-            gridHeight++;
-        }
-
-        return { gridWidth, gridHeight };
-        // return { gridWidth: 3, gridHeight: 2 };
-    }
 
     private async setState(state: GameStateEnum) {
         if (!this.game?.head) {

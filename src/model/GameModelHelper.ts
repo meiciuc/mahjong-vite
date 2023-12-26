@@ -38,11 +38,6 @@ export class GameModelHelper {
         return gameModel.data.gameLevel;
     }
 
-    static setGameLevel(value: number) {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameLevel = value;
-    }
-
     static getGameTotalScore() {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.gameTotalScore;
@@ -75,25 +70,13 @@ export class GameModelHelper {
             helpsCount: 3,
 
             icons: [],
-            maxGridItems: 0,
+
+            gridWidth: 1,
+            gridHeight: 1,
+            seed: '',
+
             pause: false,
             language: Languages.en,
         });
-    }
-
-    static initModel(gridWidth: number, gridHeight: number, gameMaxTime: number) {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.maxGridItems = gridWidth * gridHeight;
-
-        gameModel.data.helpsCount = 3;
-        gameModel.data.gameStateTime = 0;
-        gameModel.data.gameCurrentScore = 0;
-
-        gameModel.data.gameMaxTime = gameMaxTime;
-    }
-
-    static resetGameModelForNextLevel() {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameLevel++;
     }
 }

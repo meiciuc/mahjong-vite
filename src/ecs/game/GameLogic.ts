@@ -20,10 +20,6 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
-    public getGameMaxTime(iconsQueueLength: number) {
-        return iconsQueueLength * 2;
-    }
-
     public generateIconsQueue(gridWidth: number, gridHeight: number, seed: string | undefined = undefined) {
         if (!seed) {
             seed = `${Math.random()}`
