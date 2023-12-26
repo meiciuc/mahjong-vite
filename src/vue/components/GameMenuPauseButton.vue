@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useModel } from '../model/useModel';
-import { vueService } from './VueService';
+import { useModel } from '../../model/useModel';
+import { vueService } from '../VueService';
 
 const pause = useModel(["pause"]);
 
@@ -16,7 +16,7 @@ const handleClick = () => {
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .PauseButton {
     @include scene-button;

@@ -158,7 +158,7 @@ export class GameSystem extends System {
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             // true move
-            GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
+            GameModelHelper.setGameCurrentScore(GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {

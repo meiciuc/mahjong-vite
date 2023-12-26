@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { AppStateEnum } from '../model/GameModel';
-import GameMenu from './GameMenu.vue';
-import GameMenuMain from './GameMenuMain.vue';
-import StartScreen from './StartScreen.vue';
-import StartScreenFirst from './StartScreenFirst.vue';
-import StartScreenNovice from './StartScreenNovice.vue';
-import GamePause from './GamePause.vue';
-import GameVictoryScreen from './GameVictoryScreen.vue';
-import GameDefeatedScreen from './GameDefeatedScreen.vue';
-import NoMoreMovesScreen from './NoMoreMovesScreen.vue';
-import ModalBackground from './ModalBackground.vue';
-import ModalBackgroundColored from './ModalBackgroundColored.vue';
+import GameMenu from './components/GameMenu.vue';
+import GameMenuMain from './components/GameMenuMain.vue';
+import StartScreen from './screens/StartScreen.vue';
+import StartScreenFirst from './screens/StartScreenFirst.vue';
+import StartScreenNovice from './screens/StartScreenNovice.vue';
+import GamePause from './screens/GamePause.vue';
+import GameVictoryScreen from './screens/GameVictoryScreen.vue';
+import GameDefeatedScreen from './screens/GameDefeatedScreen.vue';
+import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
+import ModalBackground from './components/ModalBackground.vue';
+import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
 import { useModel } from '../model/useModel';
 import { computed, ref } from 'vue';
 import isMobile from 'is-mobile';

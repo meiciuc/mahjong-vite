@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { vueService } from './VueService';
-import { useModel } from '../model/useModel';
-import { Localization } from '../utils/Localization';
-import GameMenuTimer from './GameMenuTimer.vue';
-import GameMenuPauseButton from './GameMenuPauseButton.vue';
+import { vueService } from '../VueService';
+import { useModel } from '../../model/useModel';
+import { Localization } from '../../utils/Localization';
 
+const gameLevel = useModel(["gameLevel"]);
+const gameTotalScore = useModel(["gameTotalScore"]);
 const helpsCount = useModel(["helpsCount"]);
 
 const handleClick = () => {
@@ -15,20 +15,18 @@ const handleClick = () => {
 <template>
     <div class="MenuPanel">
         <div>
-            <GameMenuTimer></GameMenuTimer>
-            <GameMenuPauseButton></GameMenuPauseButton>
+            {{ Localization.getText('game.level') }}<div class="GameLevel">{{ gameLevel }}</div>
+            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
         </div>
 
         <div class="HelpContainer">
-            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
-            <div v-else class="HelpButton HelpButtonDisabled">{{ Localization.getText('game.help') }}</div>
-            <div class="HelpsCount">{{ helpsCount }}</div>
+            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">&#x2699;</div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 div {
     display: flex;
@@ -42,7 +40,7 @@ div {
     background: rgba($color: $background_colored, $alpha: 1);
     padding: 10px 0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
 .GameLevel {
@@ -75,10 +73,11 @@ div {
     @include scene-button;
     color: $button_text_colored;
     background-color: $button_text_idle;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+    padding: 0px calc($button_padding_horizontal / 4);
     border-radius: $button_border_radius;
     border-color: $button_text_idle;
     border: solid;
+    font-size: 1.5em;
 }
 
 .HelpButton:hover {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Localization } from '../utils/Localization';
-import { vueService } from './VueService';
+import { Localization } from '../../utils/Localization';
+import { vueService } from '../VueService';
 import { computed, ref } from 'vue';
 
 
@@ -28,7 +28,7 @@ const handleClick = () => {
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .Container {
     position: absolute;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Localization } from '../utils/Localization';
-import { vueService } from './VueService';
+import { Localization } from '../../utils/Localization';
+import { vueService } from '../VueService';
 import { computed, ref } from 'vue';
 
 
@@ -15,20 +15,20 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => {
-    vueService.signalPauseButton.dispatch();
+    vueService.signalStartButton.dispatch();
 }
 </script>
 
 <template>
-    <div class="Container" @click="handleClick">
+    <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div>{{ Localization.getText('game.clickAnyPlace') }}</div>
+            <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .Container {
     position: absolute;

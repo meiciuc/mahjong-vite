@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useModel } from '../model/useModel';
+import { useModel } from '../../model/useModel';
 
 const stateTime = useModel(["gameStateTime"]);
 const maxTime = useModel(["gameMaxTime"]);
@@ -34,7 +34,7 @@ const blinking = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .Timer {
     background: rgba($color: $button_background_colored, $alpha: 1);

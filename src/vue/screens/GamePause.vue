@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Localization } from '../utils/Localization';
-import { vueService } from './VueService';
+import { Localization } from '../../utils/Localization';
+import { vueService } from '../VueService';
 import { computed, ref } from 'vue';
 
 
@@ -15,21 +15,20 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => {
-    vueService.signalGameEndButton.dispatch();
+    vueService.signalPauseButton.dispatch();
 }
 </script>
 
 <template>
-    <div class="Container">
+    <div class="Container" @click="handleClick">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div class="Text">VICTORY</div>
-            <button class="StartButton" @click="handleClick">{{ Localization.getText('victory.next') }}</button>
+            <div>{{ Localization.getText('game.clickAnyPlace') }}</div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .Container {
     position: absolute;
@@ -45,9 +44,6 @@ const handleClick = () => {
     block-size: fit-content;
     left: 50%;
     top: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .StartButton {
@@ -65,14 +61,4 @@ const handleClick = () => {
     border-color: $button_text_idle;
     border: solid;
 }
-
-.Text {
-    font-family: 'Inter-SemiBold';
-    text-align: center;
-    font-size: 4em;
-    color: white;
-    user-select: none;
-    margin-bottom: 30%;
-}
 </style>
-

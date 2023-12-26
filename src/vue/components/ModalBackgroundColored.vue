@@ -7,7 +7,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 .ModalBackground {
     background-color: $background_colored;

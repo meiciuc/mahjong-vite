@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { vueService } from './VueService';
-import { useModel } from '../model/useModel';
-import { Localization } from '../utils/Localization';
-import { computed } from 'vue';
+import { vueService } from '../VueService';
+import { useModel } from '../../model/useModel';
+import { Localization } from '../../utils/Localization';
+import GameMenuTimer from './GameMenuTimer.vue';
+import GameMenuPauseButton from './GameMenuPauseButton.vue';
 
-const gameLevel = useModel(["gameLevel"]);
-const gameTotalScore = useModel(["gameTotalScore"]);
 const helpsCount = useModel(["helpsCount"]);
-
-const isVisibleTotalScore = computed(() => { return gameTotalScore.value > 0; });
+const gameCurrentScore = useModel(["gameCurrentScore"]);
 
 const handleClick = () => {
     vueService.signalHelpButton.dispatch();
@@ -17,19 +15,25 @@ const handleClick = () => {
 
 <template>
     <div class="MenuPanel">
-        <div :class="[isVisibleTotalScore ? '' : 'invisible']">
-            {{ Localization.getText('game.level') }}<div class="GameLevel">{{ gameLevel }}</div>
-            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
+        <div>
+            <GameMenuTimer></GameMenuTimer>
+            <GameMenuPauseButton></GameMenuPauseButton>
+        </div>
+
+        <div>
+            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameCurrentScore }}</div>
         </div>
 
         <div class="HelpContainer">
-            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">&#x2699;</div>
+            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
+            <div v-else class="HelpButton HelpButtonDisabled">{{ Localization.getText('game.help') }}</div>
+            <div class="HelpsCount">{{ helpsCount }}</div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import './global.scss';
+@import '../global.scss';
 
 div {
     display: flex;
@@ -43,7 +47,7 @@ div {
     background: rgba($color: $background_colored, $alpha: 1);
     padding: 10px 0;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 .GameLevel {
@@ -76,11 +80,10 @@ div {
     @include scene-button;
     color: $button_text_colored;
     background-color: $button_text_idle;
-    padding: 0px calc($button_padding_horizontal / 4);
+    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
     border-radius: $button_border_radius;
     border-color: $button_text_idle;
     border: solid;
-    font-size: 1.5em;
 }
 
 .HelpButton:hover {
