@@ -13,6 +13,7 @@ import { TileNode } from '../tiles/nodes/TileNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
+import { PointLike } from "../../utils/point";
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
@@ -120,6 +121,28 @@ export class GameSystem extends System {
         }
 
         this.game.head.game.model.data.gameState = state;
+    }
+
+    // TODO bugfix
+    private getCornersLength(arr: PointLike[]) {
+        let corners = 0
+        if (arr.length < 3) {
+            return corners;
+        }
+
+        let xDirection = arr[1].x - arr[0].x;
+        let yDirection = arr[1].y - arr[0].y;
+        for (let i = 2; i < arr.length; i++) {
+            const xDirection1 = arr[i].x - arr[i - 1].x;
+            const yDirection1 = arr[i].y - arr[i - 1].y;
+            if (xDirection !== xDirection1 || yDirection !== yDirection1) {
+                corners++;
+            }
+            xDirection = xDirection1;
+            yDirection = yDirection1;
+        }
+        // HACK
+        return Math.max(corners, 2);
     }
 
     private async handleTwoSelected(tiles: TileSelectedNode[]) {
