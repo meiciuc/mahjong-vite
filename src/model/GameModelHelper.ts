@@ -1,6 +1,6 @@
 import { dataService } from "../core/services/DataService";
 import { Languages } from "../utils/Localization";
-import { AppStateEnum, GameModel, GameStateEnum } from "./GameModel";
+import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 
 export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {
@@ -58,6 +58,11 @@ export class GameModelHelper {
         gameModel.data.gameCurrentScore = value;
     }
 
+    static setUserActionAfterTheLastGame(value: UserActionAfterTheLastGame) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.userActionAfterTheLastGame = value;
+    }
+
     static createModel() {
         dataService.config<GameModel>({
             appState: AppStateEnum.NONE,
@@ -74,6 +79,8 @@ export class GameModelHelper {
             gridWidth: 1,
             gridHeight: 1,
             seed: '',
+
+            userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
 
             pause: false,
             language: Languages.en,

@@ -4,7 +4,7 @@ import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import easingsFunctions from '../core/utils/easingsFunctions';
-import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
+import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
 import { vueService } from '../vue/VueService';
@@ -58,10 +58,32 @@ export class ApplicationController extends BaseController {
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
+        switch (this.gameModel.raw.userActionAfterTheLastGame) {
+            case UserActionAfterTheLastGame.RESET: {
+                this.resetGameModelForNext();
+                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                break;
+            }
+            case UserActionAfterTheLastGame.RETRY: {
+                const level = this.gameModel.raw.gameLevel;
+                const gridWidth = this.gameModel.raw.gridWidth;
+                const gridHeight = this.gameModel.raw.gridHeight;
+                const seed = this.gameModel.raw.seed;
 
-        this.resetGameModelForNext();
-        const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel() + 1);
-        this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                this.resetGameModelForNext();
+                this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                break;
+            }
+            default: {
+                this.resetGameModelForNext();
+                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel() + 1);
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+            }
+        }
+
+
 
         await this.nextCycle();
     }
@@ -83,6 +105,7 @@ export class ApplicationController extends BaseController {
         model.data.helpsCount = 3;
         model.data.gameStateTime = 0;
         model.data.gameCurrentScore = 0;
+        model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
 
     private calculateGameModelParams(level: number) {

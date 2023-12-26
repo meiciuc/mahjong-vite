@@ -1,5 +1,11 @@
 import { Languages } from "../utils/Localization";
 
+export enum UserActionAfterTheLastGame {
+    DEFAULT = 'default',
+    RETRY = 'retry',
+    RESET = 'reset',
+}
+
 export enum GameStateEnum {
     NONE = 'none',
     PREPARE = 'prepare',
@@ -49,6 +55,8 @@ export interface GameModel {
     gridWidth: number,
     gridHeight: number,
     seed: string,
+
+    userActionAfterTheLastGame: UserActionAfterTheLastGame,
 
     pause: boolean,
     language: Languages,

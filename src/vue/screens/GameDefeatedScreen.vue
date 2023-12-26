@@ -4,6 +4,7 @@ import { vueService } from '../VueService';
 import { computed, ref, onMounted } from 'vue';
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
+import { UserActionAfterTheLastGame } from '../../model/GameModel';
 
 
 const Popup = ref(null);
@@ -34,10 +35,12 @@ const marginTop = computed(() => {
 });
 
 const handleClickRetry = () => {
+    GameModelHelper.setUserActionAfterTheLastGame(UserActionAfterTheLastGame.RETRY);
     vueService.signalGameEndButton.dispatch();
 }
 
 const handleClickReset = () => {
+    GameModelHelper.setUserActionAfterTheLastGame(UserActionAfterTheLastGame.RESET);
     vueService.signalGameEndButton.dispatch();
 }
 </script>
