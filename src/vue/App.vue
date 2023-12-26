@@ -8,6 +8,7 @@ import StartScreenNovice from './screens/StartScreenNovice.vue';
 import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import GameDefeatedScreen from './screens/GameDefeatedScreen.vue';
+import GameDefeatedScreenFullscreenAds from './screens/GameDefeatedScreenFullscreenAds.vue';
 import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
 import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
@@ -24,6 +25,7 @@ const showGameMenu = computed(() => {
         case AppStateEnum.GAME_SCREEN_PAUSE:
         case AppStateEnum.GAME_VICTORY:
         case AppStateEnum.GAME_DEFEATED:
+        case AppStateEnum.GAME_DEFEATED_ADS:
             return true;
     }
     return false;
@@ -64,6 +66,7 @@ window.addEventListener('resize', () => {
 
     <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen>
+    <GameDefeatedScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEATED_ADS"></GameDefeatedScreenFullscreenAds>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 
     <GameMenuMain v-if="appState !== AppStateEnum.START_SCREEN_FIRST" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">

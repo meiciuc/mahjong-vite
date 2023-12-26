@@ -46,7 +46,7 @@ export class ApplicationController extends BaseController {
         if (gameState === GameStateEnum.GAME_VICTORY) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEATED);
+            GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 10 ? AppStateEnum.GAME_DEFEATED : AppStateEnum.GAME_DEFEATED_ADS);
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }

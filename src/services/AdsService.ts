@@ -64,6 +64,14 @@ class GpService {
             this.gp.leaderboard.open();
         }
     }
+
+    public async showFullscreen() {
+        if (this.gp.ads.isFullscreenAvailable) {
+            return this.gp.ads.showFullscreen();
+        } else {
+            return Promise.resolve();
+        }
+    }
 }
 
 export const adsService = new GpService();
