@@ -125,6 +125,7 @@ export class GameSystem extends System {
     private async handleTwoSelected(tiles: TileSelectedNode[]) {
         const tileA = throwIfNull(tiles[0]);
         const tileB = throwIfNull(tiles[1]);
+        const tileBPosition = tileB.transform.position;
 
         const arr = await this.gameLogic.findCross(tileA.gridPosition, tileB.gridPosition);
 
@@ -137,7 +138,12 @@ export class GameSystem extends System {
                 ids.push(node.tile.id);
                 this.creator.nonInteractiveTile(node.tile);
             });
-            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000 * 1.5).execute();
+
+
+            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000).execute();
+            this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_TRUE_MOVE);
+
+            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000 * 1.5 - Config.PATH_LIKE_SNAKE_DURATION * 1000).execute();
             ids.forEach((id) => {
                 const node = this.creator.getTileNodeById(id);
                 if (node) {
@@ -149,6 +155,7 @@ export class GameSystem extends System {
             }
         } else {
             // wrong move
+            this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_FALSE_MOVE);
             GameModelHelper.setGameCurrentScore(Math.max(0, GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileA.tile, false);

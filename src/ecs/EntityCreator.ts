@@ -26,6 +26,8 @@ import { PathTileToggleView } from '../view/PathTileToggleView';
 import { TileToggleEffect } from './tiles/components/TileToggleEffect';
 import { throwIfNull } from '../utils/throwIfNull';
 import { Destroing } from './tiles/components/Destroing';
+import { ScoreEffectView } from '../view/ScoreEffectView';
+import { AgeComponent } from './age/components/AgeComponent';
 export class EntityCreator {
     constructor(private engine: Engine, private gridView: GridView) {
         const textures = Assets.cache.get(`./assets/${Config.ASSETST_ICONS_VERSION}/icons_atlas.json`).textures;
@@ -64,6 +66,18 @@ export class EntityCreator {
 
         const entity = new Entity();
         entity.add(new Game(dataService.getRootModel()));
+        this.engine.addEntity(entity);
+    }
+
+    public createScoreEffect(x: number, y: number, value: number) {
+        const view = new ScoreEffectView(value);
+
+        const entity = new Entity()
+            .add(new Display(view, this.gridView.effectsTilesAbove))
+            .add(new Transform({ x, y }))
+            .add(new AnimationComponent(view))
+            .add(new AgeComponent(1));
+
         this.engine.addEntity(entity);
     }
 

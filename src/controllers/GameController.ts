@@ -23,6 +23,7 @@ import { vueService } from '../vue/VueService';
 import { BaseController } from './BaseController';
 import { FadeOutSystem } from '../ecs/fade/FadeOutSystem';
 import { FadeInSystem } from '../ecs/fade/FadeInSystem';
+import { AgeSystem } from '../ecs/age/AgeSystem';
 
 export enum SystemPriorities {
     preUpdate = 1,
@@ -113,6 +114,7 @@ export class GameController extends BaseController {
             })
 
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
+        this.engine.addSystem(new AgeSystem(this.creator), SystemPriorities.preUpdate);
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
         this.engine.addSystem(new TilesGridSystem(), SystemPriorities.update);
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
