@@ -15,15 +15,22 @@ import { useModel } from '../model/useModel';
 import { computed, ref } from 'vue';
 import isMobile from 'is-mobile';
 
-const data = useModel(["appState"]);
-const appState = computed(() => { return data.value });
+const appState = useModel(["appState"]);
 
 const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
-const showGameMenu = computed(() => { return (appState.value === AppStateEnum.GAME_SCREEN || appState.value === AppStateEnum.GAME_SCREEN_PAUSE); });
-const showModalBackground = computed(() => {
-    return data.value !== AppStateEnum.GAME_SCREEN && data.value !== AppStateEnum.GAME_SCREEN_PAUSE;
+const showGameMenu = computed(() => {
+    switch (appState.value) {
+        case AppStateEnum.GAME_SCREEN:
+        case AppStateEnum.GAME_SCREEN_PAUSE:
+        case AppStateEnum.GAME_VICTORY:
+            return true;
+    }
+    return false;
 });
-const showBackgroundColored = computed(() => {
+const showModalBackground = computed(() => {
+    return appState.value !== AppStateEnum.GAME_SCREEN && appState.value !== AppStateEnum.GAME_SCREEN_PAUSE;
+});
+const showColoredBackground = computed(() => {
     switch (appState.value) {
         case AppStateEnum.START_SCREEN:
         case AppStateEnum.START_SCREEN_FIRST:
@@ -44,10 +51,11 @@ window.addEventListener('resize', () => {
     <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
+    <ModalBackground v-show="showModalBackground"></ModalBackground>
     <GameMenu v-show="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
 
-    <ModalBackground v-show="showModalBackground"></ModalBackground>
-    <ModalBackgroundColored v-show="showBackgroundColored"></ModalBackgroundColored>
+
+    <ModalBackgroundColored v-show="showColoredBackground"></ModalBackgroundColored>
 
     <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
     <StartScreenFirst v-if="appState === AppStateEnum.START_SCREEN_FIRST"></StartScreenFirst>

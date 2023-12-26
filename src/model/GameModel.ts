@@ -20,7 +20,6 @@ export enum AppStateEnum {
     GAME_SCREEN_PAUSE = 'gameScreenPause',
 
     GAME_VICTORY = 'gameVictoryScreen',
-    GAME_VICTORY_NEXT_CHOOSING = 'gameVictoryScreenNextChoosing',
 
     GAME_NO_MORE_MOVES = 'gameNoMoreMovesScreen',
     GAME_NO_MORE_MOVES_ADS = 'gameNoMoreMovesAds',

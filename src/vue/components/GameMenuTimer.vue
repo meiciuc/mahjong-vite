@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useModel } from '../../model/useModel';
+import { AppStateEnum } from '../../model/GameModel';
 
+const appState = useModel(["appState"]);
 const stateTime = useModel(["gameStateTime"]);
 const maxTime = useModel(["gameMaxTime"]);
 const minutes = computed(() => { return Math.floor((maxTime.value - stateTime.value) / 60 % 60) });
 const secundes = computed(() => { return Math.floor((maxTime.value - stateTime.value) % 60) });
 const blinking = computed(() => {
+    if (appState.value !== AppStateEnum.GAME_SCREEN && appState.value !== AppStateEnum.GAME_SCREEN_PAUSE) {
+        return '';
+    }
     const startBlinking = 30;
     const steps = [.9, .8, .7, .6, .5, .4, .3, .2];
     if (minutes.value !== 0 || secundes.value > startBlinking) {

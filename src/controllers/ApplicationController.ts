@@ -40,6 +40,8 @@ export class ApplicationController extends BaseController {
         // await new TutorialController().execute();
 
         const game = await new GameController().execute();
+        game.destroy();
+
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
@@ -48,7 +50,6 @@ export class ApplicationController extends BaseController {
         } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
-        game.destroy();
 
         await vueService.signalGameEndButton.future();
 
