@@ -27,35 +27,38 @@ export class ApplicationController extends BaseController {
 
         await vueService.signalStartButton.future();
 
-        await this.nextCicle();
+        await this.nextCycle(Math.max(GameModelHelper.getGameLevel(), 1));
     }
 
-    private async nextCicle() {
+    private async nextCycle(level: number) {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-        const level = GameModelHelper.getGameLevel();
         GameModelHelper.resetGameModelForNextLevel();
-        GameModelHelper.setGameLevel(level + 1);
+        GameModelHelper.setGameLevel(level);
 
         // await new TutorialController().execute();
 
         const game = await new GameController().execute();
         game.destroy();
 
+        let nextLevel: number;
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
+            nextLevel = level + 1;
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
             GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 10 ? AppStateEnum.GAME_DEFEATED : AppStateEnum.GAME_DEFEATED_ADS);
-        } else if (gameState === GameStateEnum.GAME_NO_MORE_MOVES) {
+            nextLevel = level;
+        } else {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
+            nextLevel = level;
         }
 
         await vueService.signalGameEndButton.future();
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
-        this.nextCicle();
+        this.nextCycle(nextLevel);
     }
 
     private setupGameModel() {
