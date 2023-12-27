@@ -58,9 +58,7 @@ export class GameController extends BaseController {
     }
 
     pause(value: boolean) {
-        console.log('GameController PAUSE')
-        const model = dataService.getRootModel<GameModel>();
-        model.data.pause = value;
+        GameModelHelper.setApplicationState(value ? AppStateEnum.GAME_SCREEN_PAUSE : AppStateEnum.GAME_SCREEN)
         this.fsm.changeState(value ? GameControllerStateEnum.PAUSE : GameControllerStateEnum.GAME);
     }
 
@@ -155,7 +153,7 @@ export class GameController extends BaseController {
 
     private handlePauseButton = () => {
         const model = dataService.getRootModel<GameModel>();
-        this.pause(!model.raw.pause);
+        this.pause(model.raw.appState !== AppStateEnum.GAME_SCREEN_PAUSE);
     }
 
     private handleWindowFocusIn = () => { }

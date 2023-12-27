@@ -82,7 +82,6 @@ export class GameModelHelper {
 
             userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
 
-            pause: false,
             language: Languages.en,
         });
     }

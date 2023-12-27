@@ -43,6 +43,9 @@ export interface IconState {
 
 export interface GameModel {
     appState: AppStateEnum;
+    userActionAfterTheLastGame: UserActionAfterTheLastGame,
+    language: Languages,
+
     gameState: GameStateEnum,
     gameStateTime: number,
     gameLevel: number,
@@ -56,9 +59,4 @@ export interface GameModel {
     gridWidth: number,
     gridHeight: number,
     seed: string,
-
-    userActionAfterTheLastGame: UserActionAfterTheLastGame,
-
-    pause: boolean,
-    language: Languages,
 }
