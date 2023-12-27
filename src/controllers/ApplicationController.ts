@@ -1,4 +1,5 @@
 import { Config } from '../Config';
+import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
@@ -7,6 +8,7 @@ import easingsFunctions from '../core/utils/easingsFunctions';
 import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
+import { soundService } from '../services/SoundService';
 import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
@@ -160,6 +162,10 @@ export class ApplicationController extends BaseController {
                 break;
             case AppStateEnum.GAME_SCREEN:
                 adsService.showSticky(false);
+                soundService.play(SOUNDS.bookOpen);
+                break;
+            case AppStateEnum.GAME_VICTORY:
+                soundService.play(SOUNDS.win_screen);
                 break;
         }
     }

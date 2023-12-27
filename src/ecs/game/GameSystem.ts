@@ -14,6 +14,8 @@ import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameNode } from './nodes/GameNode';
 import { PointLike } from "../../utils/point";
+import { soundService } from "../../services/SoundService";
+import { SOUNDS } from "../../Sounds";
 
 export class GameSystem extends System {
     private game?: NodeList<GameNode>;
@@ -162,6 +164,7 @@ export class GameSystem extends System {
                 this.creator.nonInteractiveTile(node.tile);
             });
 
+            soundService.play(SOUNDS.bookClose);
 
             await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000).execute();
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_TRUE_MOVE);
@@ -178,6 +181,8 @@ export class GameSystem extends System {
             }
         } else {
             // wrong move
+            soundService.play(SOUNDS.beltHandle2);
+
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_FALSE_MOVE);
             GameModelHelper.setGameCurrentScore(Math.max(0, GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);

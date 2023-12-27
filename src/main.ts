@@ -12,9 +12,13 @@ import { GameModelHelper } from './model/GameModelHelper';
 import { vueService } from './vue/VueService';
 import { AssetsController } from './controllers/AssetsController';
 import { adsService } from './services/AdsService';
+import { soundService } from './services/SoundService';
+import { forIn } from 'lodash';
+import { SOUNDS } from './Sounds';
 
 window.onload = async (): Promise<void> => {
     initModel();
+    initSoundService();
     await initAddService();
     await initAssets();
     initVueService();
@@ -51,6 +55,14 @@ function initDebug() {
         };
         requestAnimationFrame(animate);
     }
+}
+
+async function initSoundService() {
+    forIn(SOUNDS, (value, _key) => {
+        soundService.register(value, {
+            src: value
+        });
+    })
 }
 
 async function initAssets() {
