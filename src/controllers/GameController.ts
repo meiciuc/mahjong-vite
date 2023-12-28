@@ -91,15 +91,9 @@ export class GameController extends BaseController {
             .addInstance(timer)
             .addInstance(help)
             .addInstance(interactive)
-            .addMethod(() => {
-                GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-                return fadeIn;
-            })
+            .addInstance(fadeIn);
         this.fsm.createState(GameControllerStateEnum.PAUSE)
-            .addMethod(() => {
-                GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-                return fadeOut;
-            })
+            .addInstance(fadeOut);
 
         this.engine.addSystem(new GameSystem(this.creator, this.gameLogic), SystemPriorities.preUpdate);
         this.engine.addSystem(new AgeSystem(this.creator), SystemPriorities.preUpdate);

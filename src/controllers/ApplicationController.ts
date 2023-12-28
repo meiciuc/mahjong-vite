@@ -24,6 +24,7 @@ export class ApplicationController extends BaseController {
         this.setupGameModel();
 
         stageService.updateSignal.add(this.update);
+        window.addEventListener('blur', this.handleWindowFocusBlur);
         vueService.signalPauseButton.on(this.handlePauseButton);
         vueService.signalOptionsButton.on(this.handleOptionsButton);
 
@@ -39,6 +40,12 @@ export class ApplicationController extends BaseController {
         this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
 
         await this.nextCycle();
+    }
+
+    private handleWindowFocusBlur = () => {
+        if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        }
     }
 
     private async nextCycle() {
@@ -141,7 +148,7 @@ export class ApplicationController extends BaseController {
 
         const seed = `${Math.random()}`;
 
-        return { level, gridWidth, gridHeight, seed };
+        return { level, gridWidth: 2, gridHeight: 3, seed };
     }
 
     private setCurrentGameModel(l: number, w: number, h: number, s: string) {
@@ -167,12 +174,12 @@ export class ApplicationController extends BaseController {
     }
 
     private handleOptionsButton = () => {
-        // if (this.applicationStateHystory[this.applicationStateHystory.length - 1] !== AppStateEnum.OPTIONS) {
-        //     GameModelHelper.setApplicationState(AppStateEnum.OPTIONS);
-        //     return;
+        // this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
+        // if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
+        //     this.gameModel.data.appState = AppStateEnum.GAME_SCREEN_PAUSE;
+        // } else if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
+        //     this.gameModel.data.appState = AppStateEnum.GAME_SCREEN;
         // }
-
-        // GameModelHelper.setApplicationState(this.applicationStateHystory[this.applicationStateHystory.length - 2]);
     }
 
     private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
