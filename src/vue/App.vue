@@ -2,6 +2,7 @@
 import { AppStateEnum } from '../model/GameModel';
 import GameMenu from './components/GameMenu.vue';
 import GameMenuMain from './components/GameMenuMain.vue';
+import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
 import StartScreen from './screens/StartScreen.vue';
 import StartScreenFirst from './screens/StartScreenFirst.vue';
 import StartScreenNovice from './screens/StartScreenNovice.vue';
@@ -45,27 +46,8 @@ const showGameMenu = computed(() => {
 });
 const showModalBackground = computed(() => {
     return optionsAreVisible.value;
-
-    // switch (appState.value) {
-    //     case AppStateEnum.NONE:
-    //     case AppStateEnum.START_SCREEN_FIRST:
-    //     case AppStateEnum.START_SCREEN_NOVICE:
-    //     case AppStateEnum.START_SCREEN:
-    //         return true;
-    //     case AppStateEnum.GAME_SCREEN:
-    //         return false;
-    //     case AppStateEnum.GAME_SCREEN_PAUSE:
-    //     case AppStateEnum.GAME_VICTORY:
-    //     case AppStateEnum.GAME_NO_MORE_MOVES:
-    //     case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
-    //     case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
-    //     case AppStateEnum.GAME_DEFEATED:
-    //     case AppStateEnum.GAME_DEFEATED_ADS:
-    //     case AppStateEnum.GAME_DEFEATED_CHOOSING:
-    //     default:
-    //         return true;
-    // }
 });
+
 const showColoredBackground = computed(() => {
     switch (appState.value) {
         case AppStateEnum.START_SCREEN:
@@ -100,11 +82,14 @@ window.addEventListener('resize', () => {
     <GameDefeatedScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEATED_ADS"></GameDefeatedScreenFullscreenAds>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
 
+    <GameMenuMain v-if="appState !== AppStateEnum.START_SCREEN_FIRST" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
+    </GameMenuMain>
+
     <ModalBackground v-show="showModalBackground"></ModalBackground>
     <Options v-if="optionsAreVisible"></Options>
 
-    <GameMenuMain v-if="appState !== AppStateEnum.START_SCREEN_FIRST" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
-    </GameMenuMain>
+    <GameMenuMainOptions v-if="appState !== AppStateEnum.START_SCREEN_FIRST"
+        :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']"></GameMenuMainOptions>
 </template>
 
 <style lang="scss" scoped>
@@ -115,7 +100,6 @@ window.addEventListener('resize', () => {
     width: 100vh;
     height: 45px;
     position: fixed;
-    background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
 }
@@ -124,7 +108,6 @@ window.addEventListener('resize', () => {
     width: 100vh;
     height: 45px;
     position: fixed;
-    background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
     left: 45px;
@@ -143,7 +126,6 @@ window.addEventListener('resize', () => {
     width: 100vw;
     height: 45px;
     position: fixed;
-    background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(0deg) translateX(0%);
 }
@@ -152,7 +134,6 @@ window.addEventListener('resize', () => {
     width: 100vw;
     height: 45px;
     position: fixed;
-    background: #4c4c4c;
     transform-origin: left top;
     transform: rotate(0deg) translateX(0%);
     top: 45px;

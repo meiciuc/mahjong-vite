@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 
 const gameLevel = useModel(["gameLevel"]);
 const gameTotalScore = useModel(["gameTotalScore"]);
-const helpsCount = useModel(["helpsCount"]);
 
-const handleClick = () => {
-    vueService.signalOptionsButton.dispatch();
-}
 </script>
 
 <template>
@@ -17,10 +12,6 @@ const handleClick = () => {
         <div>
             {{ Localization.getText('game.level') }}<div class="GameLevel">{{ gameLevel }}</div>
             {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
-        </div>
-
-        <div class="OptionsContainer">
-            <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">&#x2699;</div>
         </div>
     </div>
 </template>
@@ -38,9 +29,9 @@ div {
 
 .MenuPanel {
     background: rgba($color: $background_colored, $alpha: 1);
-    padding: 10px 0;
+    padding: 10px 30px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: left;
 }
 
 .GameLevel {
