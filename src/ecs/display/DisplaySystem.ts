@@ -26,6 +26,8 @@ export class DisplaySystem extends System {
 
     private handleNodeAdded = (node: DisplayNode) => {
         if (node.display.addToParent) {
+            node.display.view.x = node.transform.position.x;
+            node.display.view.y = node.transform.position.y;
             node.display.addToParent.addChild(node.display.view);
         }
     };

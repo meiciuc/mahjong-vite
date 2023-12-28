@@ -156,6 +156,8 @@ export class GameSystem extends System {
 
         if (arr.length > 0 && tileA.icon.state.key === tileB.icon.state.key) {
             // true move
+            soundService.play(SOUNDS.bookClose);
+
             GameModelHelper.setGameCurrentScore(GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
@@ -164,12 +166,11 @@ export class GameSystem extends System {
                 this.creator.nonInteractiveTile(node.tile);
             });
 
-            soundService.play(SOUNDS.bookClose);
-
-            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000).execute();
+            const effectDelay = Config.PATH_LIKE_SNAKE_DURATION * 1500;
+            await new TimeSkipper(effectDelay).execute();
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_TRUE_MOVE);
 
-            await new TimeSkipper(Config.PATH_LIKE_SNAKE_DURATION * 1000 * 1.5 - Config.PATH_LIKE_SNAKE_DURATION * 1000).execute();
+            await new TimeSkipper(effectDelay * 2 / 3).execute();
             ids.forEach((id) => {
                 const node = this.creator.getTileNodeById(id);
                 if (node) {
