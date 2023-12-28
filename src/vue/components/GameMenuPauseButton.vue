@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { AppStateEnum } from '../../model/GameModel';
 import { useModel } from '../../model/useModel';
 import { vueService } from '../VueService';
 
-const pause = useModel(["pause"]);
+const pause = useModel(["appState"]);
 
 const handleClick = () => {
     vueService.signalPauseButton.dispatch();
@@ -11,7 +12,7 @@ const handleClick = () => {
 
 <template>
     <div class="PauseButton" @click="handleClick">
-        {{ pause ? '>>' : '||' }}
+        {{ pause === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : '||' }}
     </div>
 </template>
 

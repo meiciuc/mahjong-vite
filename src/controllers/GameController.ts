@@ -19,7 +19,6 @@ import { AppStateEnum, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { throwIfNull } from '../utils/throwIfNull';
 import { GridView } from '../view/GridView';
-import { vueService } from '../vue/VueService';
 import { BaseController } from './BaseController';
 import { FadeOutSystem } from '../ecs/fade/FadeOutSystem';
 import { FadeInSystem } from '../ecs/fade/FadeInSystem';
@@ -48,22 +47,13 @@ export class GameController extends BaseController {
     private gameLogic?: GameLogic;
 
     destroy(): void {
-        console.log('GameController DESTROY')
-        window.removeEventListener('focus', this.handleWindowFocusIn);
-        window.removeEventListener('blur', this.handleWindowFocusOut);
-        vueService.signalPauseButton.off(this.handlePauseButton);
+        dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
         stageService.updateSignal.remove(this.update);
         this.engine?.removeAllSystems();
         this.gridView?.destroy();
     }
 
-    pause(value: boolean) {
-        GameModelHelper.setApplicationState(value ? AppStateEnum.GAME_SCREEN_PAUSE : AppStateEnum.GAME_SCREEN)
-        this.fsm.changeState(value ? GameControllerStateEnum.PAUSE : GameControllerStateEnum.GAME);
-    }
-
     protected async doExecute() {
-        console.log('GameController EXECUTE')
         this.setupView();
         this.setupEngine();
     }
@@ -125,10 +115,7 @@ export class GameController extends BaseController {
         stageService.updateSignal.add(this.update);
         GameModelHelper.setGameState(GameStateEnum.NONE);
 
-        vueService.signalPauseButton.on(this.handlePauseButton);
-
-        window.addEventListener('focus', this.handleWindowFocusIn);
-        window.addEventListener('blur', this.handleWindowFocusOut);
+        dataService.getRootModel<GameModel>().subscribe(['appState'], this.handleAppStateChange);
     }
 
     update = (time: number) => {
@@ -151,14 +138,11 @@ export class GameController extends BaseController {
         return state === GameStateEnum.GAME_DEFEATE || state === GameStateEnum.GAME_VICTORY || state === GameStateEnum.GAME_NO_MORE_MOVES;
     }
 
-    private handlePauseButton = () => {
-        const model = dataService.getRootModel<GameModel>();
-        this.pause(model.raw.appState !== AppStateEnum.GAME_SCREEN_PAUSE);
-    }
-
-    private handleWindowFocusIn = () => { }
-
-    private handleWindowFocusOut = () => {
-        this.pause(true);
+    private handleAppStateChange = (state: AppStateEnum) => {
+        if (state === AppStateEnum.GAME_SCREEN) {
+            this.fsm.changeState(GameControllerStateEnum.GAME);
+        } else {
+            this.fsm.changeState(GameControllerStateEnum.PAUSE);
+        }
     }
 }

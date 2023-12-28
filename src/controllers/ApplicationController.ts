@@ -18,11 +18,14 @@ import { TutorialController } from './TutorialController';
 export class ApplicationController extends BaseController {
 
     private gameModel?: Model<GameModel>;
+    private applicationStateHystory: AppStateEnum[] = [];
 
     protected async doExecute() {
         this.setupGameModel();
 
         stageService.updateSignal.add(this.update);
+        vueService.signalPauseButton.on(this.handlePauseButton);
+        vueService.signalOptionsButton.on(this.handleOptionsButton);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -154,7 +157,26 @@ export class ApplicationController extends BaseController {
 
     }
 
+    private handlePauseButton = () => {
+        const currentState = GameModelHelper.getApplicationState();
+        if (currentState === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        } else if (currentState === AppStateEnum.GAME_SCREEN_PAUSE) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+        }
+    }
+
+    private handleOptionsButton = () => {
+        // if (this.applicationStateHystory[this.applicationStateHystory.length - 1] !== AppStateEnum.OPTIONS) {
+        //     GameModelHelper.setApplicationState(AppStateEnum.OPTIONS);
+        //     return;
+        // }
+
+        // GameModelHelper.setApplicationState(this.applicationStateHystory[this.applicationStateHystory.length - 2]);
+    }
+
     private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
+        this.applicationStateHystory.push(currenState);
         switch (currenState) {
             case AppStateEnum.START_SCREEN:
             case AppStateEnum.GAME_SCREEN_PAUSE:

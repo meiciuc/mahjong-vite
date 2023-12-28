@@ -8,7 +8,7 @@ const gameTotalScore = useModel(["gameTotalScore"]);
 const helpsCount = useModel(["helpsCount"]);
 
 const handleClick = () => {
-    vueService.signalHelpButton.dispatch();
+    vueService.signalOptionsButton.dispatch();
 }
 </script>
 
@@ -19,8 +19,8 @@ const handleClick = () => {
             {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
         </div>
 
-        <div class="HelpContainer">
-            <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">&#x2699;</div>
+        <div class="OptionsContainer">
+            <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">&#x2699;</div>
         </div>
     </div>
 </template>
@@ -64,12 +64,12 @@ div {
     border: solid;
 }
 
-.HelpContainer {
+.OptionsContainer {
     background-color: $background_colored_darken;
     border-radius: $button_border_radius;
 }
 
-.HelpButton {
+.OptionsButton {
     @include scene-button;
     color: $button_text_colored;
     background-color: $button_text_idle;
@@ -80,13 +80,13 @@ div {
     font-size: 1.5em;
 }
 
-.HelpButton:hover {
+.OptionsButton:hover {
     background-color: $button_background_colored;
     color: $button_text_idle;
     border-color: $button_text_idle;
 }
 
-.HelpButtonDisabled {
+.OptionsButtonDisabled {
     pointer-events: none;
     cursor: auto;
     opacity: 0.7;

@@ -7,6 +7,7 @@ class VueService {
     signalHelpButton = new Signal();
     signalPauseButton = new Signal();
     signalGameEndButton = new Signal();
+    signalOptionsButton = new Signal();
 
     init() {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));
