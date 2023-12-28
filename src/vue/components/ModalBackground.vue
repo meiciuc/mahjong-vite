@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="ModalBackground"></div>
+    <div class="ModalBackground" @click.stop.prevent=""></div>
 </template>
 
 <style lang="scss" scoped>

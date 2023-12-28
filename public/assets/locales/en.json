@@ -23,5 +23,8 @@
         "noMoreMoves": "NO MORE MOVES AVALIABLE",
         "again": "Try again",
         "initialy": "Initialy"
+    },
+    "options": {
+        "sound": "Sound"
     }
 }

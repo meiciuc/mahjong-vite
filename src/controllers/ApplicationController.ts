@@ -116,6 +116,7 @@ export class ApplicationController extends BaseController {
         });
 
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
+        this.gameModel.subscribe(['sound'], this.handleSound);
     }
 
     private resetGameModelForNext() {
@@ -148,7 +149,7 @@ export class ApplicationController extends BaseController {
 
         const seed = `${Math.random()}`;
 
-        return { level, gridWidth: 2, gridHeight: 3, seed };
+        return { level, gridWidth, gridHeight, seed };
     }
 
     private setCurrentGameModel(l: number, w: number, h: number, s: string) {
@@ -165,6 +166,8 @@ export class ApplicationController extends BaseController {
     }
 
     private handlePauseButton = () => {
+        soundService.play(SOUNDS.active_button);
+
         const currentState = GameModelHelper.getApplicationState();
         if (currentState === AppStateEnum.GAME_SCREEN) {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
@@ -174,12 +177,17 @@ export class ApplicationController extends BaseController {
     }
 
     private handleOptionsButton = () => {
-        // this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
-        // if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
-        //     this.gameModel.data.appState = AppStateEnum.GAME_SCREEN_PAUSE;
-        // } else if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
-        //     this.gameModel.data.appState = AppStateEnum.GAME_SCREEN;
-        // }
+        soundService.play(SOUNDS.active_button);
+
+        this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
+
+        if (this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        }
+
+        if (!this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+        }
     }
 
     private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
@@ -191,11 +199,16 @@ export class ApplicationController extends BaseController {
                 break;
             case AppStateEnum.GAME_SCREEN:
                 adsService.showSticky(false);
-                soundService.play(SOUNDS.bookOpen);
+                soundService.play(SOUNDS.active_button);
                 break;
             case AppStateEnum.GAME_VICTORY:
                 soundService.play(SOUNDS.win_screen);
                 break;
         }
+    }
+
+    private handleSound = (current: boolean) => {
+        soundService.mute(!current);
+        soundService.play(SOUNDS.active_button);
     }
 }

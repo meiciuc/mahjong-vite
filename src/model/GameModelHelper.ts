@@ -74,6 +74,9 @@ export class GameModelHelper {
             gameMaxTime: 0,
             helpsCount: 3,
 
+            optionsAreVisible: false,
+            sound: true,
+
             icons: [],
 
             gridWidth: 1,

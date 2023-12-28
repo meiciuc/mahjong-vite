@@ -10,6 +10,7 @@ import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import GameDefeatedScreen from './screens/GameDefeatedScreen.vue';
 import GameDefeatedScreenFullscreenAds from './screens/GameDefeatedScreenFullscreenAds.vue';
 import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
+import Options from './popups/Options.vue';
 import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
 import { useModel } from '../model/useModel';
@@ -17,21 +18,53 @@ import { computed, ref } from 'vue';
 import isMobile from 'is-mobile';
 
 const appState = useModel(["appState"]);
+const optionsAreVisible = useModel(["optionsAreVisible"]);
 
 const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
+
 const showGameMenu = computed(() => {
     switch (appState.value) {
+        case AppStateEnum.NONE:
+        case AppStateEnum.START_SCREEN_FIRST:
+        case AppStateEnum.START_SCREEN_NOVICE:
+        case AppStateEnum.START_SCREEN:
+            return false;
         case AppStateEnum.GAME_SCREEN:
         case AppStateEnum.GAME_SCREEN_PAUSE:
         case AppStateEnum.GAME_VICTORY:
+        case AppStateEnum.GAME_NO_MORE_MOVES:
+        case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+        case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
         case AppStateEnum.GAME_DEFEATED:
         case AppStateEnum.GAME_DEFEATED_ADS:
+        case AppStateEnum.GAME_DEFEATED_CHOOSING:
             return true;
+        default:
+            return false;
     }
-    return false;
 });
 const showModalBackground = computed(() => {
-    return appState.value !== AppStateEnum.GAME_SCREEN && appState.value !== AppStateEnum.GAME_SCREEN_PAUSE;
+    return optionsAreVisible.value;
+
+    // switch (appState.value) {
+    //     case AppStateEnum.NONE:
+    //     case AppStateEnum.START_SCREEN_FIRST:
+    //     case AppStateEnum.START_SCREEN_NOVICE:
+    //     case AppStateEnum.START_SCREEN:
+    //         return true;
+    //     case AppStateEnum.GAME_SCREEN:
+    //         return false;
+    //     case AppStateEnum.GAME_SCREEN_PAUSE:
+    //     case AppStateEnum.GAME_VICTORY:
+    //     case AppStateEnum.GAME_NO_MORE_MOVES:
+    //     case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+    //     case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
+    //     case AppStateEnum.GAME_DEFEATED:
+    //     case AppStateEnum.GAME_DEFEATED_ADS:
+    //     case AppStateEnum.GAME_DEFEATED_CHOOSING:
+    //     default:
+    //         return true;
+    // }
 });
 const showColoredBackground = computed(() => {
     switch (appState.value) {
@@ -54,9 +87,7 @@ window.addEventListener('resize', () => {
     <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
-    <ModalBackground v-show="showModalBackground"></ModalBackground>
     <GameMenu v-show="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
-
 
     <ModalBackgroundColored v-show="showColoredBackground"></ModalBackgroundColored>
 
@@ -68,6 +99,9 @@ window.addEventListener('resize', () => {
     <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen>
     <GameDefeatedScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEATED_ADS"></GameDefeatedScreenFullscreenAds>
     <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
+
+    <ModalBackground v-show="showModalBackground"></ModalBackground>
+    <Options v-if="optionsAreVisible"></Options>
 
     <GameMenuMain v-if="appState !== AppStateEnum.START_SCREEN_FIRST" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
     </GameMenuMain>

@@ -46,6 +46,9 @@ export interface GameModel {
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
     language: Languages,
 
+    optionsAreVisible: boolean,
+    sound: boolean,
+
     gameState: GameStateEnum,
     gameStateTime: number,
     gameLevel: number,
