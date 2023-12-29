@@ -5,6 +5,7 @@ import { computed, ref, onMounted } from 'vue';
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { adsService } from '../../services/AdsService';
+import { UserActionAfterTheLastGame } from '../../model/GameModel';
 
 const showButtons = ref(false);
 const Popup = ref(null);
@@ -40,7 +41,8 @@ const marginTop = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
 });
 
-const handleClick = () => {
+const handleClick = (value: UserActionAfterTheLastGame) => {
+    GameModelHelper.setUserActionAfterTheLastGame(value);
     vueService.signalGameEndButton.dispatch();
 }
 </script>
@@ -49,8 +51,13 @@ const handleClick = () => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
-            <button v-if="showButtons" class="StartButton" @click="handleClick">{{
+            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
                 Localization.getText('defeated.again') }}</button>
+            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
+                Localization.getText('defeated.reset') }}</button>
+            <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
+                @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
+                    Localization.getText('defeated.previous') }}</button>
         </div>
     </div>
 </template>

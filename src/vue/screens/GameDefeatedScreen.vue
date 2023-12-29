@@ -6,7 +6,7 @@ import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { UserActionAfterTheLastGame } from '../../model/GameModel';
 
-
+const showButtons = ref(false);
 const Popup = ref(null);
 const animateScore = async () => {
     const tweenProvider = { total: GameModelHelper.getGameTotalScore(), current: GameModelHelper.getGameCurrentScore() };
@@ -23,8 +23,9 @@ const animateScore = async () => {
 };
 
 onMounted(async () => {
+    showButtons.value = true;
     await animateScore();
-})
+});
 
 const marginLeft = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
@@ -38,7 +39,6 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     GameModelHelper.setUserActionAfterTheLastGame(value);
     vueService.signalGameEndButton.dispatch();
 }
-
 </script>
 
 <template>
