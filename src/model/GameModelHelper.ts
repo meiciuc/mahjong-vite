@@ -67,7 +67,7 @@ export class GameModelHelper {
         dataService.config<GameModel>({
             appState: AppStateEnum.NONE,
             gameState: GameStateEnum.NONE,
-            gameLevel: 0,
+            gameLevel: 1,
             gameTotalScore: 0,
             gameCurrentScore: 0,
             gameStateTime: 0,

@@ -36,7 +36,7 @@ export class ApplicationController extends BaseController {
         await vueService.signalStartButton.future();
 
         this.resetGameModelForNext();
-        const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(1);
+        const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
         this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
 
         await this.nextCycle();
@@ -109,6 +109,14 @@ export class ApplicationController extends BaseController {
     private setupGameModel() {
         // TODO внесение кастомных данных
         this.gameModel = dataService.getRootModel<GameModel>();
+
+        const data = this.getData() as GameModel;
+        if (data) {
+            this.gameModel.data.gameLevel = data.gameLevel;
+            this.gameModel.data.gameTotalScore = data.gameTotalScore;
+            this.gameModel.data.sound = data.sound;
+        }
+
         const keys: string[] = [];
         const icons = this.gameModel.data.icons;
         icons.forEach((icon) => {
@@ -117,6 +125,10 @@ export class ApplicationController extends BaseController {
 
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
+
+        this.gameModel.subscribe(['gameTotalScore'], () => { this.saveData() });
+        this.gameModel.subscribe(['sound'], () => { this.saveData() });
+        this.gameModel.subscribe(['gameLevel'], () => { this.saveData() });
     }
 
     private resetGameModelForNext() {
@@ -202,6 +214,7 @@ export class ApplicationController extends BaseController {
                 soundService.play(SOUNDS.active_button);
                 break;
             case AppStateEnum.GAME_VICTORY:
+                this.gameModel.data.gameLevel += 1;
                 soundService.play(SOUNDS.win_screen);
                 break;
         }
@@ -210,5 +223,17 @@ export class ApplicationController extends BaseController {
     private handleSound = (current: boolean) => {
         soundService.mute(!current);
         soundService.play(SOUNDS.active_button);
+    }
+
+    private saveData() {
+        localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
+    }
+
+    private getData() {
+        const data = localStorage.getItem('data');
+        if (!data) {
+            return null;
+        }
+        return JSON.parse(data);
     }
 }
