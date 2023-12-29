@@ -54,7 +54,7 @@ class GpService {
         console.log('this.gp.ads.isPreloaderAvailable', this.gp.ads.isPreloaderAvailable);
     }
 
-    public showSticky(value: boolean) {
+    showSticky(value: boolean) {
         if (!this.gp) {
             return;
         }
@@ -68,7 +68,7 @@ class GpService {
         }
     }
 
-    public showLeaderboard(value: boolean) {
+    showLeaderboard(value: boolean) {
         if (!this.gp) {
             return;
         }
@@ -78,7 +78,7 @@ class GpService {
         }
     }
 
-    public async showFullscreen() {
+    async showFullscreen() {
         if (!this.gp) {
             return;
         }
@@ -88,6 +88,14 @@ class GpService {
         } else {
             return Promise.resolve();
         }
+    }
+
+    getAvatar() {
+        if (!this.gp! || !this.gp.player) {
+            return;
+        }
+
+        return this.gp.player.avatar;
     }
 
     saveData(data: SaveData) {

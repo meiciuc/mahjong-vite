@@ -39,6 +39,8 @@ export class ApplicationController extends BaseController {
         const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
         this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
 
+        console.log('getAvatar', adsService.getAvatar())
+
         await this.nextCycle();
     }
 
