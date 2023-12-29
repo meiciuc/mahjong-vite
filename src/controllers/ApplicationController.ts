@@ -51,7 +51,6 @@ export class ApplicationController extends BaseController {
     private async nextCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-
         // await new TutorialController().execute();
 
         const game = await new GameController().execute();
@@ -101,8 +100,6 @@ export class ApplicationController extends BaseController {
             }
         }
 
-
-
         await this.nextCycle();
     }
 
@@ -110,11 +107,14 @@ export class ApplicationController extends BaseController {
         // TODO внесение кастомных данных
         this.gameModel = dataService.getRootModel<GameModel>();
 
-        const data = this.getData() as GameModel;
+        let data = adsService.getData();
+        if (!data) {
+            data = this.getData();
+        }
         if (data) {
-            this.gameModel.data.gameLevel = data.gameLevel;
-            this.gameModel.data.gameTotalScore = data.gameTotalScore;
-            this.gameModel.data.sound = data.sound;
+            this.gameModel.data.gameLevel = data.gameLevel ? data.gameLevel : this.gameModel.data.gameLevel;
+            this.gameModel.data.gameTotalScore = data.gameTotalScore ? data.gameTotalScore : this.gameModel.data.gameTotalScore;
+            this.gameModel.data.sound = data.sound !== undefined ? data.sound : this.gameModel.data.sound;
         }
 
         const keys: string[] = [];
@@ -126,9 +126,7 @@ export class ApplicationController extends BaseController {
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
 
-        this.gameModel.subscribe(['gameTotalScore'], () => { this.saveData() });
-        this.gameModel.subscribe(['sound'], () => { this.saveData() });
-        this.gameModel.subscribe(['gameLevel'], () => { this.saveData() });
+        this.gameModel.subscribe(['appState'], () => { this.saveData() });
     }
 
     private resetGameModelForNext() {
@@ -223,10 +221,20 @@ export class ApplicationController extends BaseController {
     private handleSound = (current: boolean) => {
         soundService.mute(!current);
         soundService.play(SOUNDS.active_button);
+        localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
     }
 
     private saveData() {
-        localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
+        const model = dataService.getRootModel<GameModel>().raw;
+        localStorage.setItem('data', JSON.stringify(model));
+
+        if (model.appState === AppStateEnum.GAME_VICTORY) {
+            adsService.saveData({
+                gameLevel: model.gameLevel,
+                gameTotalScore: model.gameTotalScore + model.gameCurrentScore,
+                sound: model.sound,
+            });
+        }
     }
 
     private getData() {

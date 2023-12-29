@@ -19,7 +19,13 @@ import { SOUNDS } from './Sounds';
 window.onload = async (): Promise<void> => {
     initModel();
     initSoundService();
-    await initAddService();
+
+    try {
+        await initAddService();
+    } catch (err) {
+        console.log(err);
+    }
+
     await initAssets();
     initVueService();
     await initStageService();

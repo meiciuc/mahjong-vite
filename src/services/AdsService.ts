@@ -1,6 +1,12 @@
 import { dataService } from "../core/services/DataService";
 import { GameModel } from "../model/GameModel";
 
+interface SaveData {
+    gameLevel: number;
+    gameTotalScore: number;
+    sound: boolean;
+}
+
 class GpService {
     private gp;
 
@@ -36,6 +42,9 @@ class GpService {
     }
 
     private setup() {
+        if (!this.gp) {
+            return;
+        }
         dataService.getRootModel<GameModel>().data.language = this.gp.language;
 
         console.log('this.gp.ads.isStickyAvailable', this.gp.ads.isStickyAvailable);
@@ -43,13 +52,13 @@ class GpService {
         console.log('this.gp.ads.isFullscreenAvailable', this.gp.ads.isFullscreenAvailable);
         console.log('this.gp.ads.isRewardedAvailable', this.gp.ads.isRewardedAvailable);
         console.log('this.gp.ads.isPreloaderAvailable', this.gp.ads.isPreloaderAvailable);
-
-        // if (this.gp.ads.isStickyAvailable) {
-        //     this.gp.ads.showSticky();
-        // }
     }
 
     public showSticky(value: boolean) {
+        if (!this.gp) {
+            return;
+        }
+
         if (value && this.gp.ads.isStickyAvailable) {
             this.gp.ads.showSticky();
         }
@@ -60,17 +69,49 @@ class GpService {
     }
 
     public showLeaderboard(value: boolean) {
+        if (!this.gp) {
+            return;
+        }
+
         if (value) {
             this.gp.leaderboard.open();
         }
     }
 
     public async showFullscreen() {
+        if (!this.gp) {
+            return;
+        }
+
         if (this.gp.ads.isFullscreenAvailable) {
             return this.gp.ads.showFullscreen();
         } else {
             return Promise.resolve();
         }
+    }
+
+    saveData(data: SaveData) {
+        if (!this.gp! || !this.gp.player) {
+            return;
+        }
+
+        this.gp.player.get('data');
+        this.gp.player.set('data', JSON.stringify(data));
+        this.gp.player.set('score', data.gameTotalScore);
+        this.gp.player.sync({ override: true });
+    }
+
+    getData() {
+        if (!this.gp! || !this.gp.player) {
+            return null;
+        }
+
+        if (!this.gp.player.has('data')) {
+            return null;
+        }
+
+        const data = this.gp.player.get('data');
+        return data ? JSON.parse(data) : null;
     }
 }
 
