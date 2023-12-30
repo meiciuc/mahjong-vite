@@ -1,9 +1,10 @@
 import { Ref, watch, ref, toRaw, onUnmounted } from 'vue';
-import { Model, PropertyPath } from "./model";
-import { DeepReadonly, GetPropertyType } from "../utils/types";
+import { Model, PropertyPath } from './model';
+import { DeepReadonly, GetPropertyType } from '../utils/types';
 import { compare } from '../utils/utils';
 
-export function useModel<Data, Path extends string[]>(
+
+export function useModel<Data, const Path extends readonly string[]>(
     model: Model<Data>,
     path: PropertyPath<Data, Path>
 ): Ref<GetPropertyType<Data, Path>> {

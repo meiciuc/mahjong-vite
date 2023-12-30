@@ -6,8 +6,8 @@ import {
     GetPropertyType,
     ValidatePropertyPath
 } from '../utils/types';
-import { clone } from '../utils/utils';
 import { Signal } from '../utils/signal';
+import { clone } from '../utils/utils';
 
 // recurcive set source to target[key], or target if no key
 function setter(target: unknown, source: unknown, key: string | number | null) {
@@ -74,17 +74,17 @@ interface PathHolder {
     [VAULT]?: { path: string[] };
 }
 
-export type Listener<Data, Path extends string[] = []> = (
+export type Listener<Data, Path extends readonly string[] = []> = (
     newValue: DeepReadonly<GetPropertyType<Data, Path>>,
     prevValue: DeepReadonly<GetPropertyType<Data, Path>>
 ) => void;
 export type Context = unknown;
-export type PropertyPath<Data, Path extends string[]>
+export type PropertyPath<Data, Path extends readonly string[]>
     = Data extends object
-        ? ValidatePropertyPath<Data, Path> extends never
-            ? GetAvailablePropertyPaths<Data, GetClosestPropertyPath<Data, Path>>
-            : Path
-        : [];
+    ? ValidatePropertyPath<Data, Path> extends never
+    ? GetAvailablePropertyPaths<Data, GetClosestPropertyPath<Data, Path>>
+    : Path
+    : [];
 
 export class Model<Data> {
     private static readonly submodelsCache = new WeakMap<object, Map<string, Model<unknown>>>();
@@ -100,7 +100,7 @@ export class Model<Data> {
         if (getVersion(data)) {
             this.dataProxy = data;
             this.dataPrev = this.raw;
-        } else  {
+        } else {
             if (typeof data !== 'object' || data === null) {
                 data = {} as Data & object;
             }
@@ -123,7 +123,7 @@ export class Model<Data> {
         return clone(this.data);
     }
 
-    public get<Path extends string[]>(
+    public get<const Path extends readonly string[]>(
         path: PropertyPath<Data, Path> = [] as PropertyPath<Data, Path>
     ): GetPropertyType<Data, Path> {
         const fullPath = this.path.concat(path);
@@ -139,7 +139,10 @@ export class Model<Data> {
         return part;
     }
 
-    public set<Path extends string[]>(path: PropertyPath<Data, Path>, value: GetPropertyType<Data, Path>): boolean {
+    public set<const Path extends readonly string[]>(
+        path: PropertyPath<Data, Path>,
+        value: GetPropertyType<Data, Path>
+    ): boolean {
         const fullPath = this.path.concat(path);
         if (!fullPath.length) {
             setter(this.dataProxy, value, null);
@@ -169,7 +172,7 @@ export class Model<Data> {
         return true;
     }
 
-    public getSubModel<Path extends string[]>(path: PropertyPath<Data, Path>): Model<GetPropertyType<Data, Path>> {
+    public getSubModel<const Path extends readonly string[]>(path: PropertyPath<Data, Path>): Model<GetPropertyType<Data, Path>> {
         // if empty path provided - return current model
         if (!path.length) {
             return this as unknown as Model<GetPropertyType<Data, Path>>;
@@ -200,16 +203,16 @@ export class Model<Data> {
 
     public subscribe(listener: Listener<Data>): void;
     public subscribe(listener: Listener<Data>, context: Context): void;
-    public subscribe<Path extends string[]>(
+    public subscribe<const Path extends readonly string[]>(
         path: PropertyPath<Data, Path>,
         listener: Listener<Data, Path>
     ): void;
-    public subscribe<Path extends string[]>(
+    public subscribe<const Path extends readonly string[]>(
         path: PropertyPath<Data, Path>,
         listener: Listener<Data, Path>,
         context: Context
     ): void;
-    public subscribe<Path extends string[]>(
+    public subscribe<const Path extends readonly string[]>(
         ...params:
             [Listener<Data, Path>]
             | [Listener<Data, Path>, Context]
@@ -225,7 +228,7 @@ export class Model<Data> {
             if (Array.isArray(params[0])) {
                 [path, listener] = params as [PropertyPath<Data, Path>, Listener<Data, Path>];
             } else {
-                [listener, context] = params;
+                [listener, context] = params as [Listener<Data, Path>, Context];
             }
         } else {
             [path, listener, context] = params;
@@ -242,9 +245,9 @@ export class Model<Data> {
     }
 
     public unsubscribe(listener: Listener<Data>): void;
-    public unsubscribe<Path extends string[]>(path: PropertyPath<Data, Path>, listener: Listener<Data, Path>): void;
-    public unsubscribe<Path extends string[]>(
-        ...params: [ listener: Listener<Data, Path> ] | [ path: PropertyPath<Data, Path>, listener: Listener<Data, Path> ]
+    public unsubscribe<const Path extends readonly string[]>(path: PropertyPath<Data, Path>, listener: Listener<Data, Path>): void;
+    public unsubscribe<const Path extends readonly string[]>(
+        ...params: [listener: Listener<Data, Path>] | [path: PropertyPath<Data, Path>, listener: Listener<Data, Path>]
     ) {
         let listener: Listener<Data, Path>;
         let path = [] as PropertyPath<Data, Path>;
