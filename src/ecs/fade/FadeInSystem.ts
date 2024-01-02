@@ -18,7 +18,7 @@ export class FadeInSystem extends System {
 
     }
 
-    update(time: number): void {
+    update(_time: number): void {
         const game = stageService.getLayer(LAYERS.GAME);
         if (game.alpha !== this.tweenProvider.value) {
             game.alpha = this.tweenProvider.value;

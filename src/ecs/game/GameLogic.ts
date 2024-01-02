@@ -9,6 +9,7 @@ import { GameModel } from '../../model/GameModel';
 import { shuffle } from '../../utils/utils';
 import easingsFunctions from '../../core/utils/easingsFunctions';
 import { Config } from '../../Config';
+import { stageService } from '../../core/services/StageService';
 
 export class GameLogic {
     private grid: NodeList<GridNode>;
@@ -22,9 +23,9 @@ export class GameLogic {
 
     public generateIconsQueue(gridWidth: number, gridHeight: number, seed: string | undefined = undefined) {
         if (!seed) {
-            seed = `${Math.random()}`
+            seed = `${Math.random()}`;
         }
-        const model = dataService.getRootModel<GameModel>().data
+        const model = dataService.getRootModel<GameModel>().data;
         const gw = gridWidth;
         const gh = gridHeight;
         const currentLevel = model.gameLevel;
@@ -116,8 +117,8 @@ export class GameLogic {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.easeOutQuad;
 
-        const startA = 3;
-        const endA = 3;
+        const startA = 2;
+        const endA = 4;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
@@ -125,5 +126,31 @@ export class GameLogic {
         const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
 
         return currentA;
+    }
+
+    static calculateGameModelParams(level: number) {
+        const easing = easingsFunctions.easeOutQuad;
+
+        const start = 5;    // 9
+        const end = 15;     // 23
+
+        const currentLevel = level;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+
+        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
+        const commonCount = size + size;
+        const scale = stageService.height / (stageService.width + stageService.height);
+
+        let gridHeight = Math.floor(commonCount * scale);
+        const gridWidth = Math.round(commonCount - gridHeight);
+
+        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
+            gridHeight++;
+        }
+
+        const seed = `${Math.random()}`;
+        const gameMaxTime = Math.round(commonCount * Config.MAX_GAME_LEVEL * scaleLevel * 5);
+
+        return { level, gridWidth, gridHeight, seed, gameMaxTime };
     }
 }

@@ -126,7 +126,7 @@ export class GameSystem extends System {
     }
 
     // TODO bugfix
-    private getCornersLength(arr: PointLike[]) {
+    getCornersLength(arr: PointLike[]) {
         let corners = 0
         if (arr.length < 3) {
             return corners;

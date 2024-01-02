@@ -25,6 +25,7 @@
         "initialy": "Initialy"
     },
     "options": {
-        "sound": "Sound"
+        "sound": "Sound",
+        "resetAllLevels": "Reset all levels"
     }
 }

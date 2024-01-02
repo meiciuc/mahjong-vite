@@ -1,10 +1,9 @@
-import { Config } from '../Config';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
-import easingsFunctions from '../core/utils/easingsFunctions';
+import { GameLogic } from '../ecs/game/GameLogic';
 import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
@@ -13,7 +12,7 @@ import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
-import { TutorialController } from './TutorialController';
+// import { TutorialController } from './TutorialController';
 
 export class ApplicationController extends BaseController {
 
@@ -27,6 +26,7 @@ export class ApplicationController extends BaseController {
         window.addEventListener('blur', this.handleWindowFocusBlur);
         vueService.signalPauseButton.on(this.handlePauseButton);
         vueService.signalOptionsButton.on(this.handleOptionsButton);
+        vueService.signalOptionsResetLevels.on(this.handleOptionsResetLevels);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -36,10 +36,8 @@ export class ApplicationController extends BaseController {
         await vueService.signalStartButton.future();
 
         this.resetGameModelForNext();
-        const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
-        this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
-
-        console.log('getAvatar', adsService.getAvatar())
+        const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+        this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
 
         await this.nextCycle();
     }
@@ -78,27 +76,29 @@ export class ApplicationController extends BaseController {
                 const gridHeight = this.gameModel.raw.gridHeight;
                 const seed = this.gameModel.raw.seed;
 
+                const { gameMaxTime } = this.calculateGameModelParams(level);
+
                 this.resetGameModelForNext();
                 this.calculateGameModelParams(GameModelHelper.getGameLevel());
-                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             case UserActionAfterTheLastGame.RESET: {
                 this.resetGameModelForNext();
-                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
-                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             case UserActionAfterTheLastGame.PREVIOUS: {
                 this.resetGameModelForNext();
-                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
-                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             default: {
                 this.resetGameModelForNext();
-                const { level, gridWidth, gridHeight, seed } = this.calculateGameModelParams(GameModelHelper.getGameLevel() + 1);
-                this.setCurrentGameModel(level, gridWidth, gridHeight, seed);
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel() + 1);
+                this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
             }
         }
 
@@ -140,40 +140,19 @@ export class ApplicationController extends BaseController {
     }
 
     private calculateGameModelParams(level: number) {
-        const easing = easingsFunctions.easeOutQuad;
-
-        const start = 9;
-        const end = 23;
-
-        const currentLevel = level;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-
-        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
-        const commonCount = size + size;
-        const scale = stageService.height / (stageService.width + stageService.height);
-
-        let gridHeight = Math.floor(commonCount * scale);
-        const gridWidth = Math.round(commonCount - gridHeight);
-
-        if (gridHeight % 2 !== 0 && gridWidth % 2 !== 0) {
-            gridHeight++;
-        }
-
-        const seed = `${Math.random()}`;
-
-        return { level, gridWidth, gridHeight, seed };
+        return GameLogic.calculateGameModelParams(level);
     }
 
-    private setCurrentGameModel(l: number, w: number, h: number, s: string) {
+    private setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
         const model = dataService.getRootModel<GameModel>();
         model.data.gameLevel = l;
         model.data.gridWidth = w;
         model.data.gridHeight = h;
         model.data.seed = s;
-        model.data.gameMaxTime = w * h * 2;
+        model.data.gameMaxTime = t;
     }
 
-    private update = (time: number) => {
+    private update = (_time: number) => {
 
     }
 
@@ -202,7 +181,14 @@ export class ApplicationController extends BaseController {
         }
     }
 
-    private handleGameModelStateChange = (currenState: AppStateEnum, oldState: AppStateEnum) => {
+    private handleOptionsResetLevels = () => {
+        soundService.play(SOUNDS.active_button);
+        GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
+        this.gameModel.data.optionsAreVisible = false;
+        GameModelHelper.createModel();
+    }
+
+    private handleGameModelStateChange = (currenState: AppStateEnum, _oldState: AppStateEnum) => {
         this.applicationStateHystory.push(currenState);
         switch (currenState) {
             case AppStateEnum.START_SCREEN:

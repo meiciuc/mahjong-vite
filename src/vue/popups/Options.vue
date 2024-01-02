@@ -2,6 +2,7 @@
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import { computed, ref } from 'vue';
+import { vueService } from '../VueService';
 
 
 const Popup = ref(null);
@@ -16,6 +17,9 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => { }
+const handleReset = () => {
+    vueService.signalOptionsResetLevels.dispatch();
+}
 
 </script>
 
@@ -23,6 +27,7 @@ const handleClick = () => { }
     <div class="Container" @click="handleClick">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div>OPTIONS</div>
+            <button class="StartButton" @click="handleReset">{{ Localization.getText('options.resetAllLevels') }}</button>
             <div><input type="checkbox" id="checkbox" v-model="sound" /><label for="checkbox">{{
                 Localization.getText('options.sound') }}</label></div>
             <div>TUTORIAL</div>
