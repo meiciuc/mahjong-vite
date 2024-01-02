@@ -65,12 +65,6 @@ export class GameModelHelper {
 
     static createModel() {
         dataService.config<GameModel>({
-            appModel: {
-                appState: AppStateEnum.NONE,
-                userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
-                language: Languages.en,
-            },
-
             appState: AppStateEnum.NONE,
             gameState: GameStateEnum.NONE,
             gameLevel: 1,

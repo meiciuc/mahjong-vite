@@ -5,12 +5,12 @@ import { Animatable } from "../ecs/animation/components/Animatable";
 import { PathViewHelper } from "./PathViewHelper";
 import { stageService } from "../core/services/StageService";
 
-export class PathAnimatedAroundTileView extends Container implements Animatable {
+export class PathAnimatedAroundTileViewNew extends Container implements Animatable {
     private svg = Config.PATH_TILE_SVG;
     private color = Config.PATH_HELP_COLOR;
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.15;
+    private particleScale = 0.2;
     private easing = easingsFunctions.easeOutSine;
 
     private path = this.svg.querySelector('path');

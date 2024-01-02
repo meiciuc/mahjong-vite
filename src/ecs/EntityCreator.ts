@@ -105,7 +105,7 @@ export class EntityCreator {
         view.position.y = transform.position.y;
         entity
             .add(new TileHelpEffect())
-            .add(new Display(view, this.gridView.effectsTilesAbove))
+            .add(new Display(view, this.gridView.effectsTilesUnder))
             .add(transform)
             .add(new AnimationComponent(view));
         this.engine.addEntity(entity);

@@ -37,19 +37,11 @@ export enum AppStateEnum {
     GAME_DEFEATED_CHOOSING = 'gameDefetedChoosing',
 }
 
-export interface AppModel {
-    appState: AppStateEnum;
-    userActionAfterTheLastGame: UserActionAfterTheLastGame,
-    language: Languages,
-}
-
 export interface IconState {
     key: string;
 }
 
 export interface GameModel {
-    appModel: AppModel;
-
     appState: AppStateEnum;
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
     language: Languages,
