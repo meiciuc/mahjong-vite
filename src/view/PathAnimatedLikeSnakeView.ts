@@ -4,14 +4,21 @@ import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
 import { PathViewHelper } from "./PathViewHelper";
 
-class Particle {
-    private static count = 0;
+class Particle extends Sprite {
+    private static texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
 
-    public id = Particle.count++;
+    isDead = false;
     constructor(
-        public sprite: Sprite,
-        public age: number,
-    ) { }
+        public age: number
+    ) {
+        super(Particle.texture);
+    }
+
+    destroy(): void {
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+    }
 }
 
 export class PathAnimatedLikeSnakeView extends ParticleContainer implements Animatable {
@@ -21,12 +28,11 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     private easing = easingsFunctions.easeInOutCirc;
     private particleAge = .3;
 
-    private texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
     private path: SVGPathElement;
     private totalLength: number;
     private k: number;
 
-    private particles: Map<number, Particle> = new Map();
+    private particles: Particle[] = [];
     private startRectangle: Rectangle;
     private finishRectangle: Rectangle;
 
@@ -62,15 +68,14 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
                 continue;
             }
 
-            const sprite = new Sprite(this.texture);
-            sprite.tint = this.color;
-            sprite.scale.set(this.particleScale);
-            sprite.position.x = point.x;
-            sprite.position.y = point.y;
-            this.addChild(sprite);
+            const particle = new Particle(this.particleAge);
+            particle.tint = this.color;
+            particle.scale.set(this.particleScale);
+            particle.position.x = point.x;
+            particle.position.y = point.y;
+            this.addChild(particle);
 
-            const particle = new Particle(sprite, this.particleAge);
-            this.particles.set(particle.id, particle);
+            this.particles.unshift(particle);
         }
     }
 
@@ -82,14 +87,17 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
             this.currentPathTime = t;
         }
 
-        this.particles.forEach((particle, id) => {
-            particle.age -= time;
-            particle.sprite.alpha = particle.age / this.particleAge;
-
-            if (particle.age < 0) {
-                particle.sprite.destroy();
-                this.particles.delete(id);
+        for (const particle of this.particles) {
+            if (particle.isDead) {
+                break;
             }
-        });
+            particle.age -= time;
+            particle.alpha = Math.max(0, particle.age / this.particleAge);
+
+            if (particle.age < 0 && !particle.isDead) {
+                particle.isDead = true;
+                particle.destroy();
+            }
+        }
     }
 }
