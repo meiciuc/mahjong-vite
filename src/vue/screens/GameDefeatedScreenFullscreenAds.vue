@@ -6,6 +6,7 @@ import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { adsService } from '../../services/AdsService';
 import { UserActionAfterTheLastGame } from '../../model/GameModel';
+import { TimeSkipper } from '../../utils/TimeSkipper';
 
 const showButtons = ref(false);
 const Popup = ref(null);
@@ -24,12 +25,18 @@ const animateScore = async () => {
 };
 
 const showFullscrinAds = async () => {
-    adsService.showFullscreen()
+    adsService.showFullscreen();
 };
 
 onMounted(async () => {
     await animateScore();
-    await showFullscrinAds();
+    await new TimeSkipper(1000).execute();
+    try {
+        await showFullscrinAds();
+    } catch (error) {
+        console.log(`Error: ${error}`)
+    }
+
     showButtons.value = true;
 });
 
@@ -51,11 +58,13 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
-            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
-                Localization.getText('defeated.again') }}</button>
-            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
-                Localization.getText('defeated.reset') }}</button>
-            <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
+            <button :class="[showButtons ? '' : 'Opacity']" class="StartButton"
+                @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
+                    Localization.getText('defeated.again') }}</button>
+            <button :class="[showButtons ? '' : 'Opacity']" class="StartButton"
+                @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
+                    Localization.getText('defeated.reset') }}</button>
+            <button v-if="GameModelHelper.getGameLevel() > 1" :class="[showButtons ? '' : 'Opacity']" class="StartButton"
                 @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
                     Localization.getText('defeated.previous') }}</button>
         </div>
@@ -107,6 +116,10 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     color: white;
     user-select: none;
     margin-bottom: 30%;
+}
+
+.Opacity {
+    opacity: 0;
 }
 </style>
 

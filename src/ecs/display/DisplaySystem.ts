@@ -10,7 +10,11 @@ export class DisplaySystem extends System {
         this.displays.nodeRemoved.add(this.handleNodeRemoved);
     }
 
-    removeFromEngine(_engine: Engine): void {
+    removeFromEngine(engine: Engine): void {
+        while (this.displays?.head) {
+            engine.removeEntity(this.displays.head.entity);
+        }
+
         this.displays?.nodeAdded.add(this.handleNodeAdded);
         this.displays?.nodeRemoved.remove(this.handleNodeRemoved);
         this.displays = undefined;

@@ -21,7 +21,9 @@
     },
     "noMoreMoves": {
         "noMoreMoves": "NO MORE MOVES AVALIABLE",
-        "again": "Try again",
+        "again": "Repeat the same layout",
+        "reset": "Reset",
+        "previous": "One level below",
         "initialy": "Initialy"
     },
     "options": {

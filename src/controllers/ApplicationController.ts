@@ -137,8 +137,6 @@ export class ApplicationController extends BaseController {
 
     private gameResetedToLevelOne = async () => {
         this.gameModel.data.gameLevel = 1;
-        // TODO remove for release
-        this.gameModel.data.gameTotalScore = 0;
         this.gameModel.data.optionsAreVisible = false;
 
         this.saveData(true);
