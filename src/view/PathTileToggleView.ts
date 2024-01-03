@@ -11,7 +11,7 @@ export class PathTileToggleView extends ParticleContainer {
     }
 
     private async draw() {
-        const texture = await PathViewHelper.getTileToggleTexture('./assets/particle.png');
+        const texture = await PathViewHelper.getTileToggleTexture(Config.PARTICLE_KEY);
         const sprite = new Sprite(texture);
         sprite.scale.set(0.8);
         sprite.tint = this.color;

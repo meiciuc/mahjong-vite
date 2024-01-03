@@ -125,26 +125,24 @@ export class GameSystem extends System {
         this.game.head.game.model.data.gameState = state;
     }
 
-    // TODO bugfix
-    getCornersLength(arr: PointLike[]) {
-        let corners = 0
+    getEdgesLength(arr: PointLike[]) {
+        let corners = 1
         if (arr.length < 3) {
             return corners;
         }
 
-        let xDirection = arr[1].x - arr[0].x;
-        let yDirection = arr[1].y - arr[0].y;
+        let xDirection = Math.round(arr[1].x - arr[0].x);
+        let yDirection = Math.round(arr[1].y - arr[0].y);
         for (let i = 2; i < arr.length; i++) {
-            const xDirection1 = arr[i].x - arr[i - 1].x;
-            const yDirection1 = arr[i].y - arr[i - 1].y;
+            const xDirection1 = Math.round(arr[i].x - arr[i - 1].x);
+            const yDirection1 = Math.round(arr[i].y - arr[i - 1].y);
             if (xDirection !== xDirection1 || yDirection !== yDirection1) {
                 corners++;
             }
             xDirection = xDirection1;
             yDirection = yDirection1;
         }
-        // HACK
-        return Math.max(corners, 2);
+        return Math.min(corners, 3);
     }
 
     private async handleTwoSelected(tiles: TileSelectedNode[]) {
@@ -158,7 +156,9 @@ export class GameSystem extends System {
             // true move
             soundService.play(SOUNDS.bookClose);
 
-            GameModelHelper.setGameCurrentScore(GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_TRUE_MOVE);
+            const added = Config.ADD_SCORE_FOR_TRUE_MOVE * this.getEdgesLength(arr);
+
+            GameModelHelper.setGameCurrentScore(GameModelHelper.getGameCurrentScore() + added);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
@@ -168,7 +168,7 @@ export class GameSystem extends System {
 
             const effectDelay = Config.PATH_LIKE_SNAKE_DURATION * 1500;
             await new TimeSkipper(effectDelay).execute();
-            this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_TRUE_MOVE);
+            this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, added);
 
             await new TimeSkipper(effectDelay * 2 / 3).execute();
             ids.forEach((id) => {

@@ -1,4 +1,4 @@
-import { Sprite, Texture } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 import { Config } from "../Config";
 import { stageService } from "../core/services/StageService";
 
@@ -17,23 +17,25 @@ export class PathViewHelper {
         if (!PathViewHelper.textures[name]) {
             const color = Config.PATH_SELECT_COLOR;
             const texture = Texture.from(key);
-            const svg = Config.PATH_TILE_SVG
+            const svg = Config.PATH_TILE_SVG;
             const path = svg.querySelector('path');
             const totalLength = path.getTotalLength();
             const length = Math.floor(totalLength / 2);
             const k = 1 / length;// 100 / length;
             let time = 0;
-            const container = new Sprite();
+            const sprite = new Sprite();
             for (let i = 0; i < length; i++) {
                 const point = path.getPointAtLength(time * totalLength);
                 time += k;
-                const sprite = new Sprite(texture);
-                sprite.tint = color;
-                sprite.position.x = point.x;
-                sprite.position.y = point.y;
-                sprite.scale.set(0.2)
-                container.addChild(sprite);
+                const particle = new Sprite(texture);
+                particle.tint = color;
+                particle.position.x = point.x / window.devicePixelRatio;
+                particle.position.y = point.y / window.devicePixelRatio;
+                particle.scale.set(Config.PARTICLE_SCALE / window.devicePixelRatio)
+                sprite.addChild(particle);
             }
+            const container = new Container();
+            container.addChild(sprite);
             let image = await stageService.stage.renderer.plugins.extract.image(container);
             PathViewHelper.textures[name] = Texture.from(image);
         }

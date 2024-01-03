@@ -10,7 +10,7 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     private color = Config.PATH_HELP_COLOR;
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.15;
+    private particleScale = 0.2 / window.devicePixelRatio;
     private easing = easingsFunctions.easeOutSine;
 
     private path = this.svg.querySelector('path');
@@ -34,11 +34,22 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     }
 
     private async setupCanvas() {
+        // var displayWidth = 1280;
+        // var displayHeight = 739;
+        // var canvas = document.getElementById("sig-canvas");
+        // var scale = 2;
+        // canvas.style.width = displayWidth + 'px';
+        // canvas.style.height = displayHeight + 'px';
+        // canvas.width = displayWidth * scale;
+        // canvas.height = displayHeight * scale;
+        const resolution = window.devicePixelRatio;
         this.canvas = document.createElement('canvas');
 
         const size = this.getPathBounding();
-        this.canvas.width = size.x;
-        this.canvas.height = size.y;
+        this.canvas.style.width = size.x + 'px';
+        this.canvas.style.height = size.y + 'px';
+        this.canvas.width = size.x * resolution;
+        this.canvas.height = size.y * resolution;
 
         const particle = new Container();
         const sprite = new Sprite(this.texture);

@@ -20,17 +20,20 @@ export class Config {
 
         svg.appendChild(svgPath);
 
-        const start = 2;
-        const w = Config.ICON_IMAGE_WIDTH * .95 - 2 * start;
-        const h = Config.ICON_IMAGE_HEIGHT * .95 - 2 * start;
+        const padding = 4;
+        const w = Config.ICON_IMAGE_WIDTH * 1.20 - 2 * padding;
+        const h = Config.ICON_IMAGE_HEIGHT * 1.20 - 2 * padding;
         const r = Math.floor((w + h) / 2 * .25);
-        const d = `M ${r} ${start} L ${w - r} ${start} Q ${w} ${start} ${w} ${r} L ${w} ${h - r} Q ${w} ${h} ${w - r} ${h} L ${r} ${h} Q ${start} ${h} ${start} ${h - r} L ${start} ${r} Q ${start} ${start} ${r} ${start}`;
+        const d = `M ${padding + r} ${padding} L ${padding + w - r} ${padding} Q ${padding + w} ${padding} ${padding + w} ${padding + r} L ${padding + w} ${padding + h - r} Q ${padding + w} ${padding + h} ${padding + w - r} ${padding + h} L ${padding + r} ${padding + h} Q ${padding} ${padding + h} ${padding} ${padding + h - r} L ${padding} ${padding + r} Q ${padding} ${padding} ${padding + r} ${padding}`;
         svgPath.setAttribute('d', d);
         return svg;
     }
 
-    static ADD_SCORE_FOR_TRUE_MOVE = 200;
-    static ADD_SCORE_FOR_FALSE_MOVE = -50;
+    static PARTICLE_KEY = `./assets/particle.png`;
+    static PARTICLE_SCALE = 0.2;
+
+    static ADD_SCORE_FOR_TRUE_MOVE = 1;
+    static ADD_SCORE_FOR_FALSE_MOVE = -1;
     static MAX_GAME_LEVEL = 92;
 
     static DEV = true;

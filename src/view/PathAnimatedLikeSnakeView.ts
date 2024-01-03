@@ -5,7 +5,7 @@ import { Animatable } from "../ecs/animation/components/Animatable";
 import { PathViewHelper } from "./PathViewHelper";
 
 class Particle extends Sprite {
-    private static texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
+    private static texture = PathViewHelper.getParticleTexture(Config.PARTICLE_KEY);
 
     isDead = false;
     constructor(
@@ -24,7 +24,7 @@ class Particle extends Sprite {
 export class PathAnimatedLikeSnakeView extends ParticleContainer implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.25;
+    private particleScale = Config.PARTICLE_SCALE / window.devicePixelRatio;
     private easing = easingsFunctions.easeInOutCirc;
     private particleAge = .3;
 
