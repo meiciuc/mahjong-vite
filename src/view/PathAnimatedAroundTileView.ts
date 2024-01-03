@@ -34,22 +34,14 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     }
 
     private async setupCanvas() {
-        // var displayWidth = 1280;
-        // var displayHeight = 739;
-        // var canvas = document.getElementById("sig-canvas");
-        // var scale = 2;
-        // canvas.style.width = displayWidth + 'px';
-        // canvas.style.height = displayHeight + 'px';
-        // canvas.width = displayWidth * scale;
-        // canvas.height = displayHeight * scale;
         const resolution = window.devicePixelRatio;
         this.canvas = document.createElement('canvas');
 
         const size = this.getPathBounding();
-        this.canvas.style.width = size.x + 'px';
-        this.canvas.style.height = size.y + 'px';
-        this.canvas.width = size.x * resolution;
-        this.canvas.height = size.y * resolution;
+        size.x *= resolution;
+        size.y *= resolution;
+        this.canvas.width = size.x;
+        this.canvas.height = size.y;
 
         const particle = new Container();
         const sprite = new Sprite(this.texture);
@@ -62,7 +54,8 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
 
         this.addChild(new Sprite(this.canvasTexture));
 
-        document.body.appendChild(this.canvas)
+        // HACK i not undenstand
+        this.scale.set(.8);
     }
 
     private draw(from: number, to: number) {

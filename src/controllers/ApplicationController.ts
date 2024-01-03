@@ -3,7 +3,6 @@ import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
-import { Signal } from '../core/utils/signal';
 import { GameLogic } from '../ecs/game/GameLogic';
 import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';

@@ -24,7 +24,7 @@ class Particle extends Sprite {
 export class PathAnimatedLikeSnakeView extends ParticleContainer implements Animatable {
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = Config.PARTICLE_SCALE / window.devicePixelRatio;
+    private particleScale = Config.PARTICLE_SCALE / window.devicePixelRatio * 1.3;
     private easing = easingsFunctions.easeInOutCirc;
     private particleAge = .3;
 
