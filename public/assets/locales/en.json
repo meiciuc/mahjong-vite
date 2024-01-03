@@ -26,6 +26,6 @@
     },
     "options": {
         "sound": "Sound",
-        "resetAllLevels": "Reset all levels"
+        "resetAllLevels": "Play from the first level"
     }
 }

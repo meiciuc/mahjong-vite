@@ -25,7 +25,7 @@
         "initialy": "С начала"
     },
     "options": {
-        "sound": "Sound",
-        "resetAllLevels": "Начать сначала"
+        "sound": "Звуки",
+        "resetAllLevels": "Играть с первого уровня"
     }
 }

@@ -3,6 +3,7 @@ import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
+import { Signal } from '../core/utils/signal';
 import { GameLogic } from '../ecs/game/GameLogic';
 import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
@@ -26,11 +27,14 @@ export class ApplicationController extends BaseController {
         window.addEventListener('blur', this.handleWindowFocusBlur);
         vueService.signalPauseButton.on(this.handlePauseButton);
         vueService.signalOptionsButton.on(this.handleOptionsButton);
-        vueService.signalOptionsResetLevels.on(this.handleOptionsResetLevels);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
+        await this.firstCycle();
+    }
+
+    private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
 
         await vueService.signalStartButton.future();
@@ -53,8 +57,22 @@ export class ApplicationController extends BaseController {
 
         // await new TutorialController().execute();
 
-        const game = await new GameController().execute();
-        game.destroy();
+        // TODO superdraft. rewrite it
+        const game = new GameController();
+        const race = [game.execute(), vueService.signalOptionsResetLevels.future()];
+        await Promise.race(race).then(
+            async (value) => {
+                game.destroy();
+                if (value !== game) {
+                    await this.gameResetedToLevelOne();
+                    return;
+                }
+            },
+            reason => {
+                game.destroy();
+                console.log(`race: rejected with ${reason.message}`);
+            }
+        );
 
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
@@ -103,6 +121,28 @@ export class ApplicationController extends BaseController {
         }
 
         await this.nextCycle();
+    }
+
+    // private cycleInterruptedByOptions = async (signal: Signal) => {
+    //     let interrupt = false;
+    //     vueService.signalOptionsResetLevels.once(() => {
+    //         interrupt = true;
+    //         this.gameResetedToLevelOne();
+    //     });
+    //     // return signal.future();
+    //     const race = [signal.future(), vueService.signalOptionsResetLevels.future()];
+    //     await Promise.race(race);
+
+    //     return Promise.resolve(interrupt);
+    // }
+
+    private gameResetedToLevelOne = async () => {
+        this.gameModel.data.gameLevel = 1;
+        this.gameModel.data.optionsAreVisible = false;
+
+        this.saveData(true);
+
+        await this.firstCycle();
     }
 
     private setupGameModel() {
@@ -181,13 +221,6 @@ export class ApplicationController extends BaseController {
         }
     }
 
-    private handleOptionsResetLevels = () => {
-        soundService.play(SOUNDS.active_button);
-        GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
-        this.gameModel.data.optionsAreVisible = false;
-        GameModelHelper.createModel();
-    }
-
     private handleGameModelStateChange = (currenState: AppStateEnum, _oldState: AppStateEnum) => {
         this.applicationStateHystory.push(currenState);
         switch (currenState) {
@@ -212,11 +245,11 @@ export class ApplicationController extends BaseController {
         localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
     }
 
-    private saveData() {
+    private saveData(remote = false) {
         const model = dataService.getRootModel<GameModel>().raw;
         localStorage.setItem('data', JSON.stringify(model));
 
-        if (model.appState === AppStateEnum.GAME_VICTORY) {
+        if (remote || model.appState === AppStateEnum.GAME_VICTORY) {
             adsService.saveData({
                 gameLevel: model.gameLevel,
                 gameTotalScore: model.gameTotalScore + model.gameCurrentScore,
