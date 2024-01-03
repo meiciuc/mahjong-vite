@@ -97,7 +97,7 @@ export class ApplicationController extends BaseController {
                 const { gameMaxTime } = this.calculateGameModelParams(level);
 
                 this.resetGameModelForNext();
-                this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                // this.calculateGameModelParams(GameModelHelper.getGameLevel());
                 this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
@@ -233,7 +233,6 @@ export class ApplicationController extends BaseController {
                 soundService.play(SOUNDS.active_button);
                 break;
             case AppStateEnum.GAME_VICTORY:
-                this.gameModel.data.gameLevel += 1;
                 soundService.play(SOUNDS.win_screen);
                 break;
         }
