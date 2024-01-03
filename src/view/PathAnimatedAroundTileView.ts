@@ -10,13 +10,13 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     private color = Config.PATH_HELP_COLOR;
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = 0.2 / window.devicePixelRatio;
+    private particleScale = Config.PARTICLE_SCALE / window.devicePixelRatio;
     private easing = easingsFunctions.easeOutSine;
 
     private path = this.svg.querySelector('path');
     private totalLength = this.path.getTotalLength();
-    private k = 1 / Math.ceil(this.totalLength) * 2;
-    private texture = PathViewHelper.getParticleTexture(`./assets/particle.png`);
+    private k = 1 / Math.ceil(this.totalLength);
+    private texture = PathViewHelper.getParticleTexture(Config.PARTICLE_KEY);
 
     private canvas?: HTMLCanvasElement;
     private canvasCyrcle?: HTMLCanvasElement;
