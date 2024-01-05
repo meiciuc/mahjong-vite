@@ -1,3 +1,4 @@
+import { Entity } from '@ash.ts/ash';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -12,12 +13,57 @@ import { vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
+import { FSMState, GAME_DEFEATED, GAME_DEFEATED_ADS, GAME_DEFEATED_CHOOSING, GAME_NO_MORE_MOVES, GAME_NO_MORE_MOVES_ADS, GAME_NO_MORE_MOVES_CHOOSING, GAME_SCREEN, GAME_SCREEN_PAUSE, GAME_VICTORY, NONE, START_SCREEN, START_SCREEN_FIRST, START_SCREEN_NOVICE } from './ApplicationControllerStates';
 // import { TutorialController } from './TutorialController';
+
+class EntityStateMachineExtended {
+    constructor(public entity: Entity) {
+
+    }
+    createState(state: AppStateEnum) {
+        return this;
+    }
+    add(state: FSMState) {
+
+    }
+
+    changeState(state: FSMState) {
+
+    }
+}
 
 export class ApplicationController extends BaseController {
 
     private gameModel?: Model<GameModel>;
     private applicationStateHystory: AppStateEnum[] = [];
+    private fsm?: EntityStateMachineExtended;
+
+    setupFSM() {
+        const entity = new Entity();
+        const fsm = new EntityStateMachineExtended(entity);
+        this.fsm = fsm;
+
+        fsm.createState(AppStateEnum.NONE).add(NONE);
+
+        fsm.createState(AppStateEnum.START_SCREEN_FIRST).add(START_SCREEN_FIRST);
+        fsm.createState(AppStateEnum.START_SCREEN_NOVICE).add(START_SCREEN_NOVICE);
+        fsm.createState(AppStateEnum.START_SCREEN).add(START_SCREEN);
+
+        fsm.createState(AppStateEnum.GAME_SCREEN).add(GAME_SCREEN);
+        fsm.createState(AppStateEnum.GAME_SCREEN_PAUSE).add(GAME_SCREEN_PAUSE);
+
+        fsm.createState(AppStateEnum.GAME_VICTORY).add(GAME_VICTORY);
+
+        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES).add(GAME_NO_MORE_MOVES);
+        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES_ADS).add(GAME_NO_MORE_MOVES_ADS);
+        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING).add(GAME_NO_MORE_MOVES_CHOOSING);
+
+        fsm.createState(AppStateEnum.GAME_DEFEATED).add(GAME_DEFEATED);
+        fsm.createState(AppStateEnum.GAME_DEFEATED_ADS).add(GAME_DEFEATED_ADS);
+        fsm.createState(AppStateEnum.GAME_DEFEATED_CHOOSING).add(GAME_DEFEATED_CHOOSING);
+
+        fsm.changeState(AppStateEnum.NONE);
+    }
 
     protected async doExecute() {
         this.setupGameModel();
@@ -30,7 +76,9 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
-        await this.firstCycle();
+        // await this.firstCycle();
+        this.setupFSM();
+        this.fsm.changeState(AppStateEnum.START_SCREEN_FIRST);
     }
 
     private async firstCycle() {

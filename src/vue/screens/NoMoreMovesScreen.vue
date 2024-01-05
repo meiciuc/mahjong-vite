@@ -44,7 +44,7 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div class="Text">{{ Localization.getText('noMoreMoves.noMoreMoves') }}</div>
+            <div class="Text" style="color: brown;">{{ Localization.getText('noMoreMoves.noMoreMoves') }}</div>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
                 Localization.getText('noMoreMoves.again') }}</button>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
