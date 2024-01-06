@@ -76,9 +76,9 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
-        // await this.firstCycle();
-        this.setupFSM();
-        this.fsm.changeState(AppStateEnum.START_SCREEN_FIRST);
+        await this.firstCycle();
+        // this.setupFSM();
+        // this.fsm.changeState(AppStateEnum.START_SCREEN_FIRST);
     }
 
     private async firstCycle() {

@@ -15,6 +15,7 @@ import { adsService } from './services/AdsService';
 import { soundService } from './services/SoundService';
 import { forIn } from 'lodash';
 import { SOUNDS } from './Sounds';
+import { assetsService } from './services/AssetsService';
 
 window.onload = async (): Promise<void> => {
     initModel();
@@ -29,6 +30,7 @@ window.onload = async (): Promise<void> => {
     await initAssets();
     initVueService();
     await initStageService();
+    await assetsService.init();
     setupTweens();
     initDebug();
 

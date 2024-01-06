@@ -1,26 +1,21 @@
-import { Container, Sprite, Texture } from "pixi.js";
+import { Container, Resource, Sprite, Texture } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
-import { PathViewHelper } from "./PathViewHelper";
-import { stageService } from "../core/services/StageService";
+import { assetsService } from "../services/AssetsService";
 
 export class PathAnimatedAroundTileView extends Container implements Animatable {
-    private svg = Config.PATH_TILE_SVG;
-    private color = Config.PATH_HELP_COLOR;
+
     private currentTime = 0;
     private currentPathTime = 0;
-    private particleScale = Config.PARTICLE_SCALE / window.devicePixelRatio;
     private easing = easingsFunctions.easeOutSine;
 
-    private path = this.svg.querySelector('path');
+    private path = Config.PATH_TILE_SVG.querySelector('path');
     private totalLength = this.path.getTotalLength();
     private k = 1 / Math.ceil(this.totalLength);
-    private texture = PathViewHelper.getParticleTexture(Config.PARTICLE_KEY);
 
-    private canvas?: HTMLCanvasElement;
-    private canvasCyrcle?: HTMLCanvasElement;
-    private canvasTexture?: Texture;
+    private canvasContext: CanvasRenderingContext2D;
+    private canvasTexture: Texture<Resource>;
 
     private finished = false;
 
@@ -34,47 +29,29 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     }
 
     private async setupCanvas() {
-        const resolution = window.devicePixelRatio;
-        this.canvas = document.createElement('canvas');
+        const { canvasTexture, canvasContext } = assetsService.getPathAnimatedAroundTileViewTexturePoolElement();
+        this.canvasTexture = canvasTexture;
+        this.canvasContext = canvasContext;
 
-        const size = this.getPathBounding();
-        size.x *= resolution;
-        size.y *= resolution;
-        this.canvas.width = size.x;
-        this.canvas.height = size.y;
-
-        const particle = new Container();
-        const sprite = new Sprite(this.texture);
-        sprite.tint = this.color;
-        sprite.scale.set(this.particleScale);
-        particle.addChild(sprite);
-        this.canvasCyrcle = await stageService.stage.renderer.plugins.extract.image(particle);
-
-        this.canvasTexture = Texture.from(this.canvas);
-
-        this.addChild(new Sprite(this.canvasTexture));
+        this.addChild(new Sprite(canvasTexture));
 
         // HACK i not undenstand
         this.scale.set(.8);
     }
 
     private draw(from: number, to: number) {
-        const ctx = this.canvas?.getContext('2d');
-        if (!ctx || !this.canvasCyrcle) {
-            return;
-        }
-
         let time = from;
         while (time < to) {
             const point = this.path.getPointAtLength(time * this.totalLength);
             time += this.k;
 
-            ctx.drawImage(this.canvasCyrcle, point.x, point.y);
+            this.canvasContext.drawImage(this.particleElement, point.x, point.y);
         }
+        this.canvasTexture.update();
     }
 
     animate(time: number): void {
-        if (this.finished || !this.canvasTexture) {
+        if (this.finished) {
             return;
         }
 
@@ -87,7 +64,9 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
         if (this.currentPathTime >= 1) {
             this.finished = true;
         }
+    }
 
-        this.canvasTexture.update();
+    private get particleElement() {
+        return assetsService.redParticleCanvas;
     }
 }
