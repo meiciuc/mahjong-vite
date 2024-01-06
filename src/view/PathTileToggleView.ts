@@ -1,6 +1,6 @@
 import { ParticleContainer, Sprite } from "pixi.js";
 import { Config } from "../Config";
-import { PathViewHelper } from "./PathViewHelper";
+import { assetsService } from "../services/AssetsService";
 
 export class PathTileToggleView extends ParticleContainer {
     private color = Config.PATH_SELECT_COLOR;
@@ -11,7 +11,7 @@ export class PathTileToggleView extends ParticleContainer {
     }
 
     private async draw() {
-        const texture = await PathViewHelper.getTileToggleTexture(Config.PARTICLE_KEY);
+        const texture = await assetsService.getTileToggleTexture(Config.PARTICLE_KEY);
         const sprite = new Sprite(texture);
         sprite.scale.set(0.8);
         sprite.tint = this.color;

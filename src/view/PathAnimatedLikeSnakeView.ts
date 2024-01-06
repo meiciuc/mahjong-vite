@@ -2,10 +2,10 @@ import { ParticleContainer, Rectangle, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
-import { PathViewHelper } from "./PathViewHelper";
+import { assetsService } from "../services/AssetsService";
 
 class Particle extends Sprite {
-    private static texture = PathViewHelper.getParticleTexture(Config.PARTICLE_KEY);
+    private static texture = assetsService.getParticleTexture(Config.PARTICLE_KEY);
 
     isDead = false;
     constructor(
