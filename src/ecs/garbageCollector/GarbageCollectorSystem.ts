@@ -45,7 +45,7 @@ export class GarbageCollectorSystem extends System {
     }
 
     private handleDisplayRemoved = (node: DisplayNode) => {
-        // node.display.view.destroy({ children: true });
+        node.display.view.destroy({ children: true });
     }
 
 }
