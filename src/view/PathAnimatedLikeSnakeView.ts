@@ -1,23 +1,16 @@
-import { ParticleContainer, Rectangle, Sprite } from "pixi.js";
+import { ParticleContainer, Rectangle, Resource, Sprite, Texture } from "pixi.js";
 import { Config } from "../Config";
 import easingsFunctions from "../core/utils/easingsFunctions";
 import { Animatable } from "../ecs/animation/components/Animatable";
 import { assetsService } from "../services/AssetsService";
 
 class Particle extends Sprite {
-    private static texture = assetsService.getParticleTexture(Config.PARTICLE_KEY);
-
     isDead = false;
     constructor(
-        public age: number
+        public age: number,
+        public tex: Texture<Resource>,
     ) {
-        super(Particle.texture);
-    }
-
-    destroy(): void {
-        if (this.parent) {
-            this.parent.removeChild(this);
-        }
+        super(tex);
     }
 }
 
@@ -68,7 +61,7 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
                 continue;
             }
 
-            const particle = new Particle(this.particleAge);
+            const particle = new Particle(this.particleAge, assetsService.getParticleTexture(Config.PARTICLE_KEY));
             particle.tint = this.color;
             particle.scale.set(this.particleScale);
             particle.position.x = point.x;
@@ -96,7 +89,6 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
 
             if (particle.age < 0 && !particle.isDead) {
                 particle.isDead = true;
-                particle.destroy();
             }
         }
     }

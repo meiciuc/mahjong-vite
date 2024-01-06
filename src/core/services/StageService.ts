@@ -35,6 +35,7 @@ class StageService {
         this.root = new Container();
         this.app.stage.addChild(this.root);
 
+        globalThis.__PIXI_APP__ = app;
 
         layers.sort();
         for (const layer of layers) {

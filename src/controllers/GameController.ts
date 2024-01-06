@@ -23,6 +23,7 @@ import { BaseController } from './BaseController';
 import { FadeOutSystem } from '../ecs/fade/FadeOutSystem';
 import { FadeInSystem } from '../ecs/fade/FadeInSystem';
 import { AgeSystem } from '../ecs/age/AgeSystem';
+import { GarbageCollectorSystem } from '../ecs/garbageCollector/GarbageCollectorSystem';
 
 export enum SystemPriorities {
     preUpdate = 1,
@@ -49,8 +50,11 @@ export class GameController extends BaseController {
     destroy(): void {
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
         stageService.updateSignal.remove(this.update);
+        this.engine?.removeAllEntities();
         this.engine?.removeAllSystems();
+        this.engine = undefined;
         this.gridView?.destroy();
+        this.gridView = undefined;
     }
 
     protected async doExecute() {
@@ -103,6 +107,7 @@ export class GameController extends BaseController {
         this.engine.addSystem(new TileShakingSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new TileToggleSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
+        this.engine.addSystem(new GarbageCollectorSystem(), SystemPriorities.preUpdate)
 
         this.fsm.changeState(GameControllerStateEnum.GAME);
 

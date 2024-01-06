@@ -10,7 +10,8 @@ export class PathAnimatedAroundTileView extends Container implements Animatable 
     private currentPathTime = 0;
     private easing = easingsFunctions.easeOutSine;
 
-    private path = Config.PATH_TILE_SVG.querySelector('path');
+    public svg = Config.PATH_TILE_SVG;
+    private path = this.svg.querySelector('path');
     private totalLength = this.path.getTotalLength();
     private k = 1 / Math.ceil(this.totalLength);
 
