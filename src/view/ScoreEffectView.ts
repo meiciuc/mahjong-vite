@@ -5,6 +5,8 @@ import { Easing, Tween } from "@tweenjs/tween.js";
 
 export class ScoreEffectView extends Container implements Animatable {
 
+    private static texts: { [key: string]: Text } = {};
+
     private tweenProvider = { alpha: 1, y: 0, scale: 1 };
     private text: Text;
 
@@ -14,12 +16,7 @@ export class ScoreEffectView extends Container implements Animatable {
         this.interactive = false;
         this.interactiveChildren = false;
 
-        this.text = new Text(`${value > 0 ? '+' : ''}${value}`, {
-            fontFamily: 'Arial',
-            fontSize: 100,
-            fill: value > 0 ? 0xff0000 : 0x0000ff,
-            align: 'center',
-        });
+        this.text = this.getText(value);
 
         this.addChild(this.text);
 
@@ -33,5 +30,22 @@ export class ScoreEffectView extends Container implements Animatable {
         this.text.y = this.tweenProvider.y;
         this.text.alpha = this.tweenProvider.alpha;
         this.text.scale.set(this.tweenProvider.scale);
+    }
+
+    private getText(value: number) {
+        const str = `${value > 0 ? '+' : ''}${value}`;
+        let text = ScoreEffectView.texts[str];
+
+        if (!text) {
+            text = new Text(str, {
+                fontFamily: 'Arial',
+                fontSize: 100,
+                fill: value > 0 ? 0xff0000 : 0x0000ff,
+                align: 'center',
+            });
+            ScoreEffectView.texts[str] = text;
+        }
+
+        return text;
     }
 }
