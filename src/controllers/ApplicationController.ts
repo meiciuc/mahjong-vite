@@ -35,13 +35,17 @@ export class ApplicationController extends BaseController {
     private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
 
-        await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
+        const res1 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
+        if (res1 !== VueServiceSignals.StartButton) {
+            this.gameCycleWasInterrupted(res1);
+            return;
+        }
 
         this.resetGameModelForNext();
         const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
         this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
 
-        await this.nextCycle();
+        this.nextCycle();
     }
 
     private handleWindowFocusBlur = () => {
@@ -73,7 +77,11 @@ export class ApplicationController extends BaseController {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
 
-        await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
+        const res2 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
+        if (res2 !== VueServiceSignals.GameEndButton) {
+            this.gameCycleWasInterrupted(res2);
+            return;
+        }
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
@@ -109,7 +117,7 @@ export class ApplicationController extends BaseController {
             }
         }
 
-        await this.nextCycle();
+        this.nextCycle();
     }
 
     private setupGameModel() {
