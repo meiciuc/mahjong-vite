@@ -1,4 +1,3 @@
-import { Entity } from '@ash.ts/ash';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -13,57 +12,12 @@ import { VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
-import { FSMState, GAME_DEFEATED, GAME_DEFEATED_ADS, GAME_DEFEATED_CHOOSING, GAME_NO_MORE_MOVES, GAME_NO_MORE_MOVES_ADS, GAME_NO_MORE_MOVES_CHOOSING, GAME_SCREEN, GAME_SCREEN_PAUSE, GAME_VICTORY, NONE, START_SCREEN, START_SCREEN_FIRST, START_SCREEN_NOVICE } from './ApplicationControllerStates';
 // import { TutorialController } from './TutorialController';
-
-class EntityStateMachineExtended {
-    constructor(public entity: Entity) {
-
-    }
-    createState(state: AppStateEnum) {
-        return this;
-    }
-    add(state: FSMState) {
-
-    }
-
-    changeState(state: FSMState) {
-
-    }
-}
 
 export class ApplicationController extends BaseController {
 
     private gameModel?: Model<GameModel>;
     private applicationStateHystory: AppStateEnum[] = [];
-    private fsm?: EntityStateMachineExtended;
-
-    setupFSM() {
-        const entity = new Entity();
-        const fsm = new EntityStateMachineExtended(entity);
-        this.fsm = fsm;
-
-        fsm.createState(AppStateEnum.NONE).add(NONE);
-
-        fsm.createState(AppStateEnum.START_SCREEN_FIRST).add(START_SCREEN_FIRST);
-        fsm.createState(AppStateEnum.START_SCREEN_NOVICE).add(START_SCREEN_NOVICE);
-        fsm.createState(AppStateEnum.START_SCREEN).add(START_SCREEN);
-
-        fsm.createState(AppStateEnum.GAME_SCREEN).add(GAME_SCREEN);
-        fsm.createState(AppStateEnum.GAME_SCREEN_PAUSE).add(GAME_SCREEN_PAUSE);
-
-        fsm.createState(AppStateEnum.GAME_VICTORY).add(GAME_VICTORY);
-
-        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES).add(GAME_NO_MORE_MOVES);
-        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES_ADS).add(GAME_NO_MORE_MOVES_ADS);
-        fsm.createState(AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING).add(GAME_NO_MORE_MOVES_CHOOSING);
-
-        fsm.createState(AppStateEnum.GAME_DEFEATED).add(GAME_DEFEATED);
-        fsm.createState(AppStateEnum.GAME_DEFEATED_ADS).add(GAME_DEFEATED_ADS);
-        fsm.createState(AppStateEnum.GAME_DEFEATED_CHOOSING).add(GAME_DEFEATED_CHOOSING);
-
-        fsm.changeState(AppStateEnum.NONE);
-    }
 
     protected async doExecute() {
         this.setupGameModel();
@@ -76,14 +30,12 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
         await this.firstCycle();
-        // this.setupFSM();
-        // this.fsm.changeState(AppStateEnum.START_SCREEN_FIRST);
     }
 
     private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
 
-        await this.waitVueServiceSignal(VueServiceSignals.StartButton);
+        await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
 
         this.resetGameModelForNext();
         const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
@@ -103,22 +55,14 @@ export class ApplicationController extends BaseController {
 
         // await new TutorialController().execute();
 
-        // TODO superdraft. rewrite it
         const game = new GameController();
-        const race = [game.execute(), this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels)];
-        await Promise.race(race).then(
-            async (value) => {
-                game.destroy();
-                if (value !== game) {
-                    await this.gameResetedToLevelOne();
-                    return;
-                }
-            },
-            reason => {
-                game.destroy();
-                console.log(`race: rejected with ${reason.message}`);
-            }
-        );
+        const res1 = await this.waitGameCycleContinue(game.execute());
+        game.destroy();
+
+        if (res1 !== game) {
+            this.gameCycleWasInterrupted(res1);
+            return;
+        }
 
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
@@ -129,7 +73,7 @@ export class ApplicationController extends BaseController {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
 
-        await this.waitVueServiceSignal(VueServiceSignals.GameEndButton);
+        await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
@@ -166,28 +110,6 @@ export class ApplicationController extends BaseController {
         }
 
         await this.nextCycle();
-    }
-
-    // private cycleInterruptedByOptions = async (signal: Signal) => {
-    //     let interrupt = false;
-    //     vueService.signalOptionsResetLevels.once(() => {
-    //         interrupt = true;
-    //         this.gameResetedToLevelOne();
-    //     });
-    //     // return signal.future();
-    //     const race = [signal.future(), vueService.signalOptionsResetLevels.future()];
-    //     await Promise.race(race);
-
-    //     return Promise.resolve(interrupt);
-    // }
-
-    private gameResetedToLevelOne = async () => {
-        this.gameModel.data.gameLevel = 1;
-        this.gameModel.data.optionsAreVisible = false;
-
-        this.saveData(true);
-
-        await this.firstCycle();
     }
 
     private setupGameModel() {
@@ -321,6 +243,23 @@ export class ApplicationController extends BaseController {
             return Promise.resolve(value);
         } else {
             return this.waitVueServiceSignal(value);
+        }
+    }
+
+    private async waitGameCycleContinue(promise: Promise<unknown>) {
+        return Promise.race([promise, this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels)]);
+    }
+
+    private gameCycleWasInterrupted(value: VueServiceSignals) {
+        switch (value) {
+            case VueServiceSignals.OptionsResetLevels:
+                this.gameModel.data.gameLevel = 1;
+                this.gameModel.data.optionsAreVisible = false;
+                this.saveData(true);
+                this.firstCycle();
+                break;
+            default:
+                this.firstCycle();
         }
     }
 }
