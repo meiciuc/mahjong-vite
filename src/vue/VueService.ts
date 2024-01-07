@@ -2,13 +2,17 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { Signal } from '../core/utils/signal';
 
+export enum VueServiceSignals {
+    StartButton,
+    HelpButton,
+    PauseButton,
+    GameEndButton,
+    OptionsButton,
+    OptionsResetLevels,
+}
+
 class VueService {
-    signalStartButton = new Signal()
-    signalHelpButton = new Signal();
-    signalPauseButton = new Signal();
-    signalGameEndButton = new Signal();
-    signalOptionsButton = new Signal();
-    signalOptionsResetLevels = new Signal();
+    signalDataBus = new Signal<VueServiceSignals>();
 
     init() {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));

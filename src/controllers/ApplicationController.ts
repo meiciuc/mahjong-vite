@@ -9,7 +9,7 @@ import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } fr
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
 import { soundService } from '../services/SoundService';
-import { vueService } from '../vue/VueService';
+import { VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
@@ -70,8 +70,7 @@ export class ApplicationController extends BaseController {
 
         stageService.updateSignal.add(this.update);
         window.addEventListener('blur', this.handleWindowFocusBlur);
-        vueService.signalPauseButton.on(this.handlePauseButton);
-        vueService.signalOptionsButton.on(this.handleOptionsButton);
+        vueService.signalDataBus.on(this.handleDataBus);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -84,7 +83,7 @@ export class ApplicationController extends BaseController {
     private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
 
-        await vueService.signalStartButton.future();
+        await this.waitVueServiceSignal(VueServiceSignals.StartButton);
 
         this.resetGameModelForNext();
         const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
@@ -106,7 +105,7 @@ export class ApplicationController extends BaseController {
 
         // TODO superdraft. rewrite it
         const game = new GameController();
-        const race = [game.execute(), vueService.signalOptionsResetLevels.future()];
+        const race = [game.execute(), this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels)];
         await Promise.race(race).then(
             async (value) => {
                 game.destroy();
@@ -130,7 +129,7 @@ export class ApplicationController extends BaseController {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
 
-        await vueService.signalGameEndButton.future();
+        await this.waitVueServiceSignal(VueServiceSignals.GameEndButton);
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
@@ -144,7 +143,6 @@ export class ApplicationController extends BaseController {
                 const { gameMaxTime } = this.calculateGameModelParams(level);
 
                 this.resetGameModelForNext();
-                // this.calculateGameModelParams(GameModelHelper.getGameLevel());
                 this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
@@ -243,28 +241,33 @@ export class ApplicationController extends BaseController {
 
     }
 
-    private handlePauseButton = () => {
-        soundService.play(SOUNDS.active_button);
+    private handleDataBus = (data: VueServiceSignals) => {
+        switch (data) {
+            case VueServiceSignals.PauseButton: {
+                soundService.play(SOUNDS.active_button);
 
-        const currentState = GameModelHelper.getApplicationState();
-        if (currentState === AppStateEnum.GAME_SCREEN) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-        } else if (currentState === AppStateEnum.GAME_SCREEN_PAUSE) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-        }
-    }
+                const currentState = GameModelHelper.getApplicationState();
+                if (currentState === AppStateEnum.GAME_SCREEN) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+                } else if (currentState === AppStateEnum.GAME_SCREEN_PAUSE) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                }
+                break;
+            }
+            case VueServiceSignals.OptionsButton: {
+                soundService.play(SOUNDS.active_button);
 
-    private handleOptionsButton = () => {
-        soundService.play(SOUNDS.active_button);
+                this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
 
-        this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
+                if (this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+                }
 
-        if (this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-        }
-
-        if (!this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                if (!this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                }
+                break;
+            }
         }
     }
 
@@ -310,5 +313,14 @@ export class ApplicationController extends BaseController {
             return null;
         }
         return JSON.parse(data);
+    }
+
+    private async waitVueServiceSignal(value: VueServiceSignals) {
+        const data = await vueService.signalDataBus.future();
+        if (data[0] === value) {
+            return Promise.resolve(value);
+        } else {
+            return this.waitVueServiceSignal(value);
+        }
     }
 }

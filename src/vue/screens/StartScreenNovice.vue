@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Localization } from '../../utils/Localization';
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref } from 'vue';
 
 
@@ -15,7 +15,7 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => {
-    vueService.signalStartButton.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.StartButton);
 }
 </script>
 

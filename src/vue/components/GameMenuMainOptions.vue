@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 const helpsCount = useModel(["helpsCount"]);
 
 const handleClick = () => {
-    vueService.signalOptionsButton.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
 }
 </script>
 

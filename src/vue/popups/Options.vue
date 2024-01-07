@@ -2,7 +2,7 @@
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import { computed, ref } from 'vue';
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 
 
 const Popup = ref(null);
@@ -18,7 +18,7 @@ const marginTop = computed(() => {
 
 const handleClick = () => { }
 const handleReset = () => {
-    vueService.signalOptionsResetLevels.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.OptionsResetLevels);
 }
 
 </script>

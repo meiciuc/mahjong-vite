@@ -1,6 +1,6 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
 import { throwIfNull } from '../../utils/throwIfNull';
-import { vueService } from '../../vue/VueService';
+import { VueServiceSignals, vueService } from '../../vue/VueService';
 import { EntityCreator } from '../EntityCreator';
 import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
@@ -22,7 +22,7 @@ export class HelpSystem extends System {
         this.selectedNodes = engine.getNodeList(TileSelectedNode);
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
 
-        vueService.signalHelpButton.on(this.handleHelpButton);
+        vueService.signalDataBus.on(this.handleHelpButton);
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -30,7 +30,7 @@ export class HelpSystem extends System {
         this.selectedNodes?.nodeAdded.remove(this.handleSelectedNodeAdded);
         this.selectedNodes = undefined;
 
-        vueService.signalHelpButton.off(this.handleHelpButton);
+        vueService.signalDataBus.off(this.handleHelpButton);
     }
 
     update(_time: number): void {
@@ -46,7 +46,10 @@ export class HelpSystem extends System {
         }
     };
 
-    private handleHelpButton = () => {
+    private handleHelpButton = (data: VueServiceSignals) => {
+        if (data !== VueServiceSignals.HelpButton) {
+            return;
+        }
         this.helpButtonClicked = true
     };
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Localization } from '../../utils/Localization';
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref, onMounted } from 'vue';
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
@@ -36,7 +36,7 @@ const marginTop = computed(() => {
 });
 
 const handleClick = () => {
-    vueService.signalGameEndButton.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
 }
 </script>
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { AppStateEnum } from '../../model/GameModel';
 import { useModel } from '../../model/useModel';
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 
 const pause = useModel(["appState"]);
 
 const handleClick = () => {
-    vueService.signalPauseButton.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.PauseButton);
 }
 </script>
 

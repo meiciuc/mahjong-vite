@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import GameMenuTimer from './GameMenuTimer.vue';
@@ -9,7 +9,7 @@ const helpsCount = useModel(["helpsCount"]);
 const gameCurrentScore = useModel(["gameCurrentScore"]);
 
 const handleClick = () => {
-    vueService.signalHelpButton.dispatch();
+    vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
 }
 </script>
 
