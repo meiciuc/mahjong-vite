@@ -71,8 +71,6 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     @include scene-button;
     color: $button_text_colored;
     background-color: $button_text_idle;
-    border: solid;
-    border-radius: $button_border_radius;
     border-color: $button_text_idle;
 }
 
@@ -80,7 +78,6 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     background-color: $button_background_colored;
     color: $button_text_idle;
     border-color: $button_text_idle;
-    border: solid;
 }
 
 .Text {

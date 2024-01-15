@@ -1,14 +1,14 @@
 $first_color: #FFFFFF;
-$second_color: #FA4A0C;
-$second_color_darken: #b63204;
+$second_color: #999999;
+$second_color_darken: #333333;
 
-$button_padding_horizontal: 4em;
-$button_padding_vertical: 1em;
+$button_padding_horizontal: 2em;
+$button_padding_vertical: 0.2em;
 $button_background_colored: $second_color;
 $button_background_idle: $first_color;
 $button_text_colored: $second_color;
 $button_text_idle: $first_color;
-$button_border_radius: 2em;
+$button_border_radius: 0.2em;
 
 
 $background_colored: $second_color;
@@ -19,6 +19,10 @@ $background_idle: $first_color;
     width: fit-content;
     block-size: fit-content;
     font-family: 'Inter-SemiBold';
+    font-size: 2em;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: $button_border_radius;
     cursor: pointer;
     padding-top: $button_padding_vertical;
     padding-bottom: $button_padding_vertical;
@@ -33,6 +37,7 @@ $background_idle: $first_color;
     top: 0px;
     right: 0px;
     bottom: 0px;
+    word-break: break-word;
 }
 
 @mixin scene-buttons-block {
