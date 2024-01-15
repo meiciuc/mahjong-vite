@@ -60,22 +60,11 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
 @import '../global.scss';
 
 .Container {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
+    @include scene-container;
 }
 
 .Popup {
-    position: relative;
-    width: fit-content;
-    block-size: fit-content;
-    left: 50%;
-    top: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include scene-buttons-block;
 }
 
 .StartButton {
