@@ -115,7 +115,7 @@ export class GameLogic {
 
     private getGameMaxIconPaires() {
         const model = dataService.getRootModel<GameModel>();
-        const easing = easingsFunctions.easeOutQuad;
+        const easing = easingsFunctions.linear;
 
         const startA = 2;
         const endA = 4;

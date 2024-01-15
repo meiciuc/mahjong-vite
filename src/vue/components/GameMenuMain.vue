@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 
 const gameLevel = useModel(["gameLevel"]);
 const gameTotalScore = useModel(["gameTotalScore"]);
+
+const gameTotalScoreFormated = computed(() => {
+    const count = gameTotalScore.value;
+    if (count > 1000000000) { return `${Math.floor(count / 1000000000)}MM`; }
+    if (count > 1000000) { return `${Math.floor(count / 1000000)}M`; }
+    return count;
+})
 
 </script>
 
@@ -11,7 +19,7 @@ const gameTotalScore = useModel(["gameTotalScore"]);
     <div class="MenuPanel">
         <div>
             {{ Localization.getText('game.level') }}<div class="GameLevel">{{ gameLevel }}</div>
-            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScore }}</div>
+            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameTotalScoreFormated }}</div>
         </div>
     </div>
 </template>
