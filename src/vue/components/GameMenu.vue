@@ -15,13 +15,11 @@ const handleClick = () => {
 
 <template>
     <div class="MenuPanel">
-        <div>
-            <GameMenuTimer></GameMenuTimer>
-            <GameMenuPauseButton></GameMenuPauseButton>
-        </div>
+        <div class="GameScore">{{ gameCurrentScore }}</div>
 
         <div>
-            {{ Localization.getText('game.points') }}<div class="GameScore">{{ gameCurrentScore }}</div>
+            <GameMenuTimer></GameMenuTimer>
+            <GameMenuPauseButton class="GameMenuPauseButton"></GameMenuPauseButton>
         </div>
 
         <div class="HelpContainer">
@@ -44,31 +42,16 @@ div {
 }
 
 .MenuPanel {
-    background: rgba($color: $background_colored, $alpha: 1);
-    padding: 10px 0;
+    padding: 0.3em 5em;
+    background: $second_color_darken;
     display: flex;
     justify-content: space-around;
 }
 
-.GameLevel {
-    background: rgba($color: $button_background_colored, $alpha: 1);
-    color: white;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
-    min-width: 4em;
-    border-radius: $button_border_radius;
-    border-color: $button_background_idle;
-    border: solid;
-    margin-right: 0.3em;
-}
 
 .GameScore {
-    background: rgba($color: $button_background_colored, $alpha: 1);
-    color: white;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+    @include scene-text-block;
     min-width: 6em;
-    border-radius: $button_border_radius;
-    border-color: $button_background_idle;
-    border: solid;
 }
 
 .HelpContainer {
@@ -77,19 +60,12 @@ div {
 }
 
 .HelpButton {
-    @include scene-button;
-    color: $button_text_colored;
-    background-color: $button_text_idle;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
-    border-radius: $button_border_radius;
-    border-color: $button_text_idle;
-    border: solid;
+    @include button;
+    padding: 0em 1em;
 }
 
 .HelpButton:hover {
-    background-color: $button_background_colored;
-    color: $button_text_idle;
-    border-color: $button_text_idle;
+    @include button_hover;
 }
 
 .HelpButtonDisabled {
@@ -99,9 +75,11 @@ div {
 }
 
 .HelpsCount {
-    user-select: none;
-    color: $button_text_idle;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
+    @include scene-text-block;
     width: 3em;
+}
+
+.GameMenuPauseButton {
+    margin-left: 0.2em;
 }
 </style>

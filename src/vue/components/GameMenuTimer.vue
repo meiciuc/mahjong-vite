@@ -42,14 +42,8 @@ const blinking = computed(() => {
 @import '../global.scss';
 
 .Timer {
-    background: rgba($color: $button_background_colored, $alpha: 1);
-    color: white;
-    padding-top: calc($button_padding_vertical / 2);
-    padding-bottom: calc($button_padding_vertical / 2);
+    @include scene-text-block;
     width: 6em;
-    border-radius: $button_border_radius;
-    border-color: $button_background_idle;
-    border: solid;
 }
 
 .blink {

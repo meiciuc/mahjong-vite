@@ -1,6 +1,6 @@
 $first_color: #FFFFFF;
 $second_color: #999999;
-$second_color_darken: #333333;
+$second_color_darken: #777777;
 
 $button_padding_horizontal: 2em;
 $button_padding_vertical: 0.2em;
@@ -15,20 +15,36 @@ $background_colored: $second_color;
 $background_colored_darken: $second_color_darken;
 $background_idle: $first_color;
 
-@mixin scene-button {
+@mixin button {
     width: fit-content;
     block-size: fit-content;
     font-family: 'Inter-SemiBold';
-    font-size: 2em;
+
+    background: $first_color;
+    color: $second_color;
+    border-color: $second_color;
+
     border-width: 1px;
     border-style: solid;
     border-radius: $button_border_radius;
     cursor: pointer;
+    transition: all 100ms ease-out;
+    font-size: 1em;
+}
+
+@mixin button_hover {
+    background-color: $second_color;
+    color: $first_color;
+    border-color: $first_color;
+}
+
+@mixin scene-button {
+    @include button;
+    font-size: 2em;
     padding-top: $button_padding_vertical;
     padding-bottom: $button_padding_vertical;
     padding-left: $button_padding_horizontal;
     padding-right: $button_padding_horizontal;
-    transition: all 100ms ease-out;
 }
 
 @mixin scene-container {
@@ -38,6 +54,16 @@ $background_idle: $first_color;
     right: 0px;
     bottom: 0px;
     word-break: break-word;
+}
+
+@mixin scene-text-block {
+    user-select: none;
+    background: $second_color;
+    color: $first_color;
+    border-color: $first_color;
+    border-radius: $button_border_radius;
+    border: solid;
+    border-width: 1px;
 }
 
 @mixin scene-buttons-block {

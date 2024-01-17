@@ -20,18 +20,11 @@ const handleClick = () => {
 @import '../global.scss';
 
 .PauseButton {
-    @include scene-button;
-    color: $button_text_colored;
-    background-color: $button_text_idle;
-    padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
-    border-radius: $button_border_radius;
-    border-color: $button_text_idle;
-    border: solid;
+    @include button;
+    min-width: 3em;
 }
 
 .PauseButton:hover {
-    background-color: $button_background_colored;
-    color: $button_text_idle;
-    border-color: $button_text_idle;
+    @include button_hover;
 }
 </style>

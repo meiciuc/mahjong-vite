@@ -70,10 +70,10 @@ window.addEventListener('resize', () => {
 </script>
 
 <template>
-    <div id="canvas" class="t-canvas"></div>
+    <div id="canvas" class="canvas"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
-    <GameMenu v-if="showGameMenu" class="t-menu"></GameMenu>
+    <GameMenu v-if="showGameMenu" class="menu"></GameMenu>
 
     <Transition>
         <ModalBackgroundColored v-if="showColoredBackground"></ModalBackgroundColored>
@@ -104,7 +104,7 @@ window.addEventListener('resize', () => {
     <Transition>
         <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
     </Transition>
-    <GameMenuMain v-if="showMainMenu" class="t-menu-main">
+    <GameMenuMain v-if="showMainMenu" class="menu-main">
     </GameMenuMain>
     <Transition>
         <ModalBackground v-if="showModalBackground"></ModalBackground>
@@ -112,7 +112,7 @@ window.addEventListener('resize', () => {
     <Transition>
         <Options v-if="optionsAreVisible"></Options>
     </Transition>
-    <GameMenuMainOptions v-if="showGameOptionsButton" class="t-menu-main">
+    <GameMenuMainOptions v-if="showGameOptionsButton" class="menu-main">
     </GameMenuMainOptions>
 </template>
 
@@ -131,28 +131,23 @@ window.addEventListener('resize', () => {
 }
 
 // menu-left
-.t-menu-main {
+.menu-main {
     width: 100vw;
-    height: 45px;
+    height: 1.2em;
     position: fixed;
-    transform-origin: left top;
-    transform: rotate(0deg) translateX(0%);
 }
 
-.t-menu {
+.menu {
     width: 100vw;
-    height: 45px;
     position: fixed;
-    transform-origin: left top;
-    transform: rotate(0deg) translateX(0%);
-    top: 45px;
+    top: 1.8em;
 }
 
-.t-canvas {
+.canvas {
     position: fixed;
     left: 0px;
-    top: 45px;
+    top: 5em;
     width: 100vw;
-    height: calc(100vh - 45px);
+    height: calc(100vh - 5em);
 }
 </style>
