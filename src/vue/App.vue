@@ -15,12 +15,10 @@ import Options from './popups/Options.vue';
 import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
 import { useModel } from '../model/useModel';
-import { computed, ref } from 'vue';
-import isMobile from 'is-mobile';
+import { computed } from 'vue';
+// import isMobile from 'is-mobile';
 
 const appState = useModel(["appState"]);
-
-const isLeftMenu = ref(isMobile() && (window.innerWidth > window.innerHeight));
 
 const showGameOptionsButton = computed(() => {
     return appState.value !== AppStateEnum.NONE && appState.value !== AppStateEnum.START_SCREEN_FIRST;
@@ -65,17 +63,17 @@ const showColoredBackground = computed(() => {
 });
 
 window.addEventListener('resize', () => {
-    isLeftMenu.value = isMobile() && (window.innerWidth > window.innerHeight);
+
 })
 
 // https://html5up.net/uploads/demos/dimension/#
 </script>
 
 <template>
-    <div id="canvas" :class="[isLeftMenu ? 'l-canvas' : 't-canvas']"></div>
+    <div id="canvas" class="t-canvas"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
-    <GameMenu v-if="showGameMenu" :class="[isLeftMenu ? 'l-menu' : 't-menu']"></GameMenu>
+    <GameMenu v-if="showGameMenu" class="t-menu"></GameMenu>
 
     <Transition>
         <ModalBackgroundColored v-if="showColoredBackground"></ModalBackgroundColored>
@@ -106,7 +104,7 @@ window.addEventListener('resize', () => {
     <Transition>
         <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
     </Transition>
-    <GameMenuMain v-if="showMainMenu" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
+    <GameMenuMain v-if="showMainMenu" class="t-menu-main">
     </GameMenuMain>
     <Transition>
         <ModalBackground v-if="showModalBackground"></ModalBackground>
@@ -114,7 +112,7 @@ window.addEventListener('resize', () => {
     <Transition>
         <Options v-if="optionsAreVisible"></Options>
     </Transition>
-    <GameMenuMainOptions v-if="showGameOptionsButton" :class="[isLeftMenu ? 'l-menu-main' : 't-menu-main']">
+    <GameMenuMainOptions v-if="showGameOptionsButton" class="t-menu-main">
     </GameMenuMainOptions>
 </template>
 
@@ -133,32 +131,6 @@ window.addEventListener('resize', () => {
 }
 
 // menu-left
-.l-menu-main {
-    width: 100vh;
-    height: 45px;
-    position: fixed;
-    transform-origin: left top;
-    transform: rotate(-90deg) translateX(-100%);
-}
-
-.l-menu {
-    width: 100vh;
-    height: 45px;
-    position: fixed;
-    transform-origin: left top;
-    transform: rotate(-90deg) translateX(-100%);
-    left: 45px;
-}
-
-.l-canvas {
-    position: fixed;
-    left: 45px;
-    top: 0px;
-    width: calc(100vw - 45px);
-    height: 100vh;
-}
-
-// menu-top
 .t-menu-main {
     width: 100vw;
     height: 45px;

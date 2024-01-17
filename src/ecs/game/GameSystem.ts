@@ -41,7 +41,9 @@ export class GameSystem extends System {
         this.creator.createGame();
     }
 
-    removeFromEngine(_engine: Engine): void { }
+    removeFromEngine(_engine: Engine): void {
+        stageService.resizeSignal.remove(this.handleResize);
+    }
 
     update = (): void => {
         switch (this.game.head.game.model.data.gameState) {
