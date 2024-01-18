@@ -3,7 +3,6 @@ import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import GameMenuTimer from './GameMenuTimer.vue';
-import GameMenuPauseButton from './GameMenuPauseButton.vue';
 
 const helpsCount = useModel(["helpsCount"]);
 const gameCurrentScore = useModel(["gameCurrentScore"]);
@@ -19,7 +18,6 @@ const handleClick = () => {
 
         <div>
             <GameMenuTimer></GameMenuTimer>
-            <GameMenuPauseButton class="GameMenuPauseButton"></GameMenuPauseButton>
         </div>
 
         <div class="HelpContainer">
@@ -77,9 +75,5 @@ div {
 .HelpsCount {
     @include scene-text-block;
     width: 3em;
-}
-
-.GameMenuPauseButton {
-    margin-left: 0.2em;
 }
 </style>

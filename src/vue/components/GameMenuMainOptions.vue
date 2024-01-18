@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
+import { AppStateEnum } from '../../model/GameModel';
 const helpsCount = useModel(["helpsCount"]);
+const appState = useModel(["appState"]);
 
 const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
@@ -10,7 +12,10 @@ const handleClick = () => {
 
 <template>
     <div class="MenuPanel">
-        <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">&#x2699;</div>
+        <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">
+            {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
+                '&#x2699;' }}
+        </div>
     </div>
 </template>
 

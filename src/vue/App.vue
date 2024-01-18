@@ -57,6 +57,7 @@ const showColoredBackground = computed(() => {
         case AppStateEnum.START_SCREEN:
         case AppStateEnum.START_SCREEN_FIRST:
         case AppStateEnum.START_SCREEN_NOVICE:
+        case AppStateEnum.GAME_SCREEN_PAUSE:
             return true;
     }
     return false;
