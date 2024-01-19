@@ -1,19 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useModel } from '../../model/useModel';
 import GameMenuTimer from './GameMenuTimer.vue';
 import GameMenuHelp from './GameMenuHelp.vue';
+import GameMenuScore from './GameMenuScore.vue';
 
 const gameLevel = useModel(["gameLevel"]);
-const gameTotalScore = useModel(["gameTotalScore"]);
-const gameCurrentScore = useModel(["gameCurrentScore"]);
-
-const gameTotalScoreFormated = computed(() => {
-    const count = gameTotalScore.value;
-    if (count > 1000000000) { return `${Math.floor(count / 1000000000)}MM`; }
-    if (count > 1000000) { return `${Math.floor(count / 1000000)}M`; }
-    return count;
-})
 
 </script>
 
@@ -22,10 +13,9 @@ const gameTotalScoreFormated = computed(() => {
         <div class="MenuContent">
             <div class="MenuContentItem">
                 <div class="GameLevel">{{ gameLevel }}</div>
-                <div class="GameScoreCommon">{{ gameTotalScoreFormated }}</div>
+                <GameMenuScore></GameMenuScore>
             </div>
             <div class="MenuContentItem">
-                <div class="GameScoreCurrent">{{ gameCurrentScore }}</div>
                 <GameMenuTimer></GameMenuTimer>
                 <GameMenuHelp></GameMenuHelp>
             </div>
