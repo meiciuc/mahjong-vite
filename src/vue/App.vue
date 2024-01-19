@@ -134,7 +134,7 @@ window.addEventListener('resize', () => {
 // menu-left
 .menu-main {
     width: 100vw;
-    height: 1.2em;
+    height: 1.5em;
     position: fixed;
 }
 
@@ -154,7 +154,7 @@ window.addEventListener('resize', () => {
 
 .GameMenuMainOptions {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 1px;
+    right: 0.1em;
 }
 </style>

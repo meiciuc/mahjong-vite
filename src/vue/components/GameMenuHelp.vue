@@ -12,9 +12,9 @@ const handleClick = () => {
 
 <template>
     <div class="HelpContainer">
+        <div class="HelpsCount">{{ helpsCount }}</div>
         <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
         <div v-else class="HelpButton HelpButtonDisabled">{{ Localization.getText('game.help') }}</div>
-        <div class="HelpsCount">{{ helpsCount }}</div>
     </div>
 </template>
 

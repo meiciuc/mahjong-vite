@@ -36,6 +36,10 @@ const gameTotalScoreFormated = computed(() => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
+div {
+    margin: 0 5px;
+}
+
 .MenuPanel {
     background: $second_color_darken;
     display: flex;
