@@ -52,15 +52,15 @@ const showModalBackground = computed(() => {
 });
 
 const showColoredBackground = computed(() => {
-    switch (appState.value) {
-        case AppStateEnum.NONE:
-        case AppStateEnum.START_SCREEN:
-        case AppStateEnum.START_SCREEN_FIRST:
-        case AppStateEnum.START_SCREEN_NOVICE:
-        case AppStateEnum.GAME_SCREEN_PAUSE:
-            return true;
-    }
-    return false;
+    return appState.value !== AppStateEnum.GAME_SCREEN;
+    // switch (appState.value) {
+    //     case AppStateEnum.START_SCREEN:
+    //     case AppStateEnum.START_SCREEN_FIRST:
+    //     case AppStateEnum.START_SCREEN_NOVICE:
+    //     case AppStateEnum.GAME_SCREEN_PAUSE:
+    //         return true;
+    // }
+    // return false;
 });
 
 window.addEventListener('resize', () => {

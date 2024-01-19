@@ -38,6 +38,11 @@ export class GameModelHelper {
         return gameModel.data.gameLevel;
     }
 
+    static setGameLevel(value: number) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        gameModel.data.gameLevel = value;
+    }
+
     static getGameTotalScore() {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.gameTotalScore;

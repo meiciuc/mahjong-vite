@@ -34,6 +34,7 @@ export class ApplicationController extends BaseController {
 
     private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
+        // GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
 
         const res1 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
         if (res1 !== VueServiceSignals.StartButton) {
@@ -49,7 +50,9 @@ export class ApplicationController extends BaseController {
     }
 
     private handleWindowFocusBlur = () => {
-        vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+            vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
+        }
     }
 
     private async nextCycle() {
@@ -68,6 +71,7 @@ export class ApplicationController extends BaseController {
 
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
+            GameModelHelper.setGameLevel(GameModelHelper.getGameLevel() + 1);
             GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
         } else if (gameState === GameStateEnum.GAME_DEFEATE) {
             GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 10 ? AppStateEnum.GAME_DEFEATED : AppStateEnum.GAME_DEFEATED_ADS);
@@ -110,7 +114,7 @@ export class ApplicationController extends BaseController {
             }
             default: {
                 this.resetGameModelForNext();
-                const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel() + 1);
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
                 this.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
             }
         }
@@ -141,7 +145,7 @@ export class ApplicationController extends BaseController {
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
 
-        this.gameModel.subscribe(['appState'], () => { this.saveData() });
+        this.gameModel.subscribe(['gameLevel'], () => { this.handleGameLevelChanged() });
     }
 
     private resetGameModelForNext() {
@@ -210,6 +214,10 @@ export class ApplicationController extends BaseController {
         soundService.mute(!current);
         soundService.play(SOUNDS.active_button);
         localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
+    }
+
+    private handleGameLevelChanged() {
+        this.saveData();
     }
 
     private saveData(remote = false) {
