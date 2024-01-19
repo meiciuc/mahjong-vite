@@ -49,9 +49,7 @@ export class ApplicationController extends BaseController {
     }
 
     private handleWindowFocusBlur = () => {
-        if (this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-        }
+        vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
     }
 
     private async nextCycle() {
@@ -173,18 +171,8 @@ export class ApplicationController extends BaseController {
 
     private handleDataBus = (data: VueServiceSignals) => {
         switch (data) {
-            case VueServiceSignals.PauseButton: {
-                soundService.play(SOUNDS.active_button);
-
-                const currentState = GameModelHelper.getApplicationState();
-                if (currentState === AppStateEnum.GAME_SCREEN) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-                } else if (currentState === AppStateEnum.GAME_SCREEN_PAUSE) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-                }
-                break;
-            }
-            case VueServiceSignals.OptionsButton: {
+            case VueServiceSignals.PauseButton:
+            case VueServiceSignals.OptionsButton:
                 soundService.play(SOUNDS.active_button);
 
                 this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
@@ -197,7 +185,7 @@ export class ApplicationController extends BaseController {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
                 }
                 break;
-            }
+
         }
     }
 

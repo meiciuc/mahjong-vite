@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AppStateEnum } from '../model/GameModel';
-import GameMenu from './components/GameMenu.vue';
+// import GameMenu from './components/GameMenu.vue';
 import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
 import StartScreen from './screens/StartScreen.vue';
@@ -30,22 +30,22 @@ const showMainMenu = computed(() => {
     return appState.value !== AppStateEnum.NONE && appState.value !== AppStateEnum.START_SCREEN_FIRST;
 });
 
-const showGameMenu = computed(() => {
-    switch (appState.value) {
-        case AppStateEnum.GAME_SCREEN:
-        case AppStateEnum.GAME_SCREEN_PAUSE:
-        case AppStateEnum.GAME_VICTORY:
-        case AppStateEnum.GAME_NO_MORE_MOVES:
-        case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
-        case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
-        case AppStateEnum.GAME_DEFEATED:
-        case AppStateEnum.GAME_DEFEATED_ADS:
-        case AppStateEnum.GAME_DEFEATED_CHOOSING:
-            return true;
-        default:
-            return false;
-    }
-});
+// const showGameMenu = computed(() => {
+//     switch (appState.value) {
+//         case AppStateEnum.GAME_SCREEN:
+//         case AppStateEnum.GAME_SCREEN_PAUSE:
+//         case AppStateEnum.GAME_VICTORY:
+//         case AppStateEnum.GAME_NO_MORE_MOVES:
+//         case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+//         case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
+//         case AppStateEnum.GAME_DEFEATED:
+//         case AppStateEnum.GAME_DEFEATED_ADS:
+//         case AppStateEnum.GAME_DEFEATED_CHOOSING:
+//             return true;
+//         default:
+//             return false;
+//     }
+// });
 
 const showModalBackground = computed(() => {
     return optionsAreVisible.value;
@@ -74,7 +74,7 @@ window.addEventListener('resize', () => {
     <div id="canvas" class="canvas"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
-    <GameMenu v-if="showGameMenu" class="menu"></GameMenu>
+    <!-- <GameMenu v-if="showGameMenu" class="menu"></GameMenu> -->
 
     <Transition>
         <ModalBackgroundColored v-if="showColoredBackground"></ModalBackgroundColored>
@@ -113,7 +113,7 @@ window.addEventListener('resize', () => {
     <Transition>
         <Options v-if="optionsAreVisible"></Options>
     </Transition>
-    <GameMenuMainOptions v-if="showGameOptionsButton" class="menu-main">
+    <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>
 </template>
 
@@ -150,5 +150,11 @@ window.addEventListener('resize', () => {
     top: 5em;
     width: 100vw;
     height: calc(100vh - 5em);
+}
+
+.GameMenuMainOptions {
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 </style>

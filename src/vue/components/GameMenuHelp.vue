@@ -24,6 +24,7 @@ const handleClick = () => {
 .HelpContainer {
     background-color: $background_colored_darken;
     border-radius: $button_border_radius;
+    display: flex;
 }
 
 .HelpButton {
@@ -43,6 +44,6 @@ const handleClick = () => {
 
 .HelpsCount {
     @include scene-text-block;
-    width: 3em;
+    width: 2em;
 }
 </style>

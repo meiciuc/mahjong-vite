@@ -43,7 +43,7 @@ const blinking = computed(() => {
 
 .Timer {
     @include scene-text-block;
-    width: 6em;
+    width: 5em;
 }
 
 .blink {

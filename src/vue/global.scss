@@ -16,6 +16,11 @@ $background_colored_darken: $second_color_darken;
 $background_idle: $first_color;
 
 @mixin button {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
     width: fit-content;
     block-size: fit-content;
     font-family: 'Inter-SemiBold';

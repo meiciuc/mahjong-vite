@@ -11,35 +11,19 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="MenuPanel">
-        <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">
-            {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
-                '&#x2699;' }}
-        </div>
+    <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">
+        {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
+            '&#x2699;' }}
     </div>
 </template>
 
 <style lang="scss" scoped>
 @import '../global.scss';
 
-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-family: 'Inter-SemiBold';
-}
-
-.MenuPanel {
-    padding: 0.3em 5em;
-    display: flex;
-    justify-content: right;
-}
-
 .OptionsButton {
     @include button;
     min-width: 3em;
-    margin-top: 0.5em;
+    max-width: 3em;
 }
 
 .OptionsButton:hover {
