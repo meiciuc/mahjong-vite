@@ -4,6 +4,7 @@ import { useModel } from '../../model/useModel';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 
+let tween: Tween<unknown>;
 const gameTotalScore = useModel(["gameTotalScore"]);
 const gameCurrentScore = useModel(["gameCurrentScore"]);
 watch(
@@ -18,13 +19,21 @@ const blink = async () => {
     if (!el) {
         return;
     }
+
+    if (tween) {
+        tween.stop();
+    }
+
     const time = 100;
     const tweenProvider = { opacity: el.style.opacity };
-    new Tween(tweenProvider)
+    tween = new Tween(tweenProvider)
         .to({ opacity: 0 }, time)
         .easing(Easing.Linear.None)
         .onUpdate(() => {
             el.style.opacity = `${tweenProvider.opacity}`;
+        })
+        .onComplete(() => {
+            tween = undefined;
         })
         .start();
 
