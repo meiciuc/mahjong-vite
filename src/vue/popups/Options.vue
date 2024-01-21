@@ -26,11 +26,19 @@ const handleReset = () => {
 <template>
     <div class="Container" @click="handleClick">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div>OPTIONS</div>
-            <button class="StartButton" @click="handleReset">{{ Localization.getText('options.resetAllLevels') }}</button>
-            <div><input type="checkbox" id="checkbox" v-model="sound" /><label for="checkbox">{{
+            <div class="Text">Buy time (1 min.)
+                <div class="Grow"></div>
+                <button class="Item" @click="handleReset">-100</button>
+                <button class="Item" @click="handleReset">Video</button>
+            </div>
+            <div class="Text">Buy help (3 help)
+                <div class="Grow"></div>
+                <button class="Item" @click="handleReset">-100</button>
+                <button class="Item" @click="handleReset">Video</button>
+            </div>
+            <button class="Item" @click="handleReset">{{ Localization.getText('options.resetAllLevels') }}</button>
+            <div class="Item"><input type="checkbox" id="checkbox" v-model="sound" /><label for="checkbox">{{
                 Localization.getText('options.sound') }}</label></div>
-            <div>TUTORIAL</div>
         </div>
     </div>
 </template>
@@ -47,28 +55,39 @@ const handleReset = () => {
 }
 
 .Popup {
-    position: relative;
-    width: fit-content;
-    block-size: fit-content;
-    left: 50%;
-    top: 50%;
-    background-color: #777777;
-    padding: 20px;
+    @include scene-buttons-block;
+    align-items: flex-start;
 }
 
-.StartButton {
-    @include scene-button;
-    color: $button_text_colored;
-    background-color: $button_text_idle;
-    border: solid;
-    border-radius: $button_border_radius;
-    border-color: $button_text_idle;
+.Text {
+    @include scene-text-block;
+    display: flex;
+    flex-direction: row;
+    min-width: 3em;
+    align-items: center;
+    padding: 2px;
+    font-family: 'Inter-SemiBold';
+    min-width: 300px;
 }
 
-.StartButton:hover {
-    background-color: $button_background_colored;
-    color: $button_text_idle;
-    border-color: $button_text_idle;
-    border: solid;
+.Item {
+    @include button;
+    font-size: 1.5em;
+}
+
+.Item:hover {
+    @include button_hover;
+}
+
+.Grow {
+    flex-grow: 1;
+}
+
+input {
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
 }
 </style>
