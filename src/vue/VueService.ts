@@ -9,6 +9,8 @@ export enum VueServiceSignals {
     GameEndButton,
     OptionsButton,
     OptionsResetLevels,
+    BoosterTime,
+    BoosterHelp,
 }
 
 class VueService {

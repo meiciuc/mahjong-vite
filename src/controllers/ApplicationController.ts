@@ -4,11 +4,12 @@ import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { GameLogic } from '../ecs/game/GameLogic';
-import { AppStateEnum, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
+import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
 import { soundService } from '../services/SoundService';
 import { VueServiceSignals, vueService } from '../vue/VueService';
+import BoosterTimeVue from '../vue/components/BoosterTime.vue';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
@@ -34,7 +35,7 @@ export class ApplicationController extends BaseController {
 
     private async firstCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.START_SCREEN_FIRST);
-        // GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
+        // GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
 
         const res1 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
         if (res1 !== VueServiceSignals.StartButton) {
@@ -135,6 +136,10 @@ export class ApplicationController extends BaseController {
             this.gameModel.data.gameTotalScore = data.gameTotalScore ? data.gameTotalScore : this.gameModel.data.gameTotalScore;
             this.gameModel.data.sound = data.sound !== undefined ? data.sound : this.gameModel.data.sound;
         }
+
+        // TODO refactoring
+        this.gameModel.data.boosters[BoosterType.TIME] = { count: 3 };
+        this.gameModel.data.boosters[BoosterType.HELP] = { count: 4 };
 
         const keys: string[] = [];
         const icons = this.gameModel.data.icons;

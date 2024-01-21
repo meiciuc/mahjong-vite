@@ -41,6 +41,21 @@ export interface IconState {
     key: string;
 }
 
+export enum BoosterType {
+    HELP = 'help',
+    TIME = 'time',
+}
+
+export interface BoosterHelp {
+    count: number;
+}
+
+export interface BoosterTime {
+    count: number;
+}
+
+export type Booster = BoosterHelp | BoosterTime;
+
 export interface GameModel {
     appState: AppStateEnum;
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
@@ -56,6 +71,7 @@ export interface GameModel {
     gameCurrentScore: number,
     gameMaxTime: number,
     helpsCount: number,
+    boosters: { [key in BoosterType]?: Booster },
 
     icons: IconState[];
 

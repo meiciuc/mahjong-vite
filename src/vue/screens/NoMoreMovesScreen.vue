@@ -83,11 +83,13 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
 .Text {
     font-family: 'Inter-SemiBold';
     text-align: center;
-    font-size: 4em;
+    font-size: 3em;
     color: white;
     user-select: none;
     margin-bottom: 30%;
     word-break: normal;
+
+    min-width: 400px;
 }
 </style>
 

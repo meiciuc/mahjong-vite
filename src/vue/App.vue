@@ -16,6 +16,7 @@ import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
 import { useModel } from '../model/useModel';
 import { computed } from 'vue';
+import Boosters from './components/Boosters.vue';
 // import isMobile from 'is-mobile';
 
 const appState = useModel(["appState"]);
@@ -53,14 +54,10 @@ const showModalBackground = computed(() => {
 
 const showColoredBackground = computed(() => {
     return appState.value !== AppStateEnum.GAME_SCREEN;
-    // switch (appState.value) {
-    //     case AppStateEnum.START_SCREEN:
-    //     case AppStateEnum.START_SCREEN_FIRST:
-    //     case AppStateEnum.START_SCREEN_NOVICE:
-    //     case AppStateEnum.GAME_SCREEN_PAUSE:
-    //         return true;
-    // }
-    // return false;
+});
+
+const showBoosters = computed(() => {
+    return appState.value === AppStateEnum.GAME_SCREEN;
 });
 
 window.addEventListener('resize', () => {
@@ -115,6 +112,8 @@ window.addEventListener('resize', () => {
     </Transition>
     <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>
+
+    <Boosters v-if="showBoosters" class="Boosters"></Boosters>
 </template>
 
 <style lang="scss" scoped>
@@ -156,5 +155,11 @@ window.addEventListener('resize', () => {
     position: absolute;
     top: 1px;
     right: 0.1em;
+}
+
+.Boosters {
+    position: absolute;
+    top: 50%;
+    right: 0px;
 }
 </style>
