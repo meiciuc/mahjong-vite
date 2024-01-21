@@ -1,6 +1,6 @@
 import { dataService } from "../core/services/DataService";
 import { Languages } from "../utils/Localization";
-import { AppStateEnum, BoosterTime, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
+import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 
 export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {

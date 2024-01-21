@@ -8,8 +8,11 @@ let tween: Tween<unknown>;
 const gameScore = useModel(["gameTotalScore"]);
 watch(
     gameScore,
-    () => {
-        blink();
+    (cur: number, prev: number) => {
+        if (prev > cur) {
+            // TODO animated
+            blink();
+        }
     }
 );
 
@@ -26,7 +29,7 @@ const blink = async () => {
     const time = 100;
     const tweenProvider = { opacity: el.style.opacity };
     tween = new Tween(tweenProvider)
-        .to({ opacity: 0 }, time)
+        .to({ opacity: 0.5 }, time)
         .easing(Easing.Linear.None)
         .onUpdate(() => {
             el.style.opacity = `${tweenProvider.opacity}`;

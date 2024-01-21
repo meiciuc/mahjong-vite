@@ -210,6 +210,7 @@ export class ApplicationController extends BaseController {
                         if (helpBoosters && helpBoosters.current > 0) {
                             helpBoosters.current--;
                             vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
+                            this.saveData();
                         }
                     }
                 }
@@ -221,6 +222,7 @@ export class ApplicationController extends BaseController {
                     if (timeBoosters && timeBoosters.current > 0) {
                         timeBoosters.current--
                         this.gameModel.data.gameAge += 60;
+                        this.saveData();
                     }
                 }
                 break;
