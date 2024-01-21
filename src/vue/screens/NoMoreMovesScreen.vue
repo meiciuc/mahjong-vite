@@ -4,6 +4,7 @@ import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref } from 'vue';
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { UserActionAfterTheLastGame } from '../../model/GameModel';
+import ShopModule from '../components/ShopModule.vue';
 
 const Popup = ref(null);
 
@@ -32,6 +33,7 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
             <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
                 @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
                     Localization.getText('noMoreMoves.previous') }}</button>
+            <ShopModule></ShopModule>
         </div>
     </div>
 </template>

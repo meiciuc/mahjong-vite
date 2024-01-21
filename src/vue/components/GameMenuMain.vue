@@ -11,6 +11,7 @@ const gameLevel = useModel(["gameLevel"]);
 <template>
     <div class="MenuPanel">
         <div class="MenuContent">
+            <div class="Grow"></div>
             <div class="MenuContentItem">
                 <div class="GameLevel">{{ gameLevel }}</div>
                 <GameMenuScore></GameMenuScore>
@@ -19,6 +20,7 @@ const gameLevel = useModel(["gameLevel"]);
                 <GameMenuTimer></GameMenuTimer>
                 <GameMenuHelp></GameMenuHelp>
             </div>
+            <div class="Grow2"></div>
         </div>
     </div>
 </template>
@@ -26,8 +28,12 @@ const gameLevel = useModel(["gameLevel"]);
 <style lang="scss" scoped>
 @import '../global.scss';
 
-div {
-    margin: 0 5px;
+.Grow {
+    flex-grow: 1;
+}
+
+.Grow {
+    flex-grow: 2;
 }
 
 .MenuPanel {

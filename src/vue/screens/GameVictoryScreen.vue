@@ -2,6 +2,7 @@
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref } from 'vue';
+import ShopModule from '../components/ShopModule.vue';
 
 const Popup = ref(null);
 
@@ -22,6 +23,7 @@ const handleClick = () => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('victory.victory') }}</div>
+            <ShopModule></ShopModule>
             <button class="StartButton" @click="handleClick">{{
                 Localization.getText('victory.next') }}</button>
         </div>

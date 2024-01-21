@@ -159,7 +159,7 @@ window.addEventListener('resize', () => {
 
 .Boosters {
     position: absolute;
-    top: 50%;
+    top: 20%;
     right: 0px;
 }
 </style>

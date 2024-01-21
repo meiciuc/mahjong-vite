@@ -6,6 +6,7 @@ import { GameModelHelper } from '../../model/GameModelHelper';
 import { adsService } from '../../services/AdsService';
 import { UserActionAfterTheLastGame } from '../../model/GameModel';
 import { TimeSkipper } from '../../utils/TimeSkipper';
+import ShopModule from '../components/ShopModule.vue';
 
 const showButtons = ref(false);
 const Popup = ref(null);
@@ -52,6 +53,7 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
             <button v-if="GameModelHelper.getGameLevel() > 1" :class="[showButtons ? '' : 'Opacity']" class="StartButton"
                 @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
                     Localization.getText('defeated.previous') }}</button>
+            <ShopModule></ShopModule>
         </div>
     </div>
 </template>
