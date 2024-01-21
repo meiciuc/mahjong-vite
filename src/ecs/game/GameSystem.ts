@@ -92,7 +92,7 @@ export class GameSystem extends System {
                     return;
                 }
 
-                if (this.game.head.game.model.data.gameStateTime >= this.game.head.game.model.data.gameMaxTime) {
+                if (this.game.head.game.model.data.gameAge <= 0) {
                     this.game.head.game.model.data.gameState = GameStateEnum.GAME_DEFEATE;
                 }
 

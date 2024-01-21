@@ -4,10 +4,9 @@ import { useModel } from '../../model/useModel';
 import { AppStateEnum } from '../../model/GameModel';
 
 const appState = useModel(["appState"]);
-const stateTime = useModel(["gameStateTime"]);
-const maxTime = useModel(["gameMaxTime"]);
-const minutes = computed(() => { return Math.floor((maxTime.value - stateTime.value) / 60 % 60) });
-const secundes = computed(() => { return Math.floor((maxTime.value - stateTime.value) % 60) });
+const stateTime = useModel(["gameAge"]);
+const minutes = computed(() => { return Math.floor((stateTime.value) / 60 % 60) });
+const secundes = computed(() => { return Math.floor((stateTime.value) % 60) });
 const blinking = computed(() => {
     if (appState.value !== AppStateEnum.GAME_SCREEN && appState.value !== AppStateEnum.GAME_SCREEN_PAUSE) {
         return '';

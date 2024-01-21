@@ -65,11 +65,10 @@ export interface GameModel {
     sound: boolean,
 
     gameState: GameStateEnum,
-    gameStateTime: number,
+    gameAge: number,
     gameLevel: number,
     gameTotalScore: number,
     gameCurrentScore: number,
-    gameMaxTime: number,
     helpsCount: number,
     boosters: { [key in BoosterType]?: Booster },
 

@@ -9,7 +9,6 @@ import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
 import { soundService } from '../services/SoundService';
 import { VueServiceSignals, vueService } from '../vue/VueService';
-import BoosterTimeVue from '../vue/components/BoosterTime.vue';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
@@ -149,14 +148,15 @@ export class ApplicationController extends BaseController {
 
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
+        this.gameModel.subscribe(['boosters'], this.handleBoosters);
 
-        this.gameModel.subscribe(['gameLevel'], () => { this.handleGameLevelChanged() });
+        this.gameModel.subscribe(['gameLevel'], this.handleGameLevelChanged);
     }
 
     private resetGameModelForNext() {
         const model = dataService.getRootModel<GameModel>();
         model.data.helpsCount = 3;
-        model.data.gameStateTime = 0;
+        model.data.gameAge = 0;
         model.data.gameCurrentScore = 0;
         model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
@@ -171,7 +171,7 @@ export class ApplicationController extends BaseController {
         model.data.gridWidth = w;
         model.data.gridHeight = h;
         model.data.seed = s;
-        model.data.gameMaxTime = t;
+        model.data.gameAge = t;
     }
 
     private update = (_time: number) => {
@@ -194,6 +194,34 @@ export class ApplicationController extends BaseController {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
                 }
                 break;
+            case VueServiceSignals.BoosterHelp: {
+                if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+                    let helpsCount = this.gameModel.raw.helpsCount;
+
+                    if (helpsCount > 0) {
+                        vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
+                    } else {
+                        const helpBoosters = this.gameModel.data.boosters[BoosterType.HELP];
+                        if (helpBoosters && helpBoosters.count > 0) {
+                            helpBoosters.count--;
+                            vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
+                        }
+                    }
+                }
+                break;
+            }
+            case VueServiceSignals.BoosterTime: {
+                if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+                    const timeBoosters = this.gameModel.data.boosters[BoosterType.TIME];
+                    if (timeBoosters && timeBoosters.count > 0) {
+                        timeBoosters.count--
+                        console.log('this.gameModel.data.gameStateTime A', this.gameModel.data.gameAge);
+                        this.gameModel.data.gameAge += 60;
+                        console.log('this.gameModel.data.gameStateTime B', this.gameModel.data.gameAge);
+                    }
+                }
+                break;
+            }
 
         }
     }
@@ -221,7 +249,11 @@ export class ApplicationController extends BaseController {
         localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
     }
 
-    private handleGameLevelChanged() {
+    private handleBoosters = (...args) => {
+        console.log('handleBoosters', args)
+    }
+
+    private handleGameLevelChanged = () => {
         this.saveData();
     }
 

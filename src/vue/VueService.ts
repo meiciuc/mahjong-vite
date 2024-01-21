@@ -3,14 +3,14 @@ import App from './App.vue';
 import { Signal } from '../core/utils/signal';
 
 export enum VueServiceSignals {
-    StartButton,
-    HelpButton,
-    PauseButton,
-    GameEndButton,
-    OptionsButton,
-    OptionsResetLevels,
-    BoosterTime,
-    BoosterHelp,
+    StartButton = 'StartButton',
+    HelpButton = 'HelpButton',
+    PauseButton = 'PauseButton',
+    GameEndButton = 'GameEndButton',
+    OptionsButton = 'OptionsButton',
+    OptionsResetLevels = 'OptionsResetLevels',
+    BoosterTime = 'BoosterTime',
+    BoosterHelp = 'BoosterHelp',
 }
 
 class VueService {

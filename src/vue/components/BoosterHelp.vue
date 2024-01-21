@@ -32,6 +32,7 @@ const count = computed(() => {
 
 .BoosterButton {
     @include button;
+    user-select: none;
     min-width: 3em;
     max-width: 3em;
     min-height: 3em;
