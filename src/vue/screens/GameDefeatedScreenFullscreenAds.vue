@@ -2,7 +2,6 @@
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref, onMounted } from 'vue';
-import { Easing, Tween } from "@tweenjs/tween.js";
 import { GameModelHelper } from '../../model/GameModelHelper';
 import { adsService } from '../../services/AdsService';
 import { UserActionAfterTheLastGame } from '../../model/GameModel';
@@ -10,26 +9,12 @@ import { TimeSkipper } from '../../utils/TimeSkipper';
 
 const showButtons = ref(false);
 const Popup = ref(null);
-const animateScore = async () => {
-    const tweenProvider = { total: GameModelHelper.getGameTotalScore(), current: GameModelHelper.getGameCurrentScore() };
-    new Tween(tweenProvider)
-        .to({ total: tweenProvider.current + tweenProvider.total, current: 0 }, 500)
-        .easing(Easing.Linear.None)
-        .onUpdate(() => {
-            GameModelHelper.setGameCurrentScore(Math.floor(tweenProvider.current));
-        })
-        .onComplete(() => {
-            GameModelHelper.setGameCurrentScore(Math.floor(tweenProvider.current));
-        })
-        .start();
-};
 
 const showFullscrinAds = async () => {
     adsService.showFullscreen();
 };
 
 onMounted(async () => {
-    await animateScore();
     await new TimeSkipper(1000).execute();
     try {
         await showFullscrinAds();

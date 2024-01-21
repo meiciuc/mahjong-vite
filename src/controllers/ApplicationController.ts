@@ -1,3 +1,4 @@
+import { Config } from '../Config';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -157,7 +158,6 @@ export class ApplicationController extends BaseController {
         const model = dataService.getRootModel<GameModel>();
         model.data.helpsCount = 3;
         model.data.gameAge = 0;
-        model.data.gameCurrentScore = 0;
         model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
 
@@ -194,7 +194,7 @@ export class ApplicationController extends BaseController {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
                 }
                 break;
-            case VueServiceSignals.BoosterHelp: {
+            case VueServiceSignals.BoosterHelpUseBooster: {
                 if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                     let helpsCount = this.gameModel.raw.helpsCount;
 
@@ -210,19 +210,61 @@ export class ApplicationController extends BaseController {
                 }
                 break;
             }
-            case VueServiceSignals.BoosterTime: {
+            case VueServiceSignals.BoosterTimeUseBooster: {
                 if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                     const timeBoosters = this.gameModel.data.boosters[BoosterType.TIME];
                     if (timeBoosters && timeBoosters.count > 0) {
                         timeBoosters.count--
-                        console.log('this.gameModel.data.gameStateTime A', this.gameModel.data.gameAge);
                         this.gameModel.data.gameAge += 60;
-                        console.log('this.gameModel.data.gameStateTime B', this.gameModel.data.gameAge);
                     }
                 }
                 break;
             }
+            case VueServiceSignals.BoosterHelpSpendScore:
+            case VueServiceSignals.BoosterHelpWatchReward:
+            case VueServiceSignals.BoosterTimeSpendScore:
+            case VueServiceSignals.BoosterTimeWatchReward:
+                this.shop(data);
+                break;
+        }
+    }
 
+    private async shop(data: VueServiceSignals) {
+        switch (data) {
+            case VueServiceSignals.BoosterHelpSpendScore: {
+                this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
+                GameModelHelper.addBooster(BoosterType.HELP);
+                this.saveData();
+                break;
+            }
+            case VueServiceSignals.BoosterHelpWatchReward: {
+                adsService.showRewarded()
+                    .then(() => {
+                        GameModelHelper.addBooster(BoosterType.HELP);
+                        this.saveData();
+                    })
+                    .catch((error: unknown) => {
+                        console.log(error);
+                    });
+                break;
+            }
+            case VueServiceSignals.BoosterTimeSpendScore: {
+                this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
+                GameModelHelper.addBooster(BoosterType.TIME);
+                this.saveData();
+                break;
+            }
+            case VueServiceSignals.BoosterTimeWatchReward: {
+                adsService.showRewarded()
+                    .then(() => {
+                        GameModelHelper.addBooster(BoosterType.TIME);
+                        this.saveData();
+                    })
+                    .catch((error: unknown) => {
+                        console.log(error);
+                    });
+                break;
+            }
         }
     }
 
@@ -264,7 +306,7 @@ export class ApplicationController extends BaseController {
         if (remote || model.appState === AppStateEnum.GAME_VICTORY) {
             adsService.saveData({
                 gameLevel: model.gameLevel,
-                gameTotalScore: model.gameTotalScore + model.gameCurrentScore,
+                gameTotalScore: model.gameTotalScore,
                 sound: model.sound,
             });
         }

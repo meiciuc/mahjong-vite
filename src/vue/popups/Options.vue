@@ -3,6 +3,7 @@ import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import { computed, ref } from 'vue';
 import { VueServiceSignals, vueService } from '../VueService';
+import { adsService } from '../../services/AdsService';
 
 
 const Popup = ref(null);
@@ -28,13 +29,17 @@ const handleReset = () => {
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">Buy time (1 min.)
                 <div class="Grow"></div>
-                <button class="Item" @click="handleReset">-100</button>
-                <button class="Item" @click="handleReset">Video</button>
+                <button class="Item"
+                    @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpSpendScore) }">-100</button>
+                <button class="Item" v-if="adsService.isRewardedAvaliable()"
+                    @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpWatchReward) }">Video</button>
             </div>
             <div class="Text">Buy help (3 help)
                 <div class="Grow"></div>
-                <button class="Item" @click="handleReset">-100</button>
-                <button class="Item" @click="handleReset">Video</button>
+                <button class="Item"
+                    @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeSpendScore) }">-100</button>
+                <button class="Item" v-if="adsService.isRewardedAvaliable()"
+                    @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeWatchReward) }">Video</button>
             </div>
             <button class="Item" @click="handleReset">{{ Localization.getText('options.resetAllLevels') }}</button>
             <div class="Item"><input type="checkbox" id="checkbox" v-model="sound" /><label for="checkbox">{{

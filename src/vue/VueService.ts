@@ -9,8 +9,12 @@ export enum VueServiceSignals {
     GameEndButton = 'GameEndButton',
     OptionsButton = 'OptionsButton',
     OptionsResetLevels = 'OptionsResetLevels',
-    BoosterTime = 'BoosterTime',
-    BoosterHelp = 'BoosterHelp',
+    BoosterTimeUseBooster = 'BoosterTimeUseBooster',
+    BoosterTimeSpendScore = 'BoosterTimeSpendScore',
+    BoosterTimeWatchReward = 'BoosterTimeWatchReward',
+    BoosterHelpUseBooster = 'BoosterHelpUseBooster',
+    BoosterHelpSpendScore = 'BoosterHelpSpendScore',
+    BoosterHelpWatchReward = 'BoosterHelpWatchReward',
 }
 
 class VueService {

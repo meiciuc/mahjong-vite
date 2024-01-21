@@ -160,7 +160,7 @@ export class GameSystem extends System {
 
             const added = Config.ADD_SCORE_FOR_TRUE_MOVE * this.getEdgesLength(arr);
 
-            GameModelHelper.setGameCurrentScore(GameModelHelper.getGameCurrentScore() + added);
+            GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + added);
             const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
             const ids: number[] = [];
             tiles.forEach((node) => {
@@ -187,7 +187,7 @@ export class GameSystem extends System {
             soundService.play(SOUNDS.beltHandle2);
 
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, Config.ADD_SCORE_FOR_FALSE_MOVE);
-            GameModelHelper.setGameCurrentScore(Math.max(0, GameModelHelper.getGameCurrentScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
+            GameModelHelper.setGameTotalScore(Math.max(0, GameModelHelper.getGameTotalScore() + Config.ADD_SCORE_FOR_FALSE_MOVE));
             this.creator.shakeTile(tileA.tile, true);
             this.creator.selectTile(tileA.tile, false);
             this.creator.selectTile(tileB.tile, false);

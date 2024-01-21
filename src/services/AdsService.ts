@@ -54,6 +54,19 @@ class GpService {
         console.log('this.gp.ads.isPreloaderAvailable', this.gp.ads.isPreloaderAvailable);
     }
 
+
+    isRewardedAvaliable() {
+        return this.gp?.ads.isRewardedAvailable || false;
+    }
+
+    async showRewarded() {
+        if (!this.gp?.ads.isRewardedAvailable) {
+            return Promise.reject();
+        }
+
+        return await this.gp.ads.showRewardedVideo();
+    }
+
     showSticky(value: boolean) {
         if (!this.gp) {
             return;

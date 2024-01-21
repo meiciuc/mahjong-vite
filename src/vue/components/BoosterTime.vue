@@ -6,7 +6,7 @@ import { computed } from 'vue';
 
 const boosters = useModel(["boosters"]);
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTime);
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeUseBooster);
 }
 
 const count = computed(() => {

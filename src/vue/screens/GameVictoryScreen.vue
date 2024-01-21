@@ -1,31 +1,9 @@
 <script setup lang="ts">
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
-import { computed, ref, onMounted } from 'vue';
-import { Easing, Tween } from "@tweenjs/tween.js";
-import { GameModelHelper } from '../../model/GameModelHelper';
-
+import { computed, ref } from 'vue';
 
 const Popup = ref(null);
-const animateScore = async () => {
-    const tweenProvider = { total: GameModelHelper.getGameTotalScore(), current: GameModelHelper.getGameCurrentScore() };
-    new Tween(tweenProvider)
-        .to({ total: tweenProvider.current + tweenProvider.total, current: 0 }, 500)
-        .easing(Easing.Linear.None)
-        .onUpdate(() => {
-            GameModelHelper.setGameTotalScore(Math.floor(tweenProvider.total));
-            GameModelHelper.setGameCurrentScore(Math.floor(tweenProvider.current));
-        })
-        .onComplete(() => {
-            GameModelHelper.setGameTotalScore(Math.floor(tweenProvider.total));
-            GameModelHelper.setGameCurrentScore(Math.floor(tweenProvider.current));
-        })
-        .start();
-};
-
-onMounted(async () => {
-    await animateScore();
-})
 
 const marginLeft = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
