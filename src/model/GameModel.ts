@@ -47,11 +47,11 @@ export enum BoosterType {
 }
 
 export interface BoosterHelp {
-    count: number;
+    current: number;
 }
 
 export interface BoosterTime {
-    count: number;
+    current: number;
 }
 
 export type Booster = BoosterHelp | BoosterTime;

@@ -10,7 +10,7 @@ const handleClick = () => {
 }
 
 const count = computed(() => {
-    return boosters.value[BoosterType.TIME]?.count;
+    return boosters.value[BoosterType.TIME]?.current;
 })
 
 </script>

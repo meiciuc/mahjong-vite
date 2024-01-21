@@ -8,8 +8,8 @@ import BoosterTime from './BoosterTime.vue';
 
 <template>
     <div class="MenuPanel">
-        <BoosterHelp></BoosterHelp>
         <BoosterTime></BoosterTime>
+        <BoosterHelp></BoosterHelp>
     </div>
 </template>
 

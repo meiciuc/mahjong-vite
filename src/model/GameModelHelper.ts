@@ -1,6 +1,6 @@
 import { dataService } from "../core/services/DataService";
 import { Languages } from "../utils/Localization";
-import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
+import { AppStateEnum, BoosterTime, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 
 export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {
@@ -62,10 +62,10 @@ export class GameModelHelper {
         const gameModel = dataService.getRootModel<GameModel>();
         switch (type) {
             case BoosterType.TIME:
-                gameModel.data.boosters[BoosterType.TIME] ? gameModel.data.boosters[BoosterType.TIME].count++ : gameModel.data.boosters[BoosterType.TIME] = { count: 1 };
+                gameModel.data.boosters[BoosterType.TIME] ? gameModel.data.boosters[BoosterType.TIME].current++ : gameModel.data.boosters[BoosterType.TIME] = { current: 1 };
                 break;
             case BoosterType.HELP:
-                gameModel.data.boosters[BoosterType.HELP] ? gameModel.data.boosters[BoosterType.HELP].count++ : gameModel.data.boosters[BoosterType.TIME] = { count: 1 };
+                gameModel.data.boosters[BoosterType.HELP] ? gameModel.data.boosters[BoosterType.HELP].current++ : gameModel.data.boosters[BoosterType.TIME] = { current: 1 };
                 break;
         }
 
@@ -79,7 +79,10 @@ export class GameModelHelper {
             gameTotalScore: 0,
             gameAge: 0,
             helpsCount: 3,
-            boosters: {},
+            boosters: {
+                [BoosterType.TIME]: { current: 2 },
+                [BoosterType.HELP]: { current: 3 },
+            },
 
             optionsAreVisible: false,
             sound: true,

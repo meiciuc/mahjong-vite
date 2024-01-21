@@ -80,6 +80,8 @@ export class ApplicationController extends BaseController {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
 
+        this.saveData();
+
         const res2 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
         if (res2 !== VueServiceSignals.GameEndButton) {
             this.gameCycleWasInterrupted(res2);
@@ -135,11 +137,16 @@ export class ApplicationController extends BaseController {
             this.gameModel.data.gameLevel = data.gameLevel ? data.gameLevel : this.gameModel.data.gameLevel;
             this.gameModel.data.gameTotalScore = data.gameTotalScore ? data.gameTotalScore : this.gameModel.data.gameTotalScore;
             this.gameModel.data.sound = data.sound !== undefined ? data.sound : this.gameModel.data.sound;
-        }
 
-        // TODO refactoring
-        this.gameModel.data.boosters[BoosterType.TIME] = { count: 3 };
-        this.gameModel.data.boosters[BoosterType.HELP] = { count: 4 };
+            // TODO для сложных бустеров надо отрефакторить этот кусок
+            if (data.boosters) {
+                for (const booster in data.boosters) {
+                    if (this.gameModel.data.boosters[booster]) {
+                        this.gameModel.data.boosters[booster].current = data.boosters[booster].current;
+                    }
+                }
+            }
+        }
 
         const keys: string[] = [];
         const icons = this.gameModel.data.icons;
@@ -150,8 +157,6 @@ export class ApplicationController extends BaseController {
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
         this.gameModel.subscribe(['boosters'], this.handleBoosters);
-
-        this.gameModel.subscribe(['gameLevel'], this.handleGameLevelChanged);
     }
 
     private resetGameModelForNext() {
@@ -202,8 +207,8 @@ export class ApplicationController extends BaseController {
                         vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
                     } else {
                         const helpBoosters = this.gameModel.data.boosters[BoosterType.HELP];
-                        if (helpBoosters && helpBoosters.count > 0) {
-                            helpBoosters.count--;
+                        if (helpBoosters && helpBoosters.current > 0) {
+                            helpBoosters.current--;
                             vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
                         }
                     }
@@ -213,8 +218,8 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.BoosterTimeUseBooster: {
                 if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                     const timeBoosters = this.gameModel.data.boosters[BoosterType.TIME];
-                    if (timeBoosters && timeBoosters.count > 0) {
-                        timeBoosters.count--
+                    if (timeBoosters && timeBoosters.current > 0) {
+                        timeBoosters.current--
                         this.gameModel.data.gameAge += 60;
                     }
                 }
@@ -295,21 +300,16 @@ export class ApplicationController extends BaseController {
         console.log('handleBoosters', args)
     }
 
-    private handleGameLevelChanged = () => {
-        this.saveData();
-    }
-
-    private saveData(remote = false) {
+    private saveData() {
         const model = dataService.getRootModel<GameModel>().raw;
         localStorage.setItem('data', JSON.stringify(model));
 
-        if (remote || model.appState === AppStateEnum.GAME_VICTORY) {
-            adsService.saveData({
-                gameLevel: model.gameLevel,
-                gameTotalScore: model.gameTotalScore,
-                sound: model.sound,
-            });
-        }
+        adsService.saveData({
+            gameLevel: model.gameLevel,
+            gameTotalScore: model.gameTotalScore,
+            sound: model.sound,
+            boosters: model.boosters,
+        });
     }
 
     private getData() {
@@ -338,7 +338,6 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.OptionsResetLevels:
                 this.gameModel.data.gameLevel = 1;
                 this.gameModel.data.optionsAreVisible = false;
-                this.saveData(true);
                 this.firstCycle();
                 break;
             default:

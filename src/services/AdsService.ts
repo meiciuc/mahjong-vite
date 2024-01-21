@@ -1,9 +1,10 @@
 import { dataService } from "../core/services/DataService";
-import { GameModel } from "../model/GameModel";
+import { Booster, BoosterType, GameModel } from "../model/GameModel";
 
 interface SaveData {
     gameLevel: number;
     gameTotalScore: number;
+    boosters: { [key in BoosterType]?: Booster }
     sound: boolean;
 }
 
