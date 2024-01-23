@@ -23,7 +23,9 @@ const handleClick = () => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('victory.victory') }}</div>
-            <ShopModule class="ShopModule"></ShopModule>
+            <div class="Spacer"></div>
+            <ShopModule></ShopModule>
+            <div class="Spacer"></div>
             <button class="StartButton" @click="handleClick">{{
                 Localization.getText('victory.next') }}</button>
         </div>
@@ -46,7 +48,6 @@ const handleClick = () => {
     color: $button_text_colored;
     background-color: $button_text_idle;
     border-color: $button_text_idle;
-    margin-top: 1em;
 }
 
 .StartButton:hover {
@@ -61,11 +62,10 @@ const handleClick = () => {
     font-size: 4em;
     color: white;
     user-select: none;
-    margin-bottom: 30%;
 }
 
-.ShopModule {
-    margin-bottom: 10px;
+.Spacer {
+    height: 1em;
 }
 </style>
 

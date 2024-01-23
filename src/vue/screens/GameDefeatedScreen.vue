@@ -26,13 +26,17 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
+            <div class="Spacer"></div>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
                 Localization.getText('defeated.again') }}</button>
+            <div class="Spacer"></div>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
                 Localization.getText('defeated.reset') }}</button>
+            <div class="Spacer"></div>
             <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
                 @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
                     Localization.getText('defeated.previous') }}</button>
+            <div class="Spacer"></div>
             <ShopModule></ShopModule>
         </div>
     </div>
@@ -54,7 +58,6 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     color: $button_text_colored;
     background-color: $button_text_idle;
     border-color: $button_text_idle;
-    margin-top: 1em;
 }
 
 .StartButton:hover {
@@ -66,10 +69,13 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
 .Text {
     font-family: 'Inter-SemiBold';
     text-align: center;
-    font-size: 4em;
+    font-size: 3em;
     color: white;
     user-select: none;
-    margin-bottom: 30%;
+}
+
+.Spacer {
+    height: 1em;
 }
 </style>
 

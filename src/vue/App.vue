@@ -5,7 +5,6 @@ import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
 import StartScreen from './screens/StartScreen.vue';
 import StartScreenFirst from './screens/StartScreenFirst.vue';
-import StartScreenNovice from './screens/StartScreenNovice.vue';
 import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import GameDefeatedScreen from './screens/GameDefeatedScreen.vue';
@@ -83,9 +82,6 @@ window.addEventListener('resize', () => {
     </Transition>
     <Transition>
         <StartScreenFirst v-if="appState === AppStateEnum.START_SCREEN_FIRST"></StartScreenFirst>
-    </Transition>
-    <Transition>
-        <StartScreenNovice v-if="appState === AppStateEnum.START_SCREEN_NOVICE"></StartScreenNovice>
     </Transition>
 
     <Transition>

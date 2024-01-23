@@ -13,7 +13,7 @@ const marginLeft = computed(() => {
 });
 
 const marginTop = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 3}px`;
 });
 
 const handleClick = (value: UserActionAfterTheLastGame) => {
@@ -26,13 +26,17 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <div class="Text" style="color: brown;">{{ Localization.getText('noMoreMoves.noMoreMoves') }}</div>
+            <div class="Spacer"></div>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
                 Localization.getText('noMoreMoves.again') }}</button>
+            <div class="Spacer"></div>
             <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
                 Localization.getText('noMoreMoves.reset') }}</button>
+            <div class="Spacer"></div>
             <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
                 @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
                     Localization.getText('noMoreMoves.previous') }}</button>
+            <div class="Spacer"></div>
             <ShopModule></ShopModule>
         </div>
     </div>
@@ -54,7 +58,6 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     color: $button_text_colored;
     background-color: $button_text_idle;
     border-color: $button_text_idle;
-    margin-top: 1em;
 }
 
 .StartButton:hover {
@@ -69,10 +72,11 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     font-size: 3em;
     color: white;
     user-select: none;
-    margin-bottom: 30%;
     word-break: normal;
+}
 
-    min-width: 400px;
+.Spacer {
+    height: 1em;
 }
 </style>
 

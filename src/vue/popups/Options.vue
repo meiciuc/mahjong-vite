@@ -5,6 +5,7 @@ import { computed, ref } from 'vue';
 import { VueServiceSignals, vueService } from '../VueService';
 // import { adsService } from '../../services/AdsService';
 import ShopModule from '../components/ShopModule.vue';
+import Boosters from '../components/Boosters.vue';
 
 
 const Popup = ref(null);
@@ -29,10 +30,13 @@ const handleReset = () => {
     <div class="Container" @click="handleClick">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <ShopModule></ShopModule>
+            <div class="Spacer"></div>
             <button class="Item" @click="handleReset">{{ Localization.getText('options.resetAllLevels') }}</button>
+            <div class="Spacer"></div>
             <div class="Item"><input type="checkbox" id="checkbox" v-model="sound" /><label for="checkbox">{{
                 Localization.getText('options.sound') }}</label></div>
         </div>
+        <Boosters class="Boosters"></Boosters>
     </div>
 </template>
 
@@ -68,5 +72,15 @@ input {
 
 label {
     cursor: pointer;
+}
+
+.Boosters {
+    position: absolute;
+    top: 20%;
+    right: 0px;
+}
+
+.Spacer {
+    height: 1em;
 }
 </style>

@@ -20,7 +20,6 @@ export enum AppStateEnum {
     NONE = 'none',
 
     START_SCREEN_FIRST = 'startScreenFirst',
-    START_SCREEN_NOVICE = 'startScreenNovice',
     START_SCREEN = 'startScreen',
 
     GAME_SCREEN = 'gameScreen',
