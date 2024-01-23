@@ -74,6 +74,7 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     color: $button_text_colored;
     background-color: $button_text_idle;
     border-color: $button_text_idle;
+    margin-top: 1em;
 }
 
 .StartButton:hover {

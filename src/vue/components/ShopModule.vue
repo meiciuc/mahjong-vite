@@ -34,6 +34,7 @@ import { VueServiceSignals, vueService } from '../VueService';
     padding: 2px;
     font-family: 'Inter-SemiBold';
     min-width: 300px;
+    margin-bottom: 1em;
 }
 
 .Item {

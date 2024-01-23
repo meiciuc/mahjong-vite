@@ -10,29 +10,28 @@ const gameLevel = useModel(["gameLevel"]);
 
 <template>
     <div class="MenuPanel">
-        <div class="MenuContent">
-            <div class="Grow"></div>
-            <div class="MenuContentItem">
-                <div class="GameLevel">{{ gameLevel }}</div>
-                <GameMenuScore></GameMenuScore>
-            </div>
-            <div class="MenuContentItem">
-                <GameMenuTimer></GameMenuTimer>
-                <GameMenuHelp></GameMenuHelp>
-            </div>
-            <div class="Grow2"></div>
+        <div class="Grow1"></div>
+        <div class="MenuContentItem">
+            <div class="GameLevel">{{ gameLevel }}</div>
+            <GameMenuScore></GameMenuScore>
         </div>
+        <div class="Grow1"></div>
+        <div class="MenuContentItem">
+            <GameMenuTimer class="GameMenuTimer"></GameMenuTimer>
+            <GameMenuHelp></GameMenuHelp>
+        </div>
+        <div class="Grow2"></div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.Grow {
+.Grow1 {
     flex-grow: 1;
 }
 
-.Grow {
+.Grow2 {
     flex-grow: 2;
 }
 
@@ -44,21 +43,18 @@ const gameLevel = useModel(["gameLevel"]);
     align-items: center;
     text-align: center;
     font-family: 'Inter-SemiBold';
+
+    min-width: 80%;
 }
 
-.MenuContent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-family: 'Inter-SemiBold';
+.GameMenuTimer {
+    margin-right: 15px;
 }
 
 .MenuContentItem {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
     font-family: 'Inter-SemiBold';
 }
 
