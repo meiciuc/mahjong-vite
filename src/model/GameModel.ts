@@ -31,8 +31,8 @@ export enum AppStateEnum {
     GAME_NO_MORE_MOVES_ADS = 'gameNoMoreMovesAds',
     GAME_NO_MORE_MOVES_CHOOSING = 'gameNoMoreMovesChoosing',
 
-    GAME_DEFEATED = 'gameDefeateScreen',
-    GAME_DEFEATED_ADS = 'gameDefeatedAds',
+    GAME_DEFEAT = 'gameDefeateScreen',
+    GAME_DEFEAT_ADS = 'gameDefeatedAds',
     GAME_DEFEATED_CHOOSING = 'gameDefetedChoosing',
 }
 

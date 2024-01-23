@@ -3,10 +3,8 @@ import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import { computed, ref } from 'vue';
 import { VueServiceSignals, vueService } from '../VueService';
-// import { adsService } from '../../services/AdsService';
 import ShopModule from '../components/ShopModule.vue';
 import Boosters from '../components/Boosters.vue';
-
 
 const Popup = ref(null);
 const sound = useModel(["sound"]);
@@ -19,7 +17,9 @@ const marginTop = computed(() => {
     return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2 - 10}px`;
 });
 
-const handleClick = () => { }
+const handleClick = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
+}
 const handleReset = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.OptionsResetLevels);
 }

@@ -1,22 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { AppStateEnum } from '../model/GameModel';
-// import GameMenu from './components/GameMenu.vue';
+import { useModel } from '../model/useModel';
+import Boosters from './components/Boosters.vue';
 import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
-import StartScreen from './screens/StartScreen.vue';
-import StartScreenFirst from './screens/StartScreenFirst.vue';
-import GamePause from './screens/GamePause.vue';
-import GameVictoryScreen from './screens/GameVictoryScreen.vue';
-import GameDefeatedScreen from './screens/GameDefeatedScreen.vue';
-import GameDefeatedScreenFullscreenAds from './screens/GameDefeatedScreenFullscreenAds.vue';
-import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
-import Options from './popups/Options.vue';
 import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
-import { useModel } from '../model/useModel';
-import { computed } from 'vue';
-import Boosters from './components/Boosters.vue';
-// import isMobile from 'is-mobile';
+import Options from './popups/Options.vue';
+import GameDefeatScreen from './screens/GameDefeatScreen.vue';
+import GameDefeatScreenFullscreenAds from './screens/GameDefeatScreenFullscreenAds.vue';
+import GamePause from './screens/GamePause.vue';
+import GameVictoryScreen from './screens/GameVictoryScreen.vue';
+import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
+import StartScreen from './screens/StartScreen.vue';
+import StartScreenFirst from './screens/StartScreenFirst.vue';
 
 const appState = useModel(["appState"]);
 
@@ -30,23 +28,6 @@ const showMainMenu = computed(() => {
     return appState.value !== AppStateEnum.NONE && appState.value !== AppStateEnum.START_SCREEN_FIRST;
 });
 
-// const showGameMenu = computed(() => {
-//     switch (appState.value) {
-//         case AppStateEnum.GAME_SCREEN:
-//         case AppStateEnum.GAME_SCREEN_PAUSE:
-//         case AppStateEnum.GAME_VICTORY:
-//         case AppStateEnum.GAME_NO_MORE_MOVES:
-//         case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
-//         case AppStateEnum.GAME_NO_MORE_MOVES_CHOOSING:
-//         case AppStateEnum.GAME_DEFEATED:
-//         case AppStateEnum.GAME_DEFEATED_ADS:
-//         case AppStateEnum.GAME_DEFEATED_CHOOSING:
-//             return true;
-//         default:
-//             return false;
-//     }
-// });
-
 const showModalBackground = computed(() => {
     return optionsAreVisible.value;
 });
@@ -59,18 +40,13 @@ const showBoosters = computed(() => {
     return appState.value === AppStateEnum.GAME_SCREEN;
 });
 
-window.addEventListener('resize', () => {
-
-})
-
 // https://html5up.net/uploads/demos/dimension/#
 </script>
 
 <template>
-    <div id="canvas" class="canvas"></div>
+    <div id="canvas" class="Canvas"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
-    <!-- <GameMenu v-if="showGameMenu" class="menu"></GameMenu> -->
 
     <Transition>
         <ModalBackgroundColored v-if="showColoredBackground"></ModalBackgroundColored>
@@ -89,16 +65,16 @@ window.addEventListener('resize', () => {
     </Transition>
 
     <Transition>
-        <GameDefeatedScreen v-if="appState === AppStateEnum.GAME_DEFEATED"></GameDefeatedScreen>
+        <GameDefeatScreen v-if="appState === AppStateEnum.GAME_DEFEAT"></GameDefeatScreen>
     </Transition>
     <Transition>
-        <GameDefeatedScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEATED_ADS">
-        </GameDefeatedScreenFullscreenAds>
+        <GameDefeatScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEAT_ADS">
+        </GameDefeatScreenFullscreenAds>
     </Transition>
     <Transition>
         <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
     </Transition>
-    <GameMenuMain v-if="showMainMenu" class="menu-main">
+    <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
         <ModalBackground v-if="showModalBackground"></ModalBackground>
@@ -127,19 +103,13 @@ window.addEventListener('resize', () => {
 }
 
 // menu-left
-.menu-main {
+.GameMenuMain {
     width: 100vw;
     height: 1.5em;
     position: fixed;
 }
 
-.menu {
-    width: 100vw;
-    position: fixed;
-    top: 1.8em;
-}
-
-.canvas {
+.Canvas {
     position: fixed;
     left: 0px;
     top: 5em;
