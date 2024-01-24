@@ -2,6 +2,7 @@
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref } from 'vue';
+import InviteShareModule from '../components/InviteShareModule.vue';
 
 
 const Popup = ref(null);
@@ -23,6 +24,7 @@ const handleClick = () => {
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
+            <InviteShareModule class="InviteShareModule"></InviteShareModule>
         </div>
     </div>
 </template>
@@ -49,5 +51,9 @@ const handleClick = () => {
     background-color: $button_background_colored;
     color: $button_text_idle;
     border-color: $button_text_idle;
+}
+
+.InviteShareModule {
+    margin-top: 1em;
 }
 </style>

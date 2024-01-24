@@ -15,6 +15,8 @@ export enum VueServiceSignals {
     BoosterHelpUseBooster = 'BoosterHelpUseBooster',
     BoosterHelpSpendScore = 'BoosterHelpSpendScore',
     BoosterHelpWatchReward = 'BoosterHelpWatchReward',
+    ShareShow = 'ShareShow',
+    InviteShow = 'InviteShow',
 }
 
 class VueService {

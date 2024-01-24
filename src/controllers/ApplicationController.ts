@@ -232,6 +232,12 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.BoosterTimeWatchReward:
                 this.shop(data);
                 break;
+            case VueServiceSignals.ShareShow:
+                adsService.showShare();
+                break;
+            case VueServiceSignals.InviteShow:
+                adsService.showInvite();
+                break;
         }
     }
 

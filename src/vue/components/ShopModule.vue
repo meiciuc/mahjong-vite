@@ -10,14 +10,14 @@ import { VueServiceSignals, vueService } from '../VueService';
         <div class="Grow"></div>
         <button class="Item"
             @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeSpendScore) }">-100</button>
-        <button class="Item" v-if="adsService.isRewardedAvaliable()"
+        <button class="Item" v-if="adsService.isRewardedAvaliable"
             @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeWatchReward) }">Video</button>
     </div>
     <div class="Text">Buy help (3 help)
         <div class="Grow"></div>
         <button class="Item"
             @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpSpendScore) }">-100</button>
-        <button class="Item" v-if="adsService.isRewardedAvaliable()"
+        <button class="Item" v-if="adsService.isRewardedAvaliable"
             @click="() => { vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpWatchReward) }">Video</button>
     </div>
 </template>

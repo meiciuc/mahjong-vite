@@ -58,10 +58,6 @@ class GpService {
     }
 
 
-    isRewardedAvaliable() {
-        return this.gp?.ads.isRewardedAvailable || false;
-    }
-
     async showRewarded() {
         if (!this.gp?.ads.isRewardedAvailable) {
             return Promise.reject();
@@ -92,6 +88,20 @@ class GpService {
         if (value) {
             this.gp.leaderboard.open();
         }
+    }
+
+    showShare() {
+        if (!this.gp) {
+            return;
+        }
+        this.gp.socials.share();
+    }
+
+    showInvite() {
+        if (!this.gp) {
+            return;
+        }
+        this.gp.socials.invite();
     }
 
     async showFullscreen() {
@@ -142,6 +152,18 @@ class GpService {
 
         const data = this.gp.player.get('data');
         return data ? JSON.parse(data) : null;
+    }
+
+    get isRewardedAvaliable() {
+        return this.gp?.ads.isRewardedAvailable || false;
+    }
+
+    get isShareAvaliable() {
+        return true;//this.gp?.socials.isSupportsNativeShare || false;
+    }
+
+    get isInviteAvaliable() {
+        return true;//this.gp?.socials.isSupportsNativeInvite || false;
     }
 }
 
