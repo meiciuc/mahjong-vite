@@ -21,6 +21,8 @@ export class ApplicationController extends BaseController {
     private applicationStateHystory: AppStateEnum[] = [];
 
     protected async doExecute() {
+        adsService.gameStart();
+
         this.setupGameModel();
 
         stageService.updateSignal.add(this.update);
@@ -61,8 +63,10 @@ export class ApplicationController extends BaseController {
         // await new TutorialController().execute();
 
         const game = new GameController();
+        adsService.gameplayStart();
         const res1 = await this.waitGameCycleContinue(game.execute());
         game.destroy();
+        adsService.gameplayStop();
 
         if (res1 !== game) {
             this.gameCycleWasInterrupted(res1);

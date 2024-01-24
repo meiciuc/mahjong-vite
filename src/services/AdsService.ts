@@ -44,6 +44,18 @@ class GpService {
         return promise;
     }
 
+    gameStart() {
+        this.gp?.gameStart();
+    }
+
+    gameplayStart() {
+        this.gp?.gameplayStart();
+    }
+
+    gameplayStop() {
+        this.gp?.gameplayStop();
+    }
+
     private setup() {
         if (!this.gp) {
             return;
@@ -159,11 +171,11 @@ class GpService {
     }
 
     get isShareAvaliable() {
-        return true;//this.gp?.socials.isSupportsNativeShare || false;
+        return this.gp?.socials.isSupportsNativeShare || false;
     }
 
     get isInviteAvaliable() {
-        return true;//this.gp?.socials.isSupportsNativeInvite || false;
+        return this.gp?.socials.isSupportsNativeInvite || false;
     }
 }
 
