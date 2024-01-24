@@ -1,6 +1,6 @@
 import { Config } from "../Config";
-import { dataService } from "../core/services/DataService";
-import { Booster, BoosterType, GameModel } from "../model/GameModel";
+import { Booster, BoosterType } from "../model/GameModel";
+import { Languages } from "../utils/Localization";
 
 interface SaveData {
     gameLevel: number;
@@ -23,7 +23,7 @@ class GpService {
 
         window['onGPInit'] = async (gp) => {
             this.gp = gp;
-            this.setup();
+            this.status();
             resolve(this);
         };
 
@@ -56,14 +56,28 @@ class GpService {
         this.gp?.gameplayStop();
     }
 
-    private setup() {
+    getLanguage() {
+        if (this.gp) {
+            return this.gp.language;
+        }
+
+        const arr = window.location.hostname.toLowerCase().split('.');
+        const ext = arr.length > 0 ? arr[arr.length - 1] : '';
+        const keys = Object.keys(Languages);
+        keys.forEach((key) => {
+            if (key === ext) {
+                return key;
+            }
+        });
+
+        return Languages.en;
+    }
+
+    private status() {
         if (!this.gp) {
             return;
         }
-        dataService.getRootModel<GameModel>().data.language = this.gp.language;
-
         console.log('this.gp.ads.isStickyAvailable', this.gp.ads.isStickyAvailable);
-
         console.log('this.gp.ads.isFullscreenAvailable', this.gp.ads.isFullscreenAvailable);
         console.log('this.gp.ads.isRewardedAvailable', this.gp.ads.isRewardedAvailable);
         console.log('this.gp.ads.isPreloaderAvailable', this.gp.ads.isPreloaderAvailable);

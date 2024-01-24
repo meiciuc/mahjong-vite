@@ -1,5 +1,4 @@
 import { dataService } from "../core/services/DataService";
-import { Languages } from "../utils/Localization";
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 
 export class GameModelHelper {
@@ -94,8 +93,6 @@ export class GameModelHelper {
             seed: '',
 
             userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
-
-            language: Languages.en,
         });
     }
 }

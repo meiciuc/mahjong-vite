@@ -1,0 +1,33 @@
+{
+    "start": {
+        "play": "Play"
+    },
+    "game": {
+        "help": "?",
+        "level": "Level",
+        "points": "Points",
+        "clickAnyPlace": "Click any place"
+    },
+    "victory": {
+        "victory": "Victory",
+        "next": "Next"
+    },
+    "defeated": {
+        "defeated": "Defeat",
+        "again": "Repeat the same layout",
+        "reset": "Reset",
+        "previous": "One level below",
+        "initialy": "Initialy"
+    },
+    "noMoreMoves": {
+        "noMoreMoves": "NO MORE MOVES AVALIABLE",
+        "again": "Repeat the same layout",
+        "reset": "Reset",
+        "previous": "One level below",
+        "initialy": "Initialy"
+    },
+    "options": {
+        "sound": "Sound",
+        "resetAllLevels": "Play from the first level"
+    }
+}

@@ -5,6 +5,18 @@ import HttpApi from 'i18next-http-backend';
 export enum Languages {
     ru = 'ru',
     en = 'en',
+    fr = 'fr',
+    it = 'it',
+    de = 'de',
+    es = 'es',
+    zh = 'zh', // Китайский 
+    pt = 'pt', // Португальский
+    ko = 'ko', // Корейский
+    ja = 'ja', // Японский
+    tr = 'tr', // Турекций
+    ar = 'ar', // Арабский
+    hi = 'hi', // Хинди
+    id = 'id', // Индонезийский
 }
 
 export class Localization {

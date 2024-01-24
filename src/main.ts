@@ -18,17 +18,17 @@ import { SOUNDS } from './Sounds';
 import { assetsService } from './services/AssetsService';
 
 window.onload = async (): Promise<void> => {
-    initModel();
+    GameModelHelper.createModel();
     initSoundService();
 
     try {
-        await initAddService();
+        await adsService.init();
     } catch (err) {
         console.log(err);
     }
 
     await initAssets();
-    initVueService();
+    vueService.init();
     await initStageService();
     await assetsService.init();
     setupTweens();
@@ -87,18 +87,6 @@ async function initAssets() {
         await assetsController.execute();
         assetsController.destroy();
     }
-}
-
-function initModel() {
-    GameModelHelper.createModel();
-}
-
-function initVueService() {
-    vueService.init();
-}
-
-async function initAddService() {
-    return adsService.init();
 }
 
 async function initStageService() {

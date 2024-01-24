@@ -1,5 +1,3 @@
-import { Languages } from "../utils/Localization";
-
 export enum UserActionAfterTheLastGame {
     DEFAULT = 'default',
     RETRY = 'retry',
@@ -58,7 +56,6 @@ export type Booster = BoosterHelp | BoosterTime;
 export interface GameModel {
     appState: AppStateEnum;
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
-    language: Languages,
 
     optionsAreVisible: boolean,
     sound: boolean,
