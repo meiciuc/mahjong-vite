@@ -12,7 +12,7 @@ const showButtons = ref(false);
 const Popup = ref(null);
 
 const showFullscrinAds = async () => {
-    adsService.showFullscreen();
+    return adsService.showFullscreen();
 };
 
 onMounted(async () => {

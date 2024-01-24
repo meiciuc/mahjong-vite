@@ -36,6 +36,7 @@ export class Config {
     static ADD_SCORE_FOR_FALSE_MOVE = -1;
     static MIN_BOOSTER_PRICE = 100;
     static MAX_GAME_LEVEL = 92;
+    static MIN_FULL_SCREEN_ADD_TIMEOUT = 3000;
 
     static DEV = true;
     static get DEV_SHOW_STATS() {

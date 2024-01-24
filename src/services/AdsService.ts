@@ -1,3 +1,4 @@
+import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
 import { Booster, BoosterType, GameModel } from "../model/GameModel";
 
@@ -10,6 +11,7 @@ interface SaveData {
 
 class GpService {
     private gp;
+    private fullScreenAdsTimestamp = 0;
 
     async init() {
         let resolve;
@@ -94,8 +96,14 @@ class GpService {
 
     async showFullscreen() {
         if (!this.gp) {
-            return;
+            return Promise.reject();
         }
+
+        if (Date.now() - this.fullScreenAdsTimestamp >= Config.MIN_FULL_SCREEN_ADD_TIMEOUT) {
+            return Promise.reject();
+        }
+
+        this.fullScreenAdsTimestamp = Date.now();
 
         if (this.gp.ads.isFullscreenAvailable) {
             return this.gp.ads.showFullscreen();
