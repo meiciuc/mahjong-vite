@@ -21,9 +21,8 @@ $background_idle: $first_color;
     text-align: center;
     align-items: center;
 
-    width: fit-content;
-    block-size: fit-content;
     font-family: 'Inter-SemiBold';
+    white-space: nowrap;
 
     background: $first_color;
     color: $second_color;

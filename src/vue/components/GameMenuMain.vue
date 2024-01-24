@@ -10,7 +10,6 @@ const gameLevel = useModel(["gameLevel"]);
 
 <template>
     <div class="MenuPanel">
-        <div class="Grow1"></div>
         <div class="MenuContentItem">
             <div class="GameLevel">{{ gameLevel }}</div>
             <GameMenuScore></GameMenuScore>
