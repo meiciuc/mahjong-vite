@@ -1,6 +1,7 @@
 import { Config } from "../Config";
 import { Booster, BoosterType } from "../model/GameModel";
 import { Languages } from "../utils/Localization";
+import { isMobile } from "is-mobile";
 
 interface SaveData {
     gameLevel: number;
@@ -71,6 +72,14 @@ class GpService {
         });
 
         return Languages.en;
+    }
+
+    isMobile() {
+        if (this.gp) {
+            return this.gp.isMobile;
+        }
+
+        return isMobile();
     }
 
     private status() {

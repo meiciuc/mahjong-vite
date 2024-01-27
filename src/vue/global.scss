@@ -1,6 +1,13 @@
-$first_color: #FFFFFF;
-$second_color: #999999;
-$second_color_darken: #777777;
+$color_1: #171714;
+$color_2: #f5f5f5;
+$color_3: #9ab90d;
+$color_4: #fcdb7b;
+$color_5: #683909;
+
+$first_color: $color_2;
+$second_color: $color_1;
+
+$button-text-color: $color_1;
 
 $button_padding_horizontal: 2em;
 $button_padding_vertical: 0.2em;
@@ -11,9 +18,9 @@ $button_text_idle: $first_color;
 $button_border_radius: 0.2em;
 
 
-$background_colored: $second_color;
-$background_colored_darken: $second_color_darken;
-$background_idle: $first_color;
+$background_colored: $color_2;
+
+$font-family: 'Inter-SemiBold';
 
 @mixin button {
     display: flex;
@@ -24,22 +31,23 @@ $background_idle: $first_color;
     font-family: 'Inter-SemiBold';
     white-space: nowrap;
 
-    background: $first_color;
-    color: $second_color;
-    border-color: $second_color;
+    background: $color_2;
+    color: $color_1;
+    border-color: $color_1;
 
-    border-width: 1px;
+    border-width: 3px;
     border-style: solid;
     border-radius: $button_border_radius;
     cursor: pointer;
-    transition: all 100ms ease-out;
+    transition: all 100ms ease-in-out;
     font-size: 1em;
 }
 
 @mixin button_hover {
-    background-color: $second_color;
-    color: $first_color;
-    border-color: $first_color;
+    background-color: $color_3;
+    color: $color_4;
+    border-color: $color_5;
+    border-radius: 50%;
 }
 
 @mixin scene-button {
@@ -80,7 +88,7 @@ $background_idle: $first_color;
     flex-direction: column;
     align-items: center;
 
-    max-width: 80%;
+    max-width: 90%;
     max-height: 80%;
 }
 

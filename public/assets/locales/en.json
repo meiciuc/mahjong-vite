@@ -1,6 +1,9 @@
 {
     "start": {
-        "play": "Play"
+        "play": "Play",
+        "mahjong": "MAHJONG",
+        "kitchen": "KITCHEN",
+        "reachTheHighestLevel": "REACH THE HIGHEST LEVEL"
     },
     "game": {
         "help": "?",

@@ -4,7 +4,7 @@ import { BaseController } from "./BaseController";
 import { Signal1 } from "@ash.ts/ash";
 import { Assets } from "pixi.js";
 import { Config } from "../Config";
-import { adsService } from "../services/AdsService";
+import { visualSettingsService } from "../services/VisualSettingsService";
 
 export class AssetsController extends BaseController {
 
@@ -27,7 +27,7 @@ export class AssetsController extends BaseController {
     }
 
     async loadLanguage() {
-        return Localization.setLanguage(adsService.getLanguage());
+        return Localization.setLanguage(visualSettingsService.getLanguage());
     }
 
     async loadFonts() {

@@ -22,6 +22,11 @@ const handleClick = () => {
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
+            <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
+            <div class="Label">{{ Localization.getText('start.kitchen') }}</div>
+            <div class="Spacer"></div>
+            <div class="HalfLabel">{{ Localization.getText('start.reachTheHighestLevel') }}</div>
+            <div class="SpacerX"></div>
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
         </div>
     </div>
@@ -36,18 +41,44 @@ const handleClick = () => {
 
 .Popup {
     @include scene-buttons-block;
+    font-family: $font-family;
+}
+
+.Label {
+    display: block;
+    font-size: 4em;
+    color: $button-text-color;
+    white-space: none;
+    text-align: center;
+}
+
+.HalfLabel {
+    font-size: 2em;
+    color: $button-text-color;
+    white-space: normal;
+    text-align: center;
+}
+
+.SquareLabel {
+    font-size: 1em;
+    color: $button-text-color;
+    white-space: normal;
+    text-align: center;
 }
 
 .StartButton {
     @include scene-button;
-    color: $button_text_colored;
-    background-color: $button_text_idle;
-    border-color: $button_text_idle;
 }
 
 .StartButton:hover {
-    background-color: $button_background_colored;
-    color: $button_text_idle;
-    border-color: $button_text_idle;
+    @include button_hover;
+}
+
+.Spacer {
+    height: 1em;
+}
+
+.SpacerX {
+    height: 4em;
 }
 </style>

@@ -35,7 +35,7 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .MenuPanel {
-    background: $second_color_darken;
+    background: $color_2;
     display: flex;
     justify-content: space-evenly;
 

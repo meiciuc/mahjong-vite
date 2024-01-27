@@ -22,7 +22,7 @@ const handleClick = () => {
 @import '../global.scss';
 
 .HelpContainer {
-    background-color: $background_colored_darken;
+    background-color: $color_2;
     border-radius: $button_border_radius;
     display: flex;
 }
