@@ -82,10 +82,4 @@ const gameLevel = useModel(["gameLevel"]);
     @include scene-text-block;
     min-width: 3em;
 }
-
-.HelpsCount {
-    user-select: none;
-    color: $button_text_idle;
-    width: 3em;
-}
 </style>

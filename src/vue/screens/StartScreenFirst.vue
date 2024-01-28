@@ -45,6 +45,7 @@ const handleClick = () => {
 }
 
 .Label {
+    font-family: $font-family;
     display: block;
     font-size: 4em;
     color: $button-text-color;
@@ -53,6 +54,7 @@ const handleClick = () => {
 }
 
 .HalfLabel {
+    font-family: $font-family;
     font-size: 2em;
     color: $button-text-color;
     white-space: normal;
@@ -60,6 +62,7 @@ const handleClick = () => {
 }
 
 .SquareLabel {
+    font-family: $font-family;
     font-size: 1em;
     color: $button-text-color;
     white-space: normal;

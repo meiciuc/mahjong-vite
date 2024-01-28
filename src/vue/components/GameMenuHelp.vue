@@ -10,9 +10,9 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="HelpContainer">
-        <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }" @click="handleClick">?</div>
-        <div class="HelpsCount">{{ helpsCount }}</div>
+    <div class="HelpContainer" :class="{ HelpContainerDisabled: helpsCount === 0 }" @click="handleClick">
+        <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }">?</div>
+        <div class="HelpsCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
     </div>
 </template>
 
@@ -20,9 +20,28 @@ const handleClick = () => {
 @import '../global.scss';
 
 .HelpContainer {
-    background-color: $background_colored;
-    border-radius: $button_border_radius;
-    display: flex;
+    position: relative;
+}
+
+.HelpContainer:hover .HelpButton {
+    @include button_hover;
+    border-radius: 1em;
+}
+
+.HelpContainerDisabled {
+    pointer-events: none;
+    cursor: auto;
+}
+
+.HelpContainerDisabled .HelpButton {
+    opacity: 0.5;
+}
+
+.HelpContainerDisabled .HelpsCount {
+    border-radius: .6em;
+    color: #868684;
+    border-color: #868684;
+    background: $color_light;
 }
 
 .HelpButton {
@@ -34,19 +53,30 @@ const handleClick = () => {
     border-radius: 0.4em;
 }
 
-.HelpButton:hover {
-    @include button_hover;
-    border-radius: 1em;
-}
-
-.HelpButtonDisabled {
-    pointer-events: none;
-    cursor: auto;
-    opacity: 0.7;
-}
-
 .HelpsCount {
-    @include scene-text-block;
-    width: 2em;
+    border-color: $color_5;
+    border-radius: 50%;
+    color: $color_5;
+
+    border-width: 3px;
+    border-style: solid;
+    font-size: 1em;
+
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background: #FF7A59;
+    margin-right: -15%;
+    margin-bottom: -10%;
+
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+    user-select: none;
+    cursor: pointer;
 }
 </style>
