@@ -34,23 +34,25 @@ const handleClick = () => {
 }
 
 .HelpContainerDisabled .HelpButton {
-    opacity: 0.5;
+    color: #cdcdcd;
+    border-color: #cdcdcd;
+    background: $color_light;
 }
 
 .HelpContainerDisabled .HelpsCount {
+    @include menu_button-disabled;
     border-radius: .6em;
-    color: #868684;
-    border-color: #868684;
     background: $color_light;
 }
 
 .HelpButton {
     @include menu_button;
+    font-size: 2em;
+    border-radius: .4em;
     min-width: 1.4em;
     min-height: 1.4em;
     height: 1.4em;
-    font-size: 2em;
-    border-radius: 0.4em;
+    width: 1.4em;
 }
 
 .HelpsCount {

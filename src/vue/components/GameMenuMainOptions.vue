@@ -20,10 +20,7 @@ const handleClick = () => {
 @import '../global.scss';
 
 .OptionsButton {
-    @include button;
-    width: $game_menu_height;
-    height: $game_menu_height;
-
+    @include menu_button;
 }
 
 .OptionsButton:hover {
