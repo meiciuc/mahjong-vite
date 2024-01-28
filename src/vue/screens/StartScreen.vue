@@ -2,7 +2,6 @@
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 import { computed, ref } from 'vue';
-import InviteShareModule from '../components/InviteShareModule.vue';
 
 
 const Popup = ref(null);
@@ -23,8 +22,12 @@ const handleClick = () => {
 <template>
     <div class="Container">
         <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
+            <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
+            <div class="Label">{{ Localization.getText('start.kitchen') }}</div>
+            <div class="Spacer"></div>
+            <div class="HalfLabel">{{ Localization.getText('start.reachTheHighestLevel') }}</div>
+            <div class="SpacerX"></div>
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
-            <InviteShareModule class="InviteShareModule"></InviteShareModule>
         </div>
     </div>
 </template>
@@ -38,6 +41,32 @@ const handleClick = () => {
 
 .Popup {
     @include scene-buttons-block;
+    font-family: $font-family;
+}
+
+.Label {
+    font-family: $font-family;
+    display: block;
+    font-size: 4em;
+    color: $button-text-color;
+    white-space: none;
+    text-align: center;
+}
+
+.HalfLabel {
+    font-family: $font-family;
+    font-size: 2em;
+    color: $button-text-color;
+    white-space: normal;
+    text-align: center;
+}
+
+.SquareLabel {
+    font-family: $font-family;
+    font-size: 1em;
+    color: $button-text-color;
+    white-space: normal;
+    text-align: center;
 }
 
 .StartButton {
@@ -48,7 +77,11 @@ const handleClick = () => {
     @include button_hover;
 }
 
-.InviteShareModule {
-    margin-top: 1em;
+.Spacer {
+    height: 1em;
+}
+
+.SpacerX {
+    height: 4em;
 }
 </style>

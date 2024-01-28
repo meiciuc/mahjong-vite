@@ -36,7 +36,7 @@ export class ApplicationController extends BaseController {
     }
 
     private async firstCycle() {
-        GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 3 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
+        GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
 
         const res1 = await this.waitGameCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
         if (res1 !== VueServiceSignals.StartButton) {

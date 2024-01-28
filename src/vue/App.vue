@@ -13,7 +13,6 @@ import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
-import StartScreenFirst from './screens/StartScreenFirst.vue';
 
 const appState = useModel(["appState"]);
 
@@ -49,10 +48,8 @@ const showColoredBackground = computed(() => {
 
 
     <Transition>
-        <StartScreen v-if="appState === AppStateEnum.START_SCREEN"></StartScreen>
-    </Transition>
-    <Transition>
-        <StartScreenFirst v-if="appState === AppStateEnum.START_SCREEN_FIRST"></StartScreenFirst>
+        <StartScreen v-if="appState === AppStateEnum.START_SCREEN || appState === AppStateEnum.START_SCREEN_FIRST">
+        </StartScreen>
     </Transition>
 
     <Transition>

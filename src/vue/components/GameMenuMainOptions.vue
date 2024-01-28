@@ -2,18 +2,21 @@
 import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { AppStateEnum } from '../../model/GameModel';
+import { computed } from 'vue';
 const appState = useModel(["appState"]);
 
-const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
-}
+const scaled = computed(() => {
+    return appState.value === AppStateEnum.GAME_SCREEN_PAUSE ? true : appState.value === AppStateEnum.GAME_SCREEN ? true :
+        false;
+});
+
 </script>
 
 <template>
-    <div class="OptionsButton" @click="handleClick">
-        <div class="Scaled">
+    <div class="OptionsButton" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
+        <div :class="{ Scaled: scaled, SymbolTransform: !scaled }">
             {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
-                '&#x2699;' }}
+                '&#9881;' }}
         </div>
     </div>
 </template>
@@ -27,6 +30,10 @@ const handleClick = () => {
 
 .OptionsButton:hover {
     @include button_hover;
+}
+
+.SymbolTransform {
+    transform: translateY(-.05em);
 }
 
 .Scaled {
