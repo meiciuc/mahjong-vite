@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useModel } from '../../model/useModel';
-import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 
 const helpsCount = useModel(["helpsCount"]);
@@ -12,9 +11,8 @@ const handleClick = () => {
 
 <template>
     <div class="HelpContainer">
+        <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }" @click="handleClick">?</div>
         <div class="HelpsCount">{{ helpsCount }}</div>
-        <div v-if="helpsCount > 0" class="HelpButton" @click="handleClick">{{ Localization.getText('game.help') }}</div>
-        <div v-else class="HelpButton HelpButtonDisabled">{{ Localization.getText('game.help') }}</div>
     </div>
 </template>
 
@@ -22,18 +20,23 @@ const handleClick = () => {
 @import '../global.scss';
 
 .HelpContainer {
-    background-color: $color_2;
+    background-color: $background_colored;
     border-radius: $button_border_radius;
     display: flex;
 }
 
 .HelpButton {
-    @include button;
-    padding: 0em 1em;
+    @include menu_button;
+    min-width: 1.4em;
+    min-height: 1.4em;
+    height: 1.4em;
+    font-size: 2em;
+    border-radius: 0.4em;
 }
 
 .HelpButton:hover {
     @include button_hover;
+    border-radius: 1em;
 }
 
 .HelpButtonDisabled {

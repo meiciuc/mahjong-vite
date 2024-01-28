@@ -74,7 +74,7 @@ const showBoosters = computed(() => {
     <Transition>
         <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
     </Transition>
-    <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
+    <GameMenuMain v-if="showMainMenu">
     </GameMenuMain>
     <Transition>
         <ModalBackground v-if="showModalBackground"></ModalBackground>
@@ -103,11 +103,6 @@ const showBoosters = computed(() => {
 }
 
 // menu-left
-.GameMenuMain {
-    width: 100vw;
-    height: 1.5em;
-    position: fixed;
-}
 
 .Canvas {
     position: fixed;

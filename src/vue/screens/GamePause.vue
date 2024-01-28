@@ -40,14 +40,9 @@ const handleClick = () => {
 
 .StartButton {
     @include scene-button;
-    color: $button_text_colored;
-    background-color: $button_text_idle;
-    border-color: $button_text_idle;
 }
 
 .StartButton:hover {
-    background-color: $button_background_colored;
-    color: $button_text_idle;
-    border-color: $button_text_idle;
+    @include button_hover;
 }
 </style>

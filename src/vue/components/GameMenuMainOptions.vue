@@ -2,7 +2,6 @@
 import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { AppStateEnum } from '../../model/GameModel';
-const helpsCount = useModel(["helpsCount"]);
 const appState = useModel(["appState"]);
 
 const handleClick = () => {
@@ -11,7 +10,7 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div v-if="helpsCount > 0" class="OptionsButton" @click="handleClick">
+    <div class="OptionsButton" @click="handleClick">
         {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
             '&#x2699;' }}
     </div>
@@ -22,8 +21,9 @@ const handleClick = () => {
 
 .OptionsButton {
     @include button;
-    min-width: 3em;
-    max-width: 3em;
+    width: $game_menu_height;
+    height: $game_menu_height;
+
 }
 
 .OptionsButton:hover {

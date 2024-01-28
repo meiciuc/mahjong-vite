@@ -35,7 +35,11 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .MenuPanel {
-    background: $color_2;
+    width: 100vw;
+    height: $game_menu_height;
+    position: fixed;
+
+    background: $background_colored;
     display: flex;
     justify-content: space-evenly;
 
@@ -47,7 +51,7 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .GameMenuTimer {
-    margin-right: 15px;
+    margin-right: 1em;
 }
 
 .MenuContentItem {
@@ -61,6 +65,12 @@ const gameLevel = useModel(["gameLevel"]);
     @include scene-text-block;
     min-width: 2em;
     margin-right: 0.3em;
+
+    // display: block;
+    // font-size: 4em;
+    // color: $button-text-color;
+    // white-space: none;
+    // text-align: center;
 }
 
 .GameScoreCommon {
@@ -76,7 +86,6 @@ const gameLevel = useModel(["gameLevel"]);
 .HelpsCount {
     user-select: none;
     color: $button_text_idle;
-    // padding: calc($button_padding_vertical / 2) calc($button_padding_horizontal / 4);
     width: 3em;
 }
 </style>

@@ -1,24 +1,20 @@
-$color_1: #171714;
-$color_2: #f5f5f5;
+$color_dark: #171714;
+$color_light: #f5f5f5;
 $color_3: #9ab90d;
 $color_4: #fcdb7b;
 $color_5: #683909;
 
-$first_color: $color_2;
-$second_color: $color_1;
-
-$button-text-color: $color_1;
+$button-text-color: $color_dark;
 
 $button_padding_horizontal: 2em;
 $button_padding_vertical: 0.2em;
-$button_background_colored: $second_color;
-$button_background_idle: $first_color;
-$button_text_colored: $second_color;
-$button_text_idle: $first_color;
+$button_text_idle: $color_light;
 $button_border_radius: 0.2em;
+$menu_button_border_radius: 1em;
 
+$game_menu_height: 3em;
 
-$background_colored: $color_2;
+$background_colored: $color_light;
 
 $font-family: 'Inter-SemiBold';
 
@@ -31,9 +27,9 @@ $font-family: 'Inter-SemiBold';
     font-family: 'Inter-SemiBold';
     white-space: nowrap;
 
-    background: $color_2;
-    color: $color_1;
-    border-color: $color_1;
+    background: $color_light;
+    color: $color_dark;
+    border-color: $color_dark;
 
     border-width: 3px;
     border-style: solid;
@@ -48,6 +44,16 @@ $font-family: 'Inter-SemiBold';
     color: $color_4;
     border-color: $color_5;
     border-radius: 50%;
+}
+
+@mixin menu_button {
+    @include button;
+    font-size: 2em;
+    height: $game_menu_height;
+    max-height: $game_menu_height;
+    min-height: $game_menu_height;
+    min-width: $game_menu_height;
+    border-radius: $menu_button_border_radius;
 }
 
 @mixin scene-button {
@@ -70,9 +76,9 @@ $font-family: 'Inter-SemiBold';
 
 @mixin scene-text-block {
     user-select: none;
-    background: $second_color;
-    color: $first_color;
-    border-color: $first_color;
+    background: $color_dark;
+    color: $color_light;
+    border-color: $color_light;
     border-radius: $button_border_radius;
     border: solid;
     border-width: 1px;
