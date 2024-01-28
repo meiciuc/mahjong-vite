@@ -61,13 +61,9 @@ const boosterTimeCount = computed(() => {
 
 .Timer {
     @include menu_button;
+    width: 3.5em;
     cursor: auto;
     user-select: none;
-    font-size: 2em;
-    border-radius: .4em;
-    min-height: 1.4em;
-    height: 1.4em;
-    width: 3.5em;
 }
 
 .BoosterTimeCount {

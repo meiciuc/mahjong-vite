@@ -106,7 +106,7 @@ const showColoredBackground = computed(() => {
 }
 
 .GameMenuMainOptions {
-    position: absolute;
+    position: fixed;
     top: 1px;
     right: 0.1em;
 }

@@ -46,11 +46,15 @@ $font-family: 'Inter-SemiBold';
 
 @mixin menu_button {
     @include button;
-    width: $game_menu_height;
-    height: $game_menu_height;
-    border-radius: 1em;
     color: #979797;
     border-color: #979797;
+
+    font-size: 2em;
+    border-radius: .4em;
+    min-width: 1.4em;
+    min-height: 1.4em;
+    height: 1.4em;
+    width: 1.4em;
 }
 
 @mixin menu_button-disabled {

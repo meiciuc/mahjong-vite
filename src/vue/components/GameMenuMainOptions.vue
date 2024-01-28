@@ -11,8 +11,10 @@ const handleClick = () => {
 
 <template>
     <div class="OptionsButton" @click="handleClick">
-        {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
-            '&#x2699;' }}
+        <div class="Scaled">
+            {{ appState === AppStateEnum.GAME_SCREEN_PAUSE ? '>>' : appState === AppStateEnum.GAME_SCREEN ? '||' :
+                '&#x2699;' }}
+        </div>
     </div>
 </template>
 
@@ -25,5 +27,9 @@ const handleClick = () => {
 
 .OptionsButton:hover {
     @include button_hover;
+}
+
+.Scaled {
+    transform: scale(0.5);
 }
 </style>

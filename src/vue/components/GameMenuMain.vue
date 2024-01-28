@@ -65,12 +65,6 @@ const gameLevel = useModel(["gameLevel"]);
     @include scene-text-block;
     min-width: 2em;
     margin-right: 0.3em;
-
-    // display: block;
-    // font-size: 4em;
-    // color: $button-text-color;
-    // white-space: none;
-    // text-align: center;
 }
 
 .GameScoreCommon {

@@ -47,12 +47,6 @@ const handleClick = () => {
 
 .HelpButton {
     @include menu_button;
-    font-size: 2em;
-    border-radius: .4em;
-    min-width: 1.4em;
-    min-height: 1.4em;
-    height: 1.4em;
-    width: 1.4em;
 }
 
 .HelpsCount {
