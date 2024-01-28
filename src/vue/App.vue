@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { AppStateEnum } from '../model/GameModel';
 import { useModel } from '../model/useModel';
-import Boosters from './components/Boosters.vue';
 import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
 import ModalBackground from './components/ModalBackground.vue';
@@ -34,10 +33,6 @@ const showModalBackground = computed(() => {
 
 const showColoredBackground = computed(() => {
     return appState.value !== AppStateEnum.GAME_SCREEN;
-});
-
-const showBoosters = computed(() => {
-    return appState.value === AppStateEnum.GAME_SCREEN;
 });
 
 // https://html5up.net/uploads/demos/dimension/#
@@ -84,8 +79,6 @@ const showBoosters = computed(() => {
     </Transition>
     <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>
-
-    <Boosters v-if="showBoosters" class="Boosters"></Boosters>
 </template>
 
 <style lang="scss" scoped>
@@ -116,11 +109,5 @@ const showBoosters = computed(() => {
     position: absolute;
     top: 1px;
     right: 0.1em;
-}
-
-.Boosters {
-    position: absolute;
-    top: 20%;
-    right: 0px;
 }
 </style>

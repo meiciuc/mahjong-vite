@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import { useModel } from '../../model/useModel';
 import { AppStateEnum } from '../../model/GameModel';
+import { VueServiceSignals, vueService } from '../VueService';
+import { BoosterType } from '../../model/GameModel';
 
 const appState = useModel(["appState"]);
 const stateTime = useModel(["gameAge"]);
@@ -27,22 +29,78 @@ const blinking = computed(() => {
 
     return result;
 })
+
+const boosters = useModel(["boosters"]);
+const handleClick = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeUseBooster);
+}
+
+const boosterTimeCount = computed(() => {
+    return (boosters.value as any)[BoosterType.TIME]?.current || 0;
+})
 </script>
 
 <template>
-    <div class="Timer">
-        <span :class=blinking>
-            {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
-        </span>
+    <div class="TimerContainer">
+        <div class="Timer">
+            <span :class=blinking>
+                {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
+            </span>
+        </div>
+        <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">{{
+            boosterTimeCount }}</div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 @import '../global.scss';
 
+.TimerContainer {
+    position: relative;
+}
+
 .Timer {
-    @include scene-text-block;
-    width: 5em;
+    @include menu_button;
+    cursor: auto;
+    user-select: none;
+    font-size: 2em;
+    border-radius: .4em;
+    min-height: 1.4em;
+    height: 1.4em;
+    width: 3.5em;
+}
+
+.BoosterTimeCount {
+    border-color: $color_5;
+    border-radius: 50%;
+    color: $color_5;
+
+    border-width: 3px;
+    border-style: solid;
+    font-size: 1em;
+
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background: #FF7A59;
+    margin-right: -8%;
+    margin-bottom: -5%;
+
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+    user-select: none;
+    cursor: pointer;
+}
+
+.BoosterTimeCountDisabled {
+    @include menu_button-disabled;
+    border-radius: .6em;
+    background: $color_light;
 }
 
 .blink {
