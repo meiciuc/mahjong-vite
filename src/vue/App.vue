@@ -97,14 +97,14 @@ const showColoredBackground = computed(() => {
 .Canvas {
     position: fixed;
     left: 0px;
-    top: 5em;
+    top: 5rem;
     width: 100vw;
-    height: calc(100vh - 5em);
+    height: calc(100vh - 5rem);
 }
 
 .GameMenuMainOptions {
     position: fixed;
     top: 1px;
-    right: 0.1em;
+    right: 0.1rem;
 }
 </style>

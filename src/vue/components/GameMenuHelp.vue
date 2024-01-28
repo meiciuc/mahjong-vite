@@ -25,7 +25,6 @@ const handleClick = () => {
 
 .HelpContainer:hover .HelpButton {
     @include button_hover;
-    border-radius: 1em;
 }
 
 .HelpContainerDisabled {
@@ -41,7 +40,7 @@ const handleClick = () => {
 
 .HelpContainerDisabled .HelpsCount {
     @include menu_button-disabled;
-    border-radius: .6em;
+    border-radius: .6rem;
     background: $color_light;
 }
 
@@ -56,17 +55,17 @@ const handleClick = () => {
 
     border-width: 3px;
     border-style: solid;
-    font-size: 1em;
+    font-size: 1rem;
 
     position: absolute;
     right: 0px;
     bottom: 0px;
     background: #FF7A59;
-    margin-right: -15%;
-    margin-bottom: -10%;
+    margin-right: -0.5rem;
+    margin-bottom: -0.5rem;
 
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -74,5 +73,7 @@ const handleClick = () => {
 
     user-select: none;
     cursor: pointer;
+
+    z-index: 1;
 }
 </style>

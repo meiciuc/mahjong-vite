@@ -72,6 +72,6 @@ const Score = ref(null);
 
 .GameScoreCommon {
     @include menu_button;
-    min-width: 5em;
+    min-width: 9rem;
 }
 </style>

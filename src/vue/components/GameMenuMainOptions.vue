@@ -33,7 +33,7 @@ const scaled = computed(() => {
 }
 
 .SymbolTransform {
-    transform: translateY(-.05em);
+    transform: translateY(-.05rem);
 }
 
 .Scaled {

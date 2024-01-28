@@ -52,7 +52,7 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .GameMenuTimer {
-    // margin-right: 1em;
+    // margin-right: 1rem;
 }
 
 .MenuContentItem {
@@ -64,11 +64,9 @@ const gameLevel = useModel(["gameLevel"]);
 
 .GameLevel {
     @include menu_button;
-    min-width: 1.5em;
 }
 
 .GameScoreCurrent {
     @include scene-text-block;
-    min-width: 3em;
 }
 </style>

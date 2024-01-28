@@ -61,7 +61,7 @@ const boosterTimeCount = computed(() => {
 
 .Timer {
     @include menu_button;
-    width: 3.5em;
+    width: 7rem;
     cursor: auto;
     user-select: none;
 }
@@ -73,17 +73,17 @@ const boosterTimeCount = computed(() => {
 
     border-width: 3px;
     border-style: solid;
-    font-size: 1em;
+    font-size: 1rem;
 
     position: absolute;
     right: 0px;
     bottom: 0px;
     background: #FF7A59;
-    margin-right: -8%;
-    margin-bottom: -5%;
+    margin-right: -0.5rem;
+    margin-bottom: -0.5rem;
 
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -97,7 +97,7 @@ const boosterTimeCount = computed(() => {
 
 .BoosterTimeCountDisabled {
     @include menu_button-disabled;
-    border-radius: .6em;
+    border-radius: .6rem;
     background: $color_light;
 }
 
