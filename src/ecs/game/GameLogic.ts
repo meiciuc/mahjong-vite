@@ -149,7 +149,7 @@ export class GameLogic {
         }
 
         const seed = `${Math.random()}`;
-        const gameMaxTime = Math.round(Math.max(size * size * 2, 60)) * 100;
+        const gameMaxTime = Math.round(Math.max(size * size * 2, 60));
 
         console.log('gameMaxTime', gameMaxTime, 'commonCount', commonCount)
 

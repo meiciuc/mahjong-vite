@@ -71,7 +71,7 @@ const Score = ref(null);
 @import '../global.scss';
 
 .GameScoreCommon {
-    @include scene-text-block;
-    min-width: 6em;
+    @include menu_button;
+    min-width: 5em;
 }
 </style>

@@ -19,7 +19,7 @@ const gameLevel = useModel(["gameLevel"]);
             <GameMenuTimer class="GameMenuTimer"></GameMenuTimer>
             <GameMenuHelp></GameMenuHelp>
         </div>
-        <div class="Grow2"></div>
+        <div class="OptionsButtonPlace"></div>
     </div>
 </template>
 
@@ -27,11 +27,12 @@ const gameLevel = useModel(["gameLevel"]);
 @import '../global.scss';
 
 .Grow1 {
-    flex-grow: 1;
+    // flex-grow: 1;
 }
 
-.Grow2 {
-    flex-grow: 2;
+.OptionsButtonPlace {
+    // flex-grow: 2;
+    width: 1.4em
 }
 
 .MenuPanel {
@@ -41,7 +42,7 @@ const gameLevel = useModel(["gameLevel"]);
 
     background: $background_colored;
     display: flex;
-    justify-content: space-evenly;
+    // justify-content: space-evenly;
 
     align-items: center;
     text-align: center;
@@ -51,7 +52,7 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .GameMenuTimer {
-    margin-right: 1em;
+    // margin-right: 1em;
 }
 
 .MenuContentItem {
@@ -62,14 +63,8 @@ const gameLevel = useModel(["gameLevel"]);
 }
 
 .GameLevel {
-    @include scene-text-block;
-    min-width: 2em;
-    margin-right: 0.3em;
-}
-
-.GameScoreCommon {
-    @include scene-text-block;
-    min-width: 6em;
+    @include menu_button;
+    min-width: 1.5em;
 }
 
 .GameScoreCurrent {

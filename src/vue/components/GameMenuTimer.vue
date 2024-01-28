@@ -91,6 +91,8 @@ const boosterTimeCount = computed(() => {
 
     user-select: none;
     cursor: pointer;
+
+    z-index: 1;
 }
 
 .BoosterTimeCountDisabled {
