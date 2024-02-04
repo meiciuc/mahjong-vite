@@ -97,7 +97,7 @@ const boosterTimeCount = computed(() => {
 
 .BoosterTimeCountDisabled {
     @include menu_button-disabled;
-    border-radius: .6rem;
+    border-radius: .3rem;
     background: $color_light;
 }
 

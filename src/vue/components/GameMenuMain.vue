@@ -3,19 +3,48 @@ import { useModel } from '../../model/useModel';
 import GameMenuTimer from './GameMenuTimer.vue';
 import GameMenuHelp from './GameMenuHelp.vue';
 import GameMenuScore from './GameMenuScore.vue';
+import { onMounted, ref } from 'vue';
 
 const gameLevel = useModel(["gameLevel"]);
+
+const Left = ref(null);
+const Center = ref(null);
+
+const handleOnResize = () => {
+
+    if (!Center || !Left) {
+        return;
+    }
+
+    const center = Center._rawValue as HTMLHtmlElement;
+    let x = window.innerWidth / 2 - center.getBoundingClientRect().width / 2;
+
+    const left = Left._rawValue as HTMLHtmlElement;
+    const leftWidth = left.getBoundingClientRect().width;
+
+    if (leftWidth > x) {
+        x = leftWidth;
+    }
+
+    center.style.left = `${x}px`;
+}
+
+onMounted(() => {
+    console.log('mounted')
+    window.addEventListener('resize', handleOnResize);
+    window.addEventListener('orientationchange', handleOnResize);
+    handleOnResize();
+});
 
 </script>
 
 <template>
     <div class="MenuPanel">
-        <div class="MenuContentItem">
+        <div class="MenuContentItem" ref="Left">
             <div class="GameLevel">{{ gameLevel }}</div>
             <GameMenuScore></GameMenuScore>
         </div>
-        <div class="Grow1"></div>
-        <div class="MenuContentItem">
+        <div class="MenuContentItem Center" ref="Center">
             <GameMenuTimer class="GameMenuTimer"></GameMenuTimer>
             <GameMenuHelp></GameMenuHelp>
         </div>
@@ -26,33 +55,14 @@ const gameLevel = useModel(["gameLevel"]);
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.Grow1 {
-    // flex-grow: 1;
-}
-
-.OptionsButtonPlace {
-    // flex-grow: 2;
-    width: 1.4em
-}
-
 .MenuPanel {
-    width: 100vw;
+    width: calc(100vw - 3rem);
     height: $game_menu_height;
     position: fixed;
 
     background: $background_colored;
     display: flex;
-    // justify-content: space-evenly;
-
-    align-items: center;
-    text-align: center;
-    font-family: 'Inter-SemiBold';
-
-    min-width: 80%;
-}
-
-.GameMenuTimer {
-    // margin-right: 1rem;
+    background-color: red;
 }
 
 .MenuContentItem {
@@ -62,11 +72,11 @@ const gameLevel = useModel(["gameLevel"]);
     font-family: 'Inter-SemiBold';
 }
 
-.GameLevel {
-    @include menu_button;
+.Center {
+    position: absolute;
 }
 
-.GameScoreCurrent {
-    @include scene-text-block;
+.GameLevel {
+    @include menu_button;
 }
 </style>
