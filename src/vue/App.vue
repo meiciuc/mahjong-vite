@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { AppStateEnum } from '../model/GameModel';
 import { useModel } from '../model/useModel';
 import GameMenuMain from './components/GameMenuMain.vue';
@@ -33,6 +33,16 @@ const showModalBackground = computed(() => {
 const showColoredBackground = computed(() => {
     return appState.value !== AppStateEnum.GAME_SCREEN;
 });
+
+const handleResize = () => {
+    document.documentElement.style.fontSize = '12px';
+}
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    handleResize();
+})
 
 // https://html5up.net/uploads/demos/dimension/#
 </script>

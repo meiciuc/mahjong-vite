@@ -27,6 +27,10 @@ const handleClick = () => {
     @include button_hover;
 }
 
+.HelpContainer:hover .HelpsCount {
+    transform: scale(1.5);
+}
+
 .HelpContainerDisabled {
     pointer-events: none;
     cursor: auto;
@@ -73,6 +77,8 @@ const handleClick = () => {
 
     user-select: none;
     cursor: pointer;
+
+    transition: all 100ms cubic-bezier(.25, .57, .68, 1.66);
 
     z-index: 1;
 }
