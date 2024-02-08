@@ -47,8 +47,8 @@ const boosterTimeCount = computed(() => {
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
             </span>
         </div>
-        <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">{{
-            boosterTimeCount }}</div>
+        <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
+            &#128722;</div>
     </div>
 </template>
 

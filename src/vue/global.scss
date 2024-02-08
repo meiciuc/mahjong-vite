@@ -16,13 +16,53 @@ $background_colored: $color_light;
 
 $font-family: 'Inter-SemiBold';
 
+$scene_color_bockground: $color_light;
+$scene_label_text_color: $color_dark;
+$scene_button_text_color: $color_dark;
+
+$menu_color_bockground: $color_dark;
+$menu_label_text_color: $color_light;
+$menu_button_text_color: $color_light;
+$label_font_family: 'MontserratAlternates-Regular';
+$button_font_family: 'MontserratAlternates-Black';
+
+@mixin label_base {
+    display: block;
+    white-space: none;
+    text-align: center;
+}
+
+@mixin button_base {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 100ms ease-in-out;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    // overflow: hidden;
+    // outline: none;
+}
+
+@mixin button_menu {
+    @include button_base;
+    font-family: $button_font_family;
+}
+
+@mixin label_menu {
+    font-family: $menu_label_font_family;
+}
+
 @mixin button {
     display: flex;
     justify-content: center;
     text-align: center;
     align-items: center;
 
-    font-family: 'Inter-SemiBold';
+    font-family: $button_font_family;
     white-space: nowrap;
 
     background: $color_light;

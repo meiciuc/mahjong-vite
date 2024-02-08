@@ -16,4 +16,22 @@ body {
   src: url('../fonts/Inter-SemiBold.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'MontserratAlternates-Regular';
+  font-style: normal;
+  src: url('../fonts/MontserratAlternates-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'MontserratAlternates-Black';
+  font-style: normal;
+  src: url('../fonts/MontserratAlternates-Black.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto-Light';
+  font-style: normal;
+  src: url('../fonts/Roboto-Light.woff') format('woff');
+}
+
 @media (prefers-color-scheme: light) {}

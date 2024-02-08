@@ -45,20 +45,17 @@ const handleClick = () => {
 }
 
 .Label {
-    font-family: $font-family;
-    display: block;
+    @include label_base;
+    font-family: $label_font_family;
     font-size: 4em;
-    color: $button-text-color;
-    white-space: none;
-    text-align: center;
+    color: $scene_label_text_color;
 }
 
 .HalfLabel {
-    font-family: $font-family;
+    @include label_base;
+    font-family: 'Roboto-Light';
     font-size: 2em;
-    color: $button-text-color;
-    white-space: normal;
-    text-align: center;
+    color: $scene_label_text_color;
 }
 
 .SquareLabel {
@@ -70,11 +67,15 @@ const handleClick = () => {
 }
 
 .StartButton {
-    @include scene-button;
+    @include button_base;
+    font-family: $button_font_family;
+    color: $scene_button_text_color;
+    font-size: 4em;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .StartButton:hover {
-    @include button_hover;
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
 .Spacer {

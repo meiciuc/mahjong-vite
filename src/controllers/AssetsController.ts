@@ -36,6 +36,9 @@ export class AssetsController extends BaseController {
                 custom: {
                     families: [
                         'Inter-SemiBold',
+                        'MontserratAlternates-Regular',
+                        'MontserratAlternates-Black',
+                        'Roboto-Light',
                     ],
                 },
                 timeout: 2000,

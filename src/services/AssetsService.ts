@@ -19,7 +19,7 @@ class AssetsService {
     async init() {
         await this.setupRedParticleCanvas();
         await this.setupPathAnimatedAroundTileViewTexturePool();
-        await this.setupScoreTexts();
+        // await this.setupScoreTexts();
 
         return Promise.resolve();
     }
