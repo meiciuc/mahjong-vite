@@ -12,7 +12,7 @@ const handleClick = () => {
 <template>
     <div class="HelpContainer" :class="{ HelpContainerDisabled: helpsCount === 0 }" @click="handleClick">
         <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }">?</div>
-        <div class="HelpsCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
+        <!-- <div class="HelpsCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div> -->
     </div>
 </template>
 
@@ -24,7 +24,7 @@ const handleClick = () => {
 }
 
 .HelpContainer:hover .HelpButton {
-    @include button_hover;
+    box-shadow: -1rem 1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1) inset;
 }
 
 .HelpContainer:hover .HelpsCount {
@@ -49,7 +49,11 @@ const handleClick = () => {
 }
 
 .HelpButton {
-    @include menu_button;
+    @include button_menu;
+    width: 3rem;
+    font-size: 2rem;
+    color: $menu_label_text_color;
+    border-radius: 50%;
 }
 
 .HelpsCount {

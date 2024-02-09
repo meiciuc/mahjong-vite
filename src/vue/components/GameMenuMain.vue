@@ -16,17 +16,17 @@ const handleOnResize = () => {
         return;
     }
 
-    const center = Center._rawValue as HTMLHtmlElement;
-    let x = window.innerWidth / 2 - center.getBoundingClientRect().width / 2;
-
     const left = Left._rawValue as HTMLHtmlElement;
     const leftWidth = left.getBoundingClientRect().width;
+
+    const center = Center._rawValue as HTMLHtmlElement;
+    let x = window.innerWidth / 2 - center.getBoundingClientRect().width / 2 - leftWidth;
 
     if (leftWidth > x) {
         x = leftWidth;
     }
 
-    center.style.left = `${x}px`;
+    center.style.marginLeft = `${x}px`;
 }
 
 onMounted(() => {
@@ -44,8 +44,10 @@ onMounted(() => {
             <div class="GameLevel">{{ gameLevel }}</div>
             <GameMenuScore></GameMenuScore>
         </div>
-        <div class="MenuContentItem Center" ref="Center">
+        <div class="MenuContentItem" ref="Center">
             <GameMenuTimer class="GameMenuTimer"></GameMenuTimer>
+        </div>
+        <div class="MenuContentItem">
             <GameMenuHelp></GameMenuHelp>
         </div>
         <div class="OptionsButtonPlace"></div>
@@ -56,13 +58,22 @@ onMounted(() => {
 @import '../global.scss';
 
 .MenuPanel {
-    width: calc(100vw - 3rem);
-    height: $game_menu_height;
     position: fixed;
-
-    background: $background_colored;
+    left: 0px;
+    right: 0px;
+    height: $game_menu_height;
+    background-color: $menu_color_background;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
     display: flex;
-    background-color: red;
+}
+
+.ColoredBackgroundLine {
+    position: absolute;
+    top: calc($game_menu_height * .1);
+    width: calc(100vw);
+    height: calc($game_menu_height * .8);
+    background-color: $menu_color_background;
+    opacity: 0.6;
 }
 
 .MenuContentItem {
@@ -72,11 +83,11 @@ onMounted(() => {
     font-family: 'Inter-SemiBold';
 }
 
-.Center {
-    position: absolute;
-}
-
 .GameLevel {
-    @include menu_button;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 2rem;
+    font-family: $label_font_family;
+    color: $menu_label_text_color;
 }
 </style>

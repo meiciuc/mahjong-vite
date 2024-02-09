@@ -71,7 +71,8 @@ const Score = ref(null);
 @import '../global.scss';
 
 .GameScoreCommon {
-    @include menu_button;
-    min-width: 9rem;
+    font-size: 1rem;
+    font-family: $label_font_family;
+    color: $menu_label_text_color;
 }
 </style>

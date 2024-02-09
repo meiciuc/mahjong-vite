@@ -25,11 +25,16 @@ const scaled = computed(() => {
 @import '../global.scss';
 
 .OptionsButton {
-    @include menu_button;
+    @include button_menu;
+    width: 3rem;
+    font-size: 2rem;
+    color: $menu_label_text_color;
+    border-radius: 50%;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .OptionsButton:hover {
-    @include button_hover;
+    box-shadow: -1rem 1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1) inset;
 }
 
 .SymbolTransform {

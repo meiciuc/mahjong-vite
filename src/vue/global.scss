@@ -20,7 +20,7 @@ $scene_color_bockground: $color_light;
 $scene_label_text_color: $color_dark;
 $scene_button_text_color: $color_dark;
 
-$menu_color_bockground: $color_dark;
+$menu_color_background: #575757;
 $menu_label_text_color: $color_light;
 $menu_button_text_color: $color_light;
 $label_font_family: 'MontserratAlternates-Regular';
@@ -43,8 +43,6 @@ $button_font_family: 'MontserratAlternates-Black';
     background-color: transparent;
     background-repeat: no-repeat;
     border: none;
-    // overflow: hidden;
-    // outline: none;
 }
 
 @mixin button_menu {

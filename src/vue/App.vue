@@ -76,7 +76,7 @@ onMounted(() => {
     <Transition>
         <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
     </Transition>
-    <GameMenuMain v-if="showMainMenu">
+    <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
         <ModalBackground v-if="showModalBackground"></ModalBackground>
@@ -112,9 +112,13 @@ onMounted(() => {
     height: calc(100vh - 5rem);
 }
 
+.GameMenuMain {
+    margin-top: calc(1rem * 0.5);
+}
+
 .GameMenuMainOptions {
     position: fixed;
-    top: 1px;
+    margin-top: calc(1rem * 0.7);
     right: 0.1rem;
 }
 </style>

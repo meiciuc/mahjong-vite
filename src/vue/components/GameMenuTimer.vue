@@ -47,8 +47,8 @@ const boosterTimeCount = computed(() => {
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
             </span>
         </div>
-        <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
-            &#128722;</div>
+        <!-- <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
+            &#128722;</div> -->
     </div>
 </template>
 
@@ -60,10 +60,12 @@ const boosterTimeCount = computed(() => {
 }
 
 .Timer {
-    @include menu_button;
     width: 7rem;
-    cursor: auto;
     user-select: none;
+
+    font-size: 2rem;
+    font-family: $label_font_family;
+    color: $menu_label_text_color;
 }
 
 .BoosterTimeCount {
