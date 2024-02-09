@@ -12,7 +12,7 @@ const handleClick = () => {
 <template>
     <div class="HelpContainer" :class="{ HelpContainerDisabled: helpsCount === 0 }" @click="handleClick">
         <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }">?</div>
-        <!-- <div class="HelpsCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div> -->
+        <div class="BoosterCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
     </div>
 </template>
 
@@ -27,8 +27,8 @@ const handleClick = () => {
     box-shadow: -1rem 1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1) inset;
 }
 
-.HelpContainer:hover .HelpsCount {
-    transform: scale(1.5);
+.HelpContainer:hover .BoosterCount {
+    transform: scale(1.2);
 }
 
 .HelpContainerDisabled {
@@ -42,7 +42,7 @@ const handleClick = () => {
     background: $color_light;
 }
 
-.HelpContainerDisabled .HelpsCount {
+.HelpContainerDisabled .BoosterCount {
     @include menu_button-disabled;
     border-radius: .6rem;
     background: $color_light;
@@ -56,24 +56,21 @@ const handleClick = () => {
     border-radius: 50%;
 }
 
-.HelpsCount {
-    border-color: $color_5;
+.BoosterCount {
     border-radius: 50%;
-    color: $color_5;
+    color: $color_dark;
 
-    border-width: 3px;
-    border-style: solid;
     font-size: 1rem;
 
     position: absolute;
     right: 0px;
     bottom: 0px;
-    background: #FF7A59;
-    margin-right: -0.5rem;
-    margin-bottom: -0.5rem;
+    background: #04FB9C;
+    margin-right: -1rem;
+    margin-bottom: -1rem;
 
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -82,6 +79,7 @@ const handleClick = () => {
     user-select: none;
     cursor: pointer;
 
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5) inset;
     transition: all 100ms cubic-bezier(.25, .57, .68, 1.66);
 
     z-index: 1;

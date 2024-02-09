@@ -47,8 +47,8 @@ const boosterTimeCount = computed(() => {
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
             </span>
         </div>
-        <!-- <div class="BoosterTimeCount" :class="{ BoosterTimeCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
-            &#128722;</div> -->
+        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
+            {{ boosterTimeCount > 0 ? boosterTimeCount : '' }}</div>
     </div>
 </template>
 
@@ -68,24 +68,21 @@ const boosterTimeCount = computed(() => {
     color: $menu_label_text_color;
 }
 
-.BoosterTimeCount {
-    border-color: $color_5;
+.BoosterCount {
     border-radius: 50%;
-    color: $color_5;
+    color: $color_dark;
 
-    border-width: 3px;
-    border-style: solid;
     font-size: 1rem;
 
     position: absolute;
     right: 0px;
     bottom: 0px;
-    background: #FF7A59;
+    background: #04FB9C;
     margin-right: -0.5rem;
-    margin-bottom: -0.5rem;
+    margin-bottom: -1rem;
 
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -94,13 +91,22 @@ const boosterTimeCount = computed(() => {
     user-select: none;
     cursor: pointer;
 
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5) inset;
+    transition: all 100ms cubic-bezier(.25, .57, .68, 1.66);
+
     z-index: 1;
 }
 
-.BoosterTimeCountDisabled {
-    @include menu_button-disabled;
-    border-radius: .3rem;
-    background: $color_light;
+.BoosterCountDisabled {
+    background: #ff0000;
+    background-image: url(./assets/svg/shoppingСart.svg);
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position: 40% 60%;
+}
+
+.BoosterCount:hover {
+    transform: scale(1.2);
 }
 
 .blink {
