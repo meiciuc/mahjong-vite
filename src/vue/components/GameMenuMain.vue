@@ -17,10 +17,12 @@ const handleOnResize = () => {
     }
 
     const left = Left._rawValue as HTMLHtmlElement;
-    const leftWidth = left.getBoundingClientRect().width;
+    const leftBounding = left.getBoundingClientRect();
+    const leftX = leftBounding.x;
+    const leftWidth = leftBounding.width;
 
     const center = Center._rawValue as HTMLHtmlElement;
-    let x = window.innerWidth / 2 - center.getBoundingClientRect().width / 2 - leftWidth;
+    let x = window.innerWidth / 2 - center.getBoundingClientRect().width / 2 - leftX - leftWidth;
 
     if (leftWidth > x) {
         x = leftWidth;
@@ -80,12 +82,10 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Inter-SemiBold';
+    margin-left: 2rem;
 }
 
 .GameLevel {
-    margin-left: 1rem;
-    margin-right: 1rem;
     font-size: 2rem;
     font-family: $label_font_family;
     color: $menu_label_text_color;

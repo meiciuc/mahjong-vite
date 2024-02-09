@@ -41,7 +41,7 @@ const boosterTimeCount = computed(() => {
 </script>
 
 <template>
-    <div class="TimerContainer">
+    <div class="ToolContainer">
         <div class="Timer">
             <span :class=blinking>
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
@@ -55,8 +55,12 @@ const boosterTimeCount = computed(() => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.TimerContainer {
+.ToolContainer {
     position: relative;
+}
+
+.ToolContainer:hover .BoosterCount {
+    transform: scale(1.2);
 }
 
 .Timer {
@@ -66,6 +70,8 @@ const boosterTimeCount = computed(() => {
     font-size: 2rem;
     font-family: $label_font_family;
     color: $menu_label_text_color;
+
+    cursor: pointer;
 }
 
 .BoosterCount {
@@ -103,10 +109,6 @@ const boosterTimeCount = computed(() => {
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: 40% 60%;
-}
-
-.BoosterCount:hover {
-    transform: scale(1.2);
 }
 
 .blink {
