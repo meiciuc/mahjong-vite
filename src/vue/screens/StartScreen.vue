@@ -11,7 +11,7 @@ const marginLeft = computed(() => {
 });
 
 const marginTop = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
+    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height * 0.65}px`;
 });
 
 const handleClick = () => {
@@ -41,36 +41,27 @@ const handleClick = () => {
 
 .Popup {
     @include scene-buttons-block;
-    font-family: $font-family;
 }
 
 .Label {
     @include label_base;
+    font-size: 4rem;
     font-family: $label_font_family;
-    font-size: 4em;
     color: $scene_label_text_color;
 }
 
 .HalfLabel {
     @include label_base;
+    font-size: 2rem;
     font-family: 'Roboto-Light';
-    font-size: 2em;
     color: $scene_label_text_color;
-}
-
-.SquareLabel {
-    font-family: $font-family;
-    font-size: 1em;
-    color: $button-text-color;
-    white-space: normal;
-    text-align: center;
 }
 
 .StartButton {
     @include button_base;
     font-family: $button_font_family;
     color: $scene_button_text_color;
-    font-size: 4em;
+    font-size: 4rem;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -79,10 +70,10 @@ const handleClick = () => {
 }
 
 .Spacer {
-    height: 1em;
+    height: .7rem;
 }
 
 .SpacerX {
-    height: 4em;
+    height: 1.2rem;
 }
 </style>
