@@ -1,63 +1,39 @@
 <script setup lang="ts">
 import { Localization } from '../../utils/Localization';
-import { VueServiceSignals, vueService } from '../VueService';
-import { computed, ref, onMounted } from 'vue';
-import { GameModelHelper } from '../../model/GameModelHelper';
-import { adsService } from '../../services/AdsService';
-import { UserActionAfterTheLastGame } from '../../model/GameModel';
 import { TimeSkipper } from '../../utils/TimeSkipper';
-import ShopModule from '../components/ShopModule.vue';
+import { VueServiceSignals, vueService } from '../VueService';
+import { ref, onMounted } from 'vue';
+import { adsService } from '../../services/AdsService';
 
-const showButtons = ref(false);
 const Popup = ref(null);
-
-const showFullscrinAds = async () => {
-    return adsService.showFullscreen();
-};
+const showButtons = ref(false);
 
 onMounted(async () => {
     await new TimeSkipper(1000).execute();
     try {
-        await showFullscrinAds();
+        await adsService.showFullscreen();
     } catch (error) {
-        console.log(`Error: ${error}`)
+        console.error(`Error: adsService.showFullscreen return ${error}`)
     }
 
     showButtons.value = true;
 });
 
-const marginLeft = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
-});
-
-const marginTop = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 2}px`;
-});
-
-const handleClick = (value: UserActionAfterTheLastGame) => {
-    GameModelHelper.setUserActionAfterTheLastGame(value);
+const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
 }
 </script>
 
 <template>
     <div class="Container">
-        <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div class="Text">{{ Localization.getText('defeated.defeated') }}</div>
-            <div class="Spacer"></div>
-            <button :class="[showButtons ? '' : 'Opacity']" class="StartButton"
-                @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
-                    Localization.getText('defeated.again') }}</button>
-            <div class="Spacer"></div>
-            <button :class="[showButtons ? '' : 'Opacity']" class="StartButton"
-                @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
-                    Localization.getText('defeated.reset') }}</button>
-            <div class="Spacer"></div>
-            <button v-if="GameModelHelper.getGameLevel() > 1" :class="[showButtons ? '' : 'Opacity']" class="StartButton"
-                @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
-                    Localization.getText('defeated.previous') }}</button>
-            <div class="Spacer"></div>
-            <ShopModule></ShopModule>
+        <div class="PopupLevelOne">
+            <div ref="Popup" class="PopupLevelTwo">
+                <div class="Label">{{ Localization.getText('defeated.defeated') }}</div>
+                <div class="HalfStartButton" :class="{ NotShowButtons: !showButtons }">{{
+                    Localization.getText('defeated.again') }}</div>
+            </div>
+            <button class="StartButton" :class="{ NotShowButtons: !showButtons }" @click="handleClick">{{
+                Localization.getText('start.play') }}</button>
         </div>
     </div>
 </template>
@@ -69,32 +45,41 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     @include scene-container;
 }
 
-.Popup {
-    @include scene-buttons-block;
+.PopupLevelOne {
+    @include popup_level_one;
+}
+
+.PopupLevelTwo {
+    @include popup_level_two;
+}
+
+.Label {
+    @include label_screen;
+    margin-bottom: 10%;
 }
 
 .StartButton {
-    @include scene-button;
+    @include button_screen;
 }
 
 .StartButton:hover {
-    @include button_hover;
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.Text {
-    font-family: 'Inter-SemiBold';
-    text-align: center;
-    font-size: 3em;
-    color: white;
-    user-select: none;
+.HalfStartButton {
+    @include button_screen;
+    align-self: self-start;
+    font-size: 2rem;
+    margin-bottom: 5%;
 }
 
-.Opacity {
+.HalfStartButton:hover {
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.NotShowButtons {
     opacity: 0;
-}
-
-.Spacer {
-    height: 1em;
+    user-select: none;
 }
 </style>
 

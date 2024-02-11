@@ -32,6 +32,8 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
+
+        // GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         await this.firstCycle();
     }
 

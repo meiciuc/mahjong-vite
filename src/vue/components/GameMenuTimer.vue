@@ -84,7 +84,7 @@ const boosterTimeCount = computed(() => {
     right: 0px;
     bottom: 0px;
     background: #04FB9C;
-    margin-right: -0.5rem;
+    // margin-right: -5%;
     margin-bottom: -1rem;
 
     width: 2rem;

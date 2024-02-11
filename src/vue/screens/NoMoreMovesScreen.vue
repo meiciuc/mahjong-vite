@@ -1,43 +1,23 @@
 <script setup lang="ts">
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
-import { computed, ref } from 'vue';
-import { GameModelHelper } from '../../model/GameModelHelper';
-import { UserActionAfterTheLastGame } from '../../model/GameModel';
-import ShopModule from '../components/ShopModule.vue';
+import { ref } from 'vue';
 
 const Popup = ref(null);
 
-const marginLeft = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().width / 2}px`;
-});
-
-const marginTop = computed(() => {
-    return Popup.value === null ? '0px' : `-${(Popup.value as HTMLDivElement).getBoundingClientRect().height / 3}px`;
-});
-
-const handleClick = (value: UserActionAfterTheLastGame) => {
-    GameModelHelper.setUserActionAfterTheLastGame(value);
+const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
 }
 </script>
 
 <template>
     <div class="Container">
-        <div ref="Popup" class="Popup" :style="{ marginLeft: marginLeft, marginTop: marginTop }">
-            <div class="Text" style="color: brown;">{{ Localization.getText('noMoreMoves.noMoreMoves') }}</div>
-            <div class="Spacer"></div>
-            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RETRY)">{{
-                Localization.getText('noMoreMoves.again') }}</button>
-            <div class="Spacer"></div>
-            <button class="StartButton" @click="handleClick(UserActionAfterTheLastGame.RESET)">{{
-                Localization.getText('noMoreMoves.reset') }}</button>
-            <div class="Spacer"></div>
-            <button v-if="GameModelHelper.getGameLevel() > 1" class="StartButton"
-                @click="handleClick(UserActionAfterTheLastGame.PREVIOUS)">{{
-                    Localization.getText('noMoreMoves.previous') }}</button>
-            <div class="Spacer"></div>
-            <ShopModule></ShopModule>
+        <div class="PopupLevelOne">
+            <div ref="Popup" class="PopupLevelTwo">
+                <div class="Label">{{ Localization.getText('noMoreMoves.noMoreMoves') }}</div>
+                <div class="HalfStartButton">{{ Localization.getText('defeated.again') }}</div>
+            </div>
+            <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
         </div>
     </div>
 </template>
@@ -49,29 +29,36 @@ const handleClick = (value: UserActionAfterTheLastGame) => {
     @include scene-container;
 }
 
-.Popup {
-    @include scene-buttons-block;
+.PopupLevelOne {
+    @include popup_level_one;
+}
+
+.PopupLevelTwo {
+    @include popup_level_two;
+}
+
+.Label {
+    @include label_screen;
+    margin-bottom: 10%;
 }
 
 .StartButton {
-    @include scene-button;
+    @include button_screen;
 }
 
 .StartButton:hover {
-    @include button_hover;
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.Text {
-    font-family: 'Inter-SemiBold';
-    text-align: center;
-    font-size: 3em;
-    color: white;
-    user-select: none;
-    word-break: normal;
+.HalfStartButton {
+    @include button_screen;
+    align-self: self-start;
+    font-size: 2rem;
+    margin-bottom: 5%;
 }
 
-.Spacer {
-    height: 1em;
+.HalfStartButton:hover {
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 </style>
 

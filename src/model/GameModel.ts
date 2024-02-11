@@ -27,11 +27,9 @@ export enum AppStateEnum {
 
     GAME_NO_MORE_MOVES = 'gameNoMoreMovesScreen',
     GAME_NO_MORE_MOVES_ADS = 'gameNoMoreMovesAds',
-    GAME_NO_MORE_MOVES_CHOOSING = 'gameNoMoreMovesChoosing',
 
     GAME_DEFEAT = 'gameDefeateScreen',
     GAME_DEFEAT_ADS = 'gameDefeatedAds',
-    GAME_DEFEATED_CHOOSING = 'gameDefetedChoosing',
 }
 
 export interface IconState {

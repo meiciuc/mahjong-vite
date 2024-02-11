@@ -16,14 +16,14 @@
         "next": "Дальше"
     },
     "defeated": {
-        "defeated": "Проигрыш",
-        "again": "Повторить этот же расклад",
+        "defeated": "НЕ победа",
+        "again": "повторить",
         "reset": "Ещё раз",
         "previous": "Уровень раньше",
         "initialy": "С начала"
     },
     "noMoreMoves": {
-        "noMoreMoves": "Нет доступных ходов",
+        "noMoreMoves": "ходов НЕТ",
         "again": "Повторить этот же расклад",
         "reset": "Ещё раз",
         "previous": "Уровень раньше",
