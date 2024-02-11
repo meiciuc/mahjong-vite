@@ -19,7 +19,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-    <div class="OptionsButton" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
+    <div class="GameMenuMainOptions" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
         <div :class="[icon]">{{ icon === '' ? '&#9881;' : '' }}</div>
     </div>
 </template>
@@ -27,16 +27,15 @@ const icon = computed(() => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.OptionsButton {
+.GameMenuMainOptions {
     @include button_menu;
     width: 3rem;
     font-size: 2rem;
     color: $menu_label_text_color;
     border-radius: 50%;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
-.Pause {
+.GameMenuMainOptions .Pause {
     width: 3rem;
     height: 3rem;
 
@@ -46,7 +45,7 @@ const icon = computed(() => {
     background-position: 40% 60%;
 }
 
-.Play {
+.GameMenuMainOptions .Play {
     width: 3rem;
     height: 3rem;
 
@@ -56,15 +55,7 @@ const icon = computed(() => {
     background-position: 40% 60%;
 }
 
-.OptionsButton:hover {
+.GameMenuMainOptions:hover {
     box-shadow: -1rem 1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1) inset;
-}
-
-.SymbolTransform {
-    transform: translateY(-.05rem);
-}
-
-.Scaled {
-    transform: scale(0.5);
 }
 </style>

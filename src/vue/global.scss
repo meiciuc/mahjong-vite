@@ -27,6 +27,7 @@ $label_font_family: 'MontserratAlternates-Regular';
 $button_font_family: 'MontserratAlternates-Black';
 
 @mixin label_base {
+    user-select: none;
     display: block;
     white-space: none;
     text-align: center;

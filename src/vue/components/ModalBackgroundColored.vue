@@ -3,13 +3,13 @@
 </script>
 
 <template>
-    <div class="ModalBackground"></div>
+    <div class="ModalBackgroundColored"></div>
 </template>
 
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.ModalBackground {
+.ModalBackgroundColored {
     background-color: $background_colored;
     position: absolute;
     top: 0px;

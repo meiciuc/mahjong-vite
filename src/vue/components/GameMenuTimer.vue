@@ -41,7 +41,7 @@ const boosterTimeCount = computed(() => {
 </script>
 
 <template>
-    <div class="ToolContainer">
+    <div class="GameMenuTimer">
         <div class="Timer">
             <span :class=blinking>
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
@@ -55,15 +55,15 @@ const boosterTimeCount = computed(() => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.ToolContainer {
+.GameMenuTimer {
     position: relative;
 }
 
-.ToolContainer:hover .BoosterCount {
+.GameMenuTimer:hover .BoosterCount {
     transform: scale(1.2);
 }
 
-.Timer {
+.GameMenuTimer .Timer {
     width: 7rem;
     user-select: none;
 
@@ -74,7 +74,7 @@ const boosterTimeCount = computed(() => {
     cursor: pointer;
 }
 
-.BoosterCount {
+.GameMenuTimer .BoosterCount {
     border-radius: 50%;
     color: $color_dark;
 
@@ -103,7 +103,7 @@ const boosterTimeCount = computed(() => {
     z-index: 1;
 }
 
-.BoosterCountDisabled {
+.GameMenuTimer .BoosterCountDisabled {
     background: #ff0000;
     background-image: url(./assets/svg/shoppingСart.svg);
     background-repeat: no-repeat;
@@ -111,39 +111,39 @@ const boosterTimeCount = computed(() => {
     background-position: 40% 60%;
 }
 
-.blink {
+.GameMenuTimer .blink {
     animation: blink-animation 1s steps(60, start) infinite;
 }
 
-.blink_9 {
+.GameMenuTimer .blink_9 {
     animation: blink-animation .9s steps(55, start) infinite;
 }
 
-.blink_8 {
+.GameMenuTimer .blink_8 {
     animation: blink-animation .8s steps(45, start) infinite;
 }
 
-.blink_7 {
+.GameMenuTimer .blink_7 {
     animation: blink-animation .7s steps(35, start) infinite;
 }
 
-.blink_6 {
+.GameMenuTimer .blink_6 {
     animation: blink-animation .6s steps(40, start) infinite;
 }
 
-.blink_5 {
+.GameMenuTimer .blink_5 {
     animation: blink-animation .5s steps(30, start) infinite;
 }
 
-.blink_4 {
+.GameMenuTimer .blink_4 {
     animation: blink-animation .4s steps(20, start) infinite;
 }
 
-.blink_3 {
+.GameMenuTimer .blink_3 {
     animation: blink-animation .3s steps(15, start) infinite;
 }
 
-.blink_2 {
+.GameMenuTimer .blink_2 {
     animation: blink-animation .2s steps(10, start) infinite;
 }
 

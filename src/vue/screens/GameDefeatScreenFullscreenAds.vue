@@ -25,7 +25,7 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="Container">
+    <div class="GameDefeatScreenFullscreenAds">
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('defeated.defeated') }}</div>
@@ -41,43 +41,43 @@ const handleClick = () => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.Container {
+.GameDefeatScreenFullscreenAds {
     @include scene-container;
 }
 
-.PopupLevelOne {
+.GameDefeatScreenFullscreenAds .PopupLevelOne {
     @include popup_level_one;
 }
 
-.PopupLevelTwo {
+.GameDefeatScreenFullscreenAds .PopupLevelTwo {
     @include popup_level_two;
 }
 
-.Label {
+.GameDefeatScreenFullscreenAds .Label {
     @include label_screen;
     margin-bottom: 10%;
 }
 
-.StartButton {
+.GameDefeatScreenFullscreenAds .StartButton {
     @include button_screen;
 }
 
-.StartButton:hover {
+.GameDefeatScreenFullscreenAds .StartButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.HalfStartButton {
+.GameDefeatScreenFullscreenAds .HalfStartButton {
     @include button_screen;
     align-self: self-start;
     font-size: 2rem;
     margin-bottom: 5%;
 }
 
-.HalfStartButton:hover {
+.GameDefeatScreenFullscreenAds .HalfStartButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.NotShowButtons {
+.GameDefeatScreenFullscreenAds .NotShowButtons {
     opacity: 0;
     user-select: none;
 }

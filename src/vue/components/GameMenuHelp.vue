@@ -12,7 +12,7 @@ const handleClick = () => {
 <template>
     <div class="ToolContainer" :class="{ ToolContainerDisabled: helpsCount === 0 }" @click="handleClick">
         <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }">?</div>
-        <div class="BoosterCount" :class="{ HelpCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
+        <div class="BoosterCount" :class="{ BoosterCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
     </div>
 </template>
 
@@ -84,5 +84,13 @@ const handleClick = () => {
     transition: all 100ms cubic-bezier(.25, .57, .68, 1.66);
 
     z-index: 1;
+}
+
+.BoosterCountDisabled {
+    background: #ff0000;
+    background-image: url(./assets/svg/shoppingСart.svg);
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position: 40% 60%;
 }
 </style>

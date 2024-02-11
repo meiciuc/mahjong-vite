@@ -11,7 +11,7 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="Container">
+    <div class="GameDefeatScreen">
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('defeated.defeated') }}</div>
@@ -25,39 +25,39 @@ const handleClick = () => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.Container {
+.GameDefeatScreen {
     @include scene-container;
 }
 
-.PopupLevelOne {
+.GameDefeatScreen .PopupLevelOne {
     @include popup_level_one;
 }
 
-.PopupLevelTwo {
+.GameDefeatScreen .PopupLevelTwo {
     @include popup_level_two;
 }
 
-.Label {
+.GameDefeatScreen .Label {
     @include label_screen;
     margin-bottom: 10%;
 }
 
-.StartButton {
+.GameDefeatScreen .StartButton {
     @include button_screen;
 }
 
-.StartButton:hover {
+.GameDefeatScreen .StartButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.HalfStartButton {
+.GameDefeatScreen .HalfStartButton {
     @include button_screen;
     align-self: self-start;
     font-size: 2rem;
     margin-bottom: 5%;
 }
 
-.HalfStartButton:hover {
+.GameDefeatScreen .HalfStartButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 </style>

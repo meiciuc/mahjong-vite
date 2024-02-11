@@ -12,7 +12,7 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div class="Container">
+    <div class="StartScreen">
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
@@ -28,31 +28,31 @@ const handleClick = () => {
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.Container {
+.StartScreen {
     @include scene-container;
 }
 
-.PopupLevelOne {
+.StartScreen .PopupLevelOne {
     @include popup_level_one;
 }
 
-.PopupLevelTwo {
+.StartScreen .PopupLevelTwo {
     @include popup_level_two;
 }
 
-.Label {
+.StartScreen .Label {
     @include label_screen;
 }
 
-.StartButton {
+.StartScreen .StartButton {
     @include button_screen;
 }
 
-.StartButton:hover {
+.StartScreen .StartButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.HalfLabel {
+.StartScreen .HalfLabel {
     @include label_base;
     font-size: 2rem;
     font-family: 'Roboto-Light';

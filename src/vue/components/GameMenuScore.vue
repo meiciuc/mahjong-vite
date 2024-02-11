@@ -60,7 +60,7 @@ const Score = ref(null);
 </script>
 
 <template>
-    <div class="GameScoreCommon">
+    <div class="GameMenuScore">
         <span ref="Score">
             {{ `${gameTotalScoreFormated}` }}
         </span>
@@ -70,9 +70,10 @@ const Score = ref(null);
 <style lang="scss" scoped>
 @import '../global.scss';
 
-.GameScoreCommon {
+.GameMenuScore {
     font-size: 1rem;
     font-family: $label_font_family;
     color: $menu_label_text_color;
+    user-select: none;
 }
 </style>
