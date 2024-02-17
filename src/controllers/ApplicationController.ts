@@ -13,7 +13,6 @@ import { VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
-// import { TutorialController } from './TutorialController';
 
 export class ApplicationController extends BaseController {
 
@@ -33,8 +32,8 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
 
-        // GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEAT_ADS);
-        await this.firstCycle();
+        GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEAT_ADS);
+        // await this.firstCycle();
     }
 
     private async firstCycle() {

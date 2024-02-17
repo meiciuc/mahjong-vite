@@ -6,28 +6,15 @@
         "reachTheHighestLevel": "REACH THE HIGHEST LEVEL"
     },
     "game": {
-        "help": "?",
-        "level": "Level",
-        "points": "Points",
-        "clickAnyPlace": "Click any place"
+        "help": "?"
     },
     "victory": {
-        "victory": "Victory",
-        "next": "Next"
+        "victory": "Victory"
     },
-    "defeated": {
-        "defeated": "Defeat",
-        "again": "Repeat the same layout",
-        "reset": "Reset",
-        "previous": "One level below",
-        "initialy": "Initialy"
-    },
-    "noMoreMoves": {
-        "noMoreMoves": "NO MORE MOVES AVALIABLE",
-        "again": "Repeat the same layout",
-        "reset": "Reset",
-        "previous": "One level below",
-        "initialy": "Initialy"
+    "defeat": {
+        "defeat": "NO victory",
+        "noMoreMoves": "NO more moves avaliable",
+        "repeat": "repeat"
     },
     "options": {
         "sound": "Sound",

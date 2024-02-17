@@ -8,10 +8,8 @@ import ModalBackground from './components/ModalBackground.vue';
 import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
 import Options from './popups/Options.vue';
 import GameDefeatScreen from './screens/GameDefeatScreen.vue';
-import GameDefeatScreenFullscreenAds from './screens/GameDefeatScreenFullscreenAds.vue';
 import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
-import NoMoreMovesScreen from './screens/NoMoreMovesScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
 
 const appState = useModel(["appState"]);
@@ -44,6 +42,41 @@ onMounted(() => {
     handleResize();
 })
 
+const showDefeat = computed(() => {
+    switch (appState.value) {
+        case AppStateEnum.GAME_DEFEAT:
+        case AppStateEnum.GAME_DEFEAT_ADS:
+        case AppStateEnum.GAME_NO_MORE_MOVES:
+        case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+            return true;
+        default:
+            return false;
+    }
+});
+
+const showFullscreenAds = computed(() => {
+    switch (appState.value) {
+        case AppStateEnum.GAME_DEFEAT_ADS:
+        case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+            return true;
+        default:
+            return false;
+    }
+});
+
+const defeatMessage = computed(() => {
+    switch (appState.value) {
+        case AppStateEnum.GAME_DEFEAT:
+        case AppStateEnum.GAME_DEFEAT_ADS:
+            return 'defeat.defeat';
+        case AppStateEnum.GAME_NO_MORE_MOVES:
+        case AppStateEnum.GAME_NO_MORE_MOVES_ADS:
+            return 'defeat.noMoreMoves';
+        default:
+            return '';
+    }
+});
+
 // https://html5up.net/uploads/demos/dimension/#
 </script>
 
@@ -67,14 +100,8 @@ onMounted(() => {
     </Transition>
 
     <Transition>
-        <GameDefeatScreen v-if="appState === AppStateEnum.GAME_DEFEAT"></GameDefeatScreen>
-    </Transition>
-    <Transition>
-        <GameDefeatScreenFullscreenAds v-if="appState === AppStateEnum.GAME_DEFEAT_ADS">
-        </GameDefeatScreenFullscreenAds>
-    </Transition>
-    <Transition>
-        <NoMoreMovesScreen v-if="appState === AppStateEnum.GAME_NO_MORE_MOVES"></NoMoreMovesScreen>
+        <GameDefeatScreen v-if="showDefeat" :show-fullscreen-ads="showFullscreenAds" :reason-message="defeatMessage">
+        </GameDefeatScreen>
     </Transition>
     <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>

@@ -6,28 +6,15 @@
         "reachTheHighestLevel": "наивысший уровень!"
     },
     "game": {
-        "help": "?",
-        "level": "Уровень",
-        "points": "Очки",
-        "clickAnyPlace": "Клик в любое место"
+        "help": "?"
     },
     "victory": {
-        "victory": "Победа",
-        "next": "Дальше"
+        "victory": "Победа"
     },
-    "defeated": {
-        "defeated": "НЕ победа",
-        "again": "повторить",
-        "reset": "Ещё раз",
-        "previous": "Уровень раньше",
-        "initialy": "С начала"
-    },
-    "noMoreMoves": {
+    "defeat": {
+        "defeat": "НЕ победа",
         "noMoreMoves": "ходов НЕТ",
-        "again": "Повторить этот же расклад",
-        "reset": "Ещё раз",
-        "previous": "Уровень раньше",
-        "initialy": "С начала"
+        "repeat": "повторить"
     },
     "options": {
         "sound": "Звуки",
