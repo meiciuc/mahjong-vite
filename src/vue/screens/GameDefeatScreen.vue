@@ -6,8 +6,8 @@ import { ref, onMounted } from 'vue';
 import { adsService } from '../../services/AdsService';
 
 export interface Props {
-    showFullscreenAds: boolean,
-    reasonMessage: string
+    showFullscreenAds?: boolean,
+    reasonMessage?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {

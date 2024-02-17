@@ -32,8 +32,8 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
 
-        GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEAT_ADS);
-        // await this.firstCycle();
+        // GameModelHelper.setApplicationState(AppStateEnum.GAME_DEFEAT_ADS);
+        await this.firstCycle();
     }
 
     private async firstCycle() {

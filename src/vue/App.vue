@@ -4,13 +4,12 @@ import { AppStateEnum } from '../model/GameModel';
 import { useModel } from '../model/useModel';
 import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
-import ModalBackground from './components/ModalBackground.vue';
-import ModalBackgroundColored from './components/ModalBackgroundColored.vue';
-import Options from './popups/Options.vue';
+
 import GameDefeatScreen from './screens/GameDefeatScreen.vue';
 import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
+import OptionsScreen from './screens/OptionsScreen.vue';
 
 const appState = useModel(["appState"]);
 
@@ -26,10 +25,6 @@ const showMainMenu = computed(() => {
 
 const showModalBackground = computed(() => {
     return optionsAreVisible.value;
-});
-
-const showColoredBackground = computed(() => {
-    return appState.value !== AppStateEnum.GAME_SCREEN;
 });
 
 const handleResize = () => {
@@ -86,30 +81,24 @@ const defeatMessage = computed(() => {
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
 
     <Transition>
-        <ModalBackgroundColored v-if="showColoredBackground"></ModalBackgroundColored>
-    </Transition>
-
-
-    <Transition>
-        <StartScreen v-if="appState === AppStateEnum.START_SCREEN || appState === AppStateEnum.START_SCREEN_FIRST">
+        <StartScreen
+            v-if="!showModalBackground && (appState === AppStateEnum.START_SCREEN || appState === AppStateEnum.START_SCREEN_FIRST)">
         </StartScreen>
     </Transition>
 
     <Transition>
-        <GameVictoryScreen v-if="appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
+        <GameVictoryScreen v-if="!showModalBackground && appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
     </Transition>
 
     <Transition>
-        <GameDefeatScreen v-if="showDefeat" :show-fullscreen-ads="showFullscreenAds" :reason-message="defeatMessage">
+        <GameDefeatScreen v-if="!showModalBackground && showDefeat" :show-fullscreen-ads="showFullscreenAds"
+            :reason-message="defeatMessage">
         </GameDefeatScreen>
     </Transition>
     <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
-        <ModalBackground v-if="showModalBackground"></ModalBackground>
-    </Transition>
-    <Transition>
-        <Options v-if="optionsAreVisible"></Options>
+        <OptionsScreen v-if="showModalBackground"></OptionsScreen>
     </Transition>
     <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>
