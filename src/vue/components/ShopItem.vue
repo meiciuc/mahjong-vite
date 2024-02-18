@@ -2,6 +2,7 @@
 
 import { defineProps, withDefaults } from 'vue';
 import { Localization } from '../../utils/Localization';
+import { VueServiceSignals, vueService } from '../VueService';
 
 export interface Props {
     booster: "time" | "question";
@@ -15,13 +16,31 @@ const props = withDefaults(defineProps<Props>(), {
     price: 100,
 });
 
+const handleClick = () => {
+    let signal: VueServiceSignals | undefined = undefined;
+    if (props.booster === 'time') {
+        signal = props.price > 0 ? VueServiceSignals.BoosterTimeSpendScore : VueServiceSignals.BoosterTimeWatchReward;
+    }
+
+    if (props.booster === 'question') {
+        signal = props.price > 0 ? VueServiceSignals.BoosterHelpSpendScore : VueServiceSignals.BoosterHelpWatchReward;
+    }
+
+    if (signal) {
+        vueService.signalDataBus.dispatch(signal);
+    }
+}
+
 </script>
 <template>
     <div class="ShopItem">
-        <div :class="[props.booster === 'time' ? 'IconTime' : 'IconQuestion']">{{ props.booster === 'time' ? '' :
-            Localization.getText('game.help') }}</div>
+        <div :class="[props.booster === 'time' ? 'IconTime' : 'IconQuestion']">
+            {{ props.booster === 'time' ? '' : Localization.getText('game.help') }}
+        </div>
         <div class="Value">{{ `+${props.value}` }}</div>
-        <div :class="[props.price > 0 ? 'PriceScore' : 'PriceAds']">{{ (props.price > 0 ? `-${props.price}` : '') }}</div>
+        <div :class="[props.price > 0 ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick">
+            {{ (props.price > 0 ? `-${props.price}` : '') }}
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>

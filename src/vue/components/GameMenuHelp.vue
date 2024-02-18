@@ -1,18 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useModel } from '../../model/useModel';
 import { VueServiceSignals, vueService } from '../VueService';
+import { BoosterType } from '../../model/GameModel';
 
-const helpsCount = useModel(["helpsCount"]);
+const boosters = useModel(["boosters"]);
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpUseBooster);
 }
+
+const boosterCount = computed(() => {
+    return (boosters.value as any)[BoosterType.HELP]?.current || 0;
+})
 
 </script>
 
 <template>
-    <div class="ToolContainer" :class="{ ToolContainerDisabled: helpsCount === 0 }" @click="handleClick">
-        <div class="HelpButton" :class="{ HelpButtonDisabled: helpsCount === 0 }">?</div>
-        <div class="BoosterCount" :class="{ BoosterCountDisabled: helpsCount === 0 }">{{ helpsCount }}</div>
+    <div class="ToolContainer" :class="{ ToolContainerDisabled: boosterCount === 0 }" @click="handleClick">
+        <div class="HelpButton" :class="{ HelpButtonDisabled: boosterCount === 0 }">?</div>
+        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }">
+            {{ boosterCount > 0 ? boosterCount : '' }}</div>
     </div>
 </template>
 

@@ -35,9 +35,9 @@ const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeUseBooster);
 }
 
-const boosterTimeCount = computed(() => {
+const boosterCount = computed(() => {
     return (boosters.value as any)[BoosterType.TIME]?.current || 0;
-})
+});
 </script>
 
 <template>
@@ -47,8 +47,8 @@ const boosterTimeCount = computed(() => {
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
             </span>
         </div>
-        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterTimeCount === 0 }" @click="handleClick">
-            {{ boosterTimeCount > 0 ? boosterTimeCount : '' }}</div>
+        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }" @click="handleClick">
+            {{ boosterCount > 0 ? boosterCount : '' }}</div>
     </div>
 </template>
 
@@ -78,13 +78,14 @@ const boosterTimeCount = computed(() => {
     border-radius: 50%;
     color: $color_dark;
 
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-family: $button_font_family;
 
     position: absolute;
     right: 0px;
     bottom: 0px;
     background: #04FB9C;
-    // margin-right: -5%;
+    // margin-right: -1rem;
     margin-bottom: -1rem;
 
     width: 2rem;

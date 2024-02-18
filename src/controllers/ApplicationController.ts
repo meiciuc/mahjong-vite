@@ -205,17 +205,11 @@ export class ApplicationController extends BaseController {
                 break;
             case VueServiceSignals.BoosterHelpUseBooster: {
                 if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                    let helpsCount = this.gameModel.raw.helpsCount;
-
-                    if (helpsCount > 0) {
+                    const helpBoosters = this.gameModel.data.boosters[BoosterType.HELP];
+                    if (helpBoosters && helpBoosters.current > 0) {
+                        helpBoosters.current--
                         vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
-                    } else {
-                        const helpBoosters = this.gameModel.data.boosters[BoosterType.HELP];
-                        if (helpBoosters && helpBoosters.current > 0) {
-                            helpBoosters.current--;
-                            vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
-                            this.saveData();
-                        }
+                        this.saveData();
                     }
                 }
                 break;
@@ -258,6 +252,8 @@ export class ApplicationController extends BaseController {
                 adsService.showRewarded()
                     .then(() => {
                         GameModelHelper.addBooster(BoosterType.HELP);
+                        GameModelHelper.addBooster(BoosterType.HELP);
+                        GameModelHelper.addBooster(BoosterType.HELP);
                         this.saveData();
                     })
                     .catch((error: unknown) => {
@@ -274,6 +270,8 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.BoosterTimeWatchReward: {
                 adsService.showRewarded()
                     .then(() => {
+                        GameModelHelper.addBooster(BoosterType.TIME);
+                        GameModelHelper.addBooster(BoosterType.TIME);
                         GameModelHelper.addBooster(BoosterType.TIME);
                         this.saveData();
                     })
@@ -315,6 +313,8 @@ export class ApplicationController extends BaseController {
     private saveData() {
         const model = dataService.getRootModel<GameModel>().raw;
         localStorage.setItem('data', JSON.stringify(model));
+
+        console.log('model.boosters', model.boosters)
 
         adsService.saveData({
             gameLevel: model.gameLevel,
