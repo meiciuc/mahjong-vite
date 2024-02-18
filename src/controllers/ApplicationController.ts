@@ -189,11 +189,12 @@ export class ApplicationController extends BaseController {
 
     private handleDataBus = (data: VueServiceSignals) => {
         switch (data) {
-            case VueServiceSignals.PauseButton:
+            case VueServiceSignals.OpenShop:
             case VueServiceSignals.OptionsButton:
                 soundService.play(SOUNDS.active_button);
 
                 this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
+                this.gameModel.data.shopIsVisible = data === VueServiceSignals.OpenShop;
 
                 if (this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
@@ -203,24 +204,37 @@ export class ApplicationController extends BaseController {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
                 }
                 break;
-            case VueServiceSignals.BoosterHelpUseBooster: {
-                if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                    const helpBoosters = this.gameModel.data.boosters[BoosterType.HELP];
-                    if (helpBoosters && helpBoosters.current > 0) {
-                        helpBoosters.current--
-                        vueService.signalDataBus.dispatch(VueServiceSignals.HelpButton);
-                        this.saveData();
+            case VueServiceSignals.BoosterHelpClick: {
+                setTimeout(() => {
+                    const boosters = this.gameModel.data.boosters[BoosterType.HELP];
+                    if (boosters) {
+                        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+                            if (boosters.current > 0) {
+                                boosters.current--;
+                                this.saveData();
+                            } else {
+                                this.openShop();
+                            }
+                        } else {
+                            this.openShop();
+                        }
                     }
-                }
+                }, 1);
                 break;
             }
-            case VueServiceSignals.BoosterTimeUseBooster: {
-                if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                    const timeBoosters = this.gameModel.data.boosters[BoosterType.TIME];
-                    if (timeBoosters && timeBoosters.current > 0) {
-                        timeBoosters.current--
-                        this.gameModel.data.gameAge += 60;
-                        this.saveData();
+            case VueServiceSignals.BoosterTimeClick: {
+                const boosters = this.gameModel.data.boosters[BoosterType.TIME];
+                if (boosters) {
+                    if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+                        if (boosters.current > 0) {
+                            boosters.current--;
+                            this.gameModel.data.gameAge += 60;
+                            this.saveData();
+                        } else {
+                            this.openShop();
+                        }
+                    } else {
+                        this.openShop();
                     }
                 }
                 break;
@@ -238,6 +252,10 @@ export class ApplicationController extends BaseController {
                 adsService.showInvite();
                 break;
         }
+    }
+
+    private openShop() {
+        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
     }
 
     private async shop(data: VueServiceSignals) {

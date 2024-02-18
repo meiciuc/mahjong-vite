@@ -56,6 +56,7 @@ export interface GameModel {
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
 
     optionsAreVisible: boolean,
+    shopIsVisible: boolean,
     sound: boolean,
 
     gameState: GameStateEnum,

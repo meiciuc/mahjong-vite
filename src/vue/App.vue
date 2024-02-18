@@ -18,6 +18,7 @@ const showGameOptionsButton = computed(() => {
 });
 
 const optionsAreVisible = useModel(["optionsAreVisible"]);
+const shopIsVisible = useModel(["shopIsVisible"]);
 
 const showMainMenu = computed(() => {
     return appState.value !== AppStateEnum.NONE && appState.value !== AppStateEnum.START_SCREEN_FIRST;
@@ -98,7 +99,7 @@ const defeatMessage = computed(() => {
     <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
-        <OptionsScreen v-if="showModalBackground"></OptionsScreen>
+        <OptionsScreen v-if="showModalBackground" :mode="shopIsVisible ? 'shop' : 'options'"></OptionsScreen>
     </Transition>
     <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>

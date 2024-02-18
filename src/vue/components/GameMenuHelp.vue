@@ -6,7 +6,7 @@ import { BoosterType } from '../../model/GameModel';
 
 const boosters = useModel(["boosters"]);
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpUseBooster);
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpClick);
 }
 
 const boosterCount = computed(() => {
@@ -16,7 +16,7 @@ const boosterCount = computed(() => {
 </script>
 
 <template>
-    <div class="ToolContainer" :class="{ ToolContainerDisabled: boosterCount === 0 }" @click="handleClick">
+    <div class="ToolContainer" @click="handleClick">
         <div class="HelpButton" :class="{ HelpButtonDisabled: boosterCount === 0 }">?</div>
         <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }">
             {{ boosterCount > 0 ? boosterCount : '' }}</div>
@@ -36,23 +36,6 @@ const boosterCount = computed(() => {
 
 .ToolContainer:hover .BoosterCount {
     transform: scale(1.2);
-}
-
-.ToolContainerDisabled {
-    pointer-events: none;
-    cursor: auto;
-}
-
-.ToolContainerDisabled .HelpButton {
-    color: #cdcdcd;
-    border-color: #cdcdcd;
-    background: $color_light;
-}
-
-.ToolContainerDisabled .BoosterCount {
-    @include menu_button-disabled;
-    border-radius: .6rem;
-    background: $color_light;
 }
 
 .HelpButton {

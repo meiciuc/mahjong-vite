@@ -4,17 +4,20 @@ import { Signal } from '../core/utils/signal';
 
 export enum VueServiceSignals {
     StartButton = 'StartButton',
-    HelpButton = 'HelpButton',
-    PauseButton = 'PauseButton',
     GameEndButton = 'GameEndButton',
     OptionsButton = 'OptionsButton',
     OptionsResetLevels = 'OptionsResetLevels',
-    BoosterTimeUseBooster = 'BoosterTimeUseBooster',
+
+    BoosterTimeClick = 'BoosterTimeClick',
+    BoosterHelpClick = 'BoosterHelpClick',
+
     BoosterTimeSpendScore = 'BoosterTimeSpendScore',
     BoosterTimeWatchReward = 'BoosterTimeWatchReward',
-    BoosterHelpUseBooster = 'BoosterHelpUseBooster',
+
     BoosterHelpSpendScore = 'BoosterHelpSpendScore',
     BoosterHelpWatchReward = 'BoosterHelpWatchReward',
+
+    OpenShop = 'OpenShop',
     ShareShow = 'ShareShow',
     InviteShow = 'InviteShow',
 }

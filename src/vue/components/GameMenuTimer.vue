@@ -32,7 +32,7 @@ const blinking = computed(() => {
 
 const boosters = useModel(["boosters"]);
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeUseBooster);
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterTimeClick);
 }
 
 const boosterCount = computed(() => {

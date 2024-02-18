@@ -6,7 +6,7 @@ import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
 import { GameModelHelper } from '../../model/GameModelHelper';
-import { GameStateEnum } from '../../model/GameModel';
+import { BoosterType, GameStateEnum } from '../../model/GameModel';
 
 export class HelpSystem extends System {
     private helpButtonClicked = false;
@@ -47,10 +47,15 @@ export class HelpSystem extends System {
     };
 
     private handleHelpButton = (data: VueServiceSignals) => {
-        if (data !== VueServiceSignals.HelpButton) {
+        if (data !== VueServiceSignals.BoosterHelpClick) {
             return;
         }
-        this.helpButtonClicked = true
+
+        if (GameModelHelper.getBooster(BoosterType.HELP).current <= 0) {
+            return;
+        }
+
+        this.helpButtonClicked = true;
     };
 
     private async help() {

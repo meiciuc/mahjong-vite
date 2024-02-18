@@ -70,6 +70,11 @@ export class GameModelHelper {
 
     }
 
+    static getBooster(type: BoosterType) {
+        const gameModel = dataService.getRootModel<GameModel>();
+        return gameModel.data.boosters[type];
+    }
+
     static createModel() {
         dataService.config<GameModel>({
             appState: AppStateEnum.NONE,
@@ -84,6 +89,7 @@ export class GameModelHelper {
             },
 
             optionsAreVisible: false,
+            shopIsVisible: false,
             sound: true,
 
             icons: [],
