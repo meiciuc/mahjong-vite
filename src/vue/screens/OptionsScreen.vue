@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, withDefaults } from 'vue';
+import { ref } from 'vue';
 import { useModel } from '../../model/useModel';
 import { VueServiceSignals, vueService } from '../VueService';
 import OptionsMenuButton from '../components/OptionsMenuButton.vue';
@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
     mode: "options",
 });
 
-const sound = useModel(["sound"]);
+const sound = useModel(["sound"]).value;
 let mode = ref(props.mode);
 
 

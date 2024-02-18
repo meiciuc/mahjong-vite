@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import { defineProps, withDefaults } from 'vue';
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 
