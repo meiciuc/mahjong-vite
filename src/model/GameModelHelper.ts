@@ -22,17 +22,6 @@ export class GameModelHelper {
         return gameModel.data.gameState;
     }
 
-    static getHelpsCount() {
-        return GameModelHelper.getBooster(BoosterType.HELP)?.current || 0;
-    }
-
-    static setHelpsCount(value: number) {
-        const boosters = GameModelHelper.getBooster(BoosterType.HELP);
-        if (boosters) {
-            boosters.current = value;
-        }
-    }
-
     static getGameLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.gameLevel;
@@ -74,6 +63,14 @@ export class GameModelHelper {
     static getBooster(type: BoosterType) {
         const gameModel = dataService.getRootModel<GameModel>();
         return gameModel.data.boosters[type];
+    }
+
+    static setBooster(type: BoosterType, value: number) {
+        const booster = GameModelHelper.getBooster(type);
+        if (booster) {
+            console.log('setBooster', type, value)
+            booster.current = value;
+        }
     }
 
     static createModel() {

@@ -221,11 +221,7 @@ export class ApplicationController extends BaseController {
                 const boosters = this.gameModel.data.boosters[BoosterType.TIME];
                 if (boosters) {
                     if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                        if (boosters.current > 0) {
-                            boosters.current--;
-                            this.gameModel.data.gameAge += 60;
-                            this.saveData();
-                        } else {
+                        if (!boosters.current) {
                             this.openShop();
                         }
                     } else {

@@ -10,7 +10,7 @@ import { GameLogic } from './GameLogic';
 import { saveDataService } from '../../services/SaveDataService';
 
 export class HelpSystem extends System {
-    private helpButtonClicked = false;
+    private helpBoosterClicked = false;
     private helpEffectNodes?: NodeList<TileHelpEffectNode>;
     private selectedNodes?: NodeList<TileSelectedNode>;
 
@@ -23,7 +23,7 @@ export class HelpSystem extends System {
         this.selectedNodes = engine.getNodeList(TileSelectedNode);
         this.selectedNodes.nodeAdded.add(this.handleSelectedNodeAdded);
 
-        vueService.signalDataBus.on(this.handleHelpButton);
+        vueService.signalDataBus.on(this.handleSignalDataBus);
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -31,12 +31,12 @@ export class HelpSystem extends System {
         this.selectedNodes?.nodeAdded.remove(this.handleSelectedNodeAdded);
         this.selectedNodes = undefined;
 
-        vueService.signalDataBus.off(this.handleHelpButton);
+        vueService.signalDataBus.off(this.handleSignalDataBus);
     }
 
     update(_time: number): void {
-        if (this.helpButtonClicked) {
-            this.helpButtonClicked = false;
+        if (this.helpBoosterClicked) {
+            this.helpBoosterClicked = false;
             this.help();
         }
     }
@@ -47,7 +47,7 @@ export class HelpSystem extends System {
         }
     };
 
-    private handleHelpButton = (data: VueServiceSignals) => {
+    private handleSignalDataBus = (data: VueServiceSignals) => {
         if (data !== VueServiceSignals.BoosterHelpClick) {
             return;
         }
@@ -56,7 +56,7 @@ export class HelpSystem extends System {
             return;
         }
 
-        this.helpButtonClicked = true;
+        this.helpBoosterClicked = true;
     };
 
     private async help() {
@@ -78,7 +78,7 @@ export class HelpSystem extends System {
             this.creator.createTileHelpEffect(nodeA.transform.position.x, nodeA.transform.position.y);
             this.creator.createTileHelpEffect(nodeB.transform.position.x, nodeB.transform.position.y);
 
-            GameModelHelper.setHelpsCount(Math.max(0, GameModelHelper.getHelpsCount() - 1));
+            GameModelHelper.setBooster(BoosterType.HELP, Math.max(0, boosters - 1));
             saveDataService.saveData();
         }
     }
