@@ -41,13 +41,13 @@ const boosterCount = computed(() => {
 </script>
 
 <template>
-    <div class="GameMenuTimer">
+    <div class="GameMenuTimer" @click="handleClick">
         <div class="Timer">
             <span :class=blinking>
                 {{ `${minutes > 9 ? '' : '0'}${minutes}:${secundes > 9 ? '' : '0'}${secundes}` }}
             </span>
         </div>
-        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }" @click="handleClick">
+        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }">
             {{ boosterCount > 0 ? boosterCount : '' }}</div>
     </div>
 </template>
