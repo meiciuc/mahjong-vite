@@ -35,10 +35,10 @@ export class AssetsController extends BaseController {
             WebFont.load({
                 custom: {
                     families: [
-                        'Inter-SemiBold',
                         'MontserratAlternates-Regular',
                         'MontserratAlternates-Black',
                         'Roboto-Light',
+                        'RobotoMono-Regular.woff',
                     ],
                 },
                 timeout: 2000,

@@ -68,7 +68,7 @@ const boosterCount = computed(() => {
     user-select: none;
 
     font-size: 2rem;
-    font-family: $label_font_family;
+    font-family: 'RobotoMono-Regular';
     color: $menu_label_text_color;
 
     cursor: pointer;
@@ -85,7 +85,7 @@ const boosterCount = computed(() => {
     right: 0px;
     bottom: 0px;
     background: #04FB9C;
-    // margin-right: -1rem;
+    margin-right: -0.5rem;
     margin-bottom: -1rem;
 
     width: 2rem;

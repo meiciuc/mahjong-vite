@@ -11,12 +11,6 @@ body {
 }
 
 @font-face {
-  font-family: 'Inter-SemiBold';
-  font-style: normal;
-  src: url('../fonts/Inter-SemiBold.woff') format('woff');
-}
-
-@font-face {
   font-family: 'MontserratAlternates-Regular';
   font-style: normal;
   src: url('../fonts/MontserratAlternates-Regular.woff') format('woff');
@@ -32,6 +26,12 @@ body {
   font-family: 'Roboto-Light';
   font-style: normal;
   src: url('../fonts/Roboto-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'RobotoMono-Regular';
+  font-style: normal;
+  src: url('../fonts/RobotoMono-Regular.woff') format('woff');
 }
 
 @media (prefers-color-scheme: light) {}
