@@ -63,7 +63,6 @@ export interface GameModel {
     gameAge: number,
     gameLevel: number,
     gameTotalScore: number,
-    helpsCount: number,
     boosters: { [key in BoosterType]?: Booster },
 
     icons: IconState[];

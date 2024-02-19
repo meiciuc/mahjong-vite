@@ -23,13 +23,14 @@ export class GameModelHelper {
     }
 
     static getHelpsCount() {
-        const gameModel = dataService.getRootModel<GameModel>();
-        return gameModel.data.helpsCount;
+        return GameModelHelper.getBooster(BoosterType.HELP)?.current || 0;
     }
 
     static setHelpsCount(value: number) {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.helpsCount = value;
+        const boosters = GameModelHelper.getBooster(BoosterType.HELP);
+        if (boosters) {
+            boosters.current = value;
+        }
     }
 
     static getGameLevel() {
@@ -82,7 +83,7 @@ export class GameModelHelper {
             gameLevel: 1,
             gameTotalScore: 0,
             gameAge: 0,
-            helpsCount: 3,
+            // helpsCount: 3,
             boosters: {
                 [BoosterType.TIME]: { current: 2 },
                 [BoosterType.HELP]: { current: 3 },

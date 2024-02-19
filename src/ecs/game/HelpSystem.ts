@@ -1,12 +1,13 @@
 import { Engine, NodeList, System } from '@ash.ts/ash';
+import { BoosterType, GameStateEnum } from '../../model/GameModel';
+import { GameModelHelper } from '../../model/GameModelHelper';
 import { throwIfNull } from '../../utils/throwIfNull';
 import { VueServiceSignals, vueService } from '../../vue/VueService';
 import { EntityCreator } from '../EntityCreator';
 import { TileHelpEffectNode } from '../tiles/nodes/TileHelpEffectNode';
 import { TileSelectedNode } from '../tiles/nodes/TileSelectedNode';
 import { GameLogic } from './GameLogic';
-import { GameModelHelper } from '../../model/GameModelHelper';
-import { BoosterType, GameStateEnum } from '../../model/GameModel';
+import { saveDataService } from '../../services/SaveDataService';
 
 export class HelpSystem extends System {
     private helpButtonClicked = false;
@@ -63,6 +64,11 @@ export class HelpSystem extends System {
             return;
         }
 
+        const boosters = GameModelHelper.getBooster(BoosterType.HELP)?.current;
+        if (!boosters) {
+            return;
+        }
+
         const arr = await this.gameLogic.needHelp();
         if (arr.length === 0) {
             GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES)
@@ -73,6 +79,7 @@ export class HelpSystem extends System {
             this.creator.createTileHelpEffect(nodeB.transform.position.x, nodeB.transform.position.y);
 
             GameModelHelper.setHelpsCount(Math.max(0, GameModelHelper.getHelpsCount() - 1));
+            saveDataService.saveData();
         }
     }
 }

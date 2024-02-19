@@ -8,6 +8,7 @@ import { GameLogic } from '../ecs/game/GameLogic';
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { adsService } from '../services/AdsService';
+import { saveDataService } from '../services/SaveDataService';
 import { soundService } from '../services/SoundService';
 import { VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
@@ -165,7 +166,6 @@ export class ApplicationController extends BaseController {
 
     private resetGameModelForNext() {
         const model = dataService.getRootModel<GameModel>();
-        model.data.helpsCount = 3;
         model.data.gameAge = 0;
         model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
@@ -205,21 +205,16 @@ export class ApplicationController extends BaseController {
                 }
                 break;
             case VueServiceSignals.BoosterHelpClick: {
-                setTimeout(() => {
-                    const boosters = this.gameModel.data.boosters[BoosterType.HELP];
-                    if (boosters) {
-                        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                            if (boosters.current > 0) {
-                                boosters.current--;
-                                this.saveData();
-                            } else {
-                                this.openShop();
-                            }
-                        } else {
+                const boosters = this.gameModel.data.boosters[BoosterType.HELP];
+                if (boosters) {
+                    if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+                        if (!boosters.current) {
                             this.openShop();
                         }
+                    } else {
+                        this.openShop();
                     }
-                }, 1);
+                }
                 break;
             }
             case VueServiceSignals.BoosterTimeClick: {
@@ -329,25 +324,11 @@ export class ApplicationController extends BaseController {
     }
 
     private saveData() {
-        const model = dataService.getRootModel<GameModel>().raw;
-        localStorage.setItem('data', JSON.stringify(model));
-
-        console.log('model.boosters', model.boosters)
-
-        adsService.saveData({
-            gameLevel: model.gameLevel,
-            gameTotalScore: model.gameTotalScore,
-            sound: model.sound,
-            boosters: model.boosters,
-        });
+        saveDataService.saveData();
     }
 
     private getData() {
-        const data = localStorage.getItem('data');
-        if (!data) {
-            return null;
-        }
-        return JSON.parse(data);
+        saveDataService.getData();
     }
 
     private async waitVueServiceSignal(value: VueServiceSignals) {
