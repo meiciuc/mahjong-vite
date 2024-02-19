@@ -5,12 +5,12 @@ import { AppStateEnum } from '../../model/GameModel';
 import { computed } from 'vue';
 const appState = useModel(["appState"]);
 
-const icon = computed(() => {
+const style = computed(() => {
     switch (appState.value) {
         case AppStateEnum.GAME_SCREEN_PAUSE:
-            return 'Pause';
+            return `background-image: url(./assets/svg/stopFill.svg);`;
         case AppStateEnum.GAME_SCREEN:
-            return 'Play';
+            return `background-image: url(./assets/svg/playFill.svg);`;
         default:
             return '';
     }
@@ -20,7 +20,11 @@ const icon = computed(() => {
 
 <template>
     <div class="GameMenuMainOptions" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
-        <div :class="[icon]">{{ icon === '' ? '&#9881;' : '' }}</div>
+        <div v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE" class="SkinSvg"
+            style="background-image: url(./assets/svg/stopFill.svg);"></div>
+        <div v-else-if="appState === AppStateEnum.GAME_SCREEN" class="SkinSvg"
+            style="background-image: url(./assets/svg/playFill.svg);"></div>
+        <div v-else :style="style">{{ style === '' ? '&#9881;' : '' }}</div>
     </div>
 </template>
 
@@ -28,31 +32,19 @@ const icon = computed(() => {
 @import '../global.scss';
 
 .GameMenuMainOptions {
-    @include button_menu;
+    cursor: pointer;
     width: 3rem;
+    height: 3rem;
     font-size: 2rem;
     color: $menu_label_text_color;
     border-radius: 50%;
 }
 
-.GameMenuMainOptions .Pause {
+.GameMenuMainOptions .SkinSvg {
     width: 3rem;
     height: 3rem;
-
-    background-image: url(./assets/svg/playFill.svg);
+    background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-size: 60%;
-    background-position: 40% 60%;
-}
-
-.GameMenuMainOptions .Play {
-    width: 3rem;
-    height: 3rem;
-
-    background-image: url(./assets/svg/stopFill.svg);
-    background-repeat: no-repeat;
-    background-size: 60%;
-    background-position: 40% 60%;
 }
 
 .GameMenuMainOptions:hover {

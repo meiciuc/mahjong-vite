@@ -5,7 +5,7 @@ import { Config } from './Config';
 import { LAYERS } from './GameLayers';
 import { ApplicationController } from './controllers/ApplicationController';
 import { stageService } from './core/services/StageService';
-import './style.css';
+// import './style.css';
 
 import { PreloaderController } from './controllers/PreloaderController';
 import { GameModelHelper } from './model/GameModelHelper';
