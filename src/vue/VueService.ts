@@ -11,11 +11,11 @@ export enum VueServiceSignals {
     BoosterTimeClick = 'BoosterTimeClick',
     BoosterHelpClick = 'BoosterHelpClick',
 
-    BoosterTimeSpendScore = 'BoosterTimeSpendScore',
-    BoosterTimeWatchReward = 'BoosterTimeWatchReward',
+    BoosterTimeSpendPoints = 'BoosterTimeSpendScore',
+    BoosterTimeWatchVideo = 'BoosterTimeWatchReward',
 
-    BoosterHelpSpendScore = 'BoosterHelpSpendScore',
-    BoosterHelpWatchReward = 'BoosterHelpWatchReward',
+    BoosterHelpSpendPoints = 'BoosterHelpSpendScore',
+    BoosterHelpWatchVideo = 'BoosterHelpWatchReward',
 
     OpenShop = 'OpenShop',
     ShareShow = 'ShareShow',

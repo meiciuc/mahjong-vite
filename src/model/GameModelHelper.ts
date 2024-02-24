@@ -1,5 +1,6 @@
 import { dataService } from "../core/services/DataService";
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
+import { ShopModel, CurrencyType } from "./ShopModel";
 
 export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {
@@ -69,18 +70,24 @@ export class GameModelHelper {
         const booster = GameModelHelper.getBooster(type);
         if (booster) {
             console.log('setBooster', type, value)
+            // const analytics = GameModelHelper.getModel().data.analytics;
             booster.current = value;
         }
+    }
+
+    static getModel() {
+        return dataService.getRootModel<GameModel>();
     }
 
     static createModel() {
         dataService.config<GameModel>({
             appState: AppStateEnum.NONE,
+            analytics: {},
+            shop: GameModelHelper.createShop(),
             gameState: GameStateEnum.NONE,
             gameLevel: 1,
             gameTotalScore: 0,
             gameAge: 0,
-            // helpsCount: 3,
             boosters: {
                 [BoosterType.TIME]: { current: 2 },
                 [BoosterType.HELP]: { current: 3 },
@@ -98,5 +105,57 @@ export class GameModelHelper {
 
             userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
         });
+    }
+
+    static createShop() {
+        return <ShopModel>{
+            proposales: [
+                {
+                    id: 0,
+                    items: [{
+                        product: BoosterType.TIME,
+                        count: 1
+                    }],
+                    price: {
+                        valute: CurrencyType.POINT,
+                        price: 100
+                    }
+
+                },
+                {
+                    id: 1,
+                    items: [{
+                        product: BoosterType.TIME,
+                        count: 4,
+                    }],
+                    price: {
+                        valute: CurrencyType.VIDEO,
+                        price: 1
+                    }
+                },
+                {
+                    id: 2,
+                    items: [{
+                        product: BoosterType.HELP,
+                        count: 2,
+                    }],
+                    price: {
+                        valute: CurrencyType.POINT,
+                        price: 100
+                    }
+                },
+                {
+                    id: 3,
+                    items: [{
+                        product: BoosterType.HELP,
+                        count: 7,
+                    }],
+                    price: {
+                        valute: CurrencyType.VIDEO,
+                        price: 1
+                    }
+                }
+            ],
+        };
     }
 }

@@ -1,28 +1,38 @@
 <script setup lang="ts">
-
+import { computed } from 'vue';
+import { BoosterType } from '../../model/GameModel';
+import { Proposal, CurrencyType } from '../../model/ShopModel';
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
 
-export interface Props {
-    booster: "time" | "question";
-    value: number;
-    price: number;
-}
+const props = defineProps<{
+    proposal: Proposal
+}>();
 
-const props = withDefaults(defineProps<Props>(), {
-    booster: "time",
-    value: 1,
-    price: 100,
+const valute = computed(() => {
+    return props.proposal.price.valute;
+});
+
+const price = computed(() => {
+    return props.proposal.price.price;
+});
+
+const productType = computed(() => {
+    return props.proposal.items[0].product;
+});
+
+const productCount = computed(() => {
+    return props.proposal.items[0].count;
 });
 
 const handleClick = () => {
     let signal: VueServiceSignals | undefined = undefined;
-    if (props.booster === 'time') {
-        signal = props.price > 0 ? VueServiceSignals.BoosterTimeSpendScore : VueServiceSignals.BoosterTimeWatchReward;
+    if (productType.value === BoosterType.TIME) {
+        signal = valute.value === CurrencyType.POINT ? VueServiceSignals.BoosterTimeSpendPoints : VueServiceSignals.BoosterTimeWatchVideo;
     }
 
-    if (props.booster === 'question') {
-        signal = props.price > 0 ? VueServiceSignals.BoosterHelpSpendScore : VueServiceSignals.BoosterHelpWatchReward;
+    if (productType.value === BoosterType.HELP) {
+        signal = valute.value === CurrencyType.POINT ? VueServiceSignals.BoosterHelpSpendPoints : VueServiceSignals.BoosterHelpWatchVideo;
     }
 
     if (signal) {
@@ -33,12 +43,12 @@ const handleClick = () => {
 </script>
 <template>
     <div class="ShopItem">
-        <div :class="[props.booster === 'time' ? 'IconTime' : 'IconQuestion']">
-            {{ props.booster === 'time' ? '' : Localization.getText('game.help') }}
+        <div :class="[productType === BoosterType.TIME ? 'IconTime' : 'IconQuestion']">
+            {{ productType === BoosterType.TIME ? '' : Localization.getText('game.help') }}
         </div>
-        <div class="Value">{{ `+${props.value}` }}</div>
-        <div :class="[props.price > 0 ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick">
-            {{ (props.price > 0 ? `-${props.price}` : '') }}
+        <div class="Value">{{ `+${productCount}` }}</div>
+        <div :class="[valute === CurrencyType.POINT ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick">
+            {{ (valute === CurrencyType.POINT ? `-${price}` : '') }}
         </div>
     </div>
 </template>

@@ -1,3 +1,5 @@
+import { ShopModel } from "./ShopModel";
+
 export enum UserActionAfterTheLastGame {
     DEFAULT = 'default',
     RETRY = 'retry',
@@ -49,10 +51,18 @@ export interface BoosterTime {
     current: number;
 }
 
+export interface Analytics {
+    startTime?: number,
+    boosterSpent?: Record<BoosterType, number>
+    boosterBougth?: Record<BoosterType, number>
+}
+
 export type Booster = BoosterHelp | BoosterTime;
 
 export interface GameModel {
     appState: AppStateEnum;
+    analytics: Analytics;
+    shop: ShopModel;
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
 
     optionsAreVisible: boolean,

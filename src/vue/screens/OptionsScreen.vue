@@ -13,6 +13,8 @@ const props = withDefaults(defineProps<Props>(), {
     mode: "options",
 });
 
+const shop = useModel(["shop"]).value;
+
 const sound = useModel(["sound"]).value;
 let mode = ref(props.mode);
 
@@ -35,10 +37,7 @@ let mode = ref(props.mode);
         </div>
         <div v-else class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo Shop">
-                <ShopItem :booster="'time'" :value=1 :price=100 />
-                <ShopItem :booster="'time'" :value=3 :price=-1 />
-                <ShopItem :booster="'question'" :value=1 :price=100 />
-                <ShopItem :booster="'question'" :value=3 :price=-1 />
+                <ShopItem v-for="prop in shop.proposales" :proposal="prop" />
             </div>
         </div>
     </div>

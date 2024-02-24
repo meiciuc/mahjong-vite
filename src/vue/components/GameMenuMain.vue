@@ -42,7 +42,7 @@ onMounted(() => {
 
 <template>
     <div class="MenuPanel">
-        <div class="MenuContentItem" ref="Left">
+        <div class="MenuContentItem Left" ref="Left">
             <div class="GameLevel">{{ gameLevel }}</div>
             <GameMenuScore></GameMenuScore>
         </div>
@@ -69,7 +69,7 @@ onMounted(() => {
     display: flex;
 }
 
-.ColoredBackgroundLine {
+.MenuPanel .ColoredBackgroundLine {
     position: absolute;
     top: calc($game_menu_height * .1);
     width: calc(100vw);
@@ -78,14 +78,18 @@ onMounted(() => {
     opacity: 0.6;
 }
 
-.MenuContentItem {
+.MenuPanel .MenuContentItem {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 2rem;
 }
 
-.GameLevel {
+.MenuPanel .Left {
+    min-width: 8rem;
+}
+
+.MenuPanel .GameLevel {
     font-size: 2rem;
     font-family: $label_font_family;
     color: $menu_label_text_color;

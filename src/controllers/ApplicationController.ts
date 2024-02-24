@@ -230,10 +230,10 @@ export class ApplicationController extends BaseController {
                 }
                 break;
             }
-            case VueServiceSignals.BoosterHelpSpendScore:
-            case VueServiceSignals.BoosterHelpWatchReward:
-            case VueServiceSignals.BoosterTimeSpendScore:
-            case VueServiceSignals.BoosterTimeWatchReward:
+            case VueServiceSignals.BoosterHelpSpendPoints:
+            case VueServiceSignals.BoosterHelpWatchVideo:
+            case VueServiceSignals.BoosterTimeSpendPoints:
+            case VueServiceSignals.BoosterTimeWatchVideo:
                 this.shop(data);
                 break;
             case VueServiceSignals.ShareShow:
@@ -251,13 +251,13 @@ export class ApplicationController extends BaseController {
 
     private async shop(data: VueServiceSignals) {
         switch (data) {
-            case VueServiceSignals.BoosterHelpSpendScore: {
+            case VueServiceSignals.BoosterHelpSpendPoints: {
                 this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
                 GameModelHelper.addBooster(BoosterType.HELP);
                 this.saveData();
                 break;
             }
-            case VueServiceSignals.BoosterHelpWatchReward: {
+            case VueServiceSignals.BoosterHelpWatchVideo: {
                 adsService.showRewarded()
                     .then(() => {
                         GameModelHelper.addBooster(BoosterType.HELP);
@@ -270,13 +270,13 @@ export class ApplicationController extends BaseController {
                     });
                 break;
             }
-            case VueServiceSignals.BoosterTimeSpendScore: {
+            case VueServiceSignals.BoosterTimeSpendPoints: {
                 this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
                 GameModelHelper.addBooster(BoosterType.TIME);
                 this.saveData();
                 break;
             }
-            case VueServiceSignals.BoosterTimeWatchReward: {
+            case VueServiceSignals.BoosterTimeWatchVideo: {
                 adsService.showRewarded()
                     .then(() => {
                         GameModelHelper.addBooster(BoosterType.TIME);
