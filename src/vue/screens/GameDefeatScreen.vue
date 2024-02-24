@@ -4,6 +4,8 @@ import { TimeSkipper } from '../../utils/TimeSkipper';
 import { VueServiceSignals, vueService } from '../VueService';
 import { ref, onMounted } from 'vue';
 import { adsService } from '../../services/AdsService';
+import { dataService } from '../../core/services/DataService';
+import { GameModel, UserActionAfterTheLastGame } from '../../model/GameModel';
 
 export interface Props {
     showFullscreenAds?: boolean,
@@ -31,7 +33,13 @@ onMounted(async () => {
     showButtons.value = true;
 });
 
-const handleClick = () => {
+const handleClick = (value: "retry" | undefined = undefined) => {
+    console.log('handleClick', value)
+    if (value === "retry") {
+        dataService.getRootModel<GameModel>().data.userActionAfterTheLastGame = UserActionAfterTheLastGame.RETRY;
+    } else {
+        dataService.getRootModel<GameModel>().data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
+    }
     vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
 }
 </script>
@@ -41,10 +49,10 @@ const handleClick = () => {
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText(props.reasonMessage) }}</div>
-                <div class="HalfStartButton" :class="{ NotShowButtons: !showButtons }">{{
+                <div class="HalfStartButton" :class="{ NotShowButtons: !showButtons }" @click="handleClick('retry')">{{
                     Localization.getText('defeat.repeat') }}</div>
             </div>
-            <button class="StartButton" :class="{ NotShowButtons: !showButtons }" @click="handleClick">{{
+            <button class="StartButton" :class="{ NotShowButtons: !showButtons }" @click="handleClick()">{{
                 Localization.getText('start.play') }}</button>
         </div>
     </div>

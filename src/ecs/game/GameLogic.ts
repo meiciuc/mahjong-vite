@@ -149,9 +149,8 @@ export class GameLogic {
         }
 
         const seed = `${Math.random()}`;
-        const gameMaxTime = Math.round(Math.max(size * size * 2, 60));
-
-        console.log('gameMaxTime', gameMaxTime, 'commonCount', commonCount)
+        const kLevel = (10 - currentLevel % 5) / 10;
+        const gameMaxTime = Math.round(Math.max(size * size * 2, 60) * kLevel);
 
         return { level, gridWidth, gridHeight, seed, gameMaxTime };
     }
