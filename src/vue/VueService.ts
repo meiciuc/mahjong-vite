@@ -11,19 +11,18 @@ export enum VueServiceSignals {
     BoosterTimeClick = 'BoosterTimeClick',
     BoosterHelpClick = 'BoosterHelpClick',
 
-    BoosterTimeSpendPoints = 'BoosterTimeSpendScore',
-    BoosterTimeWatchVideo = 'BoosterTimeWatchReward',
-
-    BoosterHelpSpendPoints = 'BoosterHelpSpendScore',
-    BoosterHelpWatchVideo = 'BoosterHelpWatchReward',
-
     OpenShop = 'OpenShop',
     ShareShow = 'ShareShow',
     InviteShow = 'InviteShow',
 }
 
+export enum VueShopSignals {
+    ProposalPurchased = 'BoosterPurchased',
+}
+
 class VueService {
     signalDataBus = new Signal<VueServiceSignals>();
+    shopDataBus = new Signal<VueShopSignals, string>();
 
     init() {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));

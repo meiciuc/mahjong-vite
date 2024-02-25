@@ -1,7 +1,7 @@
 import { BoosterType } from "./GameModel";
 
 export enum CurrencyType {
-    POINT = 'point',
+    POINTS = 'points',
     VIDEO = 'video',
 }
 
@@ -16,7 +16,7 @@ export interface ItemProposalPrice {
 }
 
 export interface Proposal {
-    id: number,
+    id: string,
     items: ItemProposal[],
     price: ItemProposalPrice
 }

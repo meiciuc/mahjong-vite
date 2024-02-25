@@ -1,4 +1,3 @@
-import { Config } from '../Config';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -7,10 +6,11 @@ import { stageService } from '../core/services/StageService';
 import { GameLogic } from '../ecs/game/GameLogic';
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
+import { CurrencyType } from '../model/ShopModel';
 import { adsService } from '../services/AdsService';
 import { saveDataService } from '../services/SaveDataService';
 import { soundService } from '../services/SoundService';
-import { VueServiceSignals, vueService } from '../vue/VueService';
+import { VueServiceSignals, VueShopSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
@@ -28,6 +28,7 @@ export class ApplicationController extends BaseController {
         stageService.updateSignal.add(this.update);
         window.addEventListener('blur', this.handleWindowFocusBlur);
         vueService.signalDataBus.on(this.handleDataBus);
+        vueService.shopDataBus.on(this.handleShopBus);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -187,6 +188,40 @@ export class ApplicationController extends BaseController {
 
     }
 
+    private handleShopBus = async (type: VueShopSignals, id: string) => {
+        if (type === VueShopSignals.ProposalPurchased) {
+            for (const prop of this.gameModel.raw.shop.proposales) {
+                const boosterType = prop.items[0].product;
+                const boosterCound = prop.items[0].count;
+                if (prop.id !== id) {
+                    continue;
+                }
+
+                let result = false;
+                if (prop.price.valute === CurrencyType.VIDEO) {
+                    try {
+                        await adsService.showRewarded();
+                        result = true;
+                    } catch (error: unknown) {
+                        result = false;
+                    }
+                } else if (prop.price.valute === CurrencyType.POINTS && this.gameModel.data.gameTotalScore >= prop.price.price) {
+                    this.gameModel.data.gameTotalScore -= prop.price.price;
+                    result = true;
+                }
+
+                if (!result) {
+                    continue;
+                }
+
+                for (let i = 0; i < boosterCound; i++) {
+                    GameModelHelper.addBooster(boosterType);
+                }
+                this.saveData();
+            }
+        }
+    }
+
     private handleDataBus = (data: VueServiceSignals) => {
         switch (data) {
             case VueServiceSignals.OpenShop:
@@ -230,12 +265,6 @@ export class ApplicationController extends BaseController {
                 }
                 break;
             }
-            case VueServiceSignals.BoosterHelpSpendPoints:
-            case VueServiceSignals.BoosterHelpWatchVideo:
-            case VueServiceSignals.BoosterTimeSpendPoints:
-            case VueServiceSignals.BoosterTimeWatchVideo:
-                this.shop(data);
-                break;
             case VueServiceSignals.ShareShow:
                 adsService.showShare();
                 break;
@@ -247,49 +276,6 @@ export class ApplicationController extends BaseController {
 
     private openShop() {
         vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
-    }
-
-    private async shop(data: VueServiceSignals) {
-        switch (data) {
-            case VueServiceSignals.BoosterHelpSpendPoints: {
-                this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
-                GameModelHelper.addBooster(BoosterType.HELP);
-                this.saveData();
-                break;
-            }
-            case VueServiceSignals.BoosterHelpWatchVideo: {
-                adsService.showRewarded()
-                    .then(() => {
-                        GameModelHelper.addBooster(BoosterType.HELP);
-                        GameModelHelper.addBooster(BoosterType.HELP);
-                        GameModelHelper.addBooster(BoosterType.HELP);
-                        this.saveData();
-                    })
-                    .catch((error: unknown) => {
-                        console.log(error);
-                    });
-                break;
-            }
-            case VueServiceSignals.BoosterTimeSpendPoints: {
-                this.gameModel.data.gameTotalScore = Math.max(0, this.gameModel.data.gameTotalScore - Config.MIN_BOOSTER_PRICE);
-                GameModelHelper.addBooster(BoosterType.TIME);
-                this.saveData();
-                break;
-            }
-            case VueServiceSignals.BoosterTimeWatchVideo: {
-                adsService.showRewarded()
-                    .then(() => {
-                        GameModelHelper.addBooster(BoosterType.TIME);
-                        GameModelHelper.addBooster(BoosterType.TIME);
-                        GameModelHelper.addBooster(BoosterType.TIME);
-                        this.saveData();
-                    })
-                    .catch((error: unknown) => {
-                        console.log(error);
-                    });
-                break;
-            }
-        }
     }
 
     private handleGameModelStateChange = (currenState: AppStateEnum, _oldState: AppStateEnum) => {

@@ -3,11 +3,15 @@ import { computed } from 'vue';
 import { BoosterType } from '../../model/GameModel';
 import { Proposal, CurrencyType } from '../../model/ShopModel';
 import { Localization } from '../../utils/Localization';
-import { VueServiceSignals, vueService } from '../VueService';
+import { VueShopSignals, vueService } from '../VueService';
 
 const props = defineProps<{
     proposal: Proposal
 }>();
+
+const id = computed(() => {
+    return props.proposal.id;
+});
 
 const valute = computed(() => {
     return props.proposal.price.valute;
@@ -25,19 +29,8 @@ const productCount = computed(() => {
     return props.proposal.items[0].count;
 });
 
-const handleClick = () => {
-    let signal: VueServiceSignals | undefined = undefined;
-    if (productType.value === BoosterType.TIME) {
-        signal = valute.value === CurrencyType.POINT ? VueServiceSignals.BoosterTimeSpendPoints : VueServiceSignals.BoosterTimeWatchVideo;
-    }
-
-    if (productType.value === BoosterType.HELP) {
-        signal = valute.value === CurrencyType.POINT ? VueServiceSignals.BoosterHelpSpendPoints : VueServiceSignals.BoosterHelpWatchVideo;
-    }
-
-    if (signal) {
-        vueService.signalDataBus.dispatch(signal);
-    }
+const handleClick = (id: string) => {
+    vueService.shopDataBus.dispatch(VueShopSignals.ProposalPurchased, id);
 }
 
 </script>
@@ -47,8 +40,8 @@ const handleClick = () => {
             {{ productType === BoosterType.TIME ? '' : Localization.getText('game.help') }}
         </div>
         <div class="Value">{{ `+${productCount}` }}</div>
-        <div :class="[valute === CurrencyType.POINT ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick">
-            {{ (valute === CurrencyType.POINT ? `-${price}` : '') }}
+        <div :class="[valute === CurrencyType.POINTS ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick(id)">
+            {{ (valute === CurrencyType.POINTS ? `-${price}` : '') }}
         </div>
     </div>
 </template>

@@ -111,19 +111,19 @@ export class GameModelHelper {
         return <ShopModel>{
             proposales: [
                 {
-                    id: 0,
+                    id: '0',
                     items: [{
                         product: BoosterType.TIME,
                         count: 1
                     }],
                     price: {
-                        valute: CurrencyType.POINT,
+                        valute: CurrencyType.POINTS,
                         price: 100
                     }
 
                 },
                 {
-                    id: 1,
+                    id: '1',
                     items: [{
                         product: BoosterType.TIME,
                         count: 4,
@@ -134,18 +134,18 @@ export class GameModelHelper {
                     }
                 },
                 {
-                    id: 2,
+                    id: '2',
                     items: [{
                         product: BoosterType.HELP,
                         count: 2,
                     }],
                     price: {
-                        valute: CurrencyType.POINT,
+                        valute: CurrencyType.POINTS,
                         price: 100
                     }
                 },
                 {
-                    id: 3,
+                    id: '3',
                     items: [{
                         product: BoosterType.HELP,
                         count: 7,
