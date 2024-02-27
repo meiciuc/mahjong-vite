@@ -310,7 +310,7 @@ export class ApplicationController extends BaseController {
     }
 
     private getData() {
-        saveDataService.getData();
+        return saveDataService.getData();
     }
 
     private async waitVueServiceSignal(value: VueServiceSignals) {
