@@ -131,11 +131,13 @@ const defeatMessage = computed(() => {
 
 .GameMenuMain {
     margin-top: calc(1rem * 0.5);
+    z-index: 1;
 }
 
 .GameMenuMainOptions {
     position: fixed;
     margin-top: calc(1rem * 0.7);
     right: 0.1rem;
+    z-index: 2;
 }
 </style>

@@ -4,6 +4,7 @@ import { useModel } from '../../model/useModel';
 import { VueServiceSignals, vueService } from '../VueService';
 import OptionsMenuButton from '../components/OptionsMenuButton.vue';
 import ShopItem from '../components/ShopItem.vue';
+import Tutorial from '../components/Tutorial.vue';
 
 export interface Props {
     mode?: "options" | "shop";
@@ -25,6 +26,7 @@ let mode = ref(props.mode);
     <div class="OptionsScreen" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);">
         <div v-if="mode === 'options'" class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
+                <Tutorial></Tutorial>
             </div>
             <div class="Buttons">
                 <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
