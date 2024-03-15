@@ -2,29 +2,17 @@
 import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import { AppStateEnum } from '../../model/GameModel';
-import { computed } from 'vue';
 const appState = useModel(["appState"]);
-
-const style = computed(() => {
-    switch (appState.value) {
-        case AppStateEnum.GAME_SCREEN_PAUSE:
-            return `background-image: url(./assets/svg/stopFill.svg);`;
-        case AppStateEnum.GAME_SCREEN:
-            return `background-image: url(./assets/svg/playFill.svg);`;
-        default:
-            return '';
-    }
-});
 
 </script>
 
 <template>
     <div class="GameMenuMainOptions" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
-        <div v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE" class="SkinSvg"
+        <div v-if="appState === AppStateEnum.GAME_SCREEN" class="SkinSvg"
             style="background-image: url(./assets/svg/stopFill.svg);"></div>
-        <div v-else-if="appState === AppStateEnum.GAME_SCREEN" class="SkinSvg"
+        <div v-else-if="appState === AppStateEnum.GAME_SCREEN_PAUSE" class="SkinSvg"
             style="background-image: url(./assets/svg/playFill.svg);"></div>
-        <div v-else :style="style">{{ style === '' ? '&#9881;' : '' }}</div>
+        <div v-else>&#9881;</div>
     </div>
 </template>
 

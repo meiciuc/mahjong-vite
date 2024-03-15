@@ -24,29 +24,35 @@ let mode = ref(props.mode);
 
 <template>
     <div class="OptionsScreen" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);">
-        <div v-if="mode === 'options'" class="PopupLevelOne">
-            <div ref="Popup" class="PopupLevelTwo">
-                <Tutorial></Tutorial>
+        <Transition>
+            <div v-if="mode === 'options'" class="PopupLevelOne">
+                <div ref="Popup" class="PopupLevelTwo">
+                    <Tutorial class="Tutorial"></Tutorial>
+                </div>
+                <div class="Buttons">
+                    <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
+                    </OptionsMenuButton>
+                    <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton>
+                    <OptionsMenuButton @click.stop.prevent="sound = !sound"
+                        :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">
+                    </OptionsMenuButton>
+                </div>
             </div>
-            <div class="Buttons">
-                <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
-                </OptionsMenuButton>
-                <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton>
-                <OptionsMenuButton @click.stop.prevent="sound = !sound"
-                    :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">
-                </OptionsMenuButton>
+        </Transition>
+        <Transition>
+            <div v-if="mode === 'shop'" class="PopupLevelOne">
+                <div ref="Popup" class="PopupLevelTwo Shop">
+                    <ShopItem v-for="prop in shop.proposales" :proposal="prop" />
+                </div>
             </div>
-        </div>
-        <div v-else class="PopupLevelOne">
-            <div ref="Popup" class="PopupLevelTwo Shop">
-                <ShopItem v-for="prop in shop.proposales" :proposal="prop" />
-            </div>
-        </div>
+        </Transition>
+        
     </div>
 </template>
 
 <style lang="scss" scoped>
 @import '../global.scss';
+@import '../transition.scss';
 
 .OptionsScreen {
     @include scene-container;
@@ -69,5 +75,10 @@ let mode = ref(props.mode);
 
 .OptionsScreen .Buttons {
     display: flex;
+}
+
+.OptionsScreen .Tutorial {
+    height: 35vh;
+    margin-bottom: 2vh;
 }
 </style>
