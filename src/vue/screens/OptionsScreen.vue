@@ -42,7 +42,7 @@ let mode = ref(props.mode);
         <Transition>
             <div v-if="mode === 'shop'" class="PopupLevelOne">
                 <div ref="Popup" class="PopupLevelTwo Shop">
-                    <ShopItem v-for="prop in shop.proposales" :proposal="prop" />
+                    <ShopItem v-for="prop in (shop as unknown as any).proposales" :proposal="prop" />
                 </div>
             </div>
         </Transition>

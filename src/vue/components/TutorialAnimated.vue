@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 <template>
     <div class="Tutorial">
-        <img v-if="show" src="assets/tutorial/tutorial_short.svg" type="image/svg+xml" :style="`width: ${props.size}; margin-left: ${props.marginLeft};`"/>
+        <img v-if="show" :src="'assets/tutorial/tutorial_short.svg'" type="image/svg+xml" :style="`width: ${props.size}; margin-left: ${props.marginLeft};`"/>
     </div>
 </template>
 
