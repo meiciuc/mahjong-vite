@@ -32,7 +32,6 @@ const handleOnResize = () => {
 }
 
 onMounted(() => {
-    console.log('mounted')
     window.addEventListener('resize', handleOnResize);
     window.addEventListener('orientationchange', handleOnResize);
     handleOnResize();

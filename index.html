@@ -19,7 +19,6 @@
       display: flex;
       justify-content: center;
       align-items: start;
-      scale: 0.5;
     }
 
     .images img {
@@ -30,7 +29,7 @@
       display: flex;
       justify-content: start;
       width: 30vw;
-      height: 1.2em;
+      height: 1rem;
       border: 1px solid #000000;
       visibility: hidden;
     }
@@ -47,11 +46,7 @@
 <body>
   <div class="screen">
     <div class="images">
-      <img src="./assets/__image_part_010.png" />
-      <img src="./assets/__image_part_017.png" />
-      <img src="./assets/__image_part_028.png" />
-      <img src="./assets/__image_part_089.png" />
-      <img src="./assets/__image_part_096.png" />
+      <img src="./assets/tutorial/tutorial_short.svg">
     </div>
     <div class="preloader">
       <div class="bar" style="width: 33%;"></div>
@@ -59,6 +54,8 @@
   </div>
 
   <script type="text/javascript" id="preloader" preloaded="0">
+
+    var startDate = Date.now();
 
     function getScript() {
       return document.querySelector('#preloader');

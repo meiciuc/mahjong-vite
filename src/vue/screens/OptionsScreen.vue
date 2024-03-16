@@ -4,7 +4,7 @@ import { useModel } from '../../model/useModel';
 import { VueServiceSignals, vueService } from '../VueService';
 import OptionsMenuButton from '../components/OptionsMenuButton.vue';
 import ShopItem from '../components/ShopItem.vue';
-import Tutorial from '../components/Tutorial.vue';
+import TutorialAnimated from '../components/TutorialAnimated.vue';
 
 export interface Props {
     mode?: "options" | "shop";
@@ -27,7 +27,7 @@ let mode = ref(props.mode);
         <Transition>
             <div v-if="mode === 'options'" class="PopupLevelOne">
                 <div ref="Popup" class="PopupLevelTwo">
-                    <Tutorial class="Tutorial"></Tutorial>
+                    <TutorialAnimated class="Tutorial" :size="'35vh'" :marginLeft="'-17vh'"></TutorialAnimated>
                 </div>
                 <div class="Buttons">
                     <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">

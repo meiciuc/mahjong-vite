@@ -16,6 +16,7 @@ import { soundService } from './services/SoundService';
 import { forIn } from 'lodash';
 import { SOUNDS } from './Sounds';
 import { assetsService } from './services/AssetsService';
+import { TimeSkipper } from './utils/TimeSkipper';
 
 window.onload = async (): Promise<void> => {
     GameModelHelper.createModel();
@@ -27,12 +28,23 @@ window.onload = async (): Promise<void> => {
         console.log(err);
     }
 
+    try {
+        const startDate = (window as unknown as any).startDate;
+        const date = Date.now();
+        const delta = 4000 - (date - startDate);
+        if (delta > 0) {
+            await new TimeSkipper(delta).execute();
+        }
+    } catch (error) { }
+
     await initAssets();
     vueService.init();
     await initStageService();
     await assetsService.init();
     setupTweens();
     initDebug();
+
+
 
     // start application
     new ApplicationController().execute();
