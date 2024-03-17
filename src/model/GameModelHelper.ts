@@ -1,6 +1,8 @@
+import { clamp } from "lodash";
 import { dataService } from "../core/services/DataService";
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 import { ShopModel, CurrencyType } from "./ShopModel";
+import { Config } from "../Config";
 
 export class GameModelHelper {
     static setApplicationState(value: AppStateEnum) {
@@ -30,7 +32,7 @@ export class GameModelHelper {
 
     static setGameLevel(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameLevel = value;
+        gameModel.data.gameLevel = clamp(value, 1, Config.MAX_GAME_LEVEL);
     }
 
     static getGameTotalScore() {

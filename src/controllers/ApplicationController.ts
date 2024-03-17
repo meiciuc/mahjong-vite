@@ -1,3 +1,4 @@
+import { clamp } from 'lodash';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -14,6 +15,7 @@ import { VueServiceSignals, VueShopSignals, vueService } from '../vue/VueService
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
+import { Config } from '../Config';
 
 export class ApplicationController extends BaseController {
 
@@ -177,7 +179,7 @@ export class ApplicationController extends BaseController {
 
     private setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
         const model = dataService.getRootModel<GameModel>();
-        model.data.gameLevel = l;
+        model.data.gameLevel = clamp(l, 1, Config.MAX_GAME_LEVEL);
         model.data.gridWidth = w;
         model.data.gridHeight = h;
         model.data.seed = s;

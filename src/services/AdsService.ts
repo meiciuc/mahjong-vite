@@ -173,6 +173,8 @@ class GpService {
         this.gp.player.get('data');
         this.gp.player.set('data', JSON.stringify(data));
         this.gp.player.set('score', data.gameTotalScore);
+        this.gp.player.get('gameLevel');
+        this.gp.player.set('gameLevel', data.gameLevel);
         this.gp.player.sync({ override: true });
     }
 
