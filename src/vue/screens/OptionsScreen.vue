@@ -19,6 +19,10 @@ const shop = useModel(["shop"]);
 const sound = useModel(["sound"]);
 let mode = ref(props.mode);
 
+const handleSoundClick = () => {
+    (sound.value as unknown as any) = !sound.value;
+}
+
 
 </script>
 
@@ -33,7 +37,7 @@ let mode = ref(props.mode);
                     <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
                     </OptionsMenuButton>
                     <!-- <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton> -->
-                    <OptionsMenuButton @click.stop.prevent="sound = !sound"
+                    <OptionsMenuButton @click.stop.prevent="handleSoundClick"
                         :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">
                     </OptionsMenuButton>
                 </div>
