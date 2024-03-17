@@ -75,10 +75,10 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     animate(time: number): void {
         this.currentTime += time;
         const t = this.easing(this.currentTime / this.duration);
-        if (this.currentPathTime < 1) {
-            this.draw(this.currentPathTime, t);
-            this.currentPathTime = t;
-        }
+        // if (this.currentPathTime < 1) {
+        this.draw(this.currentPathTime, t);
+        this.currentPathTime = t;
+        // }
 
         for (const particle of this.particles) {
             if (particle.isDead) {

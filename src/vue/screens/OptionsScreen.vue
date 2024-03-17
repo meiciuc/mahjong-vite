@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<Props>(), {
     mode: "options",
 });
 
-const shop = useModel(["shop"]).value;
+const shop = useModel(["shop"]);
 
-const sound = useModel(["sound"]).value;
+const sound = useModel(["sound"]);
 let mode = ref(props.mode);
 
 
@@ -32,7 +32,7 @@ let mode = ref(props.mode);
                 <div class="Buttons">
                     <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
                     </OptionsMenuButton>
-                    <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton>
+                    <!-- <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton> -->
                     <OptionsMenuButton @click.stop.prevent="sound = !sound"
                         :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">
                     </OptionsMenuButton>
