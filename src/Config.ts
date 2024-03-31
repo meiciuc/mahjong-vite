@@ -37,7 +37,7 @@ export class Config {
     static MAX_GAME_LEVEL = 92;
     static MIN_FULL_SCREEN_ADD_TIMEOUT = 3000;
 
-    static DEV = true;
+    static DEV = window.location.href.toLowerCase().indexOf('localhost') > -1;
     static get DEV_SHOW_STATS() {
         return Config.DEV;
     }

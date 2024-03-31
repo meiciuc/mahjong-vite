@@ -77,6 +77,7 @@ const defeatMessage = computed(() => {
 </script>
 
 <template>
+    <div class="AppBackground"></div>
     <div id="canvas" class="Canvas"></div>
 
     <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
@@ -110,7 +111,14 @@ const defeatMessage = computed(() => {
 
 @import './transition.scss';
 
-// menu-left
+.AppBackground {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: white;
+}
 
 .Canvas {
     position: fixed;

@@ -32,7 +32,8 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     private color = Config.PATH_SELECT_COLOR;
 
     constructor(public svg: SVGElement, private duration = Config.PATH_LIKE_SNAKE_DURATION) {
-        super();
+        super((svg.querySelector('path').getTotalLength() || 500) * 2);
+        this.setProperties({ rotation: false, position: false, vertices: false, uvs: false });
         this.particleAge = this.duration / 1.5;
 
         this.path = this.svg.querySelector('path');
@@ -75,10 +76,10 @@ export class PathAnimatedLikeSnakeView extends ParticleContainer implements Anim
     animate(time: number): void {
         this.currentTime += time;
         const t = this.easing(this.currentTime / this.duration);
-        // if (this.currentPathTime < 1) {
-        this.draw(this.currentPathTime, t);
-        this.currentPathTime = t;
-        // }
+        if (this.currentPathTime < 1) {
+            this.draw(this.currentPathTime, t);
+            this.currentPathTime = t;
+        }
 
         for (const particle of this.particles) {
             if (particle.isDead) {
