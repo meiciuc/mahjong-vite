@@ -1,5 +1,5 @@
 import { rotate270 } from "2d-array-rotation";
-import { Engine, NodeList } from "@ash.ts/ash";
+import { Engine, Entity, NodeList } from "@ash.ts/ash";
 import { Config } from "../Config";
 import { LAYERS } from "../GameLayers";
 import { stageService } from "../core/services/StageService";
@@ -15,12 +15,20 @@ import { GridView } from "../view/GridView";
 import { BaseController } from "./BaseController";
 import { SystemPriorities } from "./GameController";
 import { dataService } from "../core/services/DataService";
-import { GameModel } from "../model/GameModel";
+import { GameModel, GameStateEnum } from "../model/GameModel";
 import { PointLike } from "../utils/point";
 import { PathAnimatedLikeSnakeView } from "../view/PathAnimatedLikeSnakeView";
 import { GameLogic } from "../ecs/game/GameLogic";
 import { TileHelpEffectNode } from "../ecs/tiles/nodes/TileHelpEffectNode";
 import { TileShakingSystem } from "../ecs/tiles/TileShakingSystem";
+import { Interactive } from "../ecs/tiles/components/Interactive";
+import { TileInteractiveSystem } from "../ecs/tiles/TileInteractiveSystem";
+import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
+import { GameModelHelper } from "../model/GameModelHelper";
+import { soundService } from "../services/SoundService";
+import { SOUNDS } from "../Sounds";
+import { TimeSkipper } from "../utils/TimeSkipper";
+import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollectorSystem";
 
 class AnimationQueueItem {
     constructor(
@@ -46,6 +54,8 @@ export class TutorialController extends BaseController {
 
     private animationQueue: AnimationQueueItem[] = [];
     private animationQueueTimeout = 0;
+
+    private grid: number[][];
 
     protected async doExecute() {
         this.setupView();
@@ -73,6 +83,7 @@ export class TutorialController extends BaseController {
         this.engine.addSystem(new TileShakingSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new TileToggleSystem(this.creator), SystemPriorities.animate);
         this.engine.addSystem(new DisplaySystem(), SystemPriorities.render);
+        this.engine.addSystem(new GarbageCollectorSystem(), SystemPriorities.preUpdate);
 
         stageService.updateSignal.add(this.update);
     }
@@ -96,11 +107,8 @@ export class TutorialController extends BaseController {
         this.creator.createGrid(grid, this.portrait, this.landscape);
 
 
-
         this.creator.createTile(this.icons[0], deltaCol, deltaRow);
         grid[deltaRow][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
-        this.creator.createTile(this.icons[4], deltaCol + 1, deltaRow);
-        grid[deltaRow][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
         this.creator.createTile(this.icons[0], deltaCol + 2, deltaRow);
         grid[deltaRow][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
 
@@ -108,18 +116,45 @@ export class TutorialController extends BaseController {
         grid[deltaRow + 1][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
         this.creator.createTile(this.icons[1], deltaCol + 1, deltaRow + 1);
         grid[deltaRow + 1][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
+
         this.creator.createTile(this.icons[3], deltaCol + 3, deltaRow + 1);
         grid[deltaRow + 1][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
+        this.creator.createTile(this.icons[3], deltaCol + 1, deltaRow + 2);
+        grid[deltaRow + 2][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
 
         this.creator.createTile(this.icons[2], deltaCol, deltaRow + 2);
         grid[deltaRow + 2][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
-        this.creator.createTile(this.icons[3], deltaCol + 1, deltaRow + 2);
-        grid[deltaRow + 2][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
+        this.creator.createTile(this.icons[2], deltaCol + 2, deltaRow + 3);
+        grid[deltaRow + 3][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
+
+        this.creator.createTile(this.icons[4], deltaCol + 1, deltaRow);
+        grid[deltaRow][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
         this.creator.createTile(this.icons[4], deltaCol + 3, deltaRow + 2);
         grid[deltaRow + 2][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
 
-        this.creator.createTile(this.icons[2], deltaCol + 2, deltaRow + 3);
-        grid[deltaRow + 3][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[0], deltaCol, deltaRow);
+        // grid[deltaRow][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[4], deltaCol + 1, deltaRow);
+        // grid[deltaRow][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[0], deltaCol + 2, deltaRow);
+        // grid[deltaRow][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
+
+        // this.creator.createTile(this.icons[1], deltaCol, deltaRow + 1);
+        // grid[deltaRow + 1][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[1], deltaCol + 1, deltaRow + 1);
+        // grid[deltaRow + 1][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[3], deltaCol + 3, deltaRow + 1);
+        // grid[deltaRow + 1][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
+
+        // this.creator.createTile(this.icons[2], deltaCol, deltaRow + 2);
+        // grid[deltaRow + 2][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[3], deltaCol + 1, deltaRow + 2);
+        // grid[deltaRow + 2][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
+        // this.creator.createTile(this.icons[4], deltaCol + 3, deltaRow + 2);
+        // grid[deltaRow + 2][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
+
+        // this.creator.createTile(this.icons[2], deltaCol + 2, deltaRow + 3);
+        // grid[deltaRow + 3][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
 
 
         // rotation
@@ -128,10 +163,65 @@ export class TutorialController extends BaseController {
         this.landscape = this.portrait === grid ? newGrid : grid;
 
         // create grid
+        this.grid = grid;
         this.creator.createGrid(grid, this.portrait, this.landscape);
     }
 
     private async nextCircle() {
+        this.engine.addSystem(new TileInteractiveSystem(this.creator), SystemPriorities.move);
+
+        for (let node = this.tiles.head; node; node = node.next) {
+            node.entity.remove(Interactive);
+        }
+
+        const selectedPoints: PointLike[] = [];
+        const selectedEntities: Entity[] = [];
+
+        const nodes: TileNode[] = [];
+        for (let node = this.tiles.head; node; node = node.next) {
+            nodes.push(node);
+        }
+
+        for (const node of nodes) {
+            node.entity.add(new Interactive());
+            await this.waitClick();
+            node.entity.remove(Interactive);
+
+            selectedPoints.push(node.gridPosition);
+            selectedEntities.push(node.entity);
+
+            if (selectedPoints.length === 2) {
+                soundService.play(SOUNDS.bookClose);
+
+                const selectedPath = await GameLogic.findCross(this.grid, selectedPoints[0], selectedPoints[1]);
+
+                const added = Config.ADD_SCORE_FOR_TRUE_MOVE * this.getEdgesLength(selectedPath);
+
+                GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + added);
+
+                const pathDuration = Config.PATH_LIKE_SNAKE_DURATION;
+
+                const pathEntity = this.creator.showPath(selectedPath, pathDuration);
+
+                const effectDelay = pathDuration * 1500;
+                await new TimeSkipper(effectDelay).execute();
+
+                await new TimeSkipper(effectDelay * 2 / 3).execute();
+                selectedEntities.forEach((entity) => {
+                    this.creator.removeEntity(entity);
+                });
+                if (pathEntity) {
+                    this.creator.removeEntity(pathEntity);
+                }
+
+                selectedEntities.splice(0);
+                selectedPoints.splice(0);
+            }
+        }
+    }
+
+
+    private async __nextCircle() {
         const selectTiming = .2;
         const pathTiminig = .7;
         const pauseTiming = .5;
@@ -243,4 +333,39 @@ export class TutorialController extends BaseController {
         this.animationQueueTimeout = item.timeout;
         item.method();
     };
+
+    private async waitClick() {
+        GameModelHelper.setGameState(GameStateEnum.CLICK_WAIT);
+        return new Promise(async resolve => {
+            const selected = this.creator.getEngine().getNodeList(TileSelectedNode);
+
+            const executed = (node: TileSelectedNode) => {
+                selected.nodeAdded.remove(executed);
+                this.creator?.selectTile(node.tile, true);
+                resolve(true);
+            }
+
+            selected.nodeAdded.add(executed);
+        });
+    }
+
+    getEdgesLength(arr: PointLike[]) {
+        let corners = 1
+        if (arr.length < 3) {
+            return corners;
+        }
+
+        let xDirection = Math.round(arr[1].x - arr[0].x);
+        let yDirection = Math.round(arr[1].y - arr[0].y);
+        for (let i = 2; i < arr.length; i++) {
+            const xDirection1 = Math.round(arr[i].x - arr[i - 1].x);
+            const yDirection1 = Math.round(arr[i].y - arr[i - 1].y);
+            if (xDirection !== xDirection1 || yDirection !== yDirection1) {
+                corners++;
+            }
+            xDirection = xDirection1;
+            yDirection = yDirection1;
+        }
+        return Math.min(corners, 3);
+    }
 }

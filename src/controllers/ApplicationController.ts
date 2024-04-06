@@ -16,6 +16,7 @@ import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { Config } from '../Config';
+import { TutorialController } from './TutorialController';
 
 export class ApplicationController extends BaseController {
 

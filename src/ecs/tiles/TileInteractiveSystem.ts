@@ -77,6 +77,7 @@ export class TileInteractiveSystem extends System {
     }
 
     private handleClick = (e: any) => {
+        console.log('click', this.isHandable())
         if (!this.isHandable()) {
             return;
         }
@@ -85,6 +86,7 @@ export class TileInteractiveSystem extends System {
 
         for (let node = this.tiles?.head; node; node = node.next) {
             if (node.display.view === e.target) {
+                console.log('click 1')
                 this.clickTile(node);
             }
         }
@@ -102,11 +104,12 @@ export class TileInteractiveSystem extends System {
     }
 
     private isHandable() {
-        if (this.game?.head?.game.model.data.gameState !== GameStateEnum.CLICK_WAIT) {
-            return false;
-        }
+        return true;
+        // if (this.game?.head?.game.model.data.gameState !== GameStateEnum.CLICK_WAIT) {
+        //     return false;
+        // }
 
-        return Date.now() - this.clickLastTime > Config.CLICK_TIMEOUT;
+        // return Date.now() - this.clickLastTime > Config.CLICK_TIMEOUT;
     }
 
 }

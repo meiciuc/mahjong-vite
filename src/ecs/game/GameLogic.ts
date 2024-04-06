@@ -88,8 +88,27 @@ export class GameLogic {
     }
 
     public async findCross(A: PointLike, B: PointLike) {
-        // create matrix
         const grid = throwIfNull(this.grid.head).grid.current;
+        return GameLogic.findCross(grid, A, B);
+    }
+
+    private getGameMaxIconPaires() {
+        const model = dataService.getRootModel<GameModel>();
+        const easing = easingsFunctions.linear;
+
+        const startA = 2;
+        const endA = 20;
+
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+
+        const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
+        console.log('getGameMaxIconPaires', currentA)
+        return currentA;
+    }
+
+    static async findCross(grid: number[][], A: PointLike, B: PointLike) {
+        // create matrix
         const aMatrix: number[][] = [];
         for (let i = 0; i < grid.length; i++) {
             aMatrix.push([]);
@@ -111,21 +130,6 @@ export class GameLogic {
                 const result: PointLike[] = [];
                 return Promise.resolve(result);
             });
-    }
-
-    private getGameMaxIconPaires() {
-        const model = dataService.getRootModel<GameModel>();
-        const easing = easingsFunctions.linear;
-
-        const startA = 2;
-        const endA = 20;
-
-        const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
-
-        const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
-        console.log('getGameMaxIconPaires', currentA)
-        return currentA;
     }
 
     static calculateGameModelParams(level: number) {
