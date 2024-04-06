@@ -29,6 +29,7 @@ import { soundService } from "../services/SoundService";
 import { SOUNDS } from "../Sounds";
 import { TimeSkipper } from "../utils/TimeSkipper";
 import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollectorSystem";
+import { Point, Sprite } from "pixi.js";
 
 class AnimationQueueItem {
     constructor(
@@ -57,11 +58,48 @@ export class TutorialController extends BaseController {
 
     private grid: number[][];
 
+    private pointer = document.createElement('div');
+
     protected async doExecute() {
         this.setupView();
         this.setupEngine();
         this.generateGrid();
+        this.setupPointer();
         this.nextCircle();
+    }
+
+    private setupPointer() {
+        this.pointer = document.createElement('div');
+        this.pointer.style.position = 'absolute';
+        this.pointer.style.width = '100px';
+        this.pointer.style.height = '100px';
+        this.pointer.style.backgroundColor = 'red';
+        this.pointer.style.opacity = '0.5';
+        this.pointer.style.left = '300px';
+        this.pointer.style.top = '300px';
+
+        document.body.appendChild(this.pointer);
+
+        console.log()
+
+        const bounding = stageService.stage.view.getBoundingClientRect();
+
+        const view = this.tiles?.head?.display.view;
+        const { x, y, width, height } = view as Sprite;
+        if (view && x && y && width && height) {
+            const tl = view.toGlobal(new Point(0, 0));
+            const br = view.toGlobal(new Point(width, height));
+
+            this.pointer.style.left = `${tl.x}px`;
+            this.pointer.style.top = `${tl.y + bounding.y}px`;
+            this.pointer.style.width = `${br.x - tl.x}px`;
+            this.pointer.style.height = `${br.y - tl.y}px`;
+
+        }
+        const point = this.tiles?.head?.display.view.toGlobal(new Point());
+        if (point) {
+            console.log(point)
+        }
     }
 
     private setupView() {
