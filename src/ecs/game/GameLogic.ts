@@ -118,13 +118,13 @@ export class GameLogic {
         const easing = easingsFunctions.linear;
 
         const startA = 2;
-        const endA = 4;
+        const endA = 20;
 
         const currentLevel = model ? model.data.gameLevel : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
-
+        console.log('getGameMaxIconPaires', currentA)
         return currentA;
     }
 
@@ -134,8 +134,8 @@ export class GameLogic {
         const start = 9;// 5;    // 9
         const end = 45;//15;     // 23
 
-        const currentLevel = 50;//level;
-        const scaleLevel = currentLevel / 100;//Config.MAX_GAME_LEVEL;
+        const currentLevel = level;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const size = Math.floor(easing(scaleLevel) * (end - start) + start);
         const commonCount = size + size;

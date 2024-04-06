@@ -98,12 +98,12 @@ export class ApplicationController extends BaseController {
 
         GameModelHelper.setApplicationState(AppStateEnum.NONE);
 
-        switch (this.gameModel.raw.userActionAfterTheLastGame) {
+        switch (this.gameModel.data.userActionAfterTheLastGame) {
             case UserActionAfterTheLastGame.RETRY: {
-                const level = this.gameModel.raw.gameLevel;
-                const gridWidth = this.gameModel.raw.gridWidth;
-                const gridHeight = this.gameModel.raw.gridHeight;
-                const seed = this.gameModel.raw.seed;
+                const level = this.gameModel.data.gameLevel;
+                const gridWidth = this.gameModel.data.gridWidth;
+                const gridHeight = this.gameModel.data.gridHeight;
+                const seed = this.gameModel.data.seed;
 
                 const { gameMaxTime } = this.calculateGameModelParams(level);
 
@@ -192,7 +192,7 @@ export class ApplicationController extends BaseController {
 
     private handleShopBus = async (type: VueShopSignals, id: string) => {
         if (type === VueShopSignals.ProposalPurchased) {
-            for (const prop of this.gameModel.raw.shop.proposales) {
+            for (const prop of this.gameModel.data.shop.proposales) {
                 const boosterType = prop.items[0].product;
                 const boosterCound = prop.items[0].count;
                 if (prop.id !== id) {
@@ -233,11 +233,11 @@ export class ApplicationController extends BaseController {
                 this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
                 this.gameModel.data.shopIsVisible = data === VueServiceSignals.OpenShop;
 
-                if (this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN) {
+                if (this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN) {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
                 }
 
-                if (!this.gameModel.data.optionsAreVisible && this.gameModel.raw.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
+                if (!this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
                 }
                 break;

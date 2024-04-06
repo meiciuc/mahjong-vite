@@ -43,4 +43,5 @@ export class Config {
     }
 
     static DEV_USE_PRELOADER = true;
+    static DEV_GAME_AUTHOMATIC = false;
 }

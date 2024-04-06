@@ -122,6 +122,20 @@ export class GameSystem extends System {
                 GameModelHelper.setGameState(GameStateEnum.GAME_NO_MORE_MOVES);
                 return;
             }
+
+            // authomatic
+            if (Config.DEV_GAME_AUTHOMATIC) {
+                let selected = 0;
+                for (let node = this.tiles?.head; node; node = node.next) {
+                    if (
+                        (node.gridPosition.x === arr[0].x && node.gridPosition.y === arr[0].y)
+                        || node.gridPosition.x === arr[arr.length - 1].x && node.gridPosition.y === arr[arr.length - 1].y
+                    ) {
+                        selected++;
+                        this.creator.selectTile(node.tile, true);
+                    }
+                }
+            }
         }
 
         this.game.head.game.model.data.gameState = state;
@@ -161,14 +175,17 @@ export class GameSystem extends System {
             const added = Config.ADD_SCORE_FOR_TRUE_MOVE * this.getEdgesLength(arr);
 
             GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + added);
-            const pathEntity = this.creator.showPath(arr, Config.PATH_LIKE_SNAKE_DURATION);
+
+            const pathDuration = Config.PATH_LIKE_SNAKE_DURATION;
+
+            const pathEntity = this.creator.showPath(arr, pathDuration);
             const ids: number[] = [];
             tiles.forEach((node) => {
                 ids.push(node.tile.id);
                 this.creator.nonInteractiveTile(node.tile);
             });
 
-            const effectDelay = Config.PATH_LIKE_SNAKE_DURATION * 1500;
+            const effectDelay = pathDuration * 2;//1500;
             await new TimeSkipper(effectDelay).execute();
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, added);
 
