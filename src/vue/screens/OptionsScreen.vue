@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const shop = useModel(["shop"]);
+const tutorialOnly = useModel(["tutorialOnly"]);
 
 const sound = useModel(["sound"]);
 let mode = ref(props.mode);
@@ -34,9 +35,8 @@ const handleSoundClick = () => {
                     <TutorialAnimated class="Tutorial" :size="'35vh'" :marginLeft="'-17vh'"></TutorialAnimated>
                 </div>
                 <div class="Buttons">
-                    <OptionsMenuButton @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
+                    <OptionsMenuButton v-if="!tutorialOnly"  @click.stop.prevent="mode = 'shop'" :icon="'./assets/svg/shoppingСartFill.svg'">
                     </OptionsMenuButton>
-                    <!-- <OptionsMenuButton style="margin-left: 0.5rem;" :icon="'./assets/svg/addPeople.svg'"></OptionsMenuButton> -->
                     <OptionsMenuButton @click.stop.prevent="handleSoundClick"
                         :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">
                     </OptionsMenuButton>

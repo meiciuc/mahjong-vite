@@ -65,6 +65,7 @@ export interface GameModel {
     shop: ShopModel;
     userActionAfterTheLastGame: UserActionAfterTheLastGame,
 
+    tutorialOnly: boolean,
     optionsAreVisible: boolean,
     shopIsVisible: boolean,
     sound: boolean,

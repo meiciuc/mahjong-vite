@@ -96,6 +96,7 @@ export class GameModelHelper {
             },
 
             optionsAreVisible: false,
+            tutorialOnly: false,
             shopIsVisible: false,
             sound: true,
 

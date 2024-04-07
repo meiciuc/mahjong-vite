@@ -1,5 +1,5 @@
 import { rotate270 } from "2d-array-rotation";
-import { Engine, Entity, NodeList } from "@ash.ts/ash";
+import { Engine, EngineStateMachine, Entity, NodeList } from "@ash.ts/ash";
 import { Config } from "../Config";
 import { LAYERS } from "../GameLayers";
 import { stageService } from "../core/services/StageService";
@@ -15,7 +15,7 @@ import { GridView } from "../view/GridView";
 import { BaseController } from "./BaseController";
 import { SystemPriorities } from "./GameController";
 import { dataService } from "../core/services/DataService";
-import { GameModel, GameStateEnum } from "../model/GameModel";
+import { AppStateEnum, GameModel, GameStateEnum } from "../model/GameModel";
 import { PointLike } from "../utils/point";
 import { PathAnimatedLikeSnakeView } from "../view/PathAnimatedLikeSnakeView";
 import { GameLogic } from "../ecs/game/GameLogic";
@@ -30,6 +30,13 @@ import { SOUNDS } from "../Sounds";
 import { TimeSkipper } from "../utils/TimeSkipper";
 import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollectorSystem";
 import { Point, Sprite } from "pixi.js";
+import { FadeInSystem } from "../ecs/fade/FadeInSystem";
+import { FadeOutSystem } from "../ecs/fade/FadeOutSystem";
+
+enum GameControllerStateEnum {
+    GAME = 'game',
+    PAUSE = 'pause',
+}
 
 class AnimationQueueItem {
     constructor(
@@ -41,6 +48,7 @@ class AnimationQueueItem {
 export class TutorialController extends BaseController {
 
     private creator?: EntityCreator;
+    private fsm?: EngineStateMachine;
     private engine?: Engine;
     private gameLogic?: GameLogic;
     private gridView?: GridView;
@@ -60,7 +68,13 @@ export class TutorialController extends BaseController {
 
     private pointer = document.createElement('div');
 
+    destroy(): void {
+        GameModelHelper.getModel().data.tutorialOnly = false;
+        dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
+    }
+
     protected async doExecute() {
+        GameModelHelper.getModel().data.tutorialOnly = true;
         this.setupView();
         this.setupEngine();
         this.generateGrid();
@@ -77,10 +91,10 @@ export class TutorialController extends BaseController {
         this.pointer.style.opacity = '0.5';
         this.pointer.style.left = '300px';
         this.pointer.style.top = '300px';
+        this.pointer.style.userSelect = 'none';
+        this.pointer.style.pointerEvents = 'none';
 
         document.body.appendChild(this.pointer);
-
-        console.log()
 
         const bounding = stageService.stage.view.getBoundingClientRect();
 
@@ -102,9 +116,13 @@ export class TutorialController extends BaseController {
         }
     }
 
+    private showPointer(value: boolean) {
+        this.pointer.style.opacity = `${value ? '0.5' : '0'}`;
+    }
+
     private setupView() {
         this.gridView = new GridView();
-        stageService.getLayer(LAYERS.TUTORIAL).addChild(this.gridView);
+        stageService.getLayer(LAYERS.GAME).addChild(this.gridView);
     }
 
     private async setupEngine() {
@@ -115,6 +133,22 @@ export class TutorialController extends BaseController {
         this.tiles = this.engine.getNodeList(TileNode);
         this.helpEffectNodes = this.engine.getNodeList(TileHelpEffectNode);
 
+        const fadeIn = new FadeInSystem();
+        const fadeOut = new FadeOutSystem();
+
+        this.fsm = new EngineStateMachine(this.engine);
+        this.fsm.createState(GameControllerStateEnum.GAME)
+            .addMethod(() => {
+                this.showPointer(true);
+                return fadeIn;
+            });
+
+        this.fsm.createState(GameControllerStateEnum.PAUSE)
+            .addMethod(() => {
+                this.showPointer(false);
+                return fadeOut;
+            });
+
         this.engine.addSystem(new GridViewSystem(this.getGridView()), SystemPriorities.update);
         this.engine.addSystem(new TilesGridSystem(), SystemPriorities.update);
         this.engine.addSystem(new AnimationSystem(), SystemPriorities.animate);
@@ -124,6 +158,10 @@ export class TutorialController extends BaseController {
         this.engine.addSystem(new GarbageCollectorSystem(), SystemPriorities.preUpdate);
 
         stageService.updateSignal.add(this.update);
+
+        this.fsm.changeState(GameControllerStateEnum.GAME);
+
+        dataService.getRootModel<GameModel>().subscribe(['appState'], this.handleAppStateChange);
     }
 
     private getGridView() {
@@ -405,5 +443,14 @@ export class TutorialController extends BaseController {
             yDirection = yDirection1;
         }
         return Math.min(corners, 3);
+    }
+
+    private handleAppStateChange = (state: AppStateEnum) => {
+        console.log('handleAppStateChange', state)
+        if (state === AppStateEnum.GAME_SCREEN) {
+            this.fsm.changeState(GameControllerStateEnum.GAME);
+        } else {
+            this.fsm.changeState(GameControllerStateEnum.PAUSE);
+        }
     }
 }

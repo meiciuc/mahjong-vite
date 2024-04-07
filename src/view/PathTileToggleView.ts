@@ -15,6 +15,9 @@ export class PathTileToggleView extends ParticleContainer {
         const sprite = new Sprite(texture);
         sprite.scale.set(0.8);
         sprite.tint = this.color;
-        this.addChild(sprite);
+        // TODO sync
+        try {
+            this.addChild(sprite);
+        } catch (error) { }
     }
 }
