@@ -32,6 +32,7 @@ import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollector
 import { Point, Sprite } from "pixi.js";
 import { FadeInSystem } from "../ecs/fade/FadeInSystem";
 import { FadeOutSystem } from "../ecs/fade/FadeOutSystem";
+import { Easing, Tween } from "@tweenjs/tween.js";
 
 enum GameControllerStateEnum {
     GAME = 'game',
@@ -95,29 +96,57 @@ export class TutorialController extends BaseController {
         this.pointer.style.pointerEvents = 'none';
 
         document.body.appendChild(this.pointer);
+    }
 
+    private showPointer(value: boolean) {
+        this.pointer.style.opacity = `${value ? '0.5' : '0'}`;
+    }
+
+    private movePointerToTile(node: TileNode, duration = 0) {
         const bounding = stageService.stage.view.getBoundingClientRect();
 
-        const view = this.tiles?.head?.display.view;
+        const view = node.display.view;
         const { x, y, width, height } = view as Sprite;
         if (view && x && y && width && height) {
             const tl = view.toGlobal(new Point(0, 0));
             const br = view.toGlobal(new Point(width, height));
 
-            this.pointer.style.left = `${tl.x}px`;
-            this.pointer.style.top = `${tl.y + bounding.y}px`;
-            this.pointer.style.width = `${br.x - tl.x}px`;
-            this.pointer.style.height = `${br.y - tl.y}px`;
+            if (!duration) {
+                this.pointer.style.left = `${tl.x}px`;
+                this.pointer.style.top = `${tl.y + bounding.y}px`;
+                this.pointer.style.width = `${br.x - tl.x}px`;
+                this.pointer.style.height = `${br.y - tl.y}px`;
+            } else {
+                const pointerBoundingBox = this.pointer.getBoundingClientRect();
+                const tweenProvider: {
+                    left: number,
+                    top: number,
+                    width: number,
+                    height: number
+                } = {
+                    left: pointerBoundingBox.x,
+                    top: pointerBoundingBox.y,
+                    width: pointerBoundingBox.width,
+                    height: pointerBoundingBox.height
+                };
 
+                new Tween(tweenProvider)
+                    .to({
+                        left: tl.x,
+                        top: tl.y + bounding.y,
+                        width: br.x - tl.x,
+                        height: br.y - tl.y
+                    }, duration)
+                    .easing(Easing.Quadratic.Out)
+                    .onUpdate(() => {
+                        this.pointer.style.left = `${tweenProvider.left}px`;
+                        this.pointer.style.top = `${tweenProvider.top}px`;
+                        this.pointer.style.width = `${tweenProvider.width}px`;
+                        this.pointer.style.height = `${tweenProvider.height}px`;
+                    })
+                    .start();
+            }
         }
-        const point = this.tiles?.head?.display.view.toGlobal(new Point());
-        if (point) {
-            console.log(point)
-        }
-    }
-
-    private showPointer(value: boolean) {
-        this.pointer.style.opacity = `${value ? '0.5' : '0'}`;
     }
 
     private setupView() {
@@ -260,6 +289,9 @@ export class TutorialController extends BaseController {
 
         for (const node of nodes) {
             node.entity.add(new Interactive());
+
+            this.movePointerToTile(node, selectedEntities.length ? 300 : 0);
+
             await this.waitClick();
             node.entity.remove(Interactive);
 
