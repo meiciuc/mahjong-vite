@@ -68,10 +68,13 @@ export class TutorialController extends BaseController {
     private grid: number[][];
 
     private pointer = document.createElement('div');
+    private leaveTutoralButton = document.createElement('button');
 
     destroy(): void {
         GameModelHelper.getModel().data.tutorialOnly = false;
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
+        this.pointer.remove();
+        this.leaveTutoralButton.remove();
     }
 
     protected async doExecute() {
@@ -80,7 +83,30 @@ export class TutorialController extends BaseController {
         this.setupEngine();
         this.generateGrid();
         this.setupPointer();
-        this.nextCircle();
+        this.setupLeaveTutorialButton();
+        await this.nextCircle();
+
+        this.complete();
+    }
+
+    protected complete() {
+        console.log('COMPLETE')
+        this.destroy();
+        super.complete();
+    }
+
+    private setupLeaveTutorialButton() {
+        // TODO icon
+        this.leaveTutoralButton.innerText = 'LEAVE';
+        this.leaveTutoralButton.style.position = 'absolute';
+        this.leaveTutoralButton.style.right = '1em';
+        this.leaveTutoralButton.style.bottom = '1em';
+        this.leaveTutoralButton.style.cursor = 'pointer';
+
+        document.body.appendChild(this.leaveTutoralButton);
+
+        this.leaveTutoralButton.onclick = () => this.complete();
+        this.leaveTutoralButton.ontouchstart = () => this.complete();
     }
 
     private setupPointer() {
@@ -98,8 +124,10 @@ export class TutorialController extends BaseController {
         document.body.appendChild(this.pointer);
     }
 
-    private showPointer(value: boolean) {
+    private showTutorialUI(value: boolean) {
         this.pointer.style.opacity = `${value ? '0.5' : '0'}`;
+        this.leaveTutoralButton.style.opacity = `${value ? '1' : '0'}`;
+        this.leaveTutoralButton.style.pointerEvents = `${value ? 'auto' : 'none'}`;
     }
 
     private movePointerToTile(node: TileNode, duration = 0) {
@@ -168,13 +196,13 @@ export class TutorialController extends BaseController {
         this.fsm = new EngineStateMachine(this.engine);
         this.fsm.createState(GameControllerStateEnum.GAME)
             .addMethod(() => {
-                this.showPointer(true);
+                this.showTutorialUI(true);
                 return fadeIn;
             });
 
         this.fsm.createState(GameControllerStateEnum.PAUSE)
             .addMethod(() => {
-                this.showPointer(false);
+                this.showTutorialUI(false);
                 return fadeOut;
             });
 
