@@ -46,10 +46,10 @@ onMounted(() => {
             <GameMenuScore></GameMenuScore>
         </div>
         <div class="MenuContentItem" ref="Center">
-            <GameMenuTimer class="GameMenuTimer"></GameMenuTimer>
+            <GameMenuTimer class="MenuPanel__GameMenuTimer"></GameMenuTimer>
         </div>
         <div class="MenuContentItem">
-            <GameMenuHelp></GameMenuHelp>
+            <GameMenuHelp class="MenuPanel__GameMenuHelp"></GameMenuHelp>
         </div>
         <div class="OptionsButtonPlace"></div>
     </div>

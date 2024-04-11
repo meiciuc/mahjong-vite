@@ -1,49 +1,42 @@
 import { rotate270 } from "2d-array-rotation";
 import { Engine, EngineStateMachine, Entity, NodeList } from "@ash.ts/ash";
+import { Point, Sprite } from "pixi.js";
 import { Config } from "../Config";
 import { LAYERS } from "../GameLayers";
+import { SOUNDS } from "../Sounds";
+import { dataService } from "../core/services/DataService";
 import { stageService } from "../core/services/StageService";
 import { EntityCreator } from "../ecs/EntityCreator";
 import { AnimationSystem } from "../ecs/animation/AnimationSystem";
 import { DisplaySystem } from "../ecs/display/DisplaySystem";
-import { GridViewSystem } from "../ecs/game/GridViewSystem";
-import { TileToggleSystem } from "../ecs/tiles/TileToggleSystem";
-import { TilesGridSystem } from "../ecs/tiles/TilesGridSystem";
-import { TileNode } from "../ecs/tiles/nodes/TileNode";
-import { throwIfNull } from "../utils/throwIfNull";
-import { GridView } from "../view/GridView";
-import { BaseController } from "./BaseController";
-import { SystemPriorities } from "./GameController";
-import { dataService } from "../core/services/DataService";
-import { AppStateEnum, GameModel, GameStateEnum } from "../model/GameModel";
-import { PointLike } from "../utils/point";
-import { PathAnimatedLikeSnakeView } from "../view/PathAnimatedLikeSnakeView";
-import { GameLogic } from "../ecs/game/GameLogic";
-import { TileHelpEffectNode } from "../ecs/tiles/nodes/TileHelpEffectNode";
-import { TileShakingSystem } from "../ecs/tiles/TileShakingSystem";
-import { Interactive } from "../ecs/tiles/components/Interactive";
-import { TileInteractiveSystem } from "../ecs/tiles/TileInteractiveSystem";
-import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
-import { GameModelHelper } from "../model/GameModelHelper";
-import { soundService } from "../services/SoundService";
-import { SOUNDS } from "../Sounds";
-import { TimeSkipper } from "../utils/TimeSkipper";
-import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollectorSystem";
-import { Point, Sprite } from "pixi.js";
 import { FadeInSystem } from "../ecs/fade/FadeInSystem";
 import { FadeOutSystem } from "../ecs/fade/FadeOutSystem";
-import { Easing, Tween } from "@tweenjs/tween.js";
+import { GameLogic } from "../ecs/game/GameLogic";
+import { GridViewSystem } from "../ecs/game/GridViewSystem";
+import { GarbageCollectorSystem } from "../ecs/garbageCollector/GarbageCollectorSystem";
+import { TileInteractiveSystem } from "../ecs/tiles/TileInteractiveSystem";
+import { TileShakingSystem } from "../ecs/tiles/TileShakingSystem";
+import { TileToggleSystem } from "../ecs/tiles/TileToggleSystem";
+import { TilesGridSystem } from "../ecs/tiles/TilesGridSystem";
+import { Interactive } from "../ecs/tiles/components/Interactive";
+import { TileHelpEffectNode } from "../ecs/tiles/nodes/TileHelpEffectNode";
+import { TileNode } from "../ecs/tiles/nodes/TileNode";
+import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
+import { AppStateEnum, GameModel, GameStateEnum } from "../model/GameModel";
+import { GameModelHelper } from "../model/GameModelHelper";
+import { soundService } from "../services/SoundService";
+import { TimeSkipper } from "../utils/TimeSkipper";
+import { PointLike } from "../utils/point";
+import { throwIfNull } from "../utils/throwIfNull";
+import { GridView } from "../view/GridView";
+import { VueServiceSignals, vueService } from "../vue/VueService";
+import { BaseController } from "./BaseController";
+import { SystemPriorities } from "./GameController";
+import { Pointer } from "./tutorial/Pointer";
 
 enum GameControllerStateEnum {
     GAME = 'game',
     PAUSE = 'pause',
-}
-
-class AnimationQueueItem {
-    constructor(
-        public method: () => void,
-        public timeout: number,
-    ) { }
 }
 
 export class TutorialController extends BaseController {
@@ -54,26 +47,25 @@ export class TutorialController extends BaseController {
     private gameLogic?: GameLogic;
     private gridView?: GridView;
     private tiles?: NodeList<TileNode>;
-    private helpEffectNodes?: NodeList<TileHelpEffectNode>;
 
     private portrait: number[][];
     private landscape: number[][];
 
-    private currentCircle = Number.MAX_SAFE_INTEGER;
     private icons = [0, 1, 2, 3, 4];
-
-    private animationQueue: AnimationQueueItem[] = [];
-    private animationQueueTimeout = 0;
 
     private grid: number[][];
 
-    private pointer = document.createElement('div');
+    private pointer: Pointer;
     private leaveTutoralButton = document.createElement('button');
+    private menuTimer: HTMLDivElement;
+    private menuHelp: HTMLDivElement;
 
     destroy(): void {
+        this.tiles?.nodeAdded.removeAll();
+        this.tiles?.nodeRemoved.removeAll();
         GameModelHelper.getModel().data.tutorialOnly = false;
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
-        this.pointer.remove();
+        this.pointer?.destroy();
         this.leaveTutoralButton.remove();
     }
 
@@ -82,6 +74,7 @@ export class TutorialController extends BaseController {
         this.setupView();
         this.setupEngine();
         this.generateGrid();
+        this.setupGameMenu();
         this.setupPointer();
         this.setupLeaveTutorialButton();
         await this.nextCircle();
@@ -93,6 +86,23 @@ export class TutorialController extends BaseController {
         console.log('COMPLETE')
         this.destroy();
         super.complete();
+    }
+
+    private setupGameMenu() {
+        const menuTimer = document.body.getElementsByClassName('MenuPanel__GameMenuTimer');
+        const menuHelp = document.body.getElementsByClassName('MenuPanel__GameMenuHelp');
+        if (!menuTimer.length || !menuHelp.length) {
+            return;
+        }
+
+        this.menuTimer = menuTimer[0] as HTMLDivElement;
+        this.menuTimer.style.pointerEvents = 'none';
+
+        this.menuHelp = menuHelp[0] as HTMLDivElement;
+        this.menuHelp.style.pointerEvents = 'none';
+
+        dataService.getRootModel<GameModel>().data.gameAge = 21;
+
     }
 
     private setupLeaveTutorialButton() {
@@ -110,70 +120,58 @@ export class TutorialController extends BaseController {
     }
 
     private setupPointer() {
-        this.pointer = document.createElement('div');
-        this.pointer.style.position = 'absolute';
-        this.pointer.style.width = '100px';
-        this.pointer.style.height = '100px';
-        this.pointer.style.backgroundColor = 'red';
-        this.pointer.style.opacity = '0.5';
-        this.pointer.style.left = '300px';
-        this.pointer.style.top = '300px';
-        this.pointer.style.userSelect = 'none';
-        this.pointer.style.pointerEvents = 'none';
-
-        document.body.appendChild(this.pointer);
+        this.pointer = new Pointer();
     }
 
     private showTutorialUI(value: boolean) {
-        this.pointer.style.opacity = `${value ? '0.5' : '0'}`;
+        this.pointer.visible = value;
         this.leaveTutoralButton.style.opacity = `${value ? '1' : '0'}`;
         this.leaveTutoralButton.style.pointerEvents = `${value ? 'auto' : 'none'}`;
     }
 
-    private movePointerToTile(node: TileNode, duration = 0) {
-        const bounding = stageService.stage.view.getBoundingClientRect();
+    private async waitClickTimer() {
+        if (!this.menuTimer) {
+            return;
+        }
 
+        const bounding = this.menuTimer.getBoundingClientRect();
+        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+
+        this.menuTimer.style.pointerEvents = 'auto';
+
+        await this.waitMenuClick(VueServiceSignals.BoosterTimeClick);
+
+        this.menuTimer.style.pointerEvents = 'none';
+    }
+
+    private async waitClickHelper() {
+        if (!this.menuHelp) {
+            return;
+        }
+
+        const bounding = this.menuHelp.getBoundingClientRect();
+        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+
+        this.menuHelp.style.pointerEvents = 'auto';
+
+        await this.waitMenuClick(VueServiceSignals.BoosterHelpClick);
+
+        this.menuHelp.style.pointerEvents = 'none';
+    }
+
+    private movePointerToTile(node: TileNode, duration = 0) {
         const view = node.display.view;
         const { x, y, width, height } = view as Sprite;
         if (view && x && y && width && height) {
+
             const tl = view.toGlobal(new Point(0, 0));
             const br = view.toGlobal(new Point(width, height));
 
-            if (!duration) {
-                this.pointer.style.left = `${tl.x}px`;
-                this.pointer.style.top = `${tl.y + bounding.y}px`;
-                this.pointer.style.width = `${br.x - tl.x}px`;
-                this.pointer.style.height = `${br.y - tl.y}px`;
-            } else {
-                const pointerBoundingBox = this.pointer.getBoundingClientRect();
-                const tweenProvider: {
-                    left: number,
-                    top: number,
-                    width: number,
-                    height: number
-                } = {
-                    left: pointerBoundingBox.x,
-                    top: pointerBoundingBox.y,
-                    width: pointerBoundingBox.width,
-                    height: pointerBoundingBox.height
-                };
+            const bounding = stageService.stage.view.getBoundingClientRect();
+            tl.y += bounding.y;
+            br.y += bounding.y;
 
-                new Tween(tweenProvider)
-                    .to({
-                        left: tl.x,
-                        top: tl.y + bounding.y,
-                        width: br.x - tl.x,
-                        height: br.y - tl.y
-                    }, duration)
-                    .easing(Easing.Quadratic.Out)
-                    .onUpdate(() => {
-                        this.pointer.style.left = `${tweenProvider.left}px`;
-                        this.pointer.style.top = `${tweenProvider.top}px`;
-                        this.pointer.style.width = `${tweenProvider.width}px`;
-                        this.pointer.style.height = `${tweenProvider.height}px`;
-                    })
-                    .start();
-            }
+            this.pointer?.movePointer(tl, br, duration);
         }
     }
 
@@ -188,7 +186,6 @@ export class TutorialController extends BaseController {
         this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
 
         this.tiles = this.engine.getNodeList(TileNode);
-        this.helpEffectNodes = this.engine.getNodeList(TileHelpEffectNode);
 
         const fadeIn = new FadeInSystem();
         const fadeOut = new FadeOutSystem();
@@ -265,31 +262,6 @@ export class TutorialController extends BaseController {
         this.creator.createTile(this.icons[4], deltaCol + 3, deltaRow + 2);
         grid[deltaRow + 2][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
 
-        // this.creator.createTile(this.icons[0], deltaCol, deltaRow);
-        // grid[deltaRow][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[4], deltaCol + 1, deltaRow);
-        // grid[deltaRow][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[0], deltaCol + 2, deltaRow);
-        // grid[deltaRow][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
-
-        // this.creator.createTile(this.icons[1], deltaCol, deltaRow + 1);
-        // grid[deltaRow + 1][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[1], deltaCol + 1, deltaRow + 1);
-        // grid[deltaRow + 1][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[3], deltaCol + 3, deltaRow + 1);
-        // grid[deltaRow + 1][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
-
-        // this.creator.createTile(this.icons[2], deltaCol, deltaRow + 2);
-        // grid[deltaRow + 2][deltaCol] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[3], deltaCol + 1, deltaRow + 2);
-        // grid[deltaRow + 2][deltaCol + 1] = throwIfNull(this.tiles?.tail).tile.id;
-        // this.creator.createTile(this.icons[4], deltaCol + 3, deltaRow + 2);
-        // grid[deltaRow + 2][deltaCol + 3] = throwIfNull(this.tiles?.tail).tile.id;
-
-        // this.creator.createTile(this.icons[2], deltaCol + 2, deltaRow + 3);
-        // grid[deltaRow + 3][deltaCol + 2] = throwIfNull(this.tiles?.tail).tile.id;
-
-
         // rotation
         const newGrid = rotate270(grid);
         this.portrait = grid.length > newGrid.length ? grid : newGrid;
@@ -315,12 +287,15 @@ export class TutorialController extends BaseController {
             nodes.push(node);
         }
 
+        let steps = 0;
+
         for (const node of nodes) {
+            steps++;
             node.entity.add(new Interactive());
 
             this.movePointerToTile(node, selectedEntities.length ? 300 : 0);
 
-            await this.waitClick();
+            await this.waitTileClick();
             node.entity.remove(Interactive);
 
             selectedPoints.push(node.gridPosition);
@@ -331,10 +306,6 @@ export class TutorialController extends BaseController {
 
                 const selectedPath = await GameLogic.findCross(this.grid, selectedPoints[0], selectedPoints[1]);
 
-                const added = Config.ADD_SCORE_FOR_TRUE_MOVE * this.getEdgesLength(selectedPath);
-
-                GameModelHelper.setGameTotalScore(GameModelHelper.getGameTotalScore() + added);
-
                 const pathDuration = Config.PATH_LIKE_SNAKE_DURATION;
 
                 const pathEntity = this.creator.showPath(selectedPath, pathDuration);
@@ -342,10 +313,10 @@ export class TutorialController extends BaseController {
                 const effectDelay = pathDuration * 1500;
                 await new TimeSkipper(effectDelay).execute();
 
-                await new TimeSkipper(effectDelay * 2 / 3).execute();
                 selectedEntities.forEach((entity) => {
                     this.creator.removeEntity(entity);
                 });
+
                 if (pathEntity) {
                     this.creator.removeEntity(pathEntity);
                 }
@@ -353,124 +324,54 @@ export class TutorialController extends BaseController {
                 selectedEntities.splice(0);
                 selectedPoints.splice(0);
             }
-        }
-    }
 
-
-    private async __nextCircle() {
-        const selectTiming = .2;
-        const pathTiminig = .7;
-        const pauseTiming = .5;
-        const errorTiming = .5;
-        const shakingTiming = .5;
-
-        const order = [this.icons[1], this.icons[2], this.icons[0], this.icons[3], this.icons[4]];
-
-        this.currentCircle++;
-        this.currentCircle = this.currentCircle >= order.length ? 0 : this.currentCircle;
-
-        const showRed = this.currentCircle === order.length - 1;
-
-        const iconState = dataService.getRootModel<GameModel>().raw.icons[order[this.currentCircle]];
-        const positions: PointLike[] = [];
-        // show pair
-        for (let node = this.tiles.head; node; node = node.next) {
-            if (node.icon.state.key === iconState.key) {
-                positions.push({ x: node.gridPosition.x, y: node.gridPosition.y });
-
-                if (showRed && positions.length > 1) {
-                    this.animationQueue.push(new AnimationQueueItem(
-                        () => { this.creator.createTileHelpEffect(node.transform.position.x, node.transform.position.y); },
-                        errorTiming
-                    ));
-                    this.animationQueue.push(new AnimationQueueItem(
-                        () => { this.creator.shakeTile(node.tile, true) },
-                        shakingTiming
-                    ));
-                } else {
-                    this.animationQueue.push(new AnimationQueueItem(
-                        () => { this.creator.selectTile(node.tile, true) },
-                        selectTiming
-                    ));
-                }
+            if (steps === 8) {
+                break;
             }
         }
 
-        // show path
-        const path = await this.gameLogic.findCross(positions[0], positions[1]);
-        if (path.length) {
-            this.animationQueue.push(new AnimationQueueItem(
-                () => {
-                    this.creator.showPath(path, Config.PATH_LIKE_SNAKE_DURATION * 3);
-                },
-                pathTiminig
-            ));
+        // show timer
+        await this.waitClickTimer();
+
+        // show helper
+        await this.waitClickHelper();
+
+        // unlock all tiles
+        for (let node = this.tiles.head; node; node = node.next) {
+            node.entity.add(new Interactive());
+            this.creator.createTileHelpEffect(node.transform.position.x, node.transform.position.y);
         }
 
-        // hide path
-        this.animationQueue.push(new AnimationQueueItem(
-            () => {
-                const entities = this.creator.getEngine().entities;
-                for (let i = 0; i < entities.length; i++) {
-                    if (entities[i].get(PathAnimatedLikeSnakeView)) {
-                        this.creator.removeEntity(entities[i]);
-                        break;
-                    }
-                }
-            },
-            0
-        ));
+        await this.waitTileClick();
 
-        // pause
-        this.animationQueue.push(new AnimationQueueItem(
-            () => { },
-            pauseTiming
-        ))
+        // remove help effects
+        const helpEffectNodes = this.creator.getEngine().getNodeList(TileHelpEffectNode);
+        console.log('helpEffectNodes', helpEffectNodes)
+        for (let node = helpEffectNodes.head; node; node = node.next) {
+            console.log('remove effect')
+            this.creator.removeEntity(node.entity);
+        }
 
-        // clear pair
-        this.animationQueue.push(new AnimationQueueItem(
-            () => {
-                for (let node = this.tiles.head; node; node = node.next) {
-                    this.creator.selectTile(node.tile, false);
+        // wait victory
+        return new Promise(res => {
+            this.tiles.nodeRemoved.add(() => {
+                if (!this.tiles.head) {
+                    console.log('TUTORIAL VICTORY')
+                    res(true);
                 }
-                if (showRed) {
-                    while (this.helpEffectNodes?.head) {
-                        this.creator.removeEntity(this.helpEffectNodes.head.entity);
-                    }
-                }
-            },
-            0
-        ));
-
-        // next circle
-        this.animationQueue.push(new AnimationQueueItem(
-            () => { this.nextCircle(); },
-            pauseTiming
-        ))
+            })
+        });
     }
 
     update = (time: number) => {
         this.engine?.update(time);
 
-        if (!this.animationQueue.length) {
-            return;
+        if (dataService.getRootModel<GameModel>().data.gameAge > 4) {
+            dataService.getRootModel<GameModel>().data.gameAge -= time;
         }
-
-        this.animationQueueTimeout -= time;
-        if (this.animationQueueTimeout > 0) {
-            return;
-        }
-
-        const item = this.animationQueue.shift();
-        if (!item) {
-            return;
-        }
-
-        this.animationQueueTimeout = item.timeout;
-        item.method();
     };
 
-    private async waitClick() {
+    private async waitTileClick() {
         GameModelHelper.setGameState(GameStateEnum.CLICK_WAIT);
         return new Promise(async resolve => {
             const selected = this.creator.getEngine().getNodeList(TileSelectedNode);
@@ -482,6 +383,19 @@ export class TutorialController extends BaseController {
             }
 
             selected.nodeAdded.add(executed);
+        });
+    }
+
+    private async waitMenuClick(value: VueServiceSignals) {
+        return new Promise(res => {
+            const handler = (signal: VueServiceSignals) => {
+                if (signal === value) {
+                    vueService.signalDataBus.off(handler);
+                    res(true);
+                }
+            }
+
+            vueService.signalDataBus.on(handler)
         });
     }
 
@@ -506,7 +420,6 @@ export class TutorialController extends BaseController {
     }
 
     private handleAppStateChange = (state: AppStateEnum) => {
-        console.log('handleAppStateChange', state)
         if (state === AppStateEnum.GAME_SCREEN) {
             this.fsm.changeState(GameControllerStateEnum.GAME);
         } else {

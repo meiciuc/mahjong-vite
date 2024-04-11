@@ -46,7 +46,6 @@ export class GameTimerSystem extends System {
     };
 
     private addTime() {
-        console.log('addTime')
         const boosters = GameModelHelper.getBooster(BoosterType.TIME)?.current;
         if (!boosters) {
             return;

@@ -66,7 +66,7 @@ export class ApplicationController extends BaseController {
     private async nextCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-        // await new TutorialController().execute();
+        await new TutorialController().execute();
 
         const game = new GameController();
         adsService.gameplayStart();
