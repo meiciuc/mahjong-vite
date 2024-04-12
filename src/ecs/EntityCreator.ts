@@ -114,6 +114,7 @@ export class EntityCreator {
     icons: { [key: string]: Texture } = {};
 
     public createTile(index: number, gridX: number, gridY: number) {
+        console.log('createTile', index, gridX, gridY)
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key];
         const sprite = new Sprite(tex);
