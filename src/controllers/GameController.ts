@@ -41,11 +41,11 @@ enum GameControllerStateEnum {
 }
 
 export class GameController extends BaseController {
-    private creator?: EntityCreator;
-    private fsm?: EngineStateMachine;
-    private engine?: Engine;
-    private gridView?: GridView;
-    private gameLogic?: GameLogic;
+    protected creator?: EntityCreator;
+    protected fsm?: EngineStateMachine;
+    protected engine?: Engine;
+    protected gridView?: GridView;
+    protected gameLogic?: GameLogic;
 
     destroy(): void {
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChange);
@@ -66,16 +66,22 @@ export class GameController extends BaseController {
         super.complete();
     }
 
-    private setupView() {
+    protected setupView() {
         this.gridView = new GridView();
         stageService.getLayer(LAYERS.GAME).addChild(this.gridView);
     }
 
-    private async setupEngine() {
-        this.engine = new Engine();
+    protected setupGameLogic() {
         this.gameLogic = new GameLogic(this.engine);
-        this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
+        this.gameLogic.generateIconsQueue();
+    }
 
+    protected async setupEngine() {
+        this.engine = new Engine();
+
+        this.setupGameLogic();
+
+        this.creator = new EntityCreator(this.engine, throwIfNull(this.gridView));
         this.creator.createGame();
 
         const timer = new GameTimerSystem();
@@ -125,19 +131,19 @@ export class GameController extends BaseController {
         }
     };
 
-    private getGridView() {
+    protected getGridView() {
         if (!this.gridView) {
             throw new Error('Error: this.gridView is undefined');
         }
         return this.gridView;
     }
 
-    private gameIsOver() {
+    protected gameIsOver() {
         const state = this.engine?.getNodeList(GameNode).head?.game.model.data.gameState;
         return state === GameStateEnum.GAME_DEFEATE || state === GameStateEnum.GAME_VICTORY || state === GameStateEnum.GAME_NO_MORE_MOVES;
     }
 
-    private handleAppStateChange = (state: AppStateEnum) => {
+    protected handleAppStateChange = (state: AppStateEnum) => {
         if (state === AppStateEnum.GAME_SCREEN) {
             this.fsm.changeState(GameControllerStateEnum.GAME);
         } else {

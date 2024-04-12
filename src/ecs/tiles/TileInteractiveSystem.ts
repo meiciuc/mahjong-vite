@@ -1,13 +1,10 @@
 import { Engine, NodeList, System, defineNode } from "@ash.ts/ash";
-import { GameNode } from "../game/nodes/GameNode";
-import { TileSelectedNode } from "./nodes/TileSelectedNode";
+import { Container, Rectangle } from "pixi.js";
 import { EntityCreator } from "../EntityCreator";
-import { GameStateEnum } from "../../model/GameModel";
-import { Config } from "../../Config";
-import { Tile } from "./components/Tile";
 import { Display } from "../display/components/Display";
 import { Interactive } from "./components/Interactive";
-import { Container, Rectangle } from "pixi.js";
+import { Tile } from "./components/Tile";
+import { TileSelectedNode } from "./nodes/TileSelectedNode";
 
 export class TileInteractiveNode extends defineNode({
     tile: Tile,
@@ -19,9 +16,6 @@ export class TileInteractiveSystem extends System {
 
     private tiles?: NodeList<TileInteractiveNode>;
     private tilesSelected?: NodeList<TileSelectedNode>;
-    private game?: NodeList<GameNode>;
-
-    private clickLastTime = 0;
 
     constructor(
         private creator: EntityCreator
@@ -40,8 +34,6 @@ export class TileInteractiveSystem extends System {
         this.tiles.nodeRemoved.add(this.handleTileRemoved);
 
         this.tilesSelected = engine.getNodeList(TileSelectedNode);
-
-        this.game = engine.getNodeList(GameNode);
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -77,16 +69,8 @@ export class TileInteractiveSystem extends System {
     }
 
     private handleClick = (e: any) => {
-        console.log('click', this.isHandable())
-        if (!this.isHandable()) {
-            return;
-        }
-
-        this.clickLastTime = Date.now();
-
         for (let node = this.tiles?.head; node; node = node.next) {
             if (node.display.view === e.target) {
-                console.log('click 1')
                 this.clickTile(node);
             }
         }
@@ -102,14 +86,4 @@ export class TileInteractiveSystem extends System {
 
         this.creator.selectTile(node.tile, true);
     }
-
-    private isHandable() {
-        return true;
-        // if (this.game?.head?.game.model.data.gameState !== GameStateEnum.CLICK_WAIT) {
-        //     return false;
-        // }
-
-        // return Date.now() - this.clickLastTime > Config.CLICK_TIMEOUT;
-    }
-
 }

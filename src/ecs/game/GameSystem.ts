@@ -37,8 +37,6 @@ export class GameSystem extends System {
         this.grid = engine.getNodeList(GridNode);
 
         stageService.resizeSignal.add(this.handleResize);
-
-        this.creator.createGame();
     }
 
     removeFromEngine(_engine: Engine): void {
@@ -48,11 +46,7 @@ export class GameSystem extends System {
     update = (): void => {
         switch (this.game.head.game.model.data.gameState) {
             case GameStateEnum.NONE:
-                const gridWidth = this.game.head.game.model.raw.gridWidth;
-                const gridHeight = this.game.head.game.model.raw.gridHeight;
-                const seed = this.game.head.game.model.raw.seed;
-
-                this.gameLogic.generateIconsQueue(gridWidth, gridHeight, seed);
+                const { gridWidth, gridHeight } = this.game.head.game.model.data;
 
                 let index = 0;
                 const grid: number[][] = [];

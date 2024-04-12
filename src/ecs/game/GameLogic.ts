@@ -11,6 +11,10 @@ import easingsFunctions from '../../core/utils/easingsFunctions';
 import { Config } from '../../Config';
 import { stageService } from '../../core/services/StageService';
 
+export interface GenerateIconsParams {
+
+}
+
 export class GameLogic {
     private grid: NodeList<GridNode>;
     private tiles: NodeList<TileNode>;
@@ -21,21 +25,37 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
-    public generateIconsQueue(gridWidth: number, gridHeight: number, seed: string | undefined = undefined) {
-        if (!seed) {
-            seed = `${Math.random()}`;
+    public seticonsQueue(value: number[]) {
+        this.iconsQueue.splice(0);
+        for (const item of value) {
+            this.iconsQueue.push(item);
         }
+    }
+
+    public getDefaultGenerateIconsConfig() {
         const model = dataService.getRootModel<GameModel>().data;
-        const gw = gridWidth;
-        const gh = gridHeight;
-        const currentLevel = model.gameLevel;
+        const { gridWidth, gridHeight, seed } = model;
+        return {
+            gridWidth,
+            gridHeight,
+            seed: seed ? seed : `${Math.random()}`,
+            pares: this.getGameMaxIconPaires(),
+            currentLevel: model.gameLevel,
+            iconsLength: model.icons.length,
+        };
+    }
+
+    public generateIconsQueue(config = this.getDefaultGenerateIconsConfig()) {
+        const { gridWidth, gridHeight, seed, pares, currentLevel, iconsLength } = config;
+
+        console.log('gridWidth', gridWidth, gridHeight)
+
         const shift = 4;
 
         const iconsQueue = [];
 
-        const pares = this.getGameMaxIconPaires();
         let maxc = pares * 2;
-        let count = gw * gh;
+        let count = gridWidth * gridHeight;
         let index = currentLevel < shift ? 0 : currentLevel - shift;
         while (count > 0) {
             while (maxc > 0) {
@@ -46,12 +66,12 @@ export class GameLogic {
                     break;
                 }
             }
-            index = (index + 1) % model.icons.length;
+            index = (index + 1) % iconsLength;
             maxc = pares * 2;
         }
 
         shuffle(iconsQueue, seed);
-
+        console.log('iconsQueue', iconsQueue)
         this.iconsQueue = iconsQueue;
     }
 
@@ -132,13 +152,13 @@ export class GameLogic {
             });
     }
 
-    static calculateGameModelParams(level: number) {
+    static calculateGameModelParams(gameLevel: number) {
         const easing = easingsFunctions.easeOutQuad;
 
-        const start = 9;// 5;    // 9
+        const start = 5;    // 9
         const end = 45;//15;     // 23
 
-        const currentLevel = level;
+        const currentLevel = gameLevel;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const size = Math.floor(easing(scaleLevel) * (end - start) + start);
@@ -156,6 +176,6 @@ export class GameLogic {
         const kLevel = (10 - currentLevel % 5) / 10;
         const gameMaxTime = Math.round(Math.max(size * size * 2, 60) * kLevel);
 
-        return { level, gridWidth, gridHeight, seed, gameMaxTime };
+        return { gameLevel, gridWidth, gridHeight, seed, gameMaxTime };
     }
 }
