@@ -82,12 +82,6 @@ export class ApplicationController extends BaseController {
         this.nextCycle();
     }
 
-    private handleWindowFocusBlur = () => {
-        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-            vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
-        }
-    }
-
     private async nextCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
@@ -210,6 +204,12 @@ export class ApplicationController extends BaseController {
 
     private update = (_time: number) => {
 
+    }
+
+    private handleWindowFocusBlur = () => {
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+            vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
+        }
     }
 
     private handleShopBus = async (type: VueShopSignals, id: string) => {

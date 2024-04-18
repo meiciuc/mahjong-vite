@@ -1,22 +1,24 @@
+import { NodeList } from "@ash.ts/ash";
 import { Point, Sprite } from "pixi.js";
 import { dataService } from "../core/services/DataService";
+import { stageService } from "../core/services/StageService";
 import { GameLogic } from "../ecs/game/GameLogic";
+import { Interactive } from "../ecs/tiles/components/Interactive";
 import { TileNode } from "../ecs/tiles/nodes/TileNode";
-import { AppStateEnum, GameModel, GameStateEnum } from "../model/GameModel";
+import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
+import { AppStateEnum, GameModel } from "../model/GameModel";
+import { TimeSkipper } from "../utils/TimeSkipper";
+import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
 import { Pointer } from "./tutorial/Pointer";
-import { stageService } from "../core/services/StageService";
-import { NodeList } from "@ash.ts/ash";
-import { GameModelHelper } from "../model/GameModelHelper";
-import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
-import { Interactive } from "../ecs/tiles/components/Interactive";
-import { TimeSkipper } from "../utils/TimeSkipper";
 
 export class GameControllerExtended extends GameController {
 
     private tiles: NodeList<TileNode>;
     private pointer: Pointer;
     private leaveTutoralButton: HTMLButtonElement;
+    private menuTimer: HTMLDivElement;
+    private menuHelp: HTMLDivElement;
     private gridScenario = [
         2, 2,
         3, 2,
@@ -29,7 +31,6 @@ export class GameControllerExtended extends GameController {
     ];
 
     private async playScenario() {
-        console.log('playScenario')
         this.tiles = this.engine?.getNodeList(TileNode);
         this.tiles.nodeAdded.add((node) => {
             node.entity.remove(Interactive);
@@ -43,7 +44,6 @@ export class GameControllerExtended extends GameController {
 
         for (let i = 0; i < this.gridScenario.length; i += 2) {
             const node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
-            console.log(node)
             if (!node) {
                 continue;
             }
@@ -52,13 +52,25 @@ export class GameControllerExtended extends GameController {
             await this.waitTileClick();
             node.entity.remove(Interactive);
         }
+
+        await this.waitClickTimer();
+        await this.waitClickHelper();
+
+        // finish game yourself
+        for (let node = this.tiles.head; node; node = node.next) {
+            node.entity.add(new Interactive());
+        }
     }
 
     protected async doExecute() {
         super.doExecute();
 
+        // for menu initialization
+        await new TimeSkipper(1000).execute();
+
         this.setupPointer();
         this.setupLeaveTutorialButton();
+        this.setupGameMenu();
 
         dataService.getRootModel<GameModel>().subscribe(['appState'], this.handleAppStateChangeExtended);
 
@@ -69,7 +81,6 @@ export class GameControllerExtended extends GameController {
         this.engine?.update(time);
 
         const model = dataService.getRootModel<GameModel>().data;
-        model.gameAge -= time;
         if (model.gameAge < 4) {
             model.gameAge = 4;
         }
@@ -77,8 +88,30 @@ export class GameControllerExtended extends GameController {
 
     destroy(): void {
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChangeExtended);
+        if (this.menuTimer) {
+            this.menuTimer.style.pointerEvents = 'auto';
+        }
+        if (this.menuHelp) {
+            this.menuHelp.style.pointerEvents = 'auto';
+        }
+
+        if (this.leaveTutoralButton) {
+            this.leaveTutoralButton.remove();
+        }
+
         super.destroy();
     }
+
+    complete() {
+        // gamer finished tutorial like game
+        // show special screen 
+        super.complete();
+    }
+
+    private leaveTutorial() {
+        // return to first page
+    }
+
 
     protected setupGameLogic() {
         this.gameLogic = new GameLogic(this.engine);
@@ -110,6 +143,23 @@ export class GameControllerExtended extends GameController {
         this.pointer = new Pointer();
     }
 
+    private setupGameMenu() {
+        const menuTimer = document.body.getElementsByClassName('MenuPanel__GameMenuTimer');
+        const menuHelp = document.body.getElementsByClassName('MenuPanel__GameMenuHelp');
+
+        if (!menuTimer.length || !menuHelp.length) {
+            return;
+        }
+
+        this.menuTimer = menuTimer[0] as HTMLDivElement;
+        this.menuTimer.style.pointerEvents = 'none';
+
+        this.menuHelp = menuHelp[0] as HTMLDivElement;
+        this.menuHelp.style.pointerEvents = 'none';
+
+        dataService.getRootModel<GameModel>().data.gameAge = 21;
+    }
+
     private setupLeaveTutorialButton() {
         // TODO icon
         this.leaveTutoralButton = document.createElement('button');
@@ -121,8 +171,8 @@ export class GameControllerExtended extends GameController {
 
         document.body.appendChild(this.leaveTutoralButton);
 
-        this.leaveTutoralButton.onclick = () => this.complete();
-        this.leaveTutoralButton.ontouchstart = () => this.complete();
+        this.leaveTutoralButton.onclick = () => this.leaveTutorial();
+        this.leaveTutoralButton.ontouchstart = () => this.leaveTutorial();
     }
 
     private handleAppStateChangeExtended = (state: AppStateEnum) => {
@@ -169,4 +219,50 @@ export class GameControllerExtended extends GameController {
         });
     }
 
+    private async waitClickTimer() {
+        if (!this.menuTimer) {
+            return;
+        }
+
+        const bounding = this.menuTimer.getBoundingClientRect();
+        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+
+        this.menuTimer.style.pointerEvents = 'auto';
+
+        await this.waitMenuClick(VueServiceSignals.BoosterTimeClick);
+
+        this.menuTimer.style.pointerEvents = 'none';
+    }
+
+    private async waitClickHelper() {
+        if (!this.menuHelp) {
+            return;
+        }
+
+        const bounding = this.menuHelp.getBoundingClientRect();
+        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+
+        this.menuHelp.style.pointerEvents = 'auto';
+        await this.waitMenuClick(VueServiceSignals.BoosterHelpClick);
+
+        const list = this.engine.getNodeList(TileSelectedNode);
+        for (let node = list.head; node; node = node.next) {
+            node.entity.add(new Interactive());
+        }
+
+        this.menuHelp.style.pointerEvents = 'none';
+    }
+
+    private async waitMenuClick(value: VueServiceSignals) {
+        return new Promise(res => {
+            const handler = (signal: VueServiceSignals) => {
+                if (signal === value) {
+                    vueService.signalDataBus.off(handler);
+                    res(true);
+                }
+            }
+
+            vueService.signalDataBus.on(handler)
+        });
+    }
 }
