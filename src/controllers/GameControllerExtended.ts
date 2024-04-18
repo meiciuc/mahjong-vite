@@ -84,6 +84,10 @@ export class GameControllerExtended extends GameController {
         if (model.gameAge < 4) {
             model.gameAge = 4;
         }
+
+        if (this.gameIsOver()) {
+            this.complete();
+        }
     };
 
     destroy(): void {
@@ -99,6 +103,10 @@ export class GameControllerExtended extends GameController {
             this.leaveTutoralButton.remove();
         }
 
+        if (this.pointer) {
+            this.pointer.destroy();
+        }
+
         super.destroy();
     }
 
@@ -109,7 +117,7 @@ export class GameControllerExtended extends GameController {
     }
 
     private leaveTutorial() {
-        // return to first page
+        vueService.signalDataBus.dispatch(VueServiceSignals.LeaveTutorial);
     }
 
 

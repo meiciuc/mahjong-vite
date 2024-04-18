@@ -36,8 +36,8 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
         this.setupGameModel();
+        await this.tutorialCycle();
         await this.firstCycle();
-        // await this.tutorialCycle();
     }
 
     private async tutorialCycle() {
@@ -46,24 +46,18 @@ export class ApplicationController extends BaseController {
 
         const game = new GameControllerExtended();
         adsService.gameplayStart();
-        const res1 = await this.waitApplicationCycleContinue(game.execute());
+        // const res1 = await this.waitApplicationCycleContinue(game.execute());
+        const res1 = await Promise.race([game.execute(), this.waitVueServiceSignal(VueServiceSignals.LeaveTutorial)]);
         game.destroy();
         adsService.gameplayStop();
 
         if (res1 !== game) {
-            this.gameCycleWasInterrupted(res1);
+            // this.gameCycleWasInterrupted(res1);
             return;
         }
 
         // TODO special screen for tutorial victory
-        const gameState = GameModelHelper.getGameState();
-        if (gameState === GameStateEnum.GAME_VICTORY) {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
-        } else if (gameState === GameStateEnum.GAME_DEFEATE) {
-            GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 10 ? AppStateEnum.GAME_DEFEAT : AppStateEnum.GAME_DEFEAT_ADS);
-        } else {
-            GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
-        }
+        GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
     }
 
     private async firstCycle() {
