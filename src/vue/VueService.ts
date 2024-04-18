@@ -7,6 +7,8 @@ export enum VueServiceSignals {
     GameEndButton = 'GameEndButton',
     OptionsButton = 'OptionsButton',
     OptionsResetLevels = 'OptionsResetLevels',
+
+    TutorialButton = 'TutorialButton',
     LeaveTutorial = 'LeaveTutorial',
 
     BoosterTimeClick = 'BoosterTimeClick',

@@ -6,8 +6,11 @@ import { ref } from 'vue';
 
 const Popup = ref(null);
 
-const handleClick = () => {
+const handleStart = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.StartButton);
+}
+const handleTutorial = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.TutorialButton);
 }
 </script>
 
@@ -19,7 +22,8 @@ const handleClick = () => {
                 <div class="Label">{{ Localization.getText('start.kitchen') }}</div>
                 <div class="HalfLabel">{{ Localization.getText('start.reachTheHighestLevel') }}</div>
             </div>
-            <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
+            <button class="StartButton" @click="handleStart">{{ Localization.getText('start.play') }}</button>
+            <button class="TutorialButton" @click="handleTutorial">{{ Localization.getText('start.tutorial') }}</button>
         </div>
 
     </div>
@@ -48,7 +52,17 @@ const handleClick = () => {
     @include button_screen;
 }
 
+.StartScreen .TutorialButton {
+    @include button_screen;
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+
 .StartScreen .StartButton:hover {
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.StartScreen .TutorialButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 

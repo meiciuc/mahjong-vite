@@ -60,6 +60,8 @@ export interface Analytics {
 export type Booster = BoosterHelp | BoosterTime;
 
 export interface GameModel {
+    firstLaunch: boolean;
+
     appState: AppStateEnum;
     analytics: Analytics;
     shop: ShopModel;

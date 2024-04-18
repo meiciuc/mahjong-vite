@@ -1,4 +1,5 @@
 import { clamp } from 'lodash';
+import { Config } from '../Config';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
 import { Model } from '../core/mvc/model';
@@ -15,9 +16,7 @@ import { VueServiceSignals, VueShopSignals, vueService } from '../vue/VueService
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
-import { Config } from '../Config';
 import { TutorialController } from './TutorialController';
-import { GameControllerExtended } from './GameControllerExtended';
 
 export class ApplicationController extends BaseController {
 
@@ -36,7 +35,12 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
         this.setupGameModel();
-        await this.tutorialCycle();
+
+        if (GameModelHelper.getGameLevel() < 2 && !localStorage.getItem('firstTime')) {
+            localStorage.setItem('firstTime', `${Date.now()}`);
+            await this.tutorialCycle();
+        }
+
         await this.firstCycle();
     }
 
@@ -44,9 +48,8 @@ export class ApplicationController extends BaseController {
         this.resetGameModelForNext();
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-        const game = new GameControllerExtended();
+        const game = new TutorialController();
         adsService.gameplayStart();
-        // const res1 = await this.waitApplicationCycleContinue(game.execute());
         const res1 = await Promise.race([game.execute(), this.waitVueServiceSignal(VueServiceSignals.LeaveTutorial)]);
         game.destroy();
         adsService.gameplayStop();
@@ -64,7 +67,9 @@ export class ApplicationController extends BaseController {
         GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
 
         const res1 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
-        if (res1 !== VueServiceSignals.StartButton) {
+        if (res1 === VueServiceSignals.TutorialButton) {
+            await this.tutorialCycle();
+        } else if (res1 !== VueServiceSignals.StartButton) {
             this.gameCycleWasInterrupted(res1);
             return;
         }
@@ -78,8 +83,6 @@ export class ApplicationController extends BaseController {
 
     private async nextCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-
-        // await new TutorialController().execute();
 
         const game = new GameController();
         adsService.gameplayStart();
@@ -341,7 +344,11 @@ export class ApplicationController extends BaseController {
     }
 
     private async waitApplicationCycleContinue(promise: Promise<unknown>) {
-        return Promise.race([promise, this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels)]);
+        return Promise.race([
+            promise,
+            this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels),
+            this.waitVueServiceSignal(VueServiceSignals.TutorialButton)
+        ]);
     }
 
     private gameCycleWasInterrupted(value: VueServiceSignals) {

@@ -48,10 +48,9 @@ onMounted(() => {
         <div class="MenuContentItem" ref="Center">
             <GameMenuTimer class="MenuPanel__GameMenuTimer"></GameMenuTimer>
         </div>
-        <div class="MenuContentItem">
+        <div class="MenuContentItem Right">
             <GameMenuHelp class="MenuPanel__GameMenuHelp"></GameMenuHelp>
         </div>
-        <div class="OptionsButtonPlace"></div>
     </div>
 </template>
 
@@ -85,7 +84,7 @@ onMounted(() => {
 }
 
 .MenuPanel .Left {
-    min-width: 8rem;
+    min-width: 6rem;
 }
 
 .MenuPanel .GameLevel {
