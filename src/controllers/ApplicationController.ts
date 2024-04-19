@@ -61,7 +61,7 @@ export class ApplicationController extends BaseController {
 
         // TODO special screen for tutorial victory
         GameModelHelper.setApplicationState(AppStateEnum.TUTORIAL_VICTORY_SCREEN);
-        await new TimeSkipper(3000).execute();
+        await new TimeSkipper(2000).execute();
     }
 
     private async firstCycle() {
