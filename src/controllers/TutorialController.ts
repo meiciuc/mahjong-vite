@@ -72,8 +72,8 @@ export class TutorialController extends GameController {
         this.boosterTimeStorage = GameModelHelper.getBooster(BoosterType.TIME).current;
         this.boosterHelpStorage = GameModelHelper.getBooster(BoosterType.HELP).current;
 
-        GameModelHelper.addBooster(BoosterType.TIME);
-        GameModelHelper.addBooster(BoosterType.HELP);
+        GameModelHelper.setBooster(BoosterType.HELP, 1);
+        GameModelHelper.setBooster(BoosterType.TIME, 1);
 
         this.setupPointer();
         this.setupLeaveTutorialButton();
@@ -93,6 +93,7 @@ export class TutorialController extends GameController {
         }
 
         if (this.gameIsOver()) {
+            console.log('TUTORIAL COMPLETE')
             this.complete();
         }
     };

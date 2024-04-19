@@ -22,6 +22,8 @@ export enum AppStateEnum {
     START_SCREEN_FIRST = 'startScreenFirst',
     START_SCREEN = 'startScreen',
 
+    TUTORIAL_VICTORY_SCREEN = 'tutorialVictoryScreen',
+
     GAME_SCREEN = 'gameScreen',
     GAME_SCREEN_PAUSE = 'gameScreenPause',
 
@@ -60,8 +62,6 @@ export interface Analytics {
 export type Booster = BoosterHelp | BoosterTime;
 
 export interface GameModel {
-    firstLaunch: boolean;
-
     appState: AppStateEnum;
     analytics: Analytics;
     shop: ShopModel;

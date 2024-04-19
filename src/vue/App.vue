@@ -10,6 +10,7 @@ import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
 import OptionsScreen from './screens/OptionsScreen.vue';
+import TutorialVictoryScreen from './screens/TutorialVictoryScreen.vue';
 
 const appState = useModel(["appState"]);
 
@@ -90,6 +91,10 @@ const defeatMessage = computed(() => {
 
     <Transition>
         <GameVictoryScreen v-if="!showModalBackground && appState === AppStateEnum.GAME_VICTORY"></GameVictoryScreen>
+    </Transition>
+
+    <Transition>
+        <TutorialVictoryScreen v-if="!showModalBackground && appState === AppStateEnum.TUTORIAL_VICTORY_SCREEN"></TutorialVictoryScreen>
     </Transition>
 
     <Transition>

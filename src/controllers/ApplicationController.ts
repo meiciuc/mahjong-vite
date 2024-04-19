@@ -17,6 +17,7 @@ import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { TutorialController } from './TutorialController';
+import { TimeSkipper } from '../utils/TimeSkipper';
 
 export class ApplicationController extends BaseController {
 
@@ -55,12 +56,12 @@ export class ApplicationController extends BaseController {
         adsService.gameplayStop();
 
         if (res1 !== game) {
-            // this.gameCycleWasInterrupted(res1);
-            return;
+            return Promise.resolve();
         }
 
         // TODO special screen for tutorial victory
-        GameModelHelper.setApplicationState(AppStateEnum.GAME_VICTORY);
+        GameModelHelper.setApplicationState(AppStateEnum.TUTORIAL_VICTORY_SCREEN);
+        await new TimeSkipper(3000).execute();
     }
 
     private async firstCycle() {
@@ -69,16 +70,16 @@ export class ApplicationController extends BaseController {
         const res1 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
         if (res1 === VueServiceSignals.TutorialButton) {
             await this.tutorialCycle();
+            this.firstCycle();
         } else if (res1 !== VueServiceSignals.StartButton) {
             this.gameCycleWasInterrupted(res1);
+            this.resetGameModelForNext();
+            const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+            this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+
+            this.nextCycle();
             return;
         }
-
-        this.resetGameModelForNext();
-        const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
-        this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
-
-        this.nextCycle();
     }
 
     private async nextCycle() {

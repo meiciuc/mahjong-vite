@@ -2,6 +2,7 @@
     "start": {
         "play": "играть",
         "tutorial": "как играть",
+        "tutorialFinished": "теперь вы всё умеете!",
         "mahjong": "МАДЖОНГ",
         "kitchen": "КУХНЯ",
         "reachTheHighestLevel": "наивысший уровень!"
