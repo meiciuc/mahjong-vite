@@ -61,7 +61,7 @@ const handleClick = (id: string) => {
     background-repeat: no-repeat;
     background-size: 4rem;
     background-position: 40% 60%;
-    background-image: url(./assets/svg/iconTime.svg);
+    background-image: url('./assets/svg/iconTime.svg');
 }
 
 .ShopItem .IconQuestion {
@@ -110,7 +110,7 @@ const handleClick = (id: string) => {
     background-repeat: no-repeat;
     background-size: 4rem;
     background-position: 70% 60%;
-    background-image: url(./assets/svg/iconVideoAds.svg);
+    background-image: url('./assets/svg/iconVideoAds.svg');
     filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
 }
 

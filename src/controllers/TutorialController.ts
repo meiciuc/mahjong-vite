@@ -27,8 +27,8 @@ export class TutorialController extends GameController {
         4, 2,
         1, 2,
         1, 5,
+        2, 1,
         1, 3,
-        2, 1
     ];
 
     private boosterTimeStorage = 0;
@@ -42,10 +42,6 @@ export class TutorialController extends GameController {
 
         await new TimeSkipper(1000).execute();
 
-        for (let node = this.tiles.head; node; node = node.next) {
-            node.entity.remove(Interactive);
-        }
-
         for (let i = 0; i < this.gridScenario.length; i += 2) {
             const node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
             if (!node) {
@@ -55,6 +51,10 @@ export class TutorialController extends GameController {
             this.movePointerToTile(node, 300);
             await this.waitTileClick();
             node.entity.remove(Interactive);
+
+            if (i % 4 > 0) {
+                await new TimeSkipper(1000).execute();
+            }
         }
 
         await this.waitClickTimer();
