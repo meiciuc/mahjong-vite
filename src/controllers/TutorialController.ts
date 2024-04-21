@@ -11,12 +11,12 @@ import { TimeSkipper } from "../utils/TimeSkipper";
 import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
 import { GameModelHelper } from "../model/GameModelHelper";
-import { PointerExtended } from "./tutorial/PointerExtended";
+import { Pointer } from "./tutorial/Pointer";
 
 export class TutorialController extends GameController {
 
     private tiles: NodeList<TileNode>;
-    private pointer: PointerExtended;
+    private pointer: Pointer;
     private leaveTutoralButton: HTMLButtonElement;
     private menuTimer: HTMLDivElement;
     private menuHelp: HTMLDivElement;
@@ -161,7 +161,7 @@ export class TutorialController extends GameController {
     }
 
     private setupPointer() {
-        this.pointer = new PointerExtended();
+        this.pointer = new Pointer();
     }
 
     private setupGameMenu() {
