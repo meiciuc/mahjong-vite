@@ -29,8 +29,6 @@ export class ApplicationController extends BaseController {
 
         stageService.updateSignal.add(this.update);
         window.addEventListener('blur', this.handleWindowFocusBlur);
-        vueService.signalDataBus.on(this.handleDataBus);
-        vueService.shopDataBus.on(this.handleShopBus);
 
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
@@ -42,7 +40,7 @@ export class ApplicationController extends BaseController {
             await this.tutorialCycle();
         }
 
-        await this.firstCycle();
+        await this.startCycle();
     }
 
     private async tutorialCycle() {
@@ -64,21 +62,28 @@ export class ApplicationController extends BaseController {
         await new TimeSkipper(2000).execute();
     }
 
-    private async firstCycle() {
+    private async startCycle() {
+        try {
+            vueService.signalDataBus.off(this.handleDataBus);
+            vueService.shopDataBus.off(this.handleShopBus);
+        } catch (error) { }
+        vueService.signalDataBus.on(this.handleDataBus);
+        vueService.shopDataBus.on(this.handleShopBus);
+
         GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
 
         const res1 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
+
         if (res1 === VueServiceSignals.TutorialButton) {
             await this.tutorialCycle();
-            this.firstCycle();
-        } else if (res1 !== VueServiceSignals.StartButton) {
+            this.startCycle();
+        } else if (res1 === VueServiceSignals.StartButton) {
             this.gameCycleWasInterrupted(res1);
             this.resetGameModelForNext();
             const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
             this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
 
             this.nextCycle();
-            return;
         }
     }
 
@@ -328,6 +333,7 @@ export class ApplicationController extends BaseController {
     }
 
     private saveData() {
+        console.log('saveData')
         saveDataService.saveData();
     }
 
@@ -358,10 +364,10 @@ export class ApplicationController extends BaseController {
                 this.gameModel.data.gameLevel = 1;
                 this.gameModel.data.optionsAreVisible = false;
                 this.saveData();
-                this.firstCycle();
+                this.startCycle();
                 break;
             default:
-                this.firstCycle();
+                this.startCycle();
         }
     }
 }
