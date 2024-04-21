@@ -10,13 +10,13 @@ import { AppStateEnum, BoosterType, GameModel } from "../model/GameModel";
 import { TimeSkipper } from "../utils/TimeSkipper";
 import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
-import { Pointer } from "./tutorial/Pointer";
 import { GameModelHelper } from "../model/GameModelHelper";
+import { PointerExtended } from "./tutorial/PointerExtended";
 
 export class TutorialController extends GameController {
 
     private tiles: NodeList<TileNode>;
-    private pointer: Pointer;
+    private pointer: PointerExtended;
     private leaveTutoralButton: HTMLButtonElement;
     private menuTimer: HTMLDivElement;
     private menuHelp: HTMLDivElement;
@@ -59,6 +59,8 @@ export class TutorialController extends GameController {
 
         await this.waitClickTimer();
         await this.waitClickHelper();
+
+        this.pointer.destroy();
 
         // finish game yourself
         for (let node = this.tiles.head; node; node = node.next) {
@@ -159,7 +161,7 @@ export class TutorialController extends GameController {
     }
 
     private setupPointer() {
-        this.pointer = new Pointer();
+        this.pointer = new PointerExtended();
     }
 
     private setupGameMenu() {

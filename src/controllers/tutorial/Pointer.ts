@@ -2,7 +2,7 @@ import { Easing, Tween } from "@tweenjs/tween.js";
 import { Point } from "pixi.js";
 
 export class Pointer {
-    private pointer: HTMLDivElement;
+    protected pointer: HTMLDivElement;
     constructor() {
         this.pointer = document.createElement('div');
         this.pointer.style.position = 'absolute';
