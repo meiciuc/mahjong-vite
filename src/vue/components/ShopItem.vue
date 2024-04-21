@@ -74,7 +74,24 @@ const handleClick = (id: string) => {
     @include label_screen;
     display: flex;
     align-items: flex-start;
-    width: 6rem;
+    width: 4rem;
+    height: 4rem;
+
+    font-size: 2rem;
+    font-family: $button_font_family;
+    color: $color_dark;
+
+    border-radius: 50%;
+    background: #04FB9C;
+    
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+    user-select: none;
+
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5) inset;
+    transition: all 100ms cubic-bezier(.25, .57, .68, 1.66);
 }
 
 .ShopItem .PriceScore {
