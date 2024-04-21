@@ -71,8 +71,6 @@ export class GameModelHelper {
     static setBooster(type: BoosterType, value: number) {
         const booster = GameModelHelper.getBooster(type);
         if (booster) {
-            console.log('setBooster', type, value)
-            // const analytics = GameModelHelper.getModel().data.analytics;
             booster.current = value;
         }
     }

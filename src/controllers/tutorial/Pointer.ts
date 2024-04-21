@@ -1,5 +1,6 @@
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { Point } from "pixi.js";
+import { TimeSkipper } from "../../utils/TimeSkipper";
 
 export class Pointer {
     private leftPointer: HTMLDivElement = document.createElement('div');
@@ -37,7 +38,27 @@ export class Pointer {
         }
     }
 
-    public destroy() {
+    public async destroy() {
+        const duration = 1500;
+        const tweenProvider = {
+            opacity: 0.15
+        };
+
+        new Tween(tweenProvider)
+            .to({
+                opacity: 0
+            }, duration)
+            .easing(Easing.Quadratic.Out)
+            .onUpdate(() => {
+                this.leftPointer.style.opacity = `${tweenProvider.opacity}`;
+                this.topPointer.style.opacity = `${tweenProvider.opacity}`;
+                this.rightPointer.style.opacity = `${tweenProvider.opacity}`;
+                this.bottomPointer.style.opacity = `${tweenProvider.opacity}`;
+            })
+            .start();
+
+        await new TimeSkipper(duration).execute();
+
         this.leftPointer.remove();
         this.topPointer.remove();
         this.rightPointer.remove();
