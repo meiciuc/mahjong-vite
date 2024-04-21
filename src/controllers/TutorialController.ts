@@ -84,6 +84,8 @@ export class TutorialController extends GameController {
         dataService.getRootModel<GameModel>().subscribe(['appState'], this.handleAppStateChangeExtended);
 
         this.playScenario();
+
+        stageService.resizeSignal.add(this.handleResize);
     }
 
     update = (time: number) => {
@@ -209,20 +211,31 @@ export class TutorialController extends GameController {
         return undefined;
     }
 
+    private getCurrentIndex = () => { return { tl: new Point(), br: new Point() } };
+
     private movePointerToTile(node: TileNode, duration = 0) {
+
         const view = node.display.view;
         const { x, y, width, height } = view as Sprite;
-        if (view && x && y && width && height) {
 
-            const tl = view.toGlobal(new Point(0, 0));
-            const br = view.toGlobal(new Point(width, height));
+        this.getCurrentIndex = () => {
+            if (view && x && y && width && height) {
 
-            const bounding = stageService.stage.view.getBoundingClientRect();
-            tl.y += bounding.y;
-            br.y += bounding.y;
+                const tl = view.toGlobal(new Point(0, 0));
+                const br = view.toGlobal(new Point(width, height));
 
-            this.pointer?.movePointer(tl, br, duration);
+                const bounding = stageService.stage.view.getBoundingClientRect();
+                tl.y += bounding.y;
+                br.y += bounding.y;
+
+                return { tl, br };
+            }
+
+            return { tl: new Point(), br: new Point() };
         }
+
+        const { tl, br } = this.getCurrentIndex();
+        this.pointer?.movePointer(tl, br, duration);
     }
 
     private async waitTileClick() {
@@ -245,8 +258,13 @@ export class TutorialController extends GameController {
             return;
         }
 
-        const bounding = this.menuTimer.getBoundingClientRect();
-        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+        this.getCurrentIndex = () => {
+            const bounding = this.menuTimer.getBoundingClientRect();
+            return { tl: new Point(bounding.x, bounding.y), br: new Point(bounding.right, bounding.bottom) };
+        }
+
+        const { tl, br } = this.getCurrentIndex();
+        this.pointer?.movePointer(new Point(tl.x, tl.y), new Point(br.x, br.y), 300);
 
         this.menuTimer.style.pointerEvents = 'auto';
 
@@ -260,8 +278,14 @@ export class TutorialController extends GameController {
             return;
         }
 
-        const bounding = this.menuHelp.getBoundingClientRect();
-        this.pointer?.movePointer(new Point(bounding.x, bounding.y), new Point(bounding.right, bounding.bottom), 300);
+
+        this.getCurrentIndex = () => {
+            const bounding = this.menuHelp.getBoundingClientRect();
+            return { tl: new Point(bounding.x, bounding.y), br: new Point(bounding.right, bounding.bottom) };
+        };
+
+        const { tl, br } = this.getCurrentIndex();
+        this.pointer?.movePointer(tl, br, 300);
 
         this.menuHelp.style.pointerEvents = 'auto';
         await this.waitMenuClick(VueServiceSignals.BoosterHelpClick);
@@ -285,5 +309,10 @@ export class TutorialController extends GameController {
 
             vueService.signalDataBus.on(handler)
         });
+    }
+
+    private handleResize = () => {
+        const { tl, br } = this.getCurrentIndex();
+        this.pointer?.movePointer(new Point(tl.x, tl.y), new Point(br.x, br.y), 0);
     }
 }
