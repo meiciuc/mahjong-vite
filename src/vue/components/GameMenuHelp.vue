@@ -18,7 +18,11 @@ const boosterCount = computed(() => {
 <template>
     <div class="ToolContainer" @click="handleClick">
         <div class="HelpButton" :class="{ HelpButtonDisabled: boosterCount === 0 }">?</div>
-        <div class="BoosterCount" :class="{ BoosterCountDisabled: boosterCount === 0 }">
+        <div 
+            class="BoosterCount" 
+            :class="{ BoosterCountDisabled: boosterCount === 0 }"
+            :style = "boosterCount > 0 ? '' : 'background-image: url(./assets/svg/shoppingСart.svg);'"
+        >
             {{ boosterCount > 0 ? boosterCount : '' }}</div>
     </div>
 </template>
@@ -78,7 +82,6 @@ const boosterCount = computed(() => {
 
 .BoosterCountDisabled {
     background: #ff0000;
-    background-image: url(./assets/svg/shoppingСart.svg);
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: 40% 60%;

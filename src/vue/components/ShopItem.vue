@@ -36,11 +36,16 @@ const handleClick = (id: string) => {
 </script>
 <template>
     <div class="ShopItem">
-        <div :class="[productType === BoosterType.TIME ? 'IconTime' : 'IconQuestion']">
+        <div :class="[productType === BoosterType.TIME ? 'IconTime' : 'IconQuestion']"
+            :style="productType === BoosterType.TIME ? 'background-image: url(./assets/svg/iconTime.svg);' : ''"
+        >
             {{ productType === BoosterType.TIME ? '' : Localization.getText('game.help') }}
         </div>
         <div class="Value">{{ `+${productCount}` }}</div>
-        <div :class="[valute === CurrencyType.POINTS ? 'PriceScore' : 'PriceAds']" @click.stop.prevent="handleClick(id)">
+        <div :class="[valute === CurrencyType.POINTS ? 'PriceScore' : 'PriceAds']" 
+            :style = "valute === CurrencyType.POINTS ? '' : 'background-image: url(./assets/svg/iconVideoAds.svg);'"
+            @click.stop.prevent="handleClick(id)"
+        >
             {{ (valute === CurrencyType.POINTS ? `-${price}` : '') }}
         </div>
     </div>
@@ -61,7 +66,7 @@ const handleClick = (id: string) => {
     background-repeat: no-repeat;
     background-size: 4rem;
     background-position: 40% 60%;
-    background-image: url('./assets/svg/iconTime.svg');
+    // background-image: url('./assets/svg/iconTime.svg');
 }
 
 .ShopItem .IconQuestion {
@@ -110,7 +115,7 @@ const handleClick = (id: string) => {
     background-repeat: no-repeat;
     background-size: 4rem;
     background-position: 70% 60%;
-    background-image: url('./assets/svg/iconVideoAds.svg');
+    // background-image: url('./assets/svg/iconVideoAds.svg');
     filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
 }
 
