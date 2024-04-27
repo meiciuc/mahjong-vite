@@ -93,9 +93,10 @@ export class GameModelHelper {
                 [BoosterType.HELP]: { current: 3 },
             },
 
+            leaderboardIsVisible: false,
             optionsAreVisible: false,
-            tutorialOnly: false,
             shopIsVisible: false,
+            tutorialOnly: false,
             sound: true,
 
             icons: [],

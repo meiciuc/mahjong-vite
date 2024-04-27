@@ -4,6 +4,7 @@ import GameMenuTimer from './GameMenuTimer.vue';
 import GameMenuHelp from './GameMenuHelp.vue';
 import GameMenuScore from './GameMenuScore.vue';
 import { onMounted, ref } from 'vue';
+import { VueServiceSignals, vueService } from '../VueService';
 
 const gameLevel = useModel(["gameLevel"]);
 
@@ -31,6 +32,10 @@ const handleOnResize = () => {
     center.style.marginLeft = `${x}px`;
 }
 
+const handleClick = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton);
+}
+
 onMounted(() => {
     window.addEventListener('resize', handleOnResize);
     window.addEventListener('orientationchange', handleOnResize);
@@ -41,7 +46,7 @@ onMounted(() => {
 
 <template>
     <div class="MenuPanel">
-        <div class="MenuContentItem Left" ref="Left">
+        <div class="MenuContentItem Left" ref="Left" @click="handleClick">
             <div class="GameLevel">{{ gameLevel }}</div>
             <GameMenuScore></GameMenuScore>
         </div>
@@ -65,6 +70,10 @@ onMounted(() => {
     background-color: $menu_color_background;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
     display: flex;
+}
+
+.MenuPanel .Left {
+    @include button_menu;
 }
 
 .MenuPanel .ColoredBackgroundLine {

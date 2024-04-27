@@ -70,6 +70,7 @@ export interface GameModel {
     tutorialOnly: boolean,
     optionsAreVisible: boolean,
     shopIsVisible: boolean,
+    leaderboardIsVisible: boolean,
     sound: boolean,
 
     gameState: GameStateEnum,

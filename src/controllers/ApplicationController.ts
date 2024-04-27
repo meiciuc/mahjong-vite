@@ -248,8 +248,19 @@ export class ApplicationController extends BaseController {
         }
     }
 
+    // TODO use FSM
     private handleDataBus = (data: VueServiceSignals) => {
         switch (data) {
+            case VueServiceSignals.LeaderBoardButton:
+                console.log('VueServiceSignals.LeaderBoardButton')
+                soundService.play(SOUNDS.active_button);
+
+                this.gameModel.data.leaderboardIsVisible = !this.gameModel.data.leaderboardIsVisible;
+                if (this.gameModel.data.leaderboardIsVisible) {
+                    this.gameModel.data.optionsAreVisible = false;
+                    this.gameModel.data.shopIsVisible = false;
+                }
+                break;
             case VueServiceSignals.OpenShop:
             case VueServiceSignals.OptionsButton:
                 soundService.play(SOUNDS.active_button);
@@ -263,6 +274,10 @@ export class ApplicationController extends BaseController {
 
                 if (!this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                }
+
+                if (this.gameModel.data.optionsAreVisible) {
+                    this.gameModel.data.leaderboardIsVisible = false;
                 }
                 break;
             case VueServiceSignals.BoosterHelpClick: {

@@ -11,6 +11,7 @@ import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
 import OptionsScreen from './screens/OptionsScreen.vue';
 import TutorialVictoryScreen from './screens/TutorialVictoryScreen.vue';
+import LeaderBoard from './screens/LeaderBoard.vue';
 
 const appState = useModel(["appState"]);
 
@@ -20,13 +21,14 @@ const showGameOptionsButton = computed(() => {
 
 const optionsAreVisible = useModel(["optionsAreVisible"]);
 const shopIsVisible = useModel(["shopIsVisible"]);
+const leaderboardIsVisible = useModel(["leaderboardIsVisible"]);
 
 const showMainMenu = computed(() => {
     return appState.value !== AppStateEnum.NONE && appState.value !== AppStateEnum.START_SCREEN_FIRST;
 });
 
 const showModalBackground = computed(() => {
-    return optionsAreVisible.value;
+    return optionsAreVisible.value || leaderboardIsVisible.value;
 });
 
 const handleResize = () => {
@@ -105,7 +107,10 @@ const defeatMessage = computed(() => {
     <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
-        <OptionsScreen v-if="showModalBackground" :mode="shopIsVisible ? 'shop' : 'options'"></OptionsScreen>
+        <OptionsScreen v-if="optionsAreVisible" :mode="shopIsVisible ? 'shop' : 'options'"></OptionsScreen>
+    </Transition>
+    <Transition>
+        <LeaderBoard v-if="leaderboardIsVisible"></LeaderBoard>
     </Transition>
     <GameMenuMainOptions v-if="showGameOptionsButton" class="GameMenuMainOptions">
     </GameMenuMainOptions>
