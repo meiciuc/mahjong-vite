@@ -87,6 +87,7 @@ export class ApplicationController extends BaseController {
         }
     }
 
+    // TODO FSM
     private async nextCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
@@ -156,10 +157,8 @@ export class ApplicationController extends BaseController {
         // TODO внесение кастомных данных
         this.gameModel = dataService.getRootModel<GameModel>();
 
-        let data = adsService.getData();
-        if (!data) {
-            data = this.getData();
-        }
+        const data = saveDataService.getData();
+
         if (data) {
             this.gameModel.data.gameLevel = data.gameLevel ? data.gameLevel : this.gameModel.data.gameLevel;
             this.gameModel.data.gameTotalScore = data.gameTotalScore ? data.gameTotalScore : this.gameModel.data.gameTotalScore;
@@ -335,10 +334,6 @@ export class ApplicationController extends BaseController {
     private saveData() {
         console.log('saveData')
         saveDataService.saveData();
-    }
-
-    private getData() {
-        return saveDataService.getData();
     }
 
     private async waitVueServiceSignal(value: VueServiceSignals) {

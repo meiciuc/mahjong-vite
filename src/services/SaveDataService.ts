@@ -8,8 +8,6 @@ class SaveDataService {
         const model = dataService.getRootModel<GameModel>().raw;
         localStorage.setItem('data', JSON.stringify(model));
 
-        console.log('model.boosters', model.boosters)
-
         adsService.saveData({
             gameLevel: model.gameLevel,
             gameTotalScore: model.gameTotalScore,
@@ -19,11 +17,13 @@ class SaveDataService {
     }
 
     getData() {
-        const data = localStorage.getItem('data');
-        if (!data) {
-            return null;
+        let data = adsService.getData();
+        if (data) {
+            return data;
         }
-        return JSON.parse(data);
+
+        data = localStorage.getItem('data');
+        return data ? JSON.parse(data) : null;
     }
 }
 
