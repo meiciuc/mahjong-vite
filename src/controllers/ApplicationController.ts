@@ -256,6 +256,15 @@ export class ApplicationController extends BaseController {
                 soundService.play(SOUNDS.active_button);
 
                 this.gameModel.data.leaderboardIsVisible = !this.gameModel.data.leaderboardIsVisible;
+
+                if (this.gameModel.data.leaderboardIsVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+                }
+
+                if (!this.gameModel.data.leaderboardIsVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
+                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+                }
+
                 if (this.gameModel.data.leaderboardIsVisible) {
                     this.gameModel.data.optionsAreVisible = false;
                     this.gameModel.data.shopIsVisible = false;
