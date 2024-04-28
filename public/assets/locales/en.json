@@ -21,5 +21,11 @@
     "options": {
         "sound": "Sound",
         "resetAllLevels": "Play from the first level"
+    },
+    "leaderboard": {
+        "board": "leaderboard",
+        "yesterday": "yesterday",
+        "today": "today",
+        "atAllTimes": "always"
     }
 }

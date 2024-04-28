@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { useModel } from '../../model/useModel';
-import GameMenuTimer from './GameMenuTimer.vue';
-import GameMenuHelp from './GameMenuHelp.vue';
-import GameMenuScore from './GameMenuScore.vue';
 import { onMounted, ref } from 'vue';
-import { VueServiceSignals, vueService } from '../VueService';
-
-const gameLevel = useModel(["gameLevel"]);
+import GameMenuHelp from './GameMenuHelp.vue';
+import GameMenuLevel from './GameMenuLevel.vue';
+import GameMenuTimer from './GameMenuTimer.vue';
 
 const Left = ref(null);
 const Center = ref(null);
@@ -32,10 +28,6 @@ const handleOnResize = () => {
     center.style.marginLeft = `${x}px`;
 }
 
-const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton);
-}
-
 onMounted(() => {
     window.addEventListener('resize', handleOnResize);
     window.addEventListener('orientationchange', handleOnResize);
@@ -46,9 +38,8 @@ onMounted(() => {
 
 <template>
     <div class="MenuPanel">
-        <div class="MenuContentItem Left" ref="Left" @click="handleClick">
-            <div class="GameLevel">{{ gameLevel }}</div>
-            <GameMenuScore></GameMenuScore>
+        <div class="MenuContentItem Left" ref="Left">
+            <GameMenuLevel></GameMenuLevel>
         </div>
         <div class="MenuContentItem" ref="Center">
             <GameMenuTimer class="MenuPanel__GameMenuTimer"></GameMenuTimer>

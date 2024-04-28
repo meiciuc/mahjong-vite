@@ -10,7 +10,7 @@ class SaveDataService {
 
         adsService.saveData({
             gameLevel: model.gameLevel,
-            gameTotalScore: model.gameTotalScore,
+            gameScore: model.gameTotalScore,
             sound: model.sound,
             boosters: model.boosters,
         });

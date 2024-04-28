@@ -21,5 +21,11 @@
     "options": {
         "sound": "Звуки",
         "resetAllLevels": "Играть с первого уровня"
+    },
+    "leaderboard": {
+        "board": "таблица лидеров",
+        "yesterday": "вчера",
+        "today": "сегодня",
+        "atAllTimes": "во все времена"
     }
 }

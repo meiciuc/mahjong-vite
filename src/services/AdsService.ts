@@ -1,11 +1,20 @@
 import { Config } from "../Config";
-import { Booster, BoosterType } from "../model/GameModel";
+import { dataService } from "../core/services/DataService";
+import { Booster, BoosterType, GameModel, LeaderboardItem } from "../model/GameModel";
 import { Languages } from "../utils/Localization";
 import { isMobile } from "is-mobile";
 
+export interface LeaderBoardFetch {
+    abovePlayers: LeaderboardItem[];
+    belowPlayers: LeaderboardItem[];
+    topPlayers: LeaderboardItem[];
+    player?: any,
+    players: LeaderboardItem[];
+}
+
 interface SaveData {
     gameLevel: number;
-    gameTotalScore: number;
+    gameScore: number;
     boosters: { [key in BoosterType]?: Booster }
     sound: boolean;
 }
@@ -115,14 +124,31 @@ class GpService {
         }
     }
 
-    showLeaderboard(value: boolean) {
+    async showLeaderboard() {
         if (!this.gp) {
             return;
         }
 
-        if (value) {
-            this.gp.leaderboard.open();
+        // this.gp.leaderboard.open();
+        const result = await this.gp.leaderboard.fetch() as LeaderBoardFetch;
+        console.log(result)
+        const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;
+        leaderboard.splice(0);
+
+        const player = result.player as LeaderboardItem;
+        const arr = player ? result.abovePlayers.concat([player]).concat(result.belowPlayers) : result.players;
+
+        for (let i = 0; i < arr.length; i++) {
+            leaderboard.push({
+                id: arr[i].id,
+                name: arr[i].name,
+                position: arr[i].position,
+                score: arr[i].score,
+                level: arr[i].level || 1,
+                selected: player ? player.id === arr[i].id : false,
+            })
         }
+
     }
 
     showShare() {
@@ -172,7 +198,7 @@ class GpService {
 
         this.gp.player.get('data');
         this.gp.player.set('data', JSON.stringify(data));
-        this.gp.player.set('score', data.gameTotalScore);
+        this.gp.player.set('score', data.gameScore);
         this.gp.player.get('gameLevel');
         this.gp.player.set('gameLevel', data.gameLevel);
         this.gp.player.sync({ override: true });

@@ -253,6 +253,7 @@ export class ApplicationController extends BaseController {
         switch (data) {
             case VueServiceSignals.LeaderBoardButton:
                 console.log('VueServiceSignals.LeaderBoardButton')
+                adsService.showLeaderboard();
                 soundService.play(SOUNDS.active_button);
 
                 this.gameModel.data.leaderboardIsVisible = !this.gameModel.data.leaderboardIsVisible;

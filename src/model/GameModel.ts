@@ -61,6 +61,15 @@ export interface Analytics {
 
 export type Booster = BoosterHelp | BoosterTime;
 
+export interface LeaderboardItem {
+    id: number,
+    name: string,
+    position: number,
+    score: number,
+    level?: number,
+    selected?: boolean,
+}
+
 export interface GameModel {
     appState: AppStateEnum;
     analytics: Analytics;
@@ -71,6 +80,7 @@ export interface GameModel {
     optionsAreVisible: boolean,
     shopIsVisible: boolean,
     leaderboardIsVisible: boolean,
+    leaderboardItems: LeaderboardItem[],
     sound: boolean,
 
     gameState: GameStateEnum,

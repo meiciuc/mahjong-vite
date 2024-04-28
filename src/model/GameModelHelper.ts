@@ -94,6 +94,7 @@ export class GameModelHelper {
             },
 
             leaderboardIsVisible: false,
+            leaderboardItems: [],
             optionsAreVisible: false,
             shopIsVisible: false,
             tutorialOnly: false,
