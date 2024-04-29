@@ -30,6 +30,7 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
                 <div 
                     v-for="item of leaderboardItems"
                     class="Item" 
+                    :class="{'Selected': item.selected}"
                     :key="item.id"
                 >
                     <div class="Position">{{item.position}}</div>
@@ -78,6 +79,11 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
     display: flex;
     flex-direction: row;
     width: 30rem;
+}
+
+.LeaderBoard .Item.Selected{
+    background-color: rgb(87, 87, 87);
+    color: white;
 }
 
 .Item .Position{
@@ -131,7 +137,7 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
 }
 
-.Selected {
+.Tabs .Selected {
     text-decoration: underline;
 }
 

@@ -131,7 +131,12 @@ class GpService {
 
         // this.gp.leaderboard.open();
         dataService.getRootModel<GameModel>().data.leaderboardSelected = key;
-        const result = await this.gp.leaderboard.fetch() as LeaderBoardFetch;
+        const result = await this.gp.leaderboard.fetch({
+            withMe: 'last',
+            showNearest: 5,
+
+        }) as LeaderBoardFetch;
+
         console.log(result)
         const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;
         leaderboard.splice(0);
