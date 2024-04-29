@@ -252,7 +252,6 @@ export class ApplicationController extends BaseController {
     private handleDataBus = (data: VueServiceSignals) => {
         switch (data) {
             case VueServiceSignals.LeaderBoardButton:
-                console.log('VueServiceSignals.LeaderBoardButton')
                 adsService.showLeaderboard();
                 soundService.play(SOUNDS.active_button);
 
@@ -270,6 +269,18 @@ export class ApplicationController extends BaseController {
                     this.gameModel.data.optionsAreVisible = false;
                     this.gameModel.data.shopIsVisible = false;
                 }
+                break;
+            case VueServiceSignals.LeaderBoardYesterdayButton:
+                adsService.showLeaderboard('yesterday');
+                soundService.play(SOUNDS.active_button);
+                break;
+            case VueServiceSignals.LeaderBoardTodayButton:
+                adsService.showLeaderboard('today');
+                soundService.play(SOUNDS.active_button);
+                break;
+            case VueServiceSignals.LeaderBoardAlwaysButton:
+                adsService.showLeaderboard('always');
+                soundService.play(SOUNDS.active_button);
                 break;
             case VueServiceSignals.OpenShop:
             case VueServiceSignals.OptionsButton:

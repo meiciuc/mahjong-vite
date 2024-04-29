@@ -7,6 +7,7 @@ import { ref } from 'vue';
 
 const Popup = ref(null);
 const leaderboardItems = useModel(['leaderboardItems']);
+const leaderboardSelected = useModel(['leaderboardSelected']);
 
 </script>
 
@@ -16,9 +17,15 @@ const leaderboardItems = useModel(['leaderboardItems']);
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('leaderboard.board') }}</div>
                 <div class="Tabs">
-                    <div class="Tab">{{ Localization.getText('leaderboard.yesterday') }}</div>
-                    <div class="Tab">{{ Localization.getText('leaderboard.today') }}</div>
-                    <div class="Tab">{{ Localization.getText('leaderboard.atAllTimes') }}</div>
+                    <div class="Tab" :class="{'Selected': leaderboardSelected === 'yesterday'}"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardYesterdayButton);"
+                    >{{ Localization.getText('leaderboard.yesterday') }}</div>
+                    <div class="Tab" :class="{'Selected': leaderboardSelected === 'today'}"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardTodayButton);"
+                    >{{ Localization.getText('leaderboard.today') }}</div>
+                    <div class="Tab" :class="{'Selected': leaderboardSelected === 'always'}"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardAlwaysButton);"
+                    >{{ Localization.getText('leaderboard.atAllTimes') }}</div>
                 </div>
                 <div 
                     v-for="item of leaderboardItems"
@@ -54,6 +61,10 @@ const leaderboardItems = useModel(['leaderboardItems']);
     font-size: 1.5rem;
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+.LeaderBoard .Tab:hover {
+    @include button_screen-hover;
 }
 
 .LeaderBoard .Item {
@@ -118,6 +129,10 @@ const leaderboardItems = useModel(['leaderboardItems']);
 
 .LeaderBoard .TutorialButton:hover {
     text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+.Selected {
+    text-decoration: underline;
 }
 
 .LeaderBoard .HalfLabel {

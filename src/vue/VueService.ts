@@ -9,6 +9,10 @@ export enum VueServiceSignals {
     OptionsResetLevels = 'OptionsResetLevels',
 
     LeaderBoardButton = 'LeaderBoardButton',
+    LeaderBoardYesterdayButton = 'LeaderBoardYesterdayButton',
+    LeaderBoardTodayButton = 'LeaderBoardTodayButton',
+    LeaderBoardAlwaysButton = 'LeaderBoardAlwaysButton',
+
     TutorialButton = 'TutorialButton',
     LeaveTutorial = 'LeaveTutorial',
 

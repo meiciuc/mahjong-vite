@@ -124,12 +124,13 @@ class GpService {
         }
     }
 
-    async showLeaderboard() {
+    async showLeaderboard(key: 'yesterday' | 'today' | 'always' = 'today') {
         if (!this.gp) {
             return;
         }
 
         // this.gp.leaderboard.open();
+        dataService.getRootModel<GameModel>().data.leaderboardSelected = key;
         const result = await this.gp.leaderboard.fetch() as LeaderBoardFetch;
         console.log(result)
         const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;

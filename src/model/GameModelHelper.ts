@@ -94,6 +94,7 @@ export class GameModelHelper {
             },
 
             leaderboardIsVisible: false,
+            leaderboardSelected: 'today',
             leaderboardItems: [],
             optionsAreVisible: false,
             shopIsVisible: false,

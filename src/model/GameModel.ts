@@ -80,6 +80,7 @@ export interface GameModel {
     optionsAreVisible: boolean,
     shopIsVisible: boolean,
     leaderboardIsVisible: boolean,
+    leaderboardSelected: 'yesterday' | 'today' | 'always',
     leaderboardItems: LeaderboardItem[],
     sound: boolean,
 
