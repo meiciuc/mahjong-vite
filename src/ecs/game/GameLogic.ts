@@ -75,8 +75,9 @@ export class GameLogic {
         this.iconsQueue = iconsQueue;
     }
 
-    public async needHelp() {
+    public async needHelp(random = true) {
         const paires: { [key: string]: boolean } = {};
+        const results: PointLike[][] = [];
 
         for (let nodeA = this.tiles.head; nodeA; nodeA = nodeA.next) {
             const nodeAId = '' + nodeA.tile.id;
@@ -93,14 +94,18 @@ export class GameLogic {
 
                 const result = await this.findCross(nodeA.gridPosition, nodeB.gridPosition);
                 if (result.length) {
-                    return result;
+                    if (random) {
+                        results.push(result);
+                    } else {
+                        return result;
+                    }
                 }
 
                 paires[nodeAId + '_' + nodeBId] = true;
             }
         }
 
-        return [];
+        return results.length > 0 ? shuffle(results)[0] : [];
     }
 
     public getIcon(index: number) {
