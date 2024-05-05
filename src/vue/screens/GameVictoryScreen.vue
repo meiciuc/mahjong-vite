@@ -46,7 +46,11 @@ const handleClick = () => {
 }
 
 .GameVictoryScreen .StartButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+    @include button_screen-hover;
+}
+
+.GameVictoryScreen .StartButton:active {
+    @include button_screen-active;
 }
 </style>
 

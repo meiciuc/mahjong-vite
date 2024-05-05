@@ -83,7 +83,11 @@ const handleClick = (value: "retry" | undefined = undefined) => {
 }
 
 .GameDefeatScreenFullscreenAds .StartButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+    @include button_screen-hover;
+}
+
+.GameDefeatScreenFullscreenAds .StartButton:active {
+    @include button_screen-active;
 }
 
 .GameDefeatScreenFullscreenAds .HalfStartButton {
@@ -93,7 +97,11 @@ const handleClick = (value: "retry" | undefined = undefined) => {
 }
 
 .GameDefeatScreenFullscreenAds .HalfStartButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+    @include button_screen-hover;
+}
+
+.GameDefeatScreenFullscreenAds .HalfStartButton:active {
+    @include button_screen-active;
 }
 
 .GameDefeatScreenFullscreenAds .NotShowButtons {

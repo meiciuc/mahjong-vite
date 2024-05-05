@@ -105,7 +105,11 @@ const handleClick = (id: string) => {
 }
 
 .ShopItem .PriceScore:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+    @include button_screen-hover;
+}
+
+.ShopItem .PriceScore:active {
+    @include button_screen-active;
 }
 
 .ShopItem .PriceAds {
@@ -115,11 +119,14 @@ const handleClick = (id: string) => {
     background-repeat: no-repeat;
     background-size: 4rem;
     background-position: 70% 60%;
-    // background-image: url('./assets/svg/iconVideoAds.svg');
     filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
 }
 
 .ShopItem .PriceAds:hover {
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
+}
+
+.ShopItem .PriceAds:active {
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
 }
 </style>

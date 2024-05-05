@@ -68,6 +68,10 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
     @include button_screen-hover;
 }
 
+.LeaderBoard .Tab:active {
+    @include button_screen-active;
+}
+
 .LeaderBoard .Item {
     @include label_screen;
     margin-top: 0.1rem;
@@ -123,18 +127,26 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
     @include button_screen;
 }
 
+.LeaderBoard .StartButton:hover {
+    @include button_screen-hover;
+}
+
+.LeaderBoard .StartButton:active {
+    @include button_screen-active;
+}
+
 .LeaderBoard .TutorialButton {
     @include button_screen;
     margin-top: 1rem;
     font-size: 2rem;
 }
 
-.LeaderBoard .StartButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+.LeaderBoard .TutorialButton:hover {
+    @include button_screen-hover;
 }
 
-.LeaderBoard .TutorialButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+.LeaderBoard .TutorialButton:active {
+    @include button_screen-active;
 }
 
 .Tabs .Selected {

@@ -52,18 +52,26 @@ const handleTutorial = () => {
     @include button_screen;
 }
 
+.StartScreen .StartButton:hover {
+    @include button_screen-hover;
+}
+
+.StartScreen .StartButton:active {
+    @include button_screen-active;
+}
+
 .StartScreen .TutorialButton {
     @include button_screen;
     margin-top: 1rem;
     font-size: 2rem;
 }
 
-.StartScreen .StartButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+.StartScreen .TutorialButton:hover {
+    @include button_screen-hover;
 }
 
-.StartScreen .TutorialButton:hover {
-    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+.StartScreen .TutorialButton:active {
+    @include button_screen-active;
 }
 
 .StartScreen .HalfLabel {
