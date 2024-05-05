@@ -48,8 +48,6 @@ export class GameLogic {
     public generateIconsQueue(config = this.getDefaultGenerateIconsConfig()) {
         const { gridWidth, gridHeight, seed, pares, currentLevel, iconsLength } = config;
 
-        console.log('gridWidth', gridWidth, gridHeight)
-
         const shift = 4;
 
         const iconsQueue = [];
@@ -71,11 +69,10 @@ export class GameLogic {
         }
 
         shuffle(iconsQueue, seed);
-        console.log('iconsQueue', iconsQueue)
         this.iconsQueue = iconsQueue;
     }
 
-    public async needHelp(random = true) {
+    public async needHelp(random = Config.DEV_HELP_LOGIC_IS_RANDOM) {
         const paires: { [key: string]: boolean } = {};
         const results: PointLike[][] = [];
 

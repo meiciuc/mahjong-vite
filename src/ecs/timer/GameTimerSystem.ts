@@ -5,6 +5,7 @@ import { VueServiceSignals, vueService } from "../../vue/VueService";
 import { GameModelHelper } from "../../model/GameModelHelper";
 import { saveDataService } from "../../services/SaveDataService";
 import { dataService } from "../../core/services/DataService";
+import { Config } from "../../Config";
 
 export class GameTimerSystem extends System {
     private timeBoosterClicked = false;
@@ -23,6 +24,9 @@ export class GameTimerSystem extends System {
     }
 
     update(time: number): void {
+        if (Config.DEV_PREVIEW_MODE) {
+            time *= 35;
+        }
         if (this.game.head.game.model.data.gameState === GameStateEnum.CLICK_WAIT) {
             this.game.head.game.model.data.gameAge = Math.max(this.game.head.game.model.data.gameAge - time, 0);
         }

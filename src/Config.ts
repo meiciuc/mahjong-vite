@@ -42,6 +42,10 @@ export class Config {
         return Config.DEV;
     }
 
+    static TUTORIAL_MODE = false;
+
     static DEV_USE_PRELOADER = true;
     static DEV_GAME_AUTHOMATIC = false;
+    static DEV_PREVIEW_MODE = false;
+    static DEV_HELP_LOGIC_IS_RANDOM = false;
 }

@@ -1,3 +1,4 @@
+import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
 import { GameModel } from "../model/GameModel";
 import { adsService } from "./AdsService";
@@ -5,6 +6,10 @@ import { adsService } from "./AdsService";
 class SaveDataService {
 
     saveData() {
+        if (Config.DEV_PREVIEW_MODE || Config.DEV_GAME_AUTHOMATIC) {
+            return;
+        }
+
         const model = dataService.getRootModel<GameModel>().raw;
         localStorage.setItem('data', JSON.stringify(model));
 

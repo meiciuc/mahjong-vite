@@ -153,7 +153,31 @@ export class ApplicationController extends BaseController {
         this.nextCycle();
     }
 
+    private setupPreviewModel() {
+        this.gameModel = dataService.getRootModel<GameModel>();
+
+        this.gameModel.data.gameLevel = 50;
+        this.gameModel.data.gameTotalScore = 1000;
+        this.gameModel.data.sound = false;
+
+        GameModelHelper.setBooster(BoosterType.TIME, 3);
+        GameModelHelper.setBooster(BoosterType.HELP, 2);
+
+        const keys: string[] = [];
+        const icons = this.gameModel.data.icons;
+        icons.forEach((icon) => {
+            keys.push(icon.key);
+        });
+
+        this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
+        this.gameModel.subscribe(['boosters'], this.handleBoosters);
+    }
+
     private setupGameModel() {
+        if (Config.DEV_PREVIEW_MODE) {
+            this.setupPreviewModel();
+            return;
+        }
         // TODO внесение кастомных данных
         this.gameModel = dataService.getRootModel<GameModel>();
 
