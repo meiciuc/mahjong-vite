@@ -6,6 +6,7 @@ import { GameModelHelper } from "../../model/GameModelHelper";
 import { saveDataService } from "../../services/SaveDataService";
 import { dataService } from "../../core/services/DataService";
 import { Config } from "../../Config";
+import { Tween } from "@tweenjs/tween.js";
 
 export class GameTimerSystem extends System {
     private timeBoosterClicked = false;
@@ -55,7 +56,13 @@ export class GameTimerSystem extends System {
             return;
         }
 
-        dataService.getRootModel<GameModel>().data.gameAge += 60;
+        const provider = { value: dataService.getRootModel<GameModel>().data.gameAge };
+        new Tween(provider)
+            .to({ value: dataService.getRootModel<GameModel>().data.gameAge + 60 }, 500)
+            .onUpdate(() => {
+                dataService.getRootModel<GameModel>().data.gameAge = provider.value;
+            })
+            .start();
 
         GameModelHelper.setBooster(BoosterType.TIME, Math.max(0, boosters - 1));
         saveDataService.saveData();
