@@ -12,6 +12,7 @@ import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
 import { GameModelHelper } from "../model/GameModelHelper";
 import { Pointer } from "./tutorial/Pointer";
+import { throwIfNull } from "../utils/throwIfNull";
 
 export class TutorialController extends GameController {
 
@@ -49,6 +50,8 @@ export class TutorialController extends GameController {
             }
             node.entity.add(new Interactive());
             this.movePointerToTile(node, 300);
+            await new TimeSkipper(500).execute();
+            this.shakeTile(node);
             await this.waitTileClick();
             node.entity.remove(Interactive);
 
@@ -62,9 +65,13 @@ export class TutorialController extends GameController {
 
         this.pointer.destroy();
 
+        await this.waitTileRemoved();
+
         // finish game yourself
         for (let node = this.tiles.head; node; node = node.next) {
             node.entity.add(new Interactive());
+            this.shakeTile(node);
+            await new TimeSkipper(50).execute();
         }
     }
 
@@ -213,7 +220,11 @@ export class TutorialController extends GameController {
 
     private getCurrentIndex = () => { return { tl: new Point(), br: new Point() } };
 
-    private movePointerToTile(node: TileNode, duration = 0) {
+    private shakeTile(node: TileNode) {
+        this.creator.shakeTile(node.tile, true);
+    }
+
+    private movePointerToTile(node: TileNode | TileSelectedNode, duration = 0) {
 
         const view = node.display.view;
         const { x, y, width, height } = view as Sprite;
@@ -239,7 +250,6 @@ export class TutorialController extends GameController {
     }
 
     private async waitTileClick() {
-        // GameModelHelper.setGameState(GameStateEnum.CLICK_WAIT);
         return new Promise(async resolve => {
             const selected = this.creator.getEngine().getNodeList(TileSelectedNode);
 
@@ -250,6 +260,19 @@ export class TutorialController extends GameController {
             }
 
             selected.nodeAdded.add(executed);
+        });
+    }
+
+    private async waitTileRemoved() {
+        return new Promise(async resolve => {
+            const tiles = this.creator.getEngine().getNodeList(TileNode);
+
+            const executed = (_node: TileNode) => {
+                tiles.nodeRemoved.remove(executed);
+                resolve(true);
+            }
+
+            tiles.nodeRemoved.add(executed);
         });
     }
 
@@ -278,7 +301,6 @@ export class TutorialController extends GameController {
             return;
         }
 
-
         this.getCurrentIndex = () => {
             const bounding = this.menuHelp.getBoundingClientRect();
             return { tl: new Point(bounding.x, bounding.y), br: new Point(bounding.right, bounding.bottom) };
@@ -289,13 +311,27 @@ export class TutorialController extends GameController {
 
         this.menuHelp.style.pointerEvents = 'auto';
         await this.waitMenuClick(VueServiceSignals.BoosterHelpClick);
-
-        const list = this.engine.getNodeList(TileSelectedNode);
-        for (let node = list.head; node; node = node.next) {
-            node.entity.add(new Interactive());
-        }
-
         this.menuHelp.style.pointerEvents = 'none';
+
+        const arr = await this.gameLogic.needHelp();
+        console.log('HELP', arr)
+        if (arr.length) {
+            const nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
+            const nodeAId = nodeA.tile.id;
+            nodeA.entity.add(new Interactive());
+            await this.movePointerToTile(nodeA, 300);
+            await new TimeSkipper(300).execute();
+            this.shakeTile(this.creator.getTileNodeById(nodeAId));
+
+            await new TimeSkipper(1000).execute();
+
+            const nodeB = throwIfNull(this.creator.getTileNodeByGridPosition(arr[arr.length - 1].x, arr[arr.length - 1].y));
+            const nodeBId = nodeB.tile.id;
+            nodeB.entity.add(new Interactive());
+            await this.movePointerToTile(nodeB, 300);
+            await new TimeSkipper(300).execute();
+            this.shakeTile(this.creator.getTileNodeById(nodeBId));
+        }
     }
 
     private async waitMenuClick(value: VueServiceSignals) {
