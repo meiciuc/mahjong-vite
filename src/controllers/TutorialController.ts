@@ -1,18 +1,20 @@
 import { NodeList } from "@ash.ts/ash";
+import { Tween } from "@tweenjs/tween.js";
 import { Point, Sprite } from "pixi.js";
 import { dataService } from "../core/services/DataService";
 import { stageService } from "../core/services/StageService";
+import easingsFunctions from "../core/utils/easingsFunctions";
 import { GameLogic } from "../ecs/game/GameLogic";
 import { Interactive } from "../ecs/tiles/components/Interactive";
 import { TileNode } from "../ecs/tiles/nodes/TileNode";
 import { TileSelectedNode } from "../ecs/tiles/nodes/TileSelectedNode";
 import { AppStateEnum, BoosterType, GameModel } from "../model/GameModel";
+import { GameModelHelper } from "../model/GameModelHelper";
 import { TimeSkipper } from "../utils/TimeSkipper";
+import { throwIfNull } from "../utils/throwIfNull";
 import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
-import { GameModelHelper } from "../model/GameModelHelper";
 import { Pointer } from "./tutorial/Pointer";
-import { throwIfNull } from "../utils/throwIfNull";
 
 export class TutorialController extends GameController {
 
@@ -48,10 +50,14 @@ export class TutorialController extends GameController {
             if (!node) {
                 continue;
             }
-            node.entity.add(new Interactive());
-            this.movePointerToTile(node, 300);
+            // node.entity.add(new Interactive());
+
+            this.movePointerToTile([node], 300);
             await new TimeSkipper(500).execute();
             this.shakeTile(node);
+            await new TimeSkipper(300).execute();
+
+            node.entity.add(new Interactive());
             await this.waitTileClick();
             node.entity.remove(Interactive);
 
@@ -63,9 +69,11 @@ export class TutorialController extends GameController {
         await this.waitClickTimer();
         await this.waitClickHelper();
 
-        this.pointer.destroy();
-
         await this.waitTileRemoved();
+
+        // the pointer destroing
+        await this.pointer.movePointer(new Point(window.innerWidth / 2, window.innerHeight / 2), new Point(window.innerWidth / 2, window.innerHeight / 2), 1000);
+        await new TimeSkipper(1000).execute();
 
         // finish game yourself
         for (let node = this.tiles.head; node; node = node.next) {
@@ -73,6 +81,9 @@ export class TutorialController extends GameController {
             this.shakeTile(node);
             await new TimeSkipper(50).execute();
         }
+
+        await this.pointer.movePointer(new Point(), new Point(window.innerWidth, window.innerHeight), 100);
+        this.pointer.destroy();
     }
 
     protected async doExecute() {
@@ -224,29 +235,38 @@ export class TutorialController extends GameController {
         this.creator.shakeTile(node.tile, true);
     }
 
-    private movePointerToTile(node: TileNode | TileSelectedNode, duration = 0) {
+    private movePointerToTile(node: TileNode[] | TileSelectedNode[], duration = 0) {
 
-        const view = node.display.view;
-        const { x, y, width, height } = view as Sprite;
+        const resultTL = new Point(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+        const resultBR = new Point(Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
 
-        this.getCurrentIndex = () => {
-            if (view && x && y && width && height) {
+        for (let i = 0; i < node.length; i++) {
+            const view = node[i].display.view;
+            const { x, y, width, height } = view as Sprite;
 
-                const tl = view.toGlobal(new Point(0, 0));
-                const br = view.toGlobal(new Point(width, height));
+            this.getCurrentIndex = () => {
+                if (view && x && y && width && height) {
 
-                const bounding = stageService.stage.view.getBoundingClientRect();
-                tl.y += bounding.y;
-                br.y += bounding.y;
+                    const tl = view.toGlobal(new Point(0, 0));
+                    const br = view.toGlobal(new Point(width, height));
 
-                return { tl, br };
+                    const bounding = stageService.stage.view.getBoundingClientRect();
+                    tl.y += bounding.y;
+                    br.y += bounding.y;
+
+                    return { tl, br };
+                }
+
+                return { tl: new Point(), br: new Point() };
             }
-
-            return { tl: new Point(), br: new Point() };
+            const { tl, br } = this.getCurrentIndex();
+            resultTL.x = Math.min(resultTL.x, tl.x);
+            resultTL.y = Math.min(resultTL.y, tl.y);
+            resultBR.x = Math.max(resultBR.x, br.x);
+            resultBR.y = Math.max(resultBR.y, br.y);
         }
 
-        const { tl, br } = this.getCurrentIndex();
-        this.pointer?.movePointer(tl, br, duration);
+        this.pointer?.movePointer(resultTL, resultBR, duration);
     }
 
     private async waitTileClick() {
@@ -276,6 +296,21 @@ export class TutorialController extends GameController {
         });
     }
 
+    private shakeHtmlDiv(div: HTMLDivElement) {
+        const delta = 5;
+        const easing = easingsFunctions.easeOutSine;
+        new Tween({})
+            .to({}, 300)
+            .onUpdate((object: unknown, t: number) => {
+                const currentX = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
+                const currentY = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
+            })
+            .onComplete(() => {
+                // div.style.transform[]
+            })
+            .start();
+    }
+
     private async waitClickTimer() {
         if (!this.menuTimer) {
             return;
@@ -286,13 +321,15 @@ export class TutorialController extends GameController {
             return { tl: new Point(bounding.x, bounding.y), br: new Point(bounding.right, bounding.bottom) };
         }
 
+        this.shakeHtmlDiv(this.menuTimer);
+
         const { tl, br } = this.getCurrentIndex();
         this.pointer?.movePointer(new Point(tl.x, tl.y), new Point(br.x, br.y), 300);
 
+
+
         this.menuTimer.style.pointerEvents = 'auto';
-
         await this.waitMenuClick(VueServiceSignals.BoosterTimeClick);
-
         this.menuTimer.style.pointerEvents = 'none';
     }
 
@@ -314,23 +351,26 @@ export class TutorialController extends GameController {
         this.menuHelp.style.pointerEvents = 'none';
 
         const arr = await this.gameLogic.needHelp();
-        console.log('HELP', arr)
         if (arr.length) {
-            const nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
+            let nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeAId = nodeA.tile.id;
-            nodeA.entity.add(new Interactive());
-            await this.movePointerToTile(nodeA, 300);
+            await this.movePointerToTile([nodeA], 300);
             await new TimeSkipper(300).execute();
             this.shakeTile(this.creator.getTileNodeById(nodeAId));
 
             await new TimeSkipper(1000).execute();
 
+            nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeB = throwIfNull(this.creator.getTileNodeByGridPosition(arr[arr.length - 1].x, arr[arr.length - 1].y));
             const nodeBId = nodeB.tile.id;
-            nodeB.entity.add(new Interactive());
-            await this.movePointerToTile(nodeB, 300);
+            const entityA = nodeA.entity;
+            const entityB = nodeB.entity;
+            await this.movePointerToTile([nodeA, nodeB], 300);
             await new TimeSkipper(300).execute();
             this.shakeTile(this.creator.getTileNodeById(nodeBId));
+
+            entityA.add(new Interactive());
+            entityB.add(new Interactive());
         }
     }
 
