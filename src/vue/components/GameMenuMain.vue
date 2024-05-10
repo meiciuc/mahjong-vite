@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
     <div class="MenuPanel">
         <div class="MenuContentItem Left" ref="Left">
-            <GameMenuLevel></GameMenuLevel>
+            <GameMenuLevel class="MenuPanel__GameMenuLevel"></GameMenuLevel>
         </div>
         <div class="MenuContentItem" ref="Center">
             <GameMenuTimer class="MenuPanel__GameMenuTimer"></GameMenuTimer>

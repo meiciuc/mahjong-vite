@@ -23,6 +23,7 @@ export class TutorialController extends GameController {
     private leaveTutoralButton: HTMLButtonElement;
     private menuTimer: HTMLDivElement;
     private menuHelp: HTMLDivElement;
+    private menuLevel: HTMLDivElement;
     private gridScenario = [
         2, 2,
         3, 2,
@@ -55,7 +56,7 @@ export class TutorialController extends GameController {
             this.movePointerToTile([node], 300);
             await new TimeSkipper(500).execute();
             this.shakeTile(node);
-            await new TimeSkipper(300).execute();
+            // await new TimeSkipper(300).execute();
 
             node.entity.add(new Interactive());
             await this.waitTileClick();
@@ -128,6 +129,9 @@ export class TutorialController extends GameController {
         if (this.menuHelp) {
             this.menuHelp.style.pointerEvents = 'auto';
         }
+        if (this.menuLevel) {
+            this.menuLevel.style.pointerEvents = 'auto';
+        }
 
         if (this.leaveTutoralButton) {
             this.leaveTutoralButton.remove();
@@ -187,8 +191,9 @@ export class TutorialController extends GameController {
     private setupGameMenu() {
         const menuTimer = document.body.getElementsByClassName('MenuPanel__GameMenuTimer');
         const menuHelp = document.body.getElementsByClassName('MenuPanel__GameMenuHelp');
+        const menuLevel = document.body.getElementsByClassName('MenuPanel__GameMenuLevel');
 
-        if (!menuTimer.length || !menuHelp.length) {
+        if (!menuTimer.length || !menuHelp.length || !menuLevel) {
             return;
         }
 
@@ -197,6 +202,9 @@ export class TutorialController extends GameController {
 
         this.menuHelp = menuHelp[0] as HTMLDivElement;
         this.menuHelp.style.pointerEvents = 'none';
+
+        this.menuLevel = menuLevel[0] as HTMLDivElement;
+        this.menuLevel.style.pointerEvents = 'none';
 
         dataService.getRootModel<GameModel>().data.gameAge = 21;
     }
