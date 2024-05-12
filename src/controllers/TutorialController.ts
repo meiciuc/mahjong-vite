@@ -35,9 +35,6 @@ export class TutorialController extends GameController {
         1, 3,
     ];
 
-    private boosterTimeStorage = 0;
-    private boosterHelpStorage = 0;
-
     private async playScenario() {
         this.tiles = this.engine?.getNodeList(TileNode);
         this.tiles.nodeAdded.add((node) => {
@@ -87,9 +84,6 @@ export class TutorialController extends GameController {
     protected async doExecute() {
         super.doExecute();
 
-        this.boosterTimeStorage = GameModelHelper.getBooster(BoosterType.TIME).current;
-        this.boosterHelpStorage = GameModelHelper.getBooster(BoosterType.HELP).current;
-
         GameModelHelper.setBooster(BoosterType.HELP, 1);
         GameModelHelper.setBooster(BoosterType.TIME, 1);
 
@@ -136,9 +130,6 @@ export class TutorialController extends GameController {
         if (this.pointer) {
             this.pointer.destroy();
         }
-
-        GameModelHelper.setBooster(BoosterType.HELP, this.boosterHelpStorage);
-        GameModelHelper.setBooster(BoosterType.TIME, this.boosterTimeStorage);
 
         super.destroy();
     }

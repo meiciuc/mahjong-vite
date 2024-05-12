@@ -5,7 +5,7 @@ import { Easing, Tween } from '@tweenjs/tween.js';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 
 let tween: Tween<unknown>;
-const gameScore = useModel(["gameTotalScore"]);
+const gameScore = useModel(["gameScore"]);
 watch(
     gameScore,
     (cur: number, prev: number) => {
@@ -48,7 +48,7 @@ const blink = async () => {
     el.style.opacity = '1';
 }
 
-const gameTotalScoreFormated = computed(() => {
+const gameScoreFormated = computed(() => {
     const count = gameScore.value;
     if (count > 1000000000) { return `${Math.floor(count / 1000000000)}MM`; }
     if (count > 1000000) { return `${Math.floor(count / 1000000)}M`; }
@@ -62,7 +62,7 @@ const Score = ref(null);
 <template>
     <div class="GameMenuScore">
         <span ref="Score">
-            {{ `${gameTotalScoreFormated}` }}
+            {{ `${gameScoreFormated}` }}
         </span>
     </div>
 </template>

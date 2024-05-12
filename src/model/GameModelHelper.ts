@@ -35,14 +35,14 @@ export class GameModelHelper {
         gameModel.data.gameLevel = clamp(value, 1, Config.MAX_GAME_LEVEL);
     }
 
-    static getGameTotalScore() {
+    static getGameScore() {
         const gameModel = dataService.getRootModel<GameModel>();
-        return gameModel.data.gameTotalScore;
+        return gameModel.data.gameScore;
     }
 
-    static setGameTotalScore(value: number) {
+    static setGameScore(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameTotalScore = value;
+        gameModel.data.gameScore = value;
     }
 
     static setUserActionAfterTheLastGame(value: UserActionAfterTheLastGame) {
@@ -86,7 +86,7 @@ export class GameModelHelper {
             shop: GameModelHelper.createShop(),
             gameState: GameStateEnum.NONE,
             gameLevel: 1,
-            gameTotalScore: 0,
+            gameScore: 0,
             gameAge: 0,
             boosters: {
                 [BoosterType.TIME]: { current: 2 },

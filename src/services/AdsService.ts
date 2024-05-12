@@ -12,7 +12,7 @@ export interface LeaderBoardFetch {
     players: LeaderboardItem[];
 }
 
-interface SaveData {
+export interface SaveData {
     gameLevel: number;
     gameScore: number;
     boosters: { [key in BoosterType]?: Booster }

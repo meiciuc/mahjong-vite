@@ -1,11 +1,12 @@
 import { Config } from "../Config";
 import { dataService } from "../core/services/DataService";
 import { GameModel } from "../model/GameModel";
-import { adsService } from "./AdsService";
+import { SaveData, adsService } from "./AdsService";
 
 class SaveDataService {
 
     saveData() {
+        console.log('saveData')
         if (Config.DEV_PREVIEW_MODE || Config.DEV_GAME_AUTHOMATIC) {
             return;
         }
@@ -15,20 +16,19 @@ class SaveDataService {
 
         adsService.saveData({
             gameLevel: model.gameLevel,
-            gameScore: model.gameTotalScore,
+            gameScore: model.gameScore,
             sound: model.sound,
             boosters: model.boosters,
         });
     }
 
     getData() {
-        let data = adsService.getData();
+        let data = adsService.getData() as SaveData;
         if (data) {
             return data;
         }
 
-        data = localStorage.getItem('data');
-        return data ? JSON.parse(data) : null;
+        return JSON.parse(localStorage.getItem('data')) as SaveData || null;
     }
 }
 

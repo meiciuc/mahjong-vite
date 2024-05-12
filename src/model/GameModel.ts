@@ -87,7 +87,7 @@ export interface GameModel {
     gameState: GameStateEnum,
     gameAge: number,
     gameLevel: number,
-    gameTotalScore: number,
+    gameScore: number,
     boosters: { [key in BoosterType]?: Booster },
 
     icons: IconState[];
