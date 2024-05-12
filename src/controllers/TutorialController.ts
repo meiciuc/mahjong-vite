@@ -51,12 +51,9 @@ export class TutorialController extends GameController {
             if (!node) {
                 continue;
             }
-            // node.entity.add(new Interactive());
-
             this.movePointerToTile([node], 300);
             await new TimeSkipper(500).execute();
             this.shakeTile(node);
-            // await new TimeSkipper(300).execute();
 
             node.entity.add(new Interactive());
             await this.waitTileClick();
@@ -73,18 +70,18 @@ export class TutorialController extends GameController {
         await this.waitTileRemoved();
 
         // the pointer destroing
-        await this.pointer.movePointer(new Point(window.innerWidth / 2, window.innerHeight / 2), new Point(window.innerWidth / 2, window.innerHeight / 2), 1000);
-        await new TimeSkipper(1000).execute();
+        await this.pointer.movePointer(new Point(window.innerWidth / 2, window.innerHeight / 2), new Point(window.innerWidth / 2, window.innerHeight / 2), 2000);
+        await new TimeSkipper(3000).execute();
+        await this.pointer.movePointer(new Point(), new Point(window.innerWidth, window.innerHeight), 100);
+        this.pointer.destroy();
 
         // finish game yourself
+        await new TimeSkipper(500).execute();
         for (let node = this.tiles.head; node; node = node.next) {
             node.entity.add(new Interactive());
             this.shakeTile(node);
             await new TimeSkipper(50).execute();
         }
-
-        await this.pointer.movePointer(new Point(), new Point(window.innerWidth, window.innerHeight), 100);
-        this.pointer.destroy();
     }
 
     protected async doExecute() {
@@ -116,7 +113,6 @@ export class TutorialController extends GameController {
         }
 
         if (this.gameIsOver()) {
-            console.log('TUTORIAL COMPLETE')
             this.complete();
         }
     };
@@ -312,9 +308,10 @@ export class TutorialController extends GameController {
             .onUpdate((object: unknown, t: number) => {
                 const currentX = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
                 const currentY = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
+                div.style.transform = `translate(${currentX}px, ${currentY}px)`;
             })
             .onComplete(() => {
-                // div.style.transform[]
+                div.style.transform = `translate(${0})`;
             })
             .start();
     }
@@ -329,10 +326,11 @@ export class TutorialController extends GameController {
             return { tl: new Point(bounding.x, bounding.y), br: new Point(bounding.right, bounding.bottom) };
         }
 
-        this.shakeHtmlDiv(this.menuTimer);
-
         const { tl, br } = this.getCurrentIndex();
         this.pointer?.movePointer(new Point(tl.x, tl.y), new Point(br.x, br.y), 300);
+
+        await new TimeSkipper(500).execute();
+        this.shakeHtmlDiv(this.menuTimer);
 
 
 
@@ -353,6 +351,9 @@ export class TutorialController extends GameController {
 
         const { tl, br } = this.getCurrentIndex();
         this.pointer?.movePointer(tl, br, 300);
+
+        await new TimeSkipper(500).execute();
+        this.shakeHtmlDiv(this.menuHelp);
 
         this.menuHelp.style.pointerEvents = 'auto';
         await this.waitMenuClick(VueServiceSignals.BoosterHelpClick);
