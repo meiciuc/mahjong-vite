@@ -20,7 +20,7 @@ export class TutorialController extends GameController {
 
     private tiles: NodeList<TileNode>;
     private pointer: Pointer;
-    private leaveTutoralButton: HTMLButtonElement;
+    private leaveTutoralButton: HTMLDivElement;
     private menuTimer: HTMLDivElement;
     private menuHelp: HTMLDivElement;
     private menuLevel: HTMLDivElement;
@@ -207,12 +207,28 @@ export class TutorialController extends GameController {
 
     private setupLeaveTutorialButton() {
         // TODO icon
-        this.leaveTutoralButton = document.createElement('button');
-        this.leaveTutoralButton.innerText = 'LEAVE';
+        this.leaveTutoralButton = document.createElement('div');
+        this.leaveTutoralButton.style.width = '4rem';
+        this.leaveTutoralButton.style.height = '4rem';
         this.leaveTutoralButton.style.position = 'absolute';
-        this.leaveTutoralButton.style.right = '1em';
-        this.leaveTutoralButton.style.bottom = '1em';
+        this.leaveTutoralButton.style.right = '2em';
+        this.leaveTutoralButton.style.bottom = '2em';
         this.leaveTutoralButton.style.cursor = 'pointer';
+        this.leaveTutoralButton.style.backgroundImage = 'url(./assets/svg/exit.svg)';
+        this.leaveTutoralButton.style.backgroundRepeat = 'no-repeat';
+        this.leaveTutoralButton.style.filter = 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))';
+
+        this.leaveTutoralButton.onpointerover = () => {
+            this.leaveTutoralButton.style.filter = 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5))';
+        }
+
+        this.leaveTutoralButton.onpointerout = () => {
+            this.leaveTutoralButton.style.filter = 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))';
+        }
+
+        this.leaveTutoralButton.onpointerdown = () => {
+            this.leaveTutoralButton.style.filter = 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5))';
+        }
 
         document.body.appendChild(this.leaveTutoralButton);
 
