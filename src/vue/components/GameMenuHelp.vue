@@ -6,7 +6,7 @@ import { BoosterType } from '../../model/GameModel';
 
 const boosters = useModel(["boosters"]);
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpClick);
+    vueService.signalDataBus.dispatch(VueServiceSignals.BoosterHelpClick, {});
 }
 
 const boosterCount = computed(() => {

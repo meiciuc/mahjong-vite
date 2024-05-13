@@ -6,7 +6,7 @@ import GameMenuScore from './GameMenuScore.vue';
 const gameLevel = useModel(["gameLevel"]);
 
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton, {});
 }
 
 </script>

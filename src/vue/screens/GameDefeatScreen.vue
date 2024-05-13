@@ -40,7 +40,7 @@ const handleClick = (value: "retry" | undefined = undefined) => {
     } else {
         dataService.getRootModel<GameModel>().data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
-    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton, {});
 }
 </script>
 

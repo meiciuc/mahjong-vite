@@ -6,7 +6,7 @@ import { ref } from 'vue';
 const Popup = ref(null);
 
 const handleClick = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton, {});
 }
 </script>
 

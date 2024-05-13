@@ -22,15 +22,22 @@ export enum VueServiceSignals {
     OpenShop = 'OpenShop',
     ShareShow = 'ShareShow',
     InviteShow = 'InviteShow',
-}
 
-export enum VueShopSignals {
     ProposalPurchased = 'BoosterPurchased',
 }
 
+export interface EmptyData {
+
+}
+
+export interface ShopData extends EmptyData {
+    id: string,
+}
+
+export type AnyBusData = EmptyData | ShopData;
+
 class VueService {
-    signalDataBus = new Signal<VueServiceSignals>();
-    shopDataBus = new Signal<VueShopSignals, string>();
+    signalDataBus = new Signal<VueServiceSignals, AnyBusData>();
 
     init() {
         createApp(App).mount(document.body.appendChild(document.createElement('div')));

@@ -7,7 +7,7 @@ const appState = useModel(["appState"]);
 </script>
 
 <template>
-    <div class="GameMenuMainOptions" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton)">
+    <div class="GameMenuMainOptions" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton, {})">
         <div v-if="appState === AppStateEnum.GAME_SCREEN" class="SkinSvg"
             style="background-image: url(./assets/svg/stopFill.svg);"></div>
         <div v-else-if="appState === AppStateEnum.GAME_SCREEN_PAUSE" class="SkinSvg"

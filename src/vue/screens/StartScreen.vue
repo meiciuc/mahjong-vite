@@ -7,10 +7,10 @@ import { ref } from 'vue';
 const Popup = ref(null);
 
 const handleStart = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.StartButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
 }
 const handleTutorial = () => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.TutorialButton);
+    vueService.signalDataBus.dispatch(VueServiceSignals.TutorialButton, {});
 }
 </script>
 

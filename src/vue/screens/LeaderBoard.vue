@@ -12,19 +12,19 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
 </script>
 
 <template>
-    <div class="LeaderBoard" @click="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton);">
+    <div class="LeaderBoard" @click="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton, {});">
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('leaderboard.board') }}</div>
                 <div class="Tabs">
                     <div class="Tab" :class="{'Selected': leaderboardSelected === 'yesterday'}"
-                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardYesterdayButton);"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardYesterdayButton, {});"
                     >{{ Localization.getText('leaderboard.yesterday') }}</div>
                     <div class="Tab" :class="{'Selected': leaderboardSelected === 'today'}"
-                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardTodayButton);"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardTodayButton, {});"
                     >{{ Localization.getText('leaderboard.today') }}</div>
                     <div class="Tab" :class="{'Selected': leaderboardSelected === 'always'}"
-                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardAlwaysButton);"
+                        @click.stop="vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardAlwaysButton, {});"
                     >{{ Localization.getText('leaderboard.atAllTimes') }}</div>
                 </div>
                 <div 

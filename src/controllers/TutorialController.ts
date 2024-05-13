@@ -141,7 +141,7 @@ export class TutorialController extends GameController {
     }
 
     private leaveTutorial() {
-        vueService.signalDataBus.dispatch(VueServiceSignals.LeaveTutorial);
+        vueService.signalDataBus.dispatch(VueServiceSignals.LeaveTutorial, {});
     }
 
 

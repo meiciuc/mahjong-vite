@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { BoosterType } from '../../model/GameModel';
 import { Proposal, CurrencyType } from '../../model/ShopModel';
 import { Localization } from '../../utils/Localization';
-import { VueShopSignals, vueService } from '../VueService';
+import { VueServiceSignals, vueService } from '../VueService';
 
 const props = defineProps<{
     proposal: Proposal
@@ -30,7 +30,7 @@ const productCount = computed(() => {
 });
 
 const handleClick = (id: string) => {
-    vueService.shopDataBus.dispatch(VueShopSignals.ProposalPurchased, id);
+    vueService.signalDataBus.dispatch(VueServiceSignals.ProposalPurchased, id);
 }
 
 </script>

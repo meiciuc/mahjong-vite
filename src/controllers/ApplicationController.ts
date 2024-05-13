@@ -12,7 +12,7 @@ import { CurrencyType } from '../model/ShopModel';
 import { adsService } from '../services/AdsService';
 import { saveDataService } from '../services/SaveDataService';
 import { soundService } from '../services/SoundService';
-import { VueServiceSignals, VueShopSignals, vueService } from '../vue/VueService';
+import { AnyBusData, ShopData, VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
@@ -69,10 +69,8 @@ export class ApplicationController extends BaseController {
         this.updateGameModel();
         try {
             vueService.signalDataBus.off(this.handleDataBus);
-            vueService.shopDataBus.off(this.handleShopBus);
         } catch (error) { }
         vueService.signalDataBus.on(this.handleDataBus);
-        vueService.shopDataBus.on(this.handleShopBus);
 
         GameModelHelper.setApplicationState(GameModelHelper.getGameLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
 
@@ -217,47 +215,46 @@ export class ApplicationController extends BaseController {
 
     private handleWindowFocusBlur = () => {
         if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-            vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);
-        }
-    }
-
-    private handleShopBus = async (type: VueShopSignals, id: string) => {
-        if (type === VueShopSignals.ProposalPurchased) {
-            for (const prop of this.gameModel.data.shop.proposales) {
-                const boosterType = prop.items[0].product;
-                const boosterCound = prop.items[0].count;
-                if (prop.id !== id) {
-                    continue;
-                }
-
-                let result = false;
-                if (prop.price.valute === CurrencyType.VIDEO) {
-                    try {
-                        await adsService.showRewarded();
-                        result = true;
-                    } catch (error: unknown) {
-                        result = false;
-                    }
-                } else if (prop.price.valute === CurrencyType.POINTS && this.gameModel.data.gameScore >= prop.price.price) {
-                    this.gameModel.data.gameScore -= prop.price.price;
-                    result = true;
-                }
-
-                if (!result) {
-                    continue;
-                }
-
-                for (let i = 0; i < boosterCound; i++) {
-                    GameModelHelper.addBooster(boosterType);
-                }
-                saveDataService.saveData();
-            }
+            vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton, {});
         }
     }
 
     // TODO use FSM
-    private handleDataBus = (data: VueServiceSignals) => {
-        switch (data) {
+    private handleDataBus = async (type: VueServiceSignals, data: AnyBusData) => {
+        switch (type) {
+            case VueServiceSignals.ProposalPurchased: {
+                const id = (data as ShopData).id;
+                for (const prop of this.gameModel.data.shop.proposales) {
+                    const boosterType = prop.items[0].product;
+                    const boosterCound = prop.items[0].count;
+                    if (prop.id !== id) {
+                        continue;
+                    }
+
+                    let result = false;
+                    if (prop.price.valute === CurrencyType.VIDEO) {
+                        try {
+                            await adsService.showRewarded();
+                            result = true;
+                        } catch (error: unknown) {
+                            result = false;
+                        }
+                    } else if (prop.price.valute === CurrencyType.POINTS && this.gameModel.data.gameScore >= prop.price.price) {
+                        this.gameModel.data.gameScore -= prop.price.price;
+                        result = true;
+                    }
+
+                    if (!result) {
+                        continue;
+                    }
+
+                    for (let i = 0; i < boosterCound; i++) {
+                        GameModelHelper.addBooster(boosterType);
+                    }
+                    saveDataService.saveData();
+                }
+                break;
+            }
             case VueServiceSignals.LeaderBoardButton:
                 adsService.showLeaderboard();
                 soundService.play(SOUNDS.active_button);
@@ -294,7 +291,7 @@ export class ApplicationController extends BaseController {
                 soundService.play(SOUNDS.active_button);
 
                 this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
-                this.gameModel.data.shopIsVisible = data === VueServiceSignals.OpenShop;
+                this.gameModel.data.shopIsVisible = type === VueServiceSignals.OpenShop;
 
                 if (this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN) {
                     GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
@@ -313,10 +310,10 @@ export class ApplicationController extends BaseController {
                 if (boosters) {
                     if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                         if (!boosters.current) {
-                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
+                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
                         }
                     } else {
-                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
+                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
                     }
                 }
                 break;
@@ -326,10 +323,10 @@ export class ApplicationController extends BaseController {
                 if (boosters) {
                     if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                         if (!boosters.current) {
-                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
+                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
                         }
                     } else {
-                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
+                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
                     }
                 }
                 break;

@@ -28,7 +28,7 @@ const handleSoundClick = () => {
 </script>
 
 <template>
-    <div class="OptionsScreen" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton);">
+    <div class="OptionsScreen" @click="vueService.signalDataBus.dispatch(VueServiceSignals.OptionsButton, {});">
         <Transition>
             <div v-if="mode === 'options'" class="PopupLevelOne">
                 <div ref="Popup" class="PopupLevelTwo">
