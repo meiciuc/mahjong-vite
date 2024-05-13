@@ -3,8 +3,45 @@ import { dataService } from "../core/services/DataService";
 import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
 import { ShopModel, CurrencyType } from "./ShopModel";
 import { Config } from "../Config";
+import { saveDataService } from "../services/SaveDataService";
 
 export class GameModelHelper {
+    static updateGameModel() {
+        const model = dataService.getRootModel<GameModel>();
+        // TODO внесение кастомных данных
+        const data = saveDataService.getData();
+
+        if (data) {
+            model.data.gameLevel = data.gameLevel ? data.gameLevel : model.data.gameLevel;
+            model.data.gameScore = data.gameScore ? data.gameScore : model.data.gameScore;
+            model.data.sound = data.sound !== undefined ? data.sound : model.data.sound;
+
+            // TODO для сложных бустеров надо отрефакторить этот кусок
+            if (data.boosters) {
+                for (const booster in data.boosters) {
+                    if (model.data.boosters[booster]) {
+                        model.data.boosters[booster].current = data.boosters[booster].current;
+                    }
+                }
+            }
+        }
+    }
+
+    static resetGameModelForNextGameCycle() {
+        const model = dataService.getRootModel<GameModel>();
+        model.data.gameAge = 0;
+        model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
+    }
+
+    static setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
+        const model = dataService.getRootModel<GameModel>();
+        model.data.gameLevel = clamp(l, 1, Config.MAX_GAME_LEVEL);
+        model.data.gridWidth = w;
+        model.data.gridHeight = h;
+        model.data.seed = s;
+        model.data.gameAge = t;
+    }
+
     static setApplicationState(value: AppStateEnum) {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.appState = value;

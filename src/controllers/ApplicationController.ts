@@ -1,4 +1,3 @@
-import { clamp } from 'lodash';
 import { Config } from '../Config';
 import { SOUNDS } from '../Sounds';
 import { PrepareIconsCommand } from '../commands/PrepareIconsCommand';
@@ -12,12 +11,12 @@ import { CurrencyType } from '../model/ShopModel';
 import { adsService } from '../services/AdsService';
 import { saveDataService } from '../services/SaveDataService';
 import { soundService } from '../services/SoundService';
+import { TimeSkipper } from '../utils/TimeSkipper';
 import { AnyBusData, ShopData, VueServiceSignals, vueService } from '../vue/VueService';
 import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { TutorialController } from './TutorialController';
-import { TimeSkipper } from '../utils/TimeSkipper';
 import { ApplicationHacksForPreview } from './hacks/ApplicationHacksForPreview';
 
 export class ApplicationController extends BaseController {
@@ -35,7 +34,7 @@ export class ApplicationController extends BaseController {
         await new PrepareIconsCommand().execute();
 
         this.setupGameModel();
-        this.updateGameModel();
+        GameModelHelper.updateGameModel();
 
         if (GameModelHelper.getGameLevel() < 2 && !localStorage.getItem('firstTime')) {
             localStorage.setItem('firstTime', `${Date.now()}`);
@@ -48,7 +47,7 @@ export class ApplicationController extends BaseController {
     private async tutorialCycle() {
         adsService.gameplayStart();
 
-        this.resetGameModelForNext();
+        GameModelHelper.resetGameModelForNextGameCycle();
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
         const game = new TutorialController();
@@ -66,7 +65,7 @@ export class ApplicationController extends BaseController {
     }
 
     private async startCycle() {
-        this.updateGameModel();
+        GameModelHelper.updateGameModel();
         try {
             vueService.signalDataBus.off(this.handleDataBus);
         } catch (error) { }
@@ -81,9 +80,9 @@ export class ApplicationController extends BaseController {
             this.startCycle();
         } else if (res1 === VueServiceSignals.StartButton) {
             this.gameCycleWasInterrupted(res1);
-            this.resetGameModelForNext();
+            GameModelHelper.resetGameModelForNextGameCycle();
             const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
-            this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+            GameModelHelper.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
 
             this.nextCycle();
         }
@@ -129,26 +128,26 @@ export class ApplicationController extends BaseController {
                 const { gridWidth, gridHeight, seed, gameLevel } = this.gameModel.data;
                 const { gameMaxTime } = GameLogic.calculateGameModelParams(gameLevel);
 
-                this.resetGameModelForNext();
-                this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+                GameModelHelper.resetGameModelForNextGameCycle();
+                GameModelHelper.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             case UserActionAfterTheLastGame.RESET: {
-                this.resetGameModelForNext();
+                GameModelHelper.resetGameModelForNextGameCycle();
                 const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
-                this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+                GameModelHelper.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             case UserActionAfterTheLastGame.PREVIOUS: {
-                this.resetGameModelForNext();
+                GameModelHelper.resetGameModelForNextGameCycle();
                 const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
-                this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+                GameModelHelper.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             default: {
-                this.resetGameModelForNext();
+                GameModelHelper.resetGameModelForNextGameCycle();
                 const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
-                this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
+                GameModelHelper.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
             }
         }
 
@@ -172,41 +171,6 @@ export class ApplicationController extends BaseController {
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
         this.gameModel.subscribe(['boosters'], this.handleBoosters);
-    }
-
-    private updateGameModel() {
-        // TODO внесение кастомных данных
-        const data = saveDataService.getData();
-
-        if (data) {
-            this.gameModel.data.gameLevel = data.gameLevel ? data.gameLevel : this.gameModel.data.gameLevel;
-            this.gameModel.data.gameScore = data.gameScore ? data.gameScore : this.gameModel.data.gameScore;
-            this.gameModel.data.sound = data.sound !== undefined ? data.sound : this.gameModel.data.sound;
-
-            // TODO для сложных бустеров надо отрефакторить этот кусок
-            if (data.boosters) {
-                for (const booster in data.boosters) {
-                    if (this.gameModel.data.boosters[booster]) {
-                        this.gameModel.data.boosters[booster].current = data.boosters[booster].current;
-                    }
-                }
-            }
-        }
-    }
-
-    private resetGameModelForNext() {
-        const model = dataService.getRootModel<GameModel>();
-        model.data.gameAge = 0;
-        model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
-    }
-
-    private setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
-        const model = dataService.getRootModel<GameModel>();
-        model.data.gameLevel = clamp(l, 1, Config.MAX_GAME_LEVEL);
-        model.data.gridWidth = w;
-        model.data.gridHeight = h;
-        model.data.seed = s;
-        model.data.gameAge = t;
     }
 
     private update = (_time: number) => {
