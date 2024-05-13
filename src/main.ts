@@ -9,7 +9,7 @@ import { stageService } from './core/services/StageService';
 
 import { PreloaderController } from './controllers/PreloaderController';
 import { GameModelHelper } from './model/GameModelHelper';
-import { vueService } from './vue/VueService';
+import { VueServiceSignals, vueService } from './vue/VueService';
 import { AssetsController } from './controllers/AssetsController';
 import { adsService } from './services/AdsService';
 import { soundService } from './services/SoundService';
@@ -45,6 +45,18 @@ window.onload = async (): Promise<void> => {
     initDebug();
 
 
+    if (Config.DEV_PREVIEW_GAMEPLAY_MODE && Config.DEV_FULLSCREEN) {
+        const fullscreen = () => {
+            document.body.requestFullscreen();
+            document.body.removeEventListener('click', fullscreen);
+
+            new TimeSkipper(10000).execute()
+                .then(() => {
+                    vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
+                })
+        }
+        document.body.addEventListener('click', fullscreen);
+    }
 
     // start application
     new ApplicationController().execute();

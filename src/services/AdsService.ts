@@ -24,6 +24,9 @@ class GpService {
     private fullScreenAdsTimestamp = 0;
 
     async init() {
+        if (!Config.DEV_USE_GP) {
+            return;
+        }
         let resolve;
         let reject;
         const promise = new Promise<GpService>((res, rej) => {

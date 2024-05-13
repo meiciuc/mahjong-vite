@@ -17,7 +17,6 @@ import { BackgroundController } from './BackgroundController';
 import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { TutorialController } from './TutorialController';
-import { ApplicationHacksForPreview } from './hacks/ApplicationHacksForPreview';
 
 export class ApplicationController extends BaseController {
 
@@ -33,8 +32,12 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
-        this.setupGameModel();
-        GameModelHelper.updateGameModel();
+        if (Config.DEV_PREVIEW_GAMEPLAY_MODE) {
+            this.gameModel = GameModelHelper.setupPreviewModel();
+        } else {
+            this.setupGameModel();
+            GameModelHelper.updateGameModel();
+        }
 
         if (GameModelHelper.getGameLevel() < 2 && !localStorage.getItem('firstTime')) {
             localStorage.setItem('firstTime', `${Date.now()}`);
@@ -65,7 +68,10 @@ export class ApplicationController extends BaseController {
     }
 
     private async startCycle() {
-        GameModelHelper.updateGameModel();
+        if (!Config.DEV_PREVIEW_GAMEPLAY_MODE) {
+            GameModelHelper.updateGameModel();
+        }
+
         try {
             vueService.signalDataBus.off(this.handleDataBus);
         } catch (error) { }
@@ -155,18 +161,7 @@ export class ApplicationController extends BaseController {
     }
 
     private setupGameModel() {
-        if (Config.DEV_PREVIEW_MODE) {
-            this.gameModel = ApplicationHacksForPreview.setupPreviewModel();
-            return;
-        }
-
         this.gameModel = dataService.getRootModel<GameModel>();
-
-        const keys: string[] = [];
-        const icons = this.gameModel.data.icons;
-        icons.forEach((icon) => {
-            keys.push(icon.key);
-        });
 
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);

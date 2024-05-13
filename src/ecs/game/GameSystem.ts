@@ -179,7 +179,7 @@ export class GameSystem extends System {
                 this.creator.nonInteractiveTile(node.tile);
             });
 
-            const effectDelay = pathDuration * (Config.DEV_PREVIEW_MODE ? 100 : 1500);
+            const effectDelay = pathDuration * (Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500);
             await new TimeSkipper(effectDelay).execute();
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, added);
 

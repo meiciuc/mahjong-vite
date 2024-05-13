@@ -7,7 +7,7 @@ class SaveDataService {
 
     saveData() {
         console.log('saveData')
-        if (Config.DEV_PREVIEW_MODE || Config.DEV_GAME_AUTHOMATIC) {
+        if (Config.DEV_PREVIEW_GAMEPLAY_MODE || Config.DEV_GAME_AUTHOMATIC) {
             return;
         }
 

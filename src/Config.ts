@@ -39,11 +39,18 @@ export class Config {
 
     static DEV = window.location.href.toLowerCase().indexOf('localhost') > -1;
     static get DEV_SHOW_STATS() {
-        return Config.DEV;
+        return false;//Config.DEV;
     }
 
     static DEV_USE_PRELOADER = true;
-    static DEV_GAME_AUTHOMATIC = false;
-    static DEV_PREVIEW_MODE = false;
     static DEV_HELP_LOGIC_IS_RANDOM = false;
+
+    static DEV_PREVIEW_GAMEPLAY_MODE = false;
+    static DEV_GAME_AUTHOMATIC = Config.DEV_PREVIEW_GAMEPLAY_MODE;
+    static DEV_USE_GP = !Config.DEV_PREVIEW_GAMEPLAY_MODE;
+    static DEV_FULLSCREEN = Config.DEV_PREVIEW_GAMEPLAY_MODE;
+
+
+
+
 }
