@@ -18,6 +18,7 @@ import { BaseController } from './BaseController';
 import { GameController } from './GameController';
 import { TutorialController } from './TutorialController';
 import { TimeSkipper } from '../utils/TimeSkipper';
+import { ApplicationHacksForPreview } from './hacks/ApplicationHacksForPreview';
 
 export class ApplicationController extends BaseController {
 
@@ -45,20 +46,21 @@ export class ApplicationController extends BaseController {
     }
 
     private async tutorialCycle() {
+        adsService.gameplayStart();
+
         this.resetGameModelForNext();
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
         const game = new TutorialController();
-        adsService.gameplayStart();
-        const res1 = await Promise.race([game.execute(), this.waitVueServiceSignal(VueServiceSignals.LeaveTutorial)]);
+        const result = await Promise.race([game.execute(), this.waitVueServiceSignal(VueServiceSignals.LeaveTutorial)]);
         game.destroy();
+
         adsService.gameplayStop();
 
-        if (res1 !== game) {
+        if (result !== game) {
             return Promise.resolve();
         }
 
-        // TODO special screen for tutorial victory
         GameModelHelper.setApplicationState(AppStateEnum.TUTORIAL_VICTORY_SCREEN);
         await new TimeSkipper(2000).execute();
     }
@@ -82,7 +84,7 @@ export class ApplicationController extends BaseController {
         } else if (res1 === VueServiceSignals.StartButton) {
             this.gameCycleWasInterrupted(res1);
             this.resetGameModelForNext();
-            const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+            const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
             this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
 
             this.nextCycle();
@@ -127,7 +129,7 @@ export class ApplicationController extends BaseController {
         switch (this.gameModel.data.userActionAfterTheLastGame) {
             case UserActionAfterTheLastGame.RETRY: {
                 const { gridWidth, gridHeight, seed, gameLevel } = this.gameModel.data;
-                const { gameMaxTime } = this.calculateGameModelParams(gameLevel);
+                const { gameMaxTime } = GameLogic.calculateGameModelParams(gameLevel);
 
                 this.resetGameModelForNext();
                 this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
@@ -135,19 +137,19 @@ export class ApplicationController extends BaseController {
             }
             case UserActionAfterTheLastGame.RESET: {
                 this.resetGameModelForNext();
-                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
                 this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             case UserActionAfterTheLastGame.PREVIOUS: {
                 this.resetGameModelForNext();
-                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
+                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel() - 1);
                 this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
                 break;
             }
             default: {
                 this.resetGameModelForNext();
-                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = this.calculateGameModelParams(GameModelHelper.getGameLevel());
+                const { gameLevel, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getGameLevel());
                 this.setCurrentGameModel(gameLevel, gridWidth, gridHeight, seed, gameMaxTime);
             }
         }
@@ -155,29 +157,9 @@ export class ApplicationController extends BaseController {
         this.nextCycle();
     }
 
-    private setupPreviewModel() {
-        this.gameModel = dataService.getRootModel<GameModel>();
-
-        this.gameModel.data.gameLevel = 50;
-        this.gameModel.data.gameScore = 1000;
-        this.gameModel.data.sound = false;
-
-        GameModelHelper.setBooster(BoosterType.TIME, 3);
-        GameModelHelper.setBooster(BoosterType.HELP, 2);
-
-        const keys: string[] = [];
-        const icons = this.gameModel.data.icons;
-        icons.forEach((icon) => {
-            keys.push(icon.key);
-        });
-
-        this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
-        this.gameModel.subscribe(['boosters'], this.handleBoosters);
-    }
-
     private setupGameModel() {
         if (Config.DEV_PREVIEW_MODE) {
-            this.setupPreviewModel();
+            this.gameModel = ApplicationHacksForPreview.setupPreviewModel();
             return;
         }
 
@@ -218,10 +200,6 @@ export class ApplicationController extends BaseController {
         const model = dataService.getRootModel<GameModel>();
         model.data.gameAge = 0;
         model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
-    }
-
-    private calculateGameModelParams(level: number) {
-        return GameLogic.calculateGameModelParams(level);
     }
 
     private setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
@@ -335,10 +313,10 @@ export class ApplicationController extends BaseController {
                 if (boosters) {
                     if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                         if (!boosters.current) {
-                            this.openShop();
+                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
                         }
                     } else {
-                        this.openShop();
+                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
                     }
                 }
                 break;
@@ -348,10 +326,10 @@ export class ApplicationController extends BaseController {
                 if (boosters) {
                     if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
                         if (!boosters.current) {
-                            this.openShop();
+                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
                         }
                     } else {
-                        this.openShop();
+                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
                     }
                 }
                 break;
@@ -363,10 +341,6 @@ export class ApplicationController extends BaseController {
                 adsService.showInvite();
                 break;
         }
-    }
-
-    private openShop() {
-        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop);
     }
 
     private handleGameModelStateChange = (currenState: AppStateEnum, _oldState: AppStateEnum) => {
