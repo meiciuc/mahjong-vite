@@ -1,10 +1,10 @@
-import WebFont from "webfontloader";
-import { Localization } from "../utils/Localization";
-import { BaseController } from "./BaseController";
 import { Signal1 } from "@ash.ts/ash";
 import { Assets } from "pixi.js";
+import WebFont from "webfontloader";
 import { Config } from "../Config";
 import { visualSettingsService } from "../services/VisualSettingsService";
+import { Localization } from "../utils/Localization";
+import { BaseController } from "./BaseController";
 
 export class AssetsController extends BaseController {
 
@@ -27,7 +27,7 @@ export class AssetsController extends BaseController {
     }
 
     async loadLanguage() {
-        return Localization.setLanguage(visualSettingsService.getLanguage());
+        return Localization.setLanguage(Config.DEV_LANG ? Config.DEV_LANG : visualSettingsService.getLanguage());
     }
 
     async loadFonts() {
