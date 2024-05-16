@@ -1,3 +1,8 @@
+import { dataService } from "./core/services/DataService";
+import { BoosterType, GameModel } from "./model/GameModel";
+import { GameModelHelper } from "./model/GameModelHelper";
+import { Languages } from "./utils/Localization";
+
 export class Config {
     static readonly APPLICATION_BACKGROUND_COLOR = 0xFFFFFF;
 
@@ -43,14 +48,82 @@ export class Config {
     }
 
     static DEV_USE_PRELOADER = true;
-    static DEV_HELP_LOGIC_IS_RANDOM = false;
+    static DEV_HELP_LOGIC_IS_RANDOM = true;
 
     static DEV_PREVIEW_GAMEPLAY_MODE = false;
-    static DEV_GAME_AUTHOMATIC = Config.DEV_PREVIEW_GAMEPLAY_MODE;
-    static DEV_USE_GP = !Config.DEV_PREVIEW_GAMEPLAY_MODE;
-    static DEV_FULLSCREEN = Config.DEV_PREVIEW_GAMEPLAY_MODE;
+    static DEV_CLCIK_EFFECT_DELAY = 1500;
+    static DEV_GAME_AUTHOMATIC = false;
+    static DEV_USE_GP = true;
+    static DEV_FULLSCREEN = false;
+    static DEV_TIMER_KOEFFICIENT = 1;
+    static DEV_LANG = Config.DEV_PREVIEW_GAMEPLAY_MODE ? Languages.ru : undefined;
 
+    private static currentPreviewState = 1;
 
+    static setupPreviewModel() {
+        const gameModel = dataService.getRootModel<GameModel>();
 
+        switch (Config.currentPreviewState) {
+            case 1:
+                gameModel.data.gameLevel = 4;
+                gameModel.data.gameScore = 367;
+                gameModel.data.sound = false;
+                gameModel.data.seed = 's1';
 
+                GameModelHelper.setBooster(BoosterType.TIME, 3);
+                GameModelHelper.setBooster(BoosterType.HELP, 2);
+                break;
+            case 2:
+                gameModel.data.gameLevel = 23;
+                gameModel.data.gameScore = 2067;
+                gameModel.data.sound = false;
+                gameModel.data.seed = 's1';
+
+                GameModelHelper.setBooster(BoosterType.TIME, 9);
+                GameModelHelper.setBooster(BoosterType.HELP, 11);
+                break;
+            case 3:
+                gameModel.data.gameLevel = 71;
+                gameModel.data.gameScore = 39667;
+                gameModel.data.sound = false;
+                gameModel.data.seed = `s2`;
+
+                GameModelHelper.setBooster(BoosterType.TIME, 23);
+                GameModelHelper.setBooster(BoosterType.HELP, 12);
+                break;
+        }
+    }
+
+    private static state() {
+        Config.DEV_PREVIEW_GAMEPLAY_MODE = true;
+        Config.DEV_FULLSCREEN = false;
+        Config.DEV_USE_GP = false;
+        Config.DEV_LANG = Languages.ru;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? Languages.ru : undefined;
+        Config.DEV_GAME_AUTHOMATIC = true;//Config.DEV_PREVIEW_GAMEPLAY_MODE;
+
+        switch (Config.currentPreviewState) {
+            case 1:
+                Config.DEV_HELP_LOGIC_IS_RANDOM = true;
+                Config.DEV_CLCIK_EFFECT_DELAY = 500;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = 1 // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                break;
+            case 2:
+                Config.DEV_HELP_LOGIC_IS_RANDOM = false;
+                Config.DEV_CLCIK_EFFECT_DELAY = 300;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = 10 // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                break;
+            case 3:
+                Config.DEV_HELP_LOGIC_IS_RANDOM = false;
+                Config.DEV_CLCIK_EFFECT_DELAY = 100;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = 50; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                break;
+        }
+    }
+
+    constructor() {
+        Config.currentPreviewState = 3;
+        Config.state();
+    }
 }
+
+// new Config();

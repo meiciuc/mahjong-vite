@@ -87,7 +87,7 @@ export class GameSystem extends System {
                 }
 
                 if (this.game.head.game.model.data.gameAge <= 0) {
-                    this.game.head.game.model.data.gameState = GameStateEnum.GAME_DEFEATE;
+                    this.setState(GameStateEnum.GAME_DEFEATE);
                 }
 
                 const arr: TileSelectedNode[] = [];
@@ -119,13 +119,11 @@ export class GameSystem extends System {
 
             // authomatic
             if (Config.DEV_GAME_AUTHOMATIC) {
-                let selected = 0;
                 for (let node = this.tiles?.head; node; node = node.next) {
                     if (
                         (node.gridPosition.x === arr[0].x && node.gridPosition.y === arr[0].y)
                         || node.gridPosition.x === arr[arr.length - 1].x && node.gridPosition.y === arr[arr.length - 1].y
                     ) {
-                        selected++;
                         this.creator.selectTile(node.tile, true);
                     }
                 }
@@ -179,7 +177,7 @@ export class GameSystem extends System {
                 this.creator.nonInteractiveTile(node.tile);
             });
 
-            const effectDelay = pathDuration * (Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500);
+            const effectDelay = pathDuration * Config.DEV_CLCIK_EFFECT_DELAY;
             await new TimeSkipper(effectDelay).execute();
             this.creator.createScoreEffect(tileBPosition.x, tileBPosition.y, added);
 

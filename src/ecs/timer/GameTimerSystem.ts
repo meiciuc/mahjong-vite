@@ -25,9 +25,8 @@ export class GameTimerSystem extends System {
     }
 
     update(time: number): void {
-        if (Config.DEV_PREVIEW_GAMEPLAY_MODE) {
-            time *= 60;
-        }
+        time *= Config.DEV_TIMER_KOEFFICIENT;
+
         if (this.game.head.game.model.data.gameState === GameStateEnum.CLICK_WAIT) {
             this.game.head.game.model.data.gameAge = Math.max(this.game.head.game.model.data.gameAge - time, 0);
         }
