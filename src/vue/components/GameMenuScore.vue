@@ -5,6 +5,7 @@ import { Easing, Tween } from '@tweenjs/tween.js';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 
 let tween: Tween<unknown>;
+const styleWidth = ref(3);
 const gameScore = useModel(["gameScore"]);
 watch(
     gameScore,
@@ -12,6 +13,7 @@ watch(
         if (prev > cur) {
             // TODO animated
             blink();
+            styleWidth.value = `${gameScore}`.length
         }
     }
 );
@@ -60,7 +62,7 @@ const Score = ref(null);
 </script>
 
 <template>
-    <div class="GameMenuScore">
+    <div class="GameMenuScore" :style="`width: ${styleWidth}rem;`">
         <span ref="Score">
             {{ `${gameScoreFormated}` }}
         </span>
