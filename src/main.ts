@@ -50,7 +50,7 @@ window.onload = async (): Promise<void> => {
             document.body.requestFullscreen();
             document.body.removeEventListener('click', fullscreen);
 
-            new TimeSkipper(10000).execute()
+            new TimeSkipper(1000).execute()
                 .then(() => {
                     vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
                 })

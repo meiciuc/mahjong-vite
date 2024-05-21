@@ -58,7 +58,8 @@ export class Config {
     static DEV_TIMER_KOEFFICIENT = 1;
     static DEV_LANG = Config.DEV_PREVIEW_GAMEPLAY_MODE ? Languages.ru : undefined;
     static DEV_AUTOSTART_FOR_PREVIEW = false;
-    static DEV_GET_LONGEST_HELP_RESULT = false;
+    static DEV_GET_LONGEST_PATH_HELP_RESULT = false;
+    static DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
 
     private static currentPreviewState = 1;
 
@@ -70,10 +71,7 @@ export class Config {
                 gameModel.data.gameLevel = 4;
                 gameModel.data.gameScore = 367;
                 gameModel.data.sound = false;
-                gameModel.data.seed = '1716292045128'//`${Date.now()}`;
-                // '1716292045128'
-
-                console.log(gameModel.data.seed)
+                gameModel.data.seed = '1716292045129';
 
                 GameModelHelper.setBooster(BoosterType.TIME, 3);
                 GameModelHelper.setBooster(BoosterType.HELP, 2);
@@ -105,6 +103,15 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.TIME, 9);
                 GameModelHelper.setBooster(BoosterType.HELP, 2);
                 break;
+            case 5:
+                gameModel.data.gameLevel = 213;
+                gameModel.data.gameScore = 9398167;
+                gameModel.data.sound = false;
+                gameModel.data.seed = `s2`;
+
+                GameModelHelper.setBooster(BoosterType.TIME, 9);
+                GameModelHelper.setBooster(BoosterType.HELP, 2);
+                break;
         }
     }
 
@@ -115,7 +122,8 @@ export class Config {
         Config.DEV_LANG = Languages.ru;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? Languages.ru : undefined;
         Config.DEV_GAME_AUTHOMATIC = true;//Config.DEV_PREVIEW_GAMEPLAY_MODE;
         Config.DEV_AUTOSTART_FOR_PREVIEW = true;
-        Config.DEV_GET_LONGEST_HELP_RESULT = false;
+        Config.DEV_GET_LONGEST_PATH_HELP_RESULT = true;
+        Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
 
         switch (Config.currentPreviewState) {
             case 1:
@@ -132,17 +140,28 @@ export class Config {
                 Config.DEV_HELP_LOGIC_IS_RANDOM = false;
                 Config.DEV_CLCIK_EFFECT_DELAY = 100;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
                 Config.DEV_TIMER_KOEFFICIENT = 48; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                Config.DEV_GET_LONGEST_PATH_HELP_RESULT = false;
+                Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = true;
                 break;
             case 4:
                 Config.DEV_HELP_LOGIC_IS_RANDOM = false;
                 Config.DEV_CLCIK_EFFECT_DELAY = 20;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
-                Config.DEV_TIMER_KOEFFICIENT = 80; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                Config.DEV_TIMER_KOEFFICIENT = 71; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                Config.DEV_GET_LONGEST_PATH_HELP_RESULT = false;
+                Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = true;
+                break;
+            case 5:
+                Config.DEV_HELP_LOGIC_IS_RANDOM = false;
+                Config.DEV_CLCIK_EFFECT_DELAY = 20;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = 71; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                Config.DEV_GET_LONGEST_PATH_HELP_RESULT = false;
+                Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = true;
                 break;
         }
     }
 
     constructor() {
-        Config.currentPreviewState = 4;
+        Config.currentPreviewState = 5;
         Config.state();
     }
 }

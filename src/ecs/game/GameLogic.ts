@@ -1,15 +1,15 @@
 import { Engine, NodeList } from '@ash.ts/ash';
+import { Config } from '../../Config';
 import { CrossFinder } from '../../controllers/finder/CrossFinder';
+import { dataService } from '../../core/services/DataService';
+import { stageService } from '../../core/services/StageService';
+import easingsFunctions from '../../core/utils/easingsFunctions';
+import { GameModel } from '../../model/GameModel';
 import { PointLike } from '../../utils/point';
 import { throwIfNull } from '../../utils/throwIfNull';
+import { shuffle } from '../../utils/utils';
 import { GridNode } from '../tiles/nodes/GridNode';
 import { TileNode } from '../tiles/nodes/TileNode';
-import { dataService } from '../../core/services/DataService';
-import { GameModel } from '../../model/GameModel';
-import { shuffle } from '../../utils/utils';
-import easingsFunctions from '../../core/utils/easingsFunctions';
-import { Config } from '../../Config';
-import { stageService } from '../../core/services/StageService';
 
 export interface GenerateIconsParams {
 
@@ -102,8 +102,13 @@ export class GameLogic {
             }
         }
 
-        if (Config.DEV_GET_LONGEST_HELP_RESULT) {
+        if (Config.DEV_GET_SHORTEST_PATH_HELP_RESULT) {
             results.sort((a, b) => a.length - b.length);
+            return results.length > 0 ? results[0] : [];
+        }
+
+        if (Config.DEV_GET_LONGEST_PATH_HELP_RESULT) {
+            results.sort((a, b) => b.length - a.length);
             return results.length > 0 ? results[0] : [];
         }
 
@@ -130,7 +135,6 @@ export class GameLogic {
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
-        console.log('getGameMaxIconPaires', currentA)
         return currentA;
     }
 
@@ -160,15 +164,13 @@ export class GameLogic {
     }
 
     static calculateGameModelParams(gameLevel: number) {
-        const easing = easingsFunctions.easeOutQuad;
-
         const start = 5;    // 9
-        const end = 45;//15;     // 23
+        const end = Math.floor(Config.MAX_GAME_LEVEL / 2);
 
         const currentLevel = gameLevel;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
-        const size = Math.floor(easing(scaleLevel) * (end - start) + start);
+        const size = Math.floor(scaleLevel * (end - start) + start);
         const commonCount = size + size;
         const scale = stageService.height / (stageService.width + stageService.height);
 
