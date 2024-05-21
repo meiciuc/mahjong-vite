@@ -102,6 +102,11 @@ export class GameLogic {
             }
         }
 
+        if (Config.DEV_GET_LONGEST_HELP_RESULT) {
+            results.sort((a, b) => a.length - b.length);
+            return results.length > 0 ? results[0] : [];
+        }
+
         return results.length > 0 ? shuffle(results)[0] : [];
     }
 

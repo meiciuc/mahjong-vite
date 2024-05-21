@@ -45,7 +45,7 @@ window.onload = async (): Promise<void> => {
     initDebug();
 
 
-    if (Config.DEV_PREVIEW_GAMEPLAY_MODE && Config.DEV_FULLSCREEN) {
+    if (Config.DEV_AUTOSTART_FOR_PREVIEW) {
         const fullscreen = () => {
             document.body.requestFullscreen();
             document.body.removeEventListener('click', fullscreen);
