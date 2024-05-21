@@ -25,12 +25,12 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
-    public seticonsQueue(value: number[]) {
-        this.iconsQueue.splice(0);
-        for (const item of value) {
-            this.iconsQueue.push(item);
-        }
-    }
+    // public seticonsQueue(value: number[]) {
+    //     this.iconsQueue.splice(0);
+    //     for (const item of value) {
+    //         this.iconsQueue.push(item);
+    //     }
+    // }
 
     public getDefaultGenerateIconsConfig() {
         const model = dataService.getRootModel<GameModel>().data;
@@ -55,6 +55,7 @@ export class GameLogic {
         let maxc = pares * 2;
         let count = gridWidth * gridHeight;
         let index = currentLevel < shift ? 0 : currentLevel - shift;
+        index = index >= iconsLength ? 0 : index;
         while (count > 0) {
             while (maxc > 0) {
                 iconsQueue.push(index);
@@ -65,6 +66,7 @@ export class GameLogic {
                 }
             }
             index = (index + 1) % iconsLength;
+            index = index >= iconsLength ? 0 : index;
             maxc = pares * 2;
         }
 
