@@ -39,7 +39,7 @@ export class Config {
 
     static ADD_SCORE_FOR_TRUE_MOVE = 1;
     static ADD_SCORE_FOR_FALSE_MOVE = -1;
-    static MAX_GAME_LEVEL = 92;
+    static MAX_GAME_LEVEL = 100;
     static MIN_FULL_SCREEN_ADD_TIMEOUT = 3000;
 
     static DEV = window.location.href.toLowerCase().indexOf('localhost') > -1;
@@ -152,8 +152,8 @@ export class Config {
                 break;
             case 5:
                 Config.DEV_HELP_LOGIC_IS_RANDOM = false;
-                Config.DEV_CLCIK_EFFECT_DELAY = 20;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
-                Config.DEV_TIMER_KOEFFICIENT = 71; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                Config.DEV_CLCIK_EFFECT_DELAY = 5;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = 121; // Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
                 Config.DEV_GET_LONGEST_PATH_HELP_RESULT = false;
                 Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = true;
                 break;
@@ -166,4 +166,4 @@ export class Config {
     }
 }
 
-new Config();
+// new Config();

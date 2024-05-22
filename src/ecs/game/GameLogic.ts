@@ -25,13 +25,6 @@ export class GameLogic {
         this.tiles = engine.getNodeList(TileNode);
     }
 
-    // public seticonsQueue(value: number[]) {
-    //     this.iconsQueue.splice(0);
-    //     for (const item of value) {
-    //         this.iconsQueue.push(item);
-    //     }
-    // }
-
     public getDefaultGenerateIconsConfig() {
         const model = dataService.getRootModel<GameModel>().data;
         const { gridWidth, gridHeight, seed } = model;
@@ -130,11 +123,15 @@ export class GameLogic {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.linear;
 
+        const currentLevel = model ? model.data.gameLevel : 1;
+        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+
         const startA = 2;
         const endA = 20;
 
-        const currentLevel = model ? model.data.gameLevel : 1;
-        const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
+        // const scale2 = 4 / 136;
+        // const count = model.data.gridWidth * model.data.gridHeight;
+        // const currentA = scale2 * count;
 
         const currentA = Math.round(easing(scaleLevel) * (endA - startA) + startA);
         return currentA;

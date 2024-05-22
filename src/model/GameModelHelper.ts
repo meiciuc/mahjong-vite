@@ -33,9 +33,9 @@ export class GameModelHelper {
         model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
 
-    static setCurrentGameModel(l: number, w: number, h: number, s: string, t: number) {
+    static setCurrentGameModel(level: number, w: number, h: number, s: string, t: number) {
         const model = dataService.getRootModel<GameModel>();
-        model.data.gameLevel = clamp(l, 1, Config.MAX_GAME_LEVEL);
+        model.data.gameLevel = clamp(level, 1, Number.MAX_SAFE_INTEGER);
         model.data.gridWidth = w;
         model.data.gridHeight = h;
         model.data.seed = s;
@@ -67,9 +67,9 @@ export class GameModelHelper {
         return gameModel.data.gameLevel;
     }
 
-    static setGameLevel(value: number) {
+    static setGameLevel(level: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameLevel = clamp(value, 1, Config.MAX_GAME_LEVEL);
+        gameModel.data.gameLevel = clamp(level, 1, Number.MAX_SAFE_INTEGER);
     }
 
     static getGameScore() {
