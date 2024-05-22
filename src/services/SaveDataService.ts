@@ -23,6 +23,10 @@ class SaveDataService {
     }
 
     getData() {
+        if (Config.DEV_RESET_GP) {
+            return null;
+        }
+
         let data = adsService.getData() as SaveData;
         if (data) {
             return data;

@@ -60,6 +60,7 @@ export class Config {
     static DEV_AUTOSTART_FOR_PREVIEW = false;
     static DEV_GET_LONGEST_PATH_HELP_RESULT = false;
     static DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
+    static DEV_RESET_GP = false;
 
     private static currentPreviewState = 1;
 
@@ -67,6 +68,15 @@ export class Config {
         const gameModel = dataService.getRootModel<GameModel>();
 
         switch (Config.currentPreviewState) {
+            case 0:
+                gameModel.data.gameLevel = 1;
+                gameModel.data.gameScore = 0;
+                gameModel.data.sound = false;
+                gameModel.data.seed = `${Date.now()}`;
+
+                GameModelHelper.setBooster(BoosterType.TIME, 3);
+                GameModelHelper.setBooster(BoosterType.HELP, 3);
+                break;
             case 1:
                 gameModel.data.gameLevel = 4;
                 gameModel.data.gameScore = 367;
@@ -126,6 +136,20 @@ export class Config {
         Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
 
         switch (Config.currentPreviewState) {
+            case 0:
+                Config.DEV_RESET_GP = true;
+                Config.DEV_PREVIEW_GAMEPLAY_MODE = false;
+                Config.DEV_FULLSCREEN = false;
+                Config.DEV_USE_GP = true;
+                Config.DEV_LANG = Config.DEV_PREVIEW_GAMEPLAY_MODE ? Languages.ru : undefined;
+                Config.DEV_GAME_AUTHOMATIC = false;//Config.DEV_PREVIEW_GAMEPLAY_MODE;
+                Config.DEV_AUTOSTART_FOR_PREVIEW = false;
+                Config.DEV_GET_LONGEST_PATH_HELP_RESULT = false;
+                Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
+                Config.DEV_HELP_LOGIC_IS_RANDOM = true;
+                Config.DEV_CLCIK_EFFECT_DELAY = Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
+                Config.DEV_TIMER_KOEFFICIENT = Config.DEV_PREVIEW_GAMEPLAY_MODE ? 60 : 1;
+                break;
             case 1:
                 Config.DEV_HELP_LOGIC_IS_RANDOM = true;
                 Config.DEV_CLCIK_EFFECT_DELAY = 500;//Config.DEV_PREVIEW_GAMEPLAY_MODE ? 100 : 1500;
@@ -161,7 +185,7 @@ export class Config {
     }
 
     constructor() {
-        Config.currentPreviewState = 5;
+        Config.currentPreviewState = 0;
         Config.state();
     }
 }
