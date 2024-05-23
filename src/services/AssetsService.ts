@@ -78,8 +78,8 @@ class AssetsService {
         const createText = async (value: number) => {
             const str = `${value > 0 ? '+' : ''}${value}`;
             const text = new Text(str, {
-                fontFamily: 'Arial',
-                fontSize: 100 / window.devicePixelRatio,
+                fontFamily: 'MontserratAlternates-Regular',
+                fontSize: 80 / window.devicePixelRatio,
                 fill: value > 0 ? 0xff0000 : 0x0000ff,
                 align: 'center',
             });
