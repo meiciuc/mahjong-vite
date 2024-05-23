@@ -10,10 +10,10 @@ const gameScore = useModel(["gameScore"]);
 watch(
     gameScore,
     (cur: number, prev: number) => {
+        styleWidth.value = `${gameScore.value}`.length;
         if (prev > cur) {
             // TODO animated
             blink();
-            styleWidth.value = `${gameScore}`.length
         }
     }
 );
