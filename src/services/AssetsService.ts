@@ -1,4 +1,4 @@
-import { Container, Resource, Sprite, Texture } from "pixi.js";
+import { Container, Resource, Sprite, Text, Texture } from "pixi.js";
 import { Config } from "../Config";
 import { stageService } from "../core/services/StageService";
 import { throwIfNull } from "../utils/throwIfNull";
@@ -19,6 +19,7 @@ class AssetsService {
     async init() {
         await this.setupRedParticleCanvas();
         await this.setupPathAnimatedAroundTileViewTexturePool();
+        await this.setupScoreTexts();
 
         return Promise.resolve();
     }
@@ -71,6 +72,27 @@ class AssetsService {
             this.textures[name] = Texture.from(image);
         }
         return this.textures[name];
+    }
+
+    private async setupScoreTexts() {
+        const createText = async (value: number) => {
+            const str = `${value > 0 ? '+' : ''}${value}`;
+            const text = new Text(str, {
+                fontFamily: 'Arial',
+                fontSize: 100 / window.devicePixelRatio,
+                fill: value > 0 ? 0xff0000 : 0x0000ff,
+                align: 'center',
+            });
+            const container = new Container();
+            container.addChild(text);
+            const image = await stageService.stage.renderer.plugins.extract.image(container);
+            const texture = Texture.from(image);
+            this.textures[str] = texture;
+        }
+        for (let i = -1; i < 4; i++) {
+            await createText(i);
+        }
+        return Promise.resolve();
     }
 
     private async setupRedParticleCanvas() {
