@@ -77,5 +77,6 @@ const Score = ref(null);
     font-family: $label_font_family;
     color: $menu_label_text_color;
     user-select: none;
+    text-align: left;
 }
 </style>
