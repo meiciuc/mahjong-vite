@@ -30,7 +30,7 @@ const productCount = computed(() => {
 });
 
 const handleClick = (id: string) => {
-    vueService.signalDataBus.dispatch(VueServiceSignals.ProposalPurchased, id);
+    vueService.signalDataBus.dispatch(VueServiceSignals.ProposalPurchased, {id});
 }
 
 </script>
