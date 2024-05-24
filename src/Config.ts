@@ -185,7 +185,7 @@ export class Config {
     }
 
     constructor() {
-        Config.currentPreviewState = 0;
+        Config.currentPreviewState = 5;
         Config.state();
     }
 }
