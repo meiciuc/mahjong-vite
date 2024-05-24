@@ -1,22 +1,37 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useModel } from '../../model/useModel';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 
+const Score = ref(null);
+const getScoreTextBounds = () => {
+    return Score.value ?(Score._rawValue as HTMLHtmlElement).getBoundingClientRect().width : 1;
+}
+
 let tween: Tween<unknown>;
-const styleWidth = ref(3);
 const gameScore = useModel(["gameScore"]);
 watch(
     gameScore,
     (cur: number, prev: number) => {
-        styleWidth.value = `${gameScore.value}`.length;
+        const textLength = `${gameScore.value}`.length;
+        if (gameScoreTextLength.value != textLength) {
+            gameScoreTextLength.value = textLength;
+            styleWidth.value = getScoreTextBounds();
+        }
         if (prev > cur) {
             // TODO animated
             blink();
         }
     }
 );
+const gameScoreTextLength = ref(gameScore.value.toString().length);
+const styleWidth = ref(getScoreTextBounds() || 1);
+
+onMounted(() => {
+    styleWidth.value = getScoreTextBounds() || 1;
+    gameScoreTextLength.value = `${styleWidth.value}`.length;
+})
 
 const blink = async () => {
     let el = Score._rawValue as HTMLHtmlElement;
@@ -57,12 +72,12 @@ const gameScoreFormated = computed(() => {
     return count;
 })
 
-const Score = ref(null);
+
 
 </script>
 
 <template>
-    <div class="GameMenuScore" :style="`width: ${styleWidth}rem;`">
+    <div class="GameMenuScore" :style="`width: ${styleWidth}px;`">
         <span ref="Score">
             {{ `${gameScoreFormated}` }}
         </span>

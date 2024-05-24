@@ -53,7 +53,7 @@ const handleClick = () => {
     color: $color_dark;
 
     position: absolute;
-    right: -2.5rem;
+    right: -1.5rem;
     bottom: 0px;
     background: #FFE604;
     margin-bottom: -1rem;
