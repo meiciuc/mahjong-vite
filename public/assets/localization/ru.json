@@ -1,0 +1,19 @@
+{
+  "start.play": "играть",
+  "start.tutorial": "как играть",
+  "start.tutorialFinished": "урок пройден",
+  "defeat.repeat": "повторить",
+  "options.sound": "звуки",
+  "options.resetAllLevels": "играть с первого уровня",
+  "leaderboard.board": "таблица лидеров",
+  "leaderboard.yesterday": "вчера",
+  "leaderboard.today": "сегодня",
+  "leaderboard.atAllTimes": "во все времена",
+  "start.mahjong": "МАДЖОНГ",
+  "start.kitchen": "КУХНЯ",
+  "start.reachTheHighestLevel": "наивысший уровень!",
+  "game.help": "?",
+  "victory.victory": "Победа",
+  "defeat.defeat": "НЕ победа",
+  "defeat.noMoreMoves": "ходов НЕТ"
+}

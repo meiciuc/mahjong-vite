@@ -1,0 +1,19 @@
+{
+  "start.play": "يلعب",
+  "start.tutorial": "كيف ألعب",
+  "start.tutorialFinished": "اكتمل الدرس",
+  "defeat.repeat": "يكرر",
+  "options.sound": "اصوات",
+  "options.resetAllLevels": "اللعب من المستوى الأول",
+  "leaderboard.board": "المتصدرين",
+  "leaderboard.yesterday": "أمس",
+  "leaderboard.today": "اليوم",
+  "leaderboard.atAllTimes": "في كل الأوقات",
+  "start.mahjong": "جونغ",
+  "start.kitchen": "مطبخ",
+  "start.reachTheHighestLevel": "اعلى مستوى!",
+  "game.help": "؟",
+  "victory.victory": "فوز",
+  "defeat.defeat": "ليس انتصارا",
+  "defeat.noMoreMoves": "لا يتحرك"
+}

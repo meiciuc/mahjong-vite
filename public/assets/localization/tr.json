@@ -1,0 +1,19 @@
+{
+  "start.play": "oynamak",
+  "start.tutorial": "nasıl oynanır",
+  "start.tutorialFinished": "ders tamamlandı",
+  "defeat.repeat": "tekrarlamak",
+  "options.sound": "sesler",
+  "options.resetAllLevels": "ilk seviyeden itibaren oyna",
+  "leaderboard.board": "liderler sıralaması",
+  "leaderboard.yesterday": "dün",
+  "leaderboard.today": "bugün",
+  "leaderboard.atAllTimes": "her zaman",
+  "start.mahjong": "MAHJONG",
+  "start.kitchen": "MUTFAK",
+  "start.reachTheHighestLevel": "en yüksek seviye!",
+  "game.help": "?",
+  "victory.victory": "Zafer",
+  "defeat.defeat": "Bir zafer DEĞİL",
+  "defeat.noMoreMoves": "HAREKET YOK"
+}

@@ -1,0 +1,19 @@
+{
+  "start.play": "놀다",
+  "start.tutorial": "게임 방법",
+  "start.tutorialFinished": "수업이 완료되었습니다",
+  "defeat.repeat": "반복하다",
+  "options.sound": "소리",
+  "options.resetAllLevels": "첫 번째 레벨부터 플레이",
+  "leaderboard.board": "리더보드",
+  "leaderboard.yesterday": "어제",
+  "leaderboard.today": "오늘",
+  "leaderboard.atAllTimes": "항상",
+  "start.mahjong": "마작",
+  "start.kitchen": "주방",
+  "start.reachTheHighestLevel": "최고 수준!",
+  "game.help": "?",
+  "victory.victory": "승리",
+  "defeat.defeat": "승리가 아니다",
+  "defeat.noMoreMoves": "움직임 없음"
+}

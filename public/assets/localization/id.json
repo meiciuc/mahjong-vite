@@ -1,0 +1,19 @@
+{
+  "start.play": "bermain",
+  "start.tutorial": "cara bermain",
+  "start.tutorialFinished": "pelajaran selesai",
+  "defeat.repeat": "mengulang",
+  "options.sound": "terdengar",
+  "options.resetAllLevels": "bermain dari level pertama",
+  "leaderboard.board": "papan peringkat",
+  "leaderboard.yesterday": "kemarin",
+  "leaderboard.today": "hari ini",
+  "leaderboard.atAllTimes": "selalu",
+  "start.mahjong": "MAHJONG",
+  "start.kitchen": "DAPUR",
+  "start.reachTheHighestLevel": "level tertinggi!",
+  "game.help": "?",
+  "victory.victory": "Kemenangan",
+  "defeat.defeat": "BUKAN kemenangan",
+  "defeat.noMoreMoves": "TIDAK ada gerakan"
+}

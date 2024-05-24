@@ -1,0 +1,19 @@
+{
+  "start.play": "遊ぶ",
+  "start.tutorial": "遊び方",
+  "start.tutorialFinished": "レッスンが完了しました",
+  "defeat.repeat": "繰り返す",
+  "options.sound": "音",
+  "options.resetAllLevels": "最初のレベルからプレイする",
+  "leaderboard.board": "リーダーボード",
+  "leaderboard.yesterday": "昨日",
+  "leaderboard.today": "今日",
+  "leaderboard.atAllTimes": "常に",
+  "start.mahjong": "麻雀",
+  "start.kitchen": "台所",
+  "start.reachTheHighestLevel": "最高レベル！",
+  "game.help": "?",
+  "victory.victory": "勝利",
+  "defeat.defeat": "勝利ではない",
+  "defeat.noMoreMoves": "動きません"
+}

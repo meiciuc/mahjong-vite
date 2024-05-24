@@ -1,0 +1,19 @@
+{
+  "start.play": "giocare",
+  "start.tutorial": "come giocare",
+  "start.tutorialFinished": "lezione completata",
+  "defeat.repeat": "ripetere",
+  "options.sound": "suoni",
+  "options.resetAllLevels": "giocare dal primo livello",
+  "leaderboard.board": "classifica",
+  "leaderboard.yesterday": "ieri",
+  "leaderboard.today": "oggi",
+  "leaderboard.atAllTimes": "sempre",
+  "start.mahjong": "MAHJONG",
+  "start.kitchen": "CUCINA",
+  "start.reachTheHighestLevel": "il livello più alto!",
+  "game.help": "?",
+  "victory.victory": "Vittoria",
+  "defeat.defeat": "NON una vittoria",
+  "defeat.noMoreMoves": "NESSUN movimento"
+}

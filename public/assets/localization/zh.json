@@ -1,0 +1,19 @@
+{
+  "start.play": "玩",
+  "start.tutorial": "怎么玩",
+  "start.tutorialFinished": "课程已完成",
+  "defeat.repeat": "重复",
+  "options.sound": "声音",
+  "options.resetAllLevels": "从第一层开始玩",
+  "leaderboard.board": "排行榜",
+  "leaderboard.yesterday": "昨天",
+  "leaderboard.today": "今天",
+  "leaderboard.atAllTimes": "每时每刻",
+  "start.mahjong": "麻将",
+  "start.kitchen": "厨房",
+  "start.reachTheHighestLevel": "最高级别！",
+  "game.help": "？",
+  "victory.victory": "胜利",
+  "defeat.defeat": "不是胜利",
+  "defeat.noMoreMoves": "没有动作"
+}
