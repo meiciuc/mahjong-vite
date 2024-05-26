@@ -15,6 +15,7 @@ import { throwIfNull } from "../utils/throwIfNull";
 import { VueServiceSignals, vueService } from "../vue/VueService";
 import { GameController } from "./GameController";
 import { Pointer } from "./tutorial/Pointer";
+import { Config } from "../Config";
 
 export class TutorialController extends GameController {
 
@@ -84,6 +85,8 @@ export class TutorialController extends GameController {
     protected async doExecute() {
         super.doExecute();
 
+        Config.DEV_HELP_LOGIC_IS_RANDOM = false;
+
         GameModelHelper.setBooster(BoosterType.HELP, 1);
         GameModelHelper.setBooster(BoosterType.TIME, 1);
 
@@ -112,6 +115,8 @@ export class TutorialController extends GameController {
     };
 
     destroy(): void {
+        Config.DEV_HELP_LOGIC_IS_RANDOM = true;
+
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChangeExtended);
         if (this.menuTimer) {
             this.menuTimer.style.pointerEvents = 'auto';
@@ -134,16 +139,9 @@ export class TutorialController extends GameController {
         super.destroy();
     }
 
-    complete() {
-        // gamer finished tutorial like game
-        // show special screen 
-        super.complete();
-    }
-
     private leaveTutorial() {
         vueService.signalDataBus.dispatch(VueServiceSignals.LeaveTutorial, {});
     }
-
 
     protected setupGameLogic() {
         this.gameLogic = new GameLogic(this.engine);
