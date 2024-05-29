@@ -70,6 +70,9 @@ export class EntityCreator {
     }
 
     public createScoreEffect(x: number, y: number, value: number) {
+        if (!Config.DEV_SHOW_BUBBLE_TEXT) {
+            return;
+        }
         const view = new ScoreEffectView(value);
 
         const entity = new Entity()
@@ -114,6 +117,9 @@ export class EntityCreator {
     icons: { [key: string]: Texture } = {};
 
     public createTile(index: number, gridX: number, gridY: number) {
+        if (Config.DEV_RANDOM_NOTPLACE_ICON && Math.random() < 0.3) {
+            return;
+        }
         const icon = dataService.getRootModel<GameModel>().data.icons[index];
         const tex = this.icons[icon.key];
         const sprite = new Sprite(tex);
@@ -182,6 +188,9 @@ export class EntityCreator {
     }
 
     public showPath(arr: PointLike[], duration = Config.PATH_LIKE_SNAKE_DURATION) {
+        if (!Config.DEV_SHOW_PATH) {
+            return;
+        }
         if (arr.length === 0) {
             return;
         }

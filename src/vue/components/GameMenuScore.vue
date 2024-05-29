@@ -25,7 +25,7 @@ watch(
         }
     }
 );
-const gameScoreTextLength = ref(gameScore.value.toString().length);
+const gameScoreTextLength = ref(`${gameScore.value}`.length);
 const styleWidth = ref(getScoreTextBounds() || 1);
 
 onMounted(() => {

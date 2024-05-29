@@ -43,7 +43,7 @@ const boosterCount = computed(() => {
 <template>
     <div class="GameMenuTimer" @click="handleClick">
         <div class="Timer">
-            <div class=blinking>
+            <div class="TimeValue" :class=blinking>
                 <div class="minutes">{{ `${minutes > 9 ? '' : '0'}${minutes}` }}</div>
                 <div class="separator">:</div>
                 <div class="secundes">{{ `${secundes > 9 ? '' : '0'}${secundes}` }}</div>
@@ -66,12 +66,12 @@ const boosterCount = computed(() => {
     position: relative;
 }
 
-.GameMenuTimer .blinking{
+.GameMenuTimer .TimeValue{
     display: flex;
     flex-direction: row;
 }
 
-.GameMenuTimer .blinking .separator{
+.GameMenuTimer .TimeValue .separator{
     justify-self: center;
 }
 

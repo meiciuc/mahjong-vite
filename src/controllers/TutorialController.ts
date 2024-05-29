@@ -310,7 +310,7 @@ export class TutorialController extends GameController {
         const easing = easingsFunctions.easeOutSine;
         new Tween({})
             .to({}, 300)
-            .onUpdate((object: unknown, t: number) => {
+            .onUpdate((_object: unknown, t: number) => {
                 const currentX = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
                 const currentY = (Math.random() * delta * (Math.random() > 0.5 ? 1 : -1)) * easing(t);
                 div.style.transform = `translate(${currentX}px, ${currentY}px)`;
@@ -369,8 +369,6 @@ export class TutorialController extends GameController {
             let nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeAId = nodeA.tile.id;
             await this.movePointerToTile([nodeA], 300);
-            await new TimeSkipper(300).execute();
-            this.shakeTile(this.creator.getTileNodeById(nodeAId));
 
             await new TimeSkipper(1000).execute();
 
@@ -381,6 +379,8 @@ export class TutorialController extends GameController {
             const entityB = nodeB.entity;
             await this.movePointerToTile([nodeA, nodeB], 300);
             await new TimeSkipper(300).execute();
+
+            this.shakeTile(this.creator.getTileNodeById(nodeAId));
             this.shakeTile(this.creator.getTileNodeById(nodeBId));
 
             entityA.add(new Interactive());

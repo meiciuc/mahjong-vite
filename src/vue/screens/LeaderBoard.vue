@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LeaderboardItem } from '../../model/GameModel';
 import { useModel } from '../../model/useModel';
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
@@ -30,13 +31,13 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
                 <div 
                     v-for="item of leaderboardItems"
                     class="Item" 
-                    :class="{'Selected': item.selected}"
-                    :key="item.id"
+                    :class="{'Selected': (item as unknown as LeaderboardItem).selected}"
+                    :key="(item as unknown as LeaderboardItem).id"
                 >
-                    <div class="Position">{{item.position}}</div>
-                    <div class="Name">{{item.name}}</div>
-                    <div class="Level">{{item.level}}</div>
-                    <div class="Score">{{item.score}}</div>
+                    <div class="Position">{{(item as unknown as LeaderboardItem).position}}</div>
+                    <div class="Name">{{(item as unknown as LeaderboardItem).name}}</div>
+                    <div class="Level">{{(item as unknown as LeaderboardItem).level}}</div>
+                    <div class="Score">{{(item as unknown as LeaderboardItem).score}}</div>
                 </div>
             </div>
         </div>

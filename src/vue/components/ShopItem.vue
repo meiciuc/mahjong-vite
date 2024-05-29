@@ -4,6 +4,8 @@ import { BoosterType } from '../../model/GameModel';
 import { Proposal, CurrencyType } from '../../model/ShopModel';
 import { Localization } from '../../utils/Localization';
 import { VueServiceSignals, vueService } from '../VueService';
+import { GameModelHelper } from '../../model/GameModelHelper';
+import { adsService } from '../../services/AdsService';
 
 const props = defineProps<{
     proposal: Proposal
@@ -29,6 +31,10 @@ const productCount = computed(() => {
     return props.proposal.items[0].count;
 });
 
+const enabled = computed(() => {
+    return valute.value === CurrencyType.POINTS ? price.value <= GameModelHelper.getGameScore() : adsService.isRewardedAvaliable;
+})
+
 const handleClick = (id: string) => {
     vueService.signalDataBus.dispatch(VueServiceSignals.ProposalPurchased, {id});
 }
@@ -42,7 +48,7 @@ const handleClick = (id: string) => {
             {{ productType === BoosterType.TIME ? '' : Localization.getText('game.help') }}
         </div>
         <div class="Value">{{ `+${productCount}` }}</div>
-        <div :class="[valute === CurrencyType.POINTS ? 'PriceScore' : 'PriceAds']" 
+        <div :class="[enabled ? '' : 'disabled' , valute === CurrencyType.POINTS ? 'PriceScore' : 'PriceAds']" 
             :style = "valute === CurrencyType.POINTS ? '' : 'background-image: url(./assets/svg/iconVideoAds.svg);'"
             @click.stop.prevent="handleClick(id)"
         >
@@ -58,6 +64,11 @@ const handleClick = (id: string) => {
     align-items: center;
     justify-content: space-between;
     width: 24rem;
+}
+
+.ShopItem .disabled{
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .ShopItem .IconTime {

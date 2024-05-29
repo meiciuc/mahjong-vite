@@ -45,15 +45,18 @@ window.onload = async (): Promise<void> => {
     initDebug();
 
 
-    if (Config.DEV_AUTOSTART_FOR_PREVIEW) {
+    if (Config.DEV_FULLSCREEN_ONCE) {
         const fullscreen = () => {
             document.body.requestFullscreen();
             document.body.removeEventListener('click', fullscreen);
 
-            new TimeSkipper(10000).execute()
-                .then(() => {
-                    vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
-                })
+            if (Config.DEV_GAME_AUTHOMATIC) {
+                new TimeSkipper(10000).execute()
+                    .then(() => {
+                        vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
+                    })
+            }
+
         }
         document.body.addEventListener('click', fullscreen);
     }
