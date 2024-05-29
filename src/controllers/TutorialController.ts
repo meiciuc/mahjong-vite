@@ -36,6 +36,8 @@ export class TutorialController extends GameController {
         1, 3,
     ];
 
+    private savedModelData: { [key: string]: number } = {};
+
     private async playScenario() {
         this.tiles = this.engine?.getNodeList(TileNode);
         this.tiles.nodeAdded.add((node) => {
@@ -45,16 +47,20 @@ export class TutorialController extends GameController {
         await new TimeSkipper(1000).execute();
 
         for (let i = 0; i < this.gridScenario.length; i += 2) {
-            const node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
+            let node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
             if (!node) {
                 continue;
             }
             this.movePointerToTile([node], 300);
             await new TimeSkipper(500).execute();
-            this.shakeTile(node);
 
+            node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
+            this.shakeTile(node);
             node.entity.add(new Interactive());
+
             await this.waitTileClick();
+
+            node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
             node.entity.remove(Interactive);
 
             if (i % 4 > 0) {
@@ -86,9 +92,11 @@ export class TutorialController extends GameController {
         super.doExecute();
 
         Config.DEV_HELP_LOGIC_IS_RANDOM = false;
-
+        Config.DEV_SAVE_RESULT = false;
         GameModelHelper.setBooster(BoosterType.HELP, 1);
         GameModelHelper.setBooster(BoosterType.TIME, 1);
+
+        await new TimeSkipper(1000).execute();
 
         this.setupPointer();
         this.setupLeaveTutorialButton();
@@ -115,8 +123,6 @@ export class TutorialController extends GameController {
     };
 
     destroy(): void {
-        Config.DEV_HELP_LOGIC_IS_RANDOM = true;
-
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChangeExtended);
         if (this.menuTimer) {
             this.menuTimer.style.pointerEvents = 'auto';
@@ -136,6 +142,11 @@ export class TutorialController extends GameController {
             this.pointer.destroy();
         }
 
+        Config.DEV_HELP_LOGIC_IS_RANDOM = true;
+        Config.DEV_SAVE_RESULT = true;
+        this.resetTutorialModel();
+        GameModelHelper.updateGameModel();
+
         super.destroy();
     }
 
@@ -144,6 +155,9 @@ export class TutorialController extends GameController {
     }
 
     protected setupGameLogic() {
+
+        this.saveCurrentModel();
+
         this.gameLogic = new GameLogic(this.engine);
 
         const config = this.gameLogic.getDefaultGenerateIconsConfig();
@@ -163,6 +177,20 @@ export class TutorialController extends GameController {
         this.gameLogic.generateIconsQueue(config);
     }
 
+    private saveCurrentModel() {
+        this.savedModelData['gameLevel'] = GameModelHelper.getGameLevel();
+        this.savedModelData['gameScore'] = GameModelHelper.getGameScore();
+        this.savedModelData['HELP'] = GameModelHelper.getBooster(BoosterType.HELP).current;
+        this.savedModelData['TIME'] = GameModelHelper.getBooster(BoosterType.TIME).current;
+    }
+
+    private resetTutorialModel() {
+        GameModelHelper.setGameLevel(this.savedModelData['gameLevel']);
+        GameModelHelper.setGameScore(this.savedModelData['gameScore']);
+        GameModelHelper.setBooster(BoosterType.HELP, this.savedModelData['HELP']);
+        GameModelHelper.setBooster(BoosterType.TIME, this.savedModelData['TIME']);
+    }
+
     private showTutorialUI(value: boolean) {
         this.pointer.visible = value;
         this.leaveTutoralButton.style.opacity = `${value ? '1' : '0'}`;
@@ -178,7 +206,7 @@ export class TutorialController extends GameController {
         const menuHelp = document.body.getElementsByClassName('MenuPanel__GameMenuHelp');
         const menuLevel = document.body.getElementsByClassName('MenuPanel__GameMenuLevel');
 
-        if (!menuTimer.length || !menuHelp.length || !menuLevel) {
+        if (!menuTimer.length || !menuHelp.length || !menuLevel.length) {
             return;
         }
 
@@ -369,7 +397,6 @@ export class TutorialController extends GameController {
             let nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeAId = nodeA.tile.id;
             await this.movePointerToTile([nodeA], 300);
-
             await new TimeSkipper(1000).execute();
 
             nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));

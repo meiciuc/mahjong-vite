@@ -47,6 +47,8 @@ export class Config {
         return false;//Config.DEV;
     }
 
+
+    static DEV_SAVE_RESULT = true;
     static DEV_USE_PRELOADER = true;
     static DEV_HELP_LOGIC_IS_RANDOM = true;
 
@@ -145,9 +147,11 @@ export class Config {
         Config.DEV_GET_SHORTEST_PATH_HELP_RESULT = false;
         Config.DEV_SHOW_BUBBLE_TEXT = true;
         Config.DEV_SHOW_PATH = true;
+        Config.DEV_SAVE_RESULT = false;
 
         switch (Config.currentPreviewState) {
             case 0:
+                Config.DEV_SAVE_RESULT = true;
                 Config.DEV_RESET_GP = true;
                 Config.DEV_PREVIEW_GAMEPLAY_MODE = false;
                 Config.DEV_FULLSCREEN_ONCE = false;
@@ -207,4 +211,4 @@ export class Config {
     }
 }
 
-// new Config();
+new Config();

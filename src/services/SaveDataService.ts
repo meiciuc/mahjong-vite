@@ -6,8 +6,7 @@ import { SaveData, adsService } from "./AdsService";
 class SaveDataService {
 
     saveData() {
-        console.log('saveData')
-        if (Config.DEV_PREVIEW_GAMEPLAY_MODE || Config.DEV_GAME_AUTHOMATIC) {
+        if (!Config.DEV_SAVE_RESULT) {
             return;
         }
 
