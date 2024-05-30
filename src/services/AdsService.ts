@@ -127,6 +127,26 @@ class GpService {
         }
     }
 
+    private generateVariantValue(key: 'yesterday' | 'today' | 'always' = 'today') {
+        const date = new Date();
+        switch (key) {
+            case 'yesterday':
+                date.setDate(date.getDate() - 1);
+                break;
+            case "today":
+                break;
+            case "always":
+                return key;
+        }
+
+
+        return date.toLocaleString('en', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+    }
+
     async showLeaderboard(key: 'yesterday' | 'today' | 'always' = 'today') {
         if (!this.gp) {
             return;
@@ -134,22 +154,14 @@ class GpService {
 
         dataService.getRootModel<GameModel>().data.leaderboardSelected = key;
 
-        // const result = await this.gp.leaderboard.fetch({
-        //     withMe: 'last',
-        //     showNearest: 5,
-        // }) as LeaderBoardFetch;
-
         const result = await this.gp.leaderboard.fetchScoped({
             // ID таблицы
             id: 11787,
             // Tag таблицы
             tag: 'global@score',
             // Название области видимости
-            variant: new Date().toLocaleString('en', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }),
+            variant: this.generateVariantValue(key),
+            orderBy: ['level', 'score'],
             // Сортировка DESC / ASC, по умолчанию значение лидерборда
             order: 'DESC',
             // Количество игроков в списке, max - 100, по умолчанию значение лидерборда
@@ -165,6 +177,35 @@ class GpService {
             // Получить N ближайших игроков сверху и снизу, максимум 10
             showNearest: 5,
         });
+
+        // const result = await this.gp.leaderboard.fetch({
+        //     withMe: 'last',
+        //     showNearest: 5,
+        // }) as LeaderBoardFetch;
+
+        // const result = await this.gp.leaderboard.fetchScoped({
+        //     // ID таблицы
+        //     id: 11787,
+        //     // Tag таблицы
+        //     tag: 'global@score',
+        //     // Название области видимости
+        //     variant: this.generateVariantValue(key),
+        //     orderBy: ['level', 'score'],
+        //     // Сортировка DESC / ASC, по умолчанию значение лидерборда
+        //     order: 'DESC',
+        //     // Количество игроков в списке, max - 100, по умолчанию значение лидерборда
+        //     limit: 10,
+        //     // Включить список полей игрока для отображения в таблице, помимо полей таблицы
+        //     /**
+        //      * Показывать ли текущего игрока в списке, если он не попал в топ
+        //      * none — не показывать
+        //      * first — показать первым
+        //      * last — показать последним
+        //      */
+        //     withMe: 'first',
+        //     // Получить N ближайших игроков сверху и снизу, максимум 10
+        //     showNearest: 5,
+        // });
 
         const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;
         leaderboard.splice(0);
@@ -230,17 +271,13 @@ class GpService {
             return;
         }
 
-        const result = await this.gp.leaderboard.publishRecord({
+        await this.gp.leaderboard.publishRecord({
             // ID таблицы
             id: 11787,
             // Tag таблицы
             tag: 'global@score',
             // Название области видимости
-            variant: new Date().toLocaleString('en', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }),
+            variant: 'always',
             // Перезаписать макисмальный рекорд?
             // По-умолчанию рекорд будет обновлен, если он побил предыдущий
             override: true,
@@ -251,8 +288,22 @@ class GpService {
             },
         });
 
-        // Результат публикации
-        // console.log('result', result)
+        await this.gp.leaderboard.publishRecord({
+            // ID таблицы
+            id: 11787,
+            // Tag таблицы
+            tag: 'global@score',
+            // Название области видимости
+            variant: this.generateVariantValue('today'),
+            // Перезаписать макисмальный рекорд?
+            // По-умолчанию рекорд будет обновлен, если он побил предыдущий
+            override: true,
+            // Рекорд игрока, установите значения нужных полей лидерборда
+            record: {
+                score,
+                level,
+            },
+        });
     }
 
     saveData(data: SaveData) {

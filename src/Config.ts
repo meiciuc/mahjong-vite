@@ -211,4 +211,4 @@ export class Config {
     }
 }
 
-new Config();
+// new Config();
