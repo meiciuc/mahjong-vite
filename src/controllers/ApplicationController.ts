@@ -119,6 +119,7 @@ export class ApplicationController extends BaseController {
             GameModelHelper.setApplicationState(AppStateEnum.GAME_NO_MORE_MOVES);
         }
 
+        saveDataService.saveLeaderboard();
         saveDataService.saveData();
 
         const res2 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
@@ -348,6 +349,7 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.OptionsResetLevels:
                 this.gameModel.data.gameLevel = 1;
                 this.gameModel.data.optionsAreVisible = false;
+                saveDataService.saveLeaderboard();
                 saveDataService.saveData();
                 this.startCycle();
                 break;

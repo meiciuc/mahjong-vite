@@ -132,15 +132,40 @@ class GpService {
             return;
         }
 
-        // this.gp.leaderboard.open();
         dataService.getRootModel<GameModel>().data.leaderboardSelected = key;
-        const result = await this.gp.leaderboard.fetch({
-            withMe: 'last',
+
+        // const result = await this.gp.leaderboard.fetch({
+        //     withMe: 'last',
+        //     showNearest: 5,
+        // }) as LeaderBoardFetch;
+
+        const result = await this.gp.leaderboard.fetchScoped({
+            // ID таблицы
+            id: 11787,
+            // Tag таблицы
+            tag: 'global@score',
+            // Название области видимости
+            variant: new Date().toLocaleString('en', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }),
+            // Сортировка DESC / ASC, по умолчанию значение лидерборда
+            order: 'DESC',
+            // Количество игроков в списке, max - 100, по умолчанию значение лидерборда
+            limit: 10,
+            // Включить список полей игрока для отображения в таблице, помимо полей таблицы
+            /**
+             * Показывать ли текущего игрока в списке, если он не попал в топ
+             * none — не показывать
+             * first — показать первым
+             * last — показать последним
+             */
+            withMe: 'first',
+            // Получить N ближайших игроков сверху и снизу, максимум 10
             showNearest: 5,
+        });
 
-        }) as LeaderBoardFetch;
-
-        console.log(result)
         const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;
         leaderboard.splice(0);
 
@@ -198,6 +223,36 @@ class GpService {
         }
 
         return this.gp.player.avatar;
+    }
+
+    async saveLeaderboard(level: number, score: number) {
+        if (!this.gp! || !this.gp.player) {
+            return;
+        }
+
+        const result = await this.gp.leaderboard.publishRecord({
+            // ID таблицы
+            id: 11787,
+            // Tag таблицы
+            tag: 'global@score',
+            // Название области видимости
+            variant: new Date().toLocaleString('en', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }),
+            // Перезаписать макисмальный рекорд?
+            // По-умолчанию рекорд будет обновлен, если он побил предыдущий
+            override: true,
+            // Рекорд игрока, установите значения нужных полей лидерборда
+            record: {
+                score,
+                level,
+            },
+        });
+
+        // Результат публикации
+        // console.log('result', result)
     }
 
     saveData(data: SaveData) {

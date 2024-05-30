@@ -5,12 +5,21 @@ import { SaveData, adsService } from "./AdsService";
 
 class SaveDataService {
 
+    saveLeaderboard() {
+        if (!Config.DEV_SAVE_RESULT) {
+            return;
+        }
+
+        const model = dataService.getRootModel<GameModel>().data;
+        adsService.saveLeaderboard(model.gameLevel, model.gameScore);
+    }
+
     saveData() {
         if (!Config.DEV_SAVE_RESULT) {
             return;
         }
 
-        const model = dataService.getRootModel<GameModel>().raw;
+        const model = dataService.getRootModel<GameModel>().data;
         localStorage.setItem('data', JSON.stringify(model));
 
         adsService.saveData({
