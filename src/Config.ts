@@ -65,6 +65,7 @@ export class Config {
     static DEV_SHOW_BUBBLE_TEXT = true;
     static DEV_SHOW_PATH = true;
     static DEV_RANDOM_NOTPLACE_ICON = false;
+    static DEV_CAN_ROTATE_GRID = true;
 
     private static currentPreviewState = 1;
 

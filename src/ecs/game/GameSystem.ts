@@ -204,6 +204,10 @@ export class GameSystem extends System {
     }
 
     private handleResize = () => {
+        if (!Config.DEV_CAN_ROTATE_GRID) {
+            return;
+        }
+
         const grid = this.grid.head.grid.current;
         if (!grid) {
             return;

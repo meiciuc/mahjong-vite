@@ -37,9 +37,11 @@ export class TutorialController extends GameController {
     ];
 
     private savedModelData: { [key: string]: number } = {};
+    private completed = false;
 
     private async playScenario() {
         await new TimeSkipper(1000).execute();
+        if (this.completed) { return; }
 
         for (let i = 0; i < this.gridScenario.length; i += 2) {
             let node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
@@ -48,42 +50,60 @@ export class TutorialController extends GameController {
             }
             this.movePointerToTile([node], 300);
             await new TimeSkipper(500).execute();
+            if (this.completed) { return; }
 
             node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
             this.shakeTile(node);
             node.entity.add(new Interactive());
 
             await this.waitTileClick();
+            if (this.completed) { return; }
 
             node = this.getTileNodeByGridPosition(this.gridScenario[i], this.gridScenario[i + 1]);
             node.entity.remove(Interactive);
 
             if (i % 4 > 0) {
                 await new TimeSkipper(1000).execute();
+                if (this.completed) { return; }
             }
         }
 
         await this.waitClickTimer();
+        if (this.completed) { return; }
+
         await this.waitClickHelper();
+        if (this.completed) { return; }
 
         await this.waitTileRemoved();
+        if (this.completed) { return; }
 
         // the pointer destroing
         await this.pointer.movePointer(new Point(window.innerWidth / 2, window.innerHeight / 2), new Point(window.innerWidth / 2, window.innerHeight / 2), 2000);
+        if (this.completed) { return; }
+
         await new TimeSkipper(3000).execute();
+        if (this.completed) { return; }
+
         await this.pointer.movePointer(new Point(), new Point(window.innerWidth, window.innerHeight), 100);
+        if (this.completed) { return; }
+
         this.pointer.destroy();
 
         // finish game yourself
         await new TimeSkipper(500).execute();
+        if (this.completed) { return; }
+
         for (let node = this.tiles.head; node; node = node.next) {
             node.entity.add(new Interactive());
             this.shakeTile(node);
             await new TimeSkipper(50).execute();
+            if (this.completed) { return; }
         }
     }
 
     protected async doExecute() {
+        Config.DEV_CAN_ROTATE_GRID = false;
+
         super.doExecute();
 
         this.tiles = this.engine?.getNodeList(TileNode);
@@ -126,6 +146,9 @@ export class TutorialController extends GameController {
     };
 
     destroy(): void {
+        this.completed = true;
+
+        stageService.resizeSignal.remove(this.handleResize);
         dataService.getRootModel<GameModel>().unsubscribe(['appState'], this.handleAppStateChangeExtended);
         if (this.menuTimer) {
             this.menuTimer.style.pointerEvents = 'auto';
@@ -145,6 +168,7 @@ export class TutorialController extends GameController {
             this.pointer.destroy();
         }
 
+        Config.DEV_CAN_ROTATE_GRID = true;
         Config.DEV_HELP_LOGIC_IS_RANDOM = true;
         Config.DEV_SAVE_RESULT = true;
         this.resetTutorialModel();
@@ -401,6 +425,7 @@ export class TutorialController extends GameController {
             const nodeAId = nodeA.tile.id;
             await this.movePointerToTile([nodeA], 300);
             await new TimeSkipper(1000).execute();
+            if (this.completed) { return; }
 
             nodeA = throwIfNull(this.creator.getTileNodeByGridPosition(arr[0].x, arr[0].y));
             const nodeB = throwIfNull(this.creator.getTileNodeByGridPosition(arr[arr.length - 1].x, arr[arr.length - 1].y));
@@ -409,6 +434,7 @@ export class TutorialController extends GameController {
             const entityB = nodeB.entity;
             await this.movePointerToTile([nodeA, nodeB], 300);
             await new TimeSkipper(300).execute();
+            if (this.completed) { return; }
 
             this.shakeTile(this.creator.getTileNodeById(nodeAId));
             this.shakeTile(this.creator.getTileNodeById(nodeBId));
