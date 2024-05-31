@@ -159,30 +159,33 @@ class GpService {
 
         dataService.getRootModel<GameModel>().data.leaderboardSelected = key;
 
-        const result = await this.gp.leaderboard.fetchScoped({
-            // ID таблицы
-            id: this.ID,
-            // Tag таблицы
-            tag: this.TAG,
-            // Название области видимости
-            variant: this.generateVariantValue(key),
-            orderBy: ['level', 'points'],
-            includeFields: ['level', 'points'],
-            // Сортировка DESC / ASC, по умолчанию значение лидерборда
-            order: 'DESC',
-            // Количество игроков в списке, max - 100, по умолчанию значение лидерборда
-            limit: 10,
-            // Включить список полей игрока для отображения в таблице, помимо полей таблицы
-            withMe: 'first',
-            // Получить N ближайших игроков сверху и снизу, максимум 10
-            showNearest: 5,
-        });
+        const result = key === 'always'
+            ? await this.gp.leaderboard.fetch({ orderBy: ["level", "points"], withMe: 'last', })
+            : await this.gp.leaderboard.fetchScoped({
+                // ID таблицы
+                id: this.ID,
+                // Tag таблицы
+                tag: this.TAG,
+                // Название области видимости
+                variant: this.generateVariantValue(key),
+                orderBy: ['level', 'points'],
+                includeFields: ['level', 'points'],
+                // Сортировка DESC / ASC, по умолчанию значение лидерборда
+                order: 'DESC',
+                // Количество игроков в списке, max - 100, по умолчанию значение лидерборда
+                limit: 10,
+                // Включить список полей игрока для отображения в таблице, помимо полей таблицы
+                withMe: 'last',
+                // Получить N ближайших игроков сверху и снизу, максимум 10
+                showNearest: 5,
+            });
 
         const leaderboard = dataService.getRootModel<GameModel>().data.leaderboardItems;
         leaderboard.splice(0);
 
         const player = result.player as LeaderboardItem;
-        const arr = player ? result.abovePlayers.concat([player]).concat(result.belowPlayers) : result.players;
+        // const arr = player ? result.abovePlayers.concat([player]).concat(result.belowPlayers) : result.players;
+        const arr = result.players ? result.players : [];
 
         for (let i = 0; i < arr.length; i++) {
             leaderboard.push({

@@ -63,10 +63,11 @@ export type Booster = BoosterHelp | BoosterTime;
 
 export interface LeaderboardItem {
     id: number,
-    name: string,
-    position: number,
-    points: number,
     level: number,
+    name: string,
+    avatar?: string,
+    points: number,
+    position: number,
     selected?: boolean,
 }
 
