@@ -39,10 +39,10 @@ export class ApplicationController extends BaseController {
             GameModelHelper.updateGameModel();
         }
 
-        if (GameModelHelper.getLevel() < 2 && !localStorage.getItem('firstTime')) {
-            localStorage.setItem('firstTime', `${Date.now()}`);
-            await this.tutorialCycle();
-        }
+        // if (GameModelHelper.getLevel() < 2 && !localStorage.getItem('firstTime')) {
+        //     localStorage.setItem('firstTime', `${Date.now()}`);
+        //     await this.tutorialCycle();
+        // }
 
         await this.startCycle();
     }
