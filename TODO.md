@@ -1,3 +1,6 @@
+ресурсы:
+https://www.figma.com/design/js3ckSjLyEaa2cfJDaD7eR/Prototyping-in-Figma?node-id=231-598&t=uKFKzlAYH3GZkRKC-0
+
 для релиза:
 1. подставить нормальные звуки
     2. сделать "пилу" нарастания сложности уровней

@@ -26,6 +26,7 @@ const appState = useModel(["appState"]);
     font-size: 2rem;
     color: $menu_label_text_color;
     border-radius: 50%;
+    user-select: none;
 }
 
 .GameMenuMainOptions .SkinSvg {
