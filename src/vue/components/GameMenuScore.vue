@@ -10,13 +10,13 @@ const getScoreTextBounds = () => {
 }
 
 let tween: Tween<unknown>;
-const gameScore = useModel(["gameScore"]);
+const points = useModel(["points"]);
 watch(
-    gameScore,
+    points,
     (cur: number, prev: number) => {
-        const textLength = `${gameScore.value}`.length;
-        if (gameScoreTextLength.value != textLength) {
-            gameScoreTextLength.value = textLength;
+        const textLength = `${points.value}`.length;
+        if (pointsTextLength.value != textLength) {
+            pointsTextLength.value = textLength;
             styleWidth.value = getScoreTextBounds();
         }
         if (prev > cur) {
@@ -25,12 +25,12 @@ watch(
         }
     }
 );
-const gameScoreTextLength = ref(`${gameScore.value}`.length);
+const pointsTextLength = ref(`${points.value}`.length);
 const styleWidth = ref(getScoreTextBounds() || 1);
 
 onMounted(() => {
     styleWidth.value = getScoreTextBounds() || 1;
-    gameScoreTextLength.value = `${styleWidth.value}`.length;
+    pointsTextLength.value = `${styleWidth.value}`.length;
 })
 
 const blink = async () => {
@@ -65,8 +65,8 @@ const blink = async () => {
     el.style.opacity = '1';
 }
 
-const gameScoreFormated = computed(() => {
-    const count = gameScore.value;
+const pointsFormated = computed(() => {
+    const count = points.value;
     if (count > 1000000000) { return `${Math.floor(count / 1000000000)}MM`; }
     if (count > 1000000) { return `${Math.floor(count / 1000000)}M`; }
     return count;
@@ -79,7 +79,7 @@ const gameScoreFormated = computed(() => {
 <template>
     <div class="GameMenuScore" :style="`width: ${styleWidth}px;`">
         <span ref="Score">
-            {{ `${gameScoreFormated}` }}
+            {{ `${pointsFormated}` }}
         </span>
     </div>
 </template>

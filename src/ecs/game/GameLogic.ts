@@ -33,7 +33,7 @@ export class GameLogic {
             gridHeight,
             seed: seed ? seed : `${Math.random()}`,
             pares: this.getGameMaxIconPaires(),
-            currentLevel: model.gameLevel,
+            currentLevel: model.level,
             iconsLength: model.icons.length,
         };
     }
@@ -123,7 +123,7 @@ export class GameLogic {
         const model = dataService.getRootModel<GameModel>();
         const easing = easingsFunctions.linear;
 
-        const currentLevel = model ? model.data.gameLevel : 1;
+        const currentLevel = model ? model.data.level : 1;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const startA = 2;
@@ -162,11 +162,11 @@ export class GameLogic {
             });
     }
 
-    static calculateGameModelParams(gameLevel: number) {
+    static calculateGameModelParams(level: number) {
         const start = 5;    // 9
         const end = Math.floor(Config.MAX_GAME_LEVEL / 2);
 
-        const currentLevel = gameLevel;
+        const currentLevel = level;
         const scaleLevel = currentLevel / Config.MAX_GAME_LEVEL;
 
         const size = Math.floor(scaleLevel * (end - start) + start);
@@ -184,6 +184,6 @@ export class GameLogic {
         const kLevel = (10 - currentLevel % 5) / 10;
         const gameMaxTime = Math.round(Math.max(size * size * 2, 60) * kLevel);
 
-        return { gameLevel, gridWidth, gridHeight, seed, gameMaxTime };
+        return { level, gridWidth, gridHeight, seed, gameMaxTime };
     }
 }

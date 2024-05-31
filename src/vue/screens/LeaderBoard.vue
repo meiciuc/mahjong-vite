@@ -37,7 +37,7 @@ const leaderboardSelected = useModel(['leaderboardSelected']);
                     <div class="Position">{{(item as unknown as LeaderboardItem).position}}</div>
                     <div class="Name">{{(item as unknown as LeaderboardItem).name}}</div>
                     <div class="Level">{{(item as unknown as LeaderboardItem).level}}</div>
-                    <div class="Score">{{(item as unknown as LeaderboardItem).score}}</div>
+                    <div class="Score">{{(item as unknown as LeaderboardItem).points}}</div>
                 </div>
             </div>
         </div>

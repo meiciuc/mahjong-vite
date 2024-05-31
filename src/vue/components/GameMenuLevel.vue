@@ -3,7 +3,7 @@ import { VueServiceSignals, vueService } from '../VueService';
 import { useModel } from '../../model/useModel';
 import GameMenuScore from './GameMenuScore.vue';
 
-const gameLevel = useModel(["gameLevel"]);
+const level = useModel(["level"]);
 
 const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.LeaderBoardButton, {});
@@ -14,7 +14,7 @@ const handleClick = () => {
 <template>
     <div class="GameMenuLevel" @click="handleClick">
         <div class="MenuContentItem">
-            <div class="GameLevel">{{ gameLevel }}</div>
+            <div class="level">{{ level }}</div>
             <GameMenuScore></GameMenuScore>
         </div>
         <div 
@@ -37,7 +37,7 @@ const handleClick = () => {
     align-items: center;
 }
 
-.GameMenuLevel .GameLevel {
+.GameMenuLevel .level {
     font-size: 2rem;
     font-family: $label_font_family;
     color: $menu_label_text_color;

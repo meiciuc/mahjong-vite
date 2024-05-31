@@ -168,7 +168,7 @@ export class TutorialController extends GameController {
         config.pares = 1;
 
         const model = dataService.getRootModel<GameModel>();
-        model.data.gameLevel = config.currentLevel;
+        model.data.level = config.currentLevel;
         model.data.gridWidth = config.gridWidth;
         model.data.gridHeight = config.gridHeight;
         model.data.seed = config.seed;
@@ -178,15 +178,15 @@ export class TutorialController extends GameController {
     }
 
     private saveCurrentModel() {
-        this.savedModelData['gameLevel'] = GameModelHelper.getGameLevel();
-        this.savedModelData['gameScore'] = GameModelHelper.getGameScore();
+        this.savedModelData['level'] = GameModelHelper.getLevel();
+        this.savedModelData['points'] = GameModelHelper.getPoints();
         this.savedModelData['HELP'] = GameModelHelper.getBooster(BoosterType.HELP).current;
         this.savedModelData['TIME'] = GameModelHelper.getBooster(BoosterType.TIME).current;
     }
 
     private resetTutorialModel() {
-        GameModelHelper.setGameLevel(this.savedModelData['gameLevel']);
-        GameModelHelper.setGameScore(this.savedModelData['gameScore']);
+        GameModelHelper.setLevel(this.savedModelData['level']);
+        GameModelHelper.setPoints(this.savedModelData['points']);
         GameModelHelper.setBooster(BoosterType.HELP, this.savedModelData['HELP']);
         GameModelHelper.setBooster(BoosterType.TIME, this.savedModelData['TIME']);
     }

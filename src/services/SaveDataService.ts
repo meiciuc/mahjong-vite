@@ -5,13 +5,15 @@ import { SaveData, adsService } from "./AdsService";
 
 class SaveDataService {
 
+    private score = (level: number, points: number) => level * 1000000000 + points;
+
     saveLeaderboard() {
         if (!Config.DEV_SAVE_RESULT) {
             return;
         }
 
         const model = dataService.getRootModel<GameModel>().data;
-        adsService.saveLeaderboard(model.gameLevel, model.gameScore);
+        adsService.saveLeaderboard(model.level, model.points, this.score(model.level, model.points));
     }
 
     saveData() {
@@ -23,8 +25,9 @@ class SaveDataService {
         localStorage.setItem('data', JSON.stringify(model));
 
         adsService.saveData({
-            gameLevel: model.gameLevel,
-            gameScore: model.gameScore,
+            level: model.level,
+            points: model.points,
+            score: this.score(model.level, model.points),
             sound: model.sound,
             boosters: model.boosters,
         });

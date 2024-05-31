@@ -12,8 +12,8 @@ export class GameModelHelper {
         const data = saveDataService.getData();
 
         if (data) {
-            model.data.gameLevel = data.gameLevel ? data.gameLevel : model.data.gameLevel;
-            model.data.gameScore = data.gameScore ? data.gameScore : model.data.gameScore;
+            model.data.level = data.level ? data.level : model.data.level;
+            model.data.points = data.points ? data.points : model.data.points;
             model.data.sound = data.sound !== undefined ? data.sound : model.data.sound;
 
             // TODO для сложных бустеров надо отрефакторить этот кусок
@@ -35,7 +35,7 @@ export class GameModelHelper {
 
     static setCurrentGameModel(level: number, w: number, h: number, s: string, t: number) {
         const model = dataService.getRootModel<GameModel>();
-        model.data.gameLevel = clamp(level, 1, Number.MAX_SAFE_INTEGER);
+        model.data.level = clamp(level, 1, Number.MAX_SAFE_INTEGER);
         model.data.gridWidth = w;
         model.data.gridHeight = h;
         model.data.seed = s;
@@ -62,24 +62,24 @@ export class GameModelHelper {
         return gameModel.data.gameState;
     }
 
-    static getGameLevel() {
+    static getLevel() {
         const gameModel = dataService.getRootModel<GameModel>();
-        return gameModel.data.gameLevel;
+        return gameModel.data.level;
     }
 
-    static setGameLevel(level: number) {
+    static setLevel(level: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameLevel = clamp(level, 1, Number.MAX_SAFE_INTEGER);
+        gameModel.data.level = clamp(level, 1, Number.MAX_SAFE_INTEGER);
     }
 
-    static getGameScore() {
+    static getPoints() {
         const gameModel = dataService.getRootModel<GameModel>();
-        return gameModel.data.gameScore;
+        return gameModel.data.points;
     }
 
-    static setGameScore(value: number) {
+    static setPoints(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.gameScore = value;
+        gameModel.data.points = value;
     }
 
     static setUserActionAfterTheLastGame(value: UserActionAfterTheLastGame) {
@@ -122,8 +122,8 @@ export class GameModelHelper {
             analytics: {},
             shop: GameModelHelper.createShop(),
             gameState: GameStateEnum.NONE,
-            gameLevel: 1,
-            gameScore: 0,
+            level: 1,
+            points: 0,
             gameAge: 0,
             boosters: {
                 [BoosterType.TIME]: { current: 2 },

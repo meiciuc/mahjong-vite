@@ -65,8 +65,8 @@ export interface LeaderboardItem {
     id: number,
     name: string,
     position: number,
-    score: number,
-    level?: number,
+    points: number,
+    level: number,
     selected?: boolean,
 }
 
@@ -86,8 +86,8 @@ export interface GameModel {
 
     gameState: GameStateEnum,
     gameAge: number,
-    gameLevel: number,
-    gameScore: number,
+    level: number,
+    points: number,
     boosters: { [key in BoosterType]?: Booster },
 
     icons: IconState[];

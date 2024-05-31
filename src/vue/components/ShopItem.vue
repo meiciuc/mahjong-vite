@@ -32,7 +32,7 @@ const productCount = computed(() => {
 });
 
 const enabled = computed(() => {
-    return valute.value === CurrencyType.POINTS ? price.value <= GameModelHelper.getGameScore() : adsService.isRewardedAvaliable;
+    return valute.value === CurrencyType.POINTS ? price.value <= GameModelHelper.getPoints() : adsService.isRewardedAvaliable;
 })
 
 const handleClick = (id: string) => {

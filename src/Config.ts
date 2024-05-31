@@ -73,8 +73,8 @@ export class Config {
 
         switch (Config.currentPreviewState) {
             case 0:
-                gameModel.data.gameLevel = 1;
-                gameModel.data.gameScore = 0;
+                gameModel.data.level = 1;
+                gameModel.data.points = 0;
                 gameModel.data.sound = false;
                 gameModel.data.seed = `${Date.now()}`;
 
@@ -82,8 +82,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 3);
                 break;
             case 1:
-                gameModel.data.gameLevel = 4;
-                gameModel.data.gameScore = 367;
+                gameModel.data.level = 4;
+                gameModel.data.points = 367;
                 gameModel.data.sound = false;
                 gameModel.data.seed = '1716292045129';
 
@@ -91,8 +91,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 2);
                 break;
             case 2:
-                gameModel.data.gameLevel = 18;
-                gameModel.data.gameScore = 2067;
+                gameModel.data.level = 18;
+                gameModel.data.points = 2067;
                 gameModel.data.sound = false;
                 gameModel.data.seed = 's1';
 
@@ -100,8 +100,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 11);
                 break;
             case 3:
-                gameModel.data.gameLevel = 71;
-                gameModel.data.gameScore = 39667;
+                gameModel.data.level = 71;
+                gameModel.data.points = 39667;
                 gameModel.data.sound = false;
                 gameModel.data.seed = `s2`;
 
@@ -109,8 +109,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 12);
                 break;
             case 4:
-                gameModel.data.gameLevel = 98;
-                gameModel.data.gameScore = 539167;
+                gameModel.data.level = 98;
+                gameModel.data.points = 539167;
                 gameModel.data.sound = false;
                 gameModel.data.seed = `s2`;
 
@@ -118,8 +118,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 2);
                 break;
             case 5:
-                gameModel.data.gameLevel = 213;
-                gameModel.data.gameScore = 9398167;
+                gameModel.data.level = 213;
+                gameModel.data.points = 9398167;
                 gameModel.data.sound = false;
                 gameModel.data.seed = `s2`;
 
@@ -127,8 +127,8 @@ export class Config {
                 GameModelHelper.setBooster(BoosterType.HELP, 2);
                 break;
             case 6:
-                gameModel.data.gameLevel = 23;
-                gameModel.data.gameScore = 2067;
+                gameModel.data.level = 23;
+                gameModel.data.points = 2067;
                 gameModel.data.sound = true;
                 gameModel.data.seed = '1716292045129';
 
