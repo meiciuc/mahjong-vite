@@ -1,12 +1,5 @@
 import { ShopModel } from "./ShopModel";
 
-export enum UserActionAfterTheLastGame {
-    DEFAULT = 'default',
-    RETRY = 'retry',
-    RESET = 'reset',
-    PREVIOUS = 'previous',
-}
-
 export enum GameStateEnum {
     NONE = 'none',
     PREPARE = 'prepare',
@@ -75,7 +68,6 @@ export interface GameModel {
     appState: AppStateEnum;
     analytics: Analytics;
     shop: ShopModel;
-    userActionAfterTheLastGame: UserActionAfterTheLastGame,
 
     tutorialOnly: boolean,
     optionsAreVisible: boolean,

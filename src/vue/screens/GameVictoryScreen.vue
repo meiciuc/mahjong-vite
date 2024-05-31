@@ -8,6 +8,9 @@ const Popup = ref(null);
 const handleClick = () => {
     vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton, {});
 }
+const handleTutorial = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.TutorialButton, {});
+}
 </script>
 
 <template>
@@ -17,6 +20,7 @@ const handleClick = () => {
                 <div class="Label">{{ Localization.getText('victory.victory') }}</div>
             </div>
             <button class="StartButton" @click="handleClick">{{ Localization.getText('start.play') }}</button>
+            <button class="TutorialButton" @click="handleTutorial">{{ Localization.getText('start.tutorial') }}</button>
         </div>
     </div>
 </template>
@@ -50,6 +54,20 @@ const handleClick = () => {
 }
 
 .GameVictoryScreen .StartButton:active {
+    @include button_screen-active;
+}
+
+.GameVictoryScreen .TutorialButton {
+    @include button_screen;
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+
+.GameVictoryScreen .TutorialButton:hover {
+    @include button_screen-hover;
+}
+
+.GameVictoryScreen .TutorialButton:active {
     @include button_screen-active;
 }
 </style>

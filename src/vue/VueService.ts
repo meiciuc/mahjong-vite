@@ -13,6 +13,8 @@ export enum VueServiceSignals {
     LeaderBoardTodayButton = 'LeaderBoardTodayButton',
     LeaderBoardAlwaysButton = 'LeaderBoardAlwaysButton',
 
+    RetryButton = 'RetryButton',
+
     TutorialButton = 'TutorialButton',
     LeaveTutorial = 'LeaveTutorial',
 

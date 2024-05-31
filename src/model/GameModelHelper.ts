@@ -1,6 +1,6 @@
 import { clamp } from "lodash";
 import { dataService } from "../core/services/DataService";
-import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from "./GameModel";
+import { AppStateEnum, BoosterType, GameModel, GameStateEnum } from "./GameModel";
 import { ShopModel, CurrencyType } from "./ShopModel";
 import { Config } from "../Config";
 import { saveDataService } from "../services/SaveDataService";
@@ -30,7 +30,6 @@ export class GameModelHelper {
     static resetGameModelForNextGameCycle() {
         const model = dataService.getRootModel<GameModel>();
         model.data.gameAge = 0;
-        model.data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
     }
 
     static setCurrentGameModel(level: number, w: number, h: number, s: string, t: number) {
@@ -80,11 +79,6 @@ export class GameModelHelper {
     static setPoints(value: number) {
         const gameModel = dataService.getRootModel<GameModel>();
         gameModel.data.points = value;
-    }
-
-    static setUserActionAfterTheLastGame(value: UserActionAfterTheLastGame) {
-        const gameModel = dataService.getRootModel<GameModel>();
-        gameModel.data.userActionAfterTheLastGame = value;
     }
 
     static addBooster(type: BoosterType) {
@@ -143,8 +137,6 @@ export class GameModelHelper {
             gridWidth: 1,
             gridHeight: 1,
             seed: '',
-
-            userActionAfterTheLastGame: UserActionAfterTheLastGame.DEFAULT,
         });
     }
 

@@ -5,7 +5,7 @@ import { Model } from '../core/mvc/model';
 import { dataService } from '../core/services/DataService';
 import { stageService } from '../core/services/StageService';
 import { GameLogic } from '../ecs/game/GameLogic';
-import { AppStateEnum, BoosterType, GameModel, GameStateEnum, UserActionAfterTheLastGame } from '../model/GameModel';
+import { AppStateEnum, BoosterType, GameModel, GameStateEnum } from '../model/GameModel';
 import { GameModelHelper } from '../model/GameModelHelper';
 import { CurrencyType } from '../model/ShopModel';
 import { adsService } from '../services/AdsService';
@@ -21,7 +21,6 @@ import { TutorialController } from './TutorialController';
 export class ApplicationController extends BaseController {
 
     private gameModel?: Model<GameModel>;
-    private applicationStateHystory: AppStateEnum[] = [];
 
     protected async doExecute() {
         adsService.gameStart();
@@ -32,19 +31,43 @@ export class ApplicationController extends BaseController {
         new BackgroundController().execute();
         await new PrepareIconsCommand().execute();
 
-        if (Config.DEV_PREVIEW_GAMEPLAY_MODE) {
-            this.gameModel = GameModelHelper.setupPreviewModel();
-        } else {
-            this.setupGameModel();
-            GameModelHelper.updateGameModel();
+        this.setupGameModel();
+        GameModelHelper.updateGameModel();
+
+        this.mainCycle();
+    }
+
+    private async mainCycle() {
+        GameModelHelper.updateGameModel();
+
+        try {
+            vueService.signalDataBus.off(this.handleDataBus);
+        } catch (error) { }
+        vueService.signalDataBus.on(this.handleDataBus);
+
+        GameModelHelper.setApplicationState(GameModelHelper.getLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
+
+        const startScreen = await Promise.race([
+            this.waitVueServiceSignal(VueServiceSignals.StartButton),
+            this.waitVueServiceSignal(VueServiceSignals.TutorialButton)
+        ]);
+
+        switch (startScreen) {
+            case VueServiceSignals.StartButton:
+                if (Config.DEV_PREVIEW_GAMEPLAY_MODE) {
+                    this.gameModel = GameModelHelper.setupPreviewModel();
+                }
+                GameModelHelper.resetGameModelForNextGameCycle();
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel());
+                GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
+                await this.gameCycle();
+                break;
+            case VueServiceSignals.TutorialButton:
+                await this.tutorialCycle();
+                break;
+            default:
+                this.mainCycle();
         }
-
-        // if (GameModelHelper.getLevel() < 2 && !localStorage.getItem('firstTime')) {
-        //     localStorage.setItem('firstTime', `${Date.now()}`);
-        //     await this.tutorialCycle();
-        // }
-
-        await this.startCycle();
     }
 
     private async tutorialCycle() {
@@ -67,47 +90,14 @@ export class ApplicationController extends BaseController {
         await new TimeSkipper(2000).execute();
     }
 
-    private async startCycle() {
-        if (!Config.DEV_PREVIEW_GAMEPLAY_MODE) {
-            GameModelHelper.updateGameModel();
-        }
-
-        try {
-            vueService.signalDataBus.off(this.handleDataBus);
-        } catch (error) { }
-        vueService.signalDataBus.on(this.handleDataBus);
-
-        GameModelHelper.setApplicationState(GameModelHelper.getLevel() < 2 ? AppStateEnum.START_SCREEN_FIRST : AppStateEnum.START_SCREEN);
-
-        const res1 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.StartButton));
-
-        if (res1 === VueServiceSignals.TutorialButton) {
-            await this.tutorialCycle();
-            this.startCycle();
-        } else if (res1 === VueServiceSignals.StartButton) {
-            this.gameCycleWasInterrupted(res1);
-            GameModelHelper.resetGameModelForNextGameCycle();
-            const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel());
-            GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
-
-            this.nextCycle();
-        }
-    }
-
-    // TODO FSM
-    private async nextCycle() {
+    private async gameCycle() {
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
 
-        const game = new GameController();
         adsService.gameplayStart();
-        const res1 = await this.waitApplicationCycleContinue(game.execute());
+        const game = new GameController()
+        await game.execute();
         game.destroy();
         adsService.gameplayStop();
-
-        if (res1 !== game) {
-            this.gameCycleWasInterrupted(res1);
-            return;
-        }
 
         const gameState = GameModelHelper.getGameState();
         if (gameState === GameStateEnum.GAME_VICTORY) {
@@ -122,43 +112,37 @@ export class ApplicationController extends BaseController {
         saveDataService.saveLeaderboard();
         saveDataService.saveData();
 
-        const res2 = await this.waitApplicationCycleContinue(this.waitVueServiceSignal(VueServiceSignals.GameEndButton));
-        if (res2 !== VueServiceSignals.GameEndButton) {
-            this.gameCycleWasInterrupted(res2);
-            return;
-        }
+        const endGameScreen = await Promise.race([
+            this.waitVueServiceSignal(VueServiceSignals.GameEndButton),
+            this.waitVueServiceSignal(VueServiceSignals.TutorialButton),
+            this.waitVueServiceSignal(VueServiceSignals.RetryButton),
+        ]);
 
-        GameModelHelper.setApplicationState(AppStateEnum.NONE);
-
-        switch (this.gameModel.data.userActionAfterTheLastGame) {
-            case UserActionAfterTheLastGame.RETRY: {
-                const { gridWidth, gridHeight, seed, level: level } = this.gameModel.data;
+        switch (endGameScreen) {
+            case VueServiceSignals.GameEndButton: {
+                GameModelHelper.resetGameModelForNextGameCycle();
+                const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel());
+                GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
+                this.gameCycle();
+                return;
+            }
+            case VueServiceSignals.TutorialButton: {
+                await this.tutorialCycle();
+                this.mainCycle();
+                return;
+            }
+            case VueServiceSignals.RetryButton: {
+                const { gridWidth, gridHeight, seed, level } = this.gameModel.data;
                 const { gameMaxTime } = GameLogic.calculateGameModelParams(level);
 
                 GameModelHelper.resetGameModelForNextGameCycle();
                 GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
-                break;
+                this.gameCycle();
+                return;
             }
-            case UserActionAfterTheLastGame.RESET: {
-                GameModelHelper.resetGameModelForNextGameCycle();
-                const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel());
-                GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
-                break;
-            }
-            case UserActionAfterTheLastGame.PREVIOUS: {
-                GameModelHelper.resetGameModelForNextGameCycle();
-                const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel() - 1);
-                GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
-                break;
-            }
-            default: {
-                GameModelHelper.resetGameModelForNextGameCycle();
-                const { level, gridWidth, gridHeight, seed, gameMaxTime } = GameLogic.calculateGameModelParams(GameModelHelper.getLevel());
-                GameModelHelper.setCurrentGameModel(level, gridWidth, gridHeight, seed, gameMaxTime);
-            }
+            default:
+                this.mainCycle();
         }
-
-        this.nextCycle();
     }
 
     private setupGameModel() {
@@ -166,7 +150,6 @@ export class ApplicationController extends BaseController {
 
         this.gameModel.subscribe(['appState'], this.handleGameModelStateChange);
         this.gameModel.subscribe(['sound'], this.handleSound);
-        this.gameModel.subscribe(['boosters'], this.handleBoosters);
     }
 
     private update = (_time: number) => {
@@ -301,7 +284,6 @@ export class ApplicationController extends BaseController {
     }
 
     private handleGameModelStateChange = (currenState: AppStateEnum, _oldState: AppStateEnum) => {
-        this.applicationStateHystory.push(currenState);
         switch (currenState) {
             case AppStateEnum.START_SCREEN:
             case AppStateEnum.GAME_SCREEN_PAUSE:
@@ -323,38 +305,12 @@ export class ApplicationController extends BaseController {
         localStorage.setItem('data', JSON.stringify(dataService.getRootModel<GameModel>().raw));
     }
 
-    private handleBoosters = (...args) => {
-        console.log('handleBoosters', args)
-    }
-
-    private async waitVueServiceSignal(value: VueServiceSignals) {
+    private async waitVueServiceSignal(value: VueServiceSignals): Promise<VueServiceSignals> {
         const data = await vueService.signalDataBus.future();
         if (data[0] === value) {
             return Promise.resolve(value);
         } else {
             return this.waitVueServiceSignal(value);
-        }
-    }
-
-    private async waitApplicationCycleContinue(promise: Promise<unknown>) {
-        return Promise.race([
-            promise,
-            this.waitVueServiceSignal(VueServiceSignals.OptionsResetLevels),
-            this.waitVueServiceSignal(VueServiceSignals.TutorialButton)
-        ]);
-    }
-
-    private gameCycleWasInterrupted(value: VueServiceSignals) {
-        switch (value) {
-            case VueServiceSignals.OptionsResetLevels:
-                this.gameModel.data.level = 1;
-                this.gameModel.data.optionsAreVisible = false;
-                saveDataService.saveLeaderboard();
-                saveDataService.saveData();
-                this.startCycle();
-                break;
-            default:
-                this.startCycle();
         }
     }
 }

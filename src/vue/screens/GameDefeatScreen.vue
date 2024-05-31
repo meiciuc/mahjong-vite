@@ -1,11 +1,9 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { adsService } from '../../services/AdsService';
 import { Localization } from '../../utils/Localization';
 import { TimeSkipper } from '../../utils/TimeSkipper';
 import { VueServiceSignals, vueService } from '../VueService';
-import { ref, onMounted } from 'vue';
-import { adsService } from '../../services/AdsService';
-import { dataService } from '../../core/services/DataService';
-import { GameModel, UserActionAfterTheLastGame } from '../../model/GameModel';
 
 export interface Props {
     showFullscreenAds?: boolean,
@@ -34,13 +32,14 @@ onMounted(async () => {
 });
 
 const handleClick = (value: "retry" | undefined = undefined) => {
-    console.log('handleClick', value)
     if (value === "retry") {
-        dataService.getRootModel<GameModel>().data.userActionAfterTheLastGame = UserActionAfterTheLastGame.RETRY;
+        vueService.signalDataBus.dispatch(VueServiceSignals.RetryButton, {});
     } else {
-        dataService.getRootModel<GameModel>().data.userActionAfterTheLastGame = UserActionAfterTheLastGame.DEFAULT;
+        vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton, {});
     }
-    vueService.signalDataBus.dispatch(VueServiceSignals.GameEndButton, {});
+}
+const handleTutorial = () => {
+    vueService.signalDataBus.dispatch(VueServiceSignals.TutorialButton, {});
 }
 </script>
 
@@ -54,6 +53,7 @@ const handleClick = (value: "retry" | undefined = undefined) => {
             </div>
             <button class="StartButton" :class="{ NotShowButtons: !showButtons }" @click="handleClick()">{{
                 Localization.getText('start.play') }}</button>
+            <button class="TutorialButton" @click="handleTutorial">{{ Localization.getText('start.tutorial') }}</button>
         </div>
     </div>
 </template>
@@ -107,6 +107,20 @@ const handleClick = (value: "retry" | undefined = undefined) => {
 .GameDefeatScreenFullscreenAds .NotShowButtons {
     opacity: 0;
     user-select: none;
+}
+
+.GameDefeatScreenFullscreenAds .TutorialButton {
+    @include button_screen;
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+
+.GameDefeatScreenFullscreenAds .TutorialButton:hover {
+    @include button_screen-hover;
+}
+
+.GameDefeatScreenFullscreenAds .TutorialButton:active {
+    @include button_screen-active;
 }
 </style>
 
