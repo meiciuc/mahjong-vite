@@ -39,11 +39,6 @@ export class TutorialController extends GameController {
     private savedModelData: { [key: string]: number } = {};
 
     private async playScenario() {
-        this.tiles = this.engine?.getNodeList(TileNode);
-        this.tiles.nodeAdded.add((node) => {
-            node.entity.remove(Interactive);
-        })
-
         await new TimeSkipper(1000).execute();
 
         for (let i = 0; i < this.gridScenario.length; i += 2) {
@@ -90,6 +85,14 @@ export class TutorialController extends GameController {
 
     protected async doExecute() {
         super.doExecute();
+
+        this.tiles = this.engine?.getNodeList(TileNode);
+        for (let node = this.tiles.head; node; node = node.next) {
+            node.entity.remove(Interactive);
+        }
+        this.tiles.nodeAdded.add((node) => {
+            node.entity.remove(Interactive);
+        })
 
         Config.DEV_HELP_LOGIC_IS_RANDOM = false;
         Config.DEV_SAVE_RESULT = false;
