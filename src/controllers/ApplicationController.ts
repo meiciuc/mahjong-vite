@@ -64,6 +64,7 @@ export class ApplicationController extends BaseController {
                 break;
             case VueServiceSignals.TutorialButton:
                 await this.tutorialCycle();
+                this.mainCycle();
                 break;
             default:
                 this.mainCycle();
