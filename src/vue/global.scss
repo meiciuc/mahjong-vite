@@ -24,19 +24,13 @@ $menu_button_text_color: $color_light;
 $label_font_family: 'MontserratAlternates-Regular';
 $button_font_family: 'MontserratAlternates-Black';
 
-@mixin user_select_disable {
-    user-select: none;
-}
-
 @mixin label_base {
-    user-select: none;
     display: block;
     white-space: none;
     text-align: center;
 }
 
 @mixin button_base {
-    user-select: none;
     display: flex;
     justify-content: center;
     text-align: center;
@@ -55,7 +49,6 @@ $button_font_family: 'MontserratAlternates-Black';
 }
 
 @mixin label_menu {
-    user-select: none;
     font-family: $menu_label_font_family;
 }
 
@@ -160,7 +153,6 @@ $button_font_family: 'MontserratAlternates-Black';
 }
 
 @mixin scene-text-block {
-    user-select: none;
     background: $color_dark;
     color: $color_light;
     border-color: $color_light;
@@ -174,7 +166,6 @@ $button_font_family: 'MontserratAlternates-Black';
     display: flex;
     flex-direction: column;
     align-items: center;
-    user-select: none;
 }
 
 :global(.invisible) {

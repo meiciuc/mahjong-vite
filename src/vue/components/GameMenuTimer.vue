@@ -81,7 +81,6 @@ const boosterCount = computed(() => {
 
 .GameMenuTimer .Timer {
     width: 7rem;
-    user-select: none;
 
     font-size: 2rem;
     font-family: 'RobotoMono-Regular';
@@ -111,7 +110,6 @@ const boosterCount = computed(() => {
     text-align: center;
     justify-content: center;
 
-    user-select: none;
     cursor: pointer;
 
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5) inset;

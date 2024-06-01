@@ -9,6 +9,7 @@
   "leaderboard.yesterday": "yesterday",
   "leaderboard.today": "today",
   "leaderboard.atAllTimes": "at all times",
+  "start.tagline": "points are nothing. level is everything!",
   "start.mahjong": "MAHJONG",
   "start.kitchen": "KITCHEN",
   "start.reachTheHighestLevel": "highest level!",
@@ -16,8 +17,8 @@
   "victory.victory": "Victory",
   "defeat.defeat": "NOT a victory",
   "defeat.noMoreMoves": "NO moves",
-  "descriptopn.short": "\"Mahjong Kitchen\" is a variation of the classic Chinese puzzle game of finding pairs of symbols within the allotted time, on a playing field that increases with each level.",
-  "description.long": "Mahjong Kitchen is a variation of the classic Chinese symbol matching puzzle game.\r\nIn this variation, the level must be completed within the allotted time.\r\nWith each new level the size of the playing field increases.\r\nPassing a level can be made easier by using boosters: an extra minute, a hint.\r\nBoosters can be purchased using points earned.\r\nThe shape of the playing field adapts to the device screen.",
-  "description.about": "Welcome to the game \"Mahjong Kitchen\".\r\nMahjong Kitchen is a variation of the classic Chinese symbol matching puzzle game.\r\nUnlike classic mahjong, the game offers additional mechanics for world-famous mahjong:\r\nwith each new level the number of icons increases - to infinity (!), so the goal of the game becomes to achieve the highest possible level;\r\nthe game takes place for a limited time;\r\nthe size and shape of the playing field adapts to the size of your screen;\r\nLeaderboards help you evaluate how successful you are in the game!",
-  "description.instructions": "Find a pair of identical icons that can be connected by one, two or three straight lines.\r\nWhen all pairs have been found, the level will end.\r\nIf you do not meet the deadline within the allotted time, the points collected are NOT written off (they can be used to purchase boosters)"
+  "descriptopn.short": "Mahjong Kitchen is a variation of the classic Chinese puzzle game of finding pairs of symbols in the allotted time, on a playing field that increases with each level.",
+  "description.long": "Mahjong Kitchen is a variation of the classic Chinese symbol matching puzzle game.\nIn this variation, the level must be completed within the allotted time.\nWith each new level the size of the playing field increases.\nPassing a level can be made easier by using boosters: an extra minute, a hint.\nBoosters can be purchased using points earned.\nThe shape of the playing field adapts to the device screen.",
+  "description.about": "Welcome to the game Mahjong Kitchen.\nMahjong Kitchen is a variation of the classic Chinese symbol matching puzzle game.\nUnlike classic mahjong, the game offers additional mechanics for world-famous mahjong:\nwith each new level the number of icons increases - to infinity (!), so the goal of the game becomes to achieve the highest possible level;\nthe game takes place for a limited time;\nthe size and shape of the playing field adapts to the size of your screen;\nLeaderboards help you evaluate how successful you are in the game!",
+  "description.instructions": "Find a pair of identical icons that can be connected by one, two or three straight lines.\nWhen all pairs have been found, the level will end.\nIf you do not meet the deadline within the allotted time, the points collected are NOT written off (they can be used to purchase boosters)"
 }

@@ -9,6 +9,7 @@
   "leaderboard.yesterday": "gestern",
   "leaderboard.today": "heute",
   "leaderboard.atAllTimes": "jederzeit",
+  "start.tagline": "brillen sind nichts. niveau ist alles!",
   "start.mahjong": "MAHJONG",
   "start.kitchen": "KÜCHE",
   "start.reachTheHighestLevel": "höchstes Level!",
@@ -16,8 +17,8 @@
   "victory.victory": "Sieg",
   "defeat.defeat": "KEIN Sieg",
   "defeat.noMoreMoves": "KEINE Bewegungen",
-  "descriptopn.short": "„Mahjong Kitchen“ ist eine Variante des klassischen chinesischen Puzzlespiels, bei dem es darum geht, innerhalb der vorgegebenen Zeit auf einem Spielfeld, das mit jedem Level größer wird, Symbolpaare zu finden.",
-  "description.long": "Mahjong Kitchen ist eine Variante des klassischen chinesischen Symbol-Matching-Puzzlespiels.\r\nBei dieser Variante muss das Level innerhalb der vorgegebenen Zeit abgeschlossen werden.\r\nMit jedem neuen Level vergrößert sich das Spielfeld.\r\nDas Bestehen eines Levels kann durch den Einsatz von Boostern erleichtert werden: eine zusätzliche Minute, ein Hinweis.\r\nBooster können mit gesammelten Punkten erworben werden.\r\nDie Form des Spielfeldes passt sich dem Gerätebildschirm an.",
-  "description.about": "Willkommen zum Spiel „Mahjong Kitchen“.\r\nMahjong Kitchen ist eine Variante des klassischen chinesischen Symbol-Matching-Puzzlespiels.\r\nIm Gegensatz zum klassischen Mahjong bietet das Spiel zusätzliche Mechaniken für das weltberühmte Mahjong:\r\nmit jedem neuen Level erhöht sich die Anzahl der Symbole – bis ins Unendliche (!), sodass das Ziel des Spiels darin besteht, das höchstmögliche Level zu erreichen;\r\ndas Spiel findet für eine begrenzte Zeit statt;\r\ndie Größe und Form des Spielfeldes passt sich der Größe Ihres Bildschirms an;\r\nMithilfe von Bestenlisten können Sie beurteilen, wie erfolgreich Sie im Spiel sind!",
-  "description.instructions": "Finden Sie ein Paar identischer Symbole, die durch eine, zwei oder drei gerade Linien verbunden werden können.\r\nWenn alle Paare gefunden wurden, endet das Level.\r\nWenn Sie die Frist nicht innerhalb der vorgegebenen Zeit einhalten, werden die gesammelten Punkte NICHT abgeschrieben (sie können zum Kauf von Boostern verwendet werden)."
+  "descriptopn.short": "Mahjong Kitchen ist eine Variante des klassischen chinesischen Puzzlespiels, bei dem es darum geht, in der vorgegebenen Zeit auf einem Spielfeld, das mit jedem Level größer wird, Symbolpaare zu finden.",
+  "description.long": "Mahjong Kitchen ist eine Variante des klassischen chinesischen Symbol-Puzzlespiels.\nBei dieser Variante muss das Level innerhalb der vorgegebenen Zeit abgeschlossen werden.\nMit jedem neuen Level vergrößert sich das Spielfeld.\nDas Bestehen eines Levels kann durch den Einsatz von Boostern erleichtert werden: eine zusätzliche Minute, ein Hinweis.\nBooster können mit gesammelten Punkten erworben werden.\nDie Form des Spielfeldes passt sich dem Gerätebildschirm an.",
+  "description.about": "Willkommen im Spiel Mahjong Kitchen.\nMahjong Kitchen ist eine Variante des klassischen chinesischen Symbol-Puzzlespiels.\nIm Gegensatz zum klassischen Mahjong bietet das Spiel zusätzliche Mechaniken für das weltberühmte Mahjong:\nmit jedem neuen Level erhöht sich die Anzahl der Symbole – bis ins Unendliche (!), sodass das Ziel des Spiels darin besteht, das höchstmögliche Level zu erreichen;\ndas Spiel findet für eine begrenzte Zeit statt;\ndie Größe und Form des Spielfeldes passt sich der Größe Ihres Bildschirms an;\nMithilfe von Bestenlisten können Sie beurteilen, wie erfolgreich Sie im Spiel sind!",
+  "description.instructions": "Finden Sie ein Paar identischer Symbole, die durch eine, zwei oder drei gerade Linien verbunden werden können.\nWenn alle Paare gefunden wurden, endet das Level.\nWenn Sie die Frist nicht innerhalb der vorgegebenen Zeit einhalten, werden die gesammelten Punkte NICHT abgeschrieben (sie können zum Kauf von Boostern verwendet werden)."
 }

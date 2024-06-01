@@ -92,6 +92,5 @@ onMounted(() => {
     font-family: $label_font_family;
     color: $menu_label_text_color;
     margin-right: 0.5rem;
-    user-select: none;
 }
 </style>

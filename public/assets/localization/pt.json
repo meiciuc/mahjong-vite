@@ -9,6 +9,7 @@
   "leaderboard.yesterday": "ontem",
   "leaderboard.today": "hoje",
   "leaderboard.atAllTimes": "em todos os momentos",
+  "start.tagline": "pontos não são nada. nível é tudo!",
   "start.mahjong": "MAH JONG",
   "start.kitchen": "COZINHA",
   "start.reachTheHighestLevel": "mais alto nível!",
@@ -16,8 +17,8 @@
   "victory.victory": "Vitória",
   "defeat.defeat": "NÃO é uma vitória",
   "defeat.noMoreMoves": "SEM movimentos",
-  "descriptopn.short": "\"Mahjong Kitchen\" é uma variação do clássico jogo chinês de encontrar pares de símbolos dentro do tempo previsto, em um campo de jogo que aumenta a cada nível.",
-  "description.long": "Mahjong Kitchen é uma variação do clássico jogo de quebra-cabeça de combinação de símbolos chineses.\r\nNesta variação, o nível deve ser concluído dentro do tempo estipulado.\r\nA cada novo nível, o tamanho do campo de jogo aumenta.\r\nPassar de nível pode ser mais fácil usando boosters: um minuto extra, uma dica.\r\nBoosters podem ser adquiridos usando os pontos ganhos.\r\nA forma do campo de jogo se adapta à tela do dispositivo.",
-  "description.about": "Bem-vindo ao jogo \"Mahjong Kitchen\".\r\nMahjong Kitchen é uma variação do clássico jogo de quebra-cabeça de combinação de símbolos chineses.\r\nAo contrário do mahjong clássico, o jogo oferece mecânica adicional para o mahjong mundialmente famoso:\r\na cada novo nível o número de ícones aumenta - até o infinito (!), então o objetivo do jogo passa a ser atingir o nível mais alto possível;\r\no jogo acontece por tempo limitado;\r\no tamanho e a forma do campo de jogo se adaptam ao tamanho da tela;\r\nAs tabelas de classificação ajudam você a avaliar o seu sucesso no jogo!",
-  "description.instructions": "Encontre um par de ícones idênticos que possam ser conectados por uma, duas ou três linhas retas.\r\nQuando todos os pares forem encontrados, o nível terminará.\r\nCaso não cumpra o prazo dentro do prazo estipulado, os pontos acumulados NÃO serão amortizados (podem ser utilizados na compra de boosters)"
+  "descriptopn.short": "Mahjong Kitchen é uma variação do clássico jogo chinês de encontrar pares de símbolos no tempo previsto, em um campo de jogo que aumenta a cada nível.",
+  "description.long": "Mahjong Kitchen é uma variação do clássico jogo de quebra-cabeça de combinação de símbolos chineses.\nNesta variação, o nível deve ser concluído dentro do tempo estipulado.\nA cada novo nível, o tamanho do campo de jogo aumenta.\nPassar de nível pode ser mais fácil usando boosters: um minuto extra, uma dica.\nBoosters podem ser adquiridos usando os pontos ganhos.\nA forma do campo de jogo se adapta à tela do dispositivo.",
+  "description.about": "Bem-vindo ao jogo Mahjong Kitchen.\nMahjong Kitchen é uma variação do clássico jogo de quebra-cabeça de combinação de símbolos chineses.\nAo contrário do mahjong clássico, o jogo oferece mecânica adicional para o mahjong mundialmente famoso:\na cada novo nível o número de ícones aumenta - até o infinito (!), então o objetivo do jogo passa a ser atingir o nível mais alto possível;\no jogo acontece por tempo limitado;\no tamanho e a forma do campo de jogo se adaptam ao tamanho da tela;\nAs tabelas de classificação ajudam você a avaliar o seu sucesso no jogo!",
+  "description.instructions": "Encontre um par de ícones idênticos que possam ser conectados por uma, duas ou três linhas retas.\nQuando todos os pares forem encontrados, o nível terminará.\nCaso não cumpra o prazo dentro do prazo estipulado, os pontos acumulados NÃO serão amortizados (podem ser utilizados na compra de boosters)"
 }

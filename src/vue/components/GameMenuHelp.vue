@@ -71,7 +71,6 @@ const boosterCount = computed(() => {
     text-align: center;
     justify-content: center;
 
-    user-select: none;
     cursor: pointer;
 
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5) inset;

@@ -106,7 +106,6 @@ const handleTutorial = () => {
 
 .GameDefeatScreenFullscreenAds .NotShowButtons {
     opacity: 0;
-    user-select: none;
 }
 
 .GameDefeatScreenFullscreenAds .TutorialButton {

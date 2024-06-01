@@ -42,7 +42,6 @@ const handleClick = () => {
     font-family: $label_font_family;
     color: $menu_label_text_color;
     margin-right: 0.5rem;
-    user-select: none;
 }
 
 .GameMenuLevel .LeaderboardIcon {
@@ -65,7 +64,6 @@ const handleClick = () => {
     text-align: center;
     justify-content: center;
 
-    user-select: none;
     cursor: pointer;
 
     // box-shadow: -1rem 1rem 0.4rem 0.4rem rgba(255, 100, 100, 0.5) inset;

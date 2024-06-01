@@ -9,6 +9,7 @@
   "leaderboard.yesterday": "kemarin",
   "leaderboard.today": "hari ini",
   "leaderboard.atAllTimes": "selalu",
+  "start.tagline": "poin bukanlah apa-apa. level adalah segalanya!",
   "start.mahjong": "MAHJONG",
   "start.kitchen": "DAPUR",
   "start.reachTheHighestLevel": "level tertinggi!",
@@ -16,8 +17,8 @@
   "victory.victory": "Kemenangan",
   "defeat.defeat": "BUKAN kemenangan",
   "defeat.noMoreMoves": "TIDAK ada gerakan",
-  "descriptopn.short": "\"Mahjong Kitchen\" adalah variasi permainan puzzle klasik Tiongkok untuk menemukan pasangan simbol dalam waktu yang ditentukan, di lapangan bermain yang meningkat di setiap level.",
-  "description.long": "Mahjong Kitchen adalah variasi permainan puzzle mencocokkan simbol klasik Tiongkok.\r\nDalam variasi ini, level harus diselesaikan dalam waktu yang ditentukan.\r\nDengan setiap level baru, ukuran lapangan bermain bertambah.\r\nMelewati level bisa menjadi lebih mudah dengan menggunakan booster: satu menit ekstra, sebuah petunjuk.\r\nBooster dapat dibeli menggunakan poin yang diperoleh.\r\nBentuk lapangan bermain menyesuaikan dengan layar perangkat.",
-  "description.about": "Selamat datang di game \"Dapur Mahjong\".\r\nMahjong Kitchen adalah variasi permainan puzzle mencocokkan simbol klasik Tiongkok.\r\nTidak seperti mahjong klasik, game ini menawarkan mekanisme tambahan untuk mahjong terkenal di dunia:\r\ndengan setiap level baru, jumlah ikon bertambah - hingga tak terbatas (!), sehingga tujuan permainan ini adalah untuk mencapai level setinggi mungkin;\r\npermainan berlangsung dalam waktu terbatas;\r\nukuran dan bentuk lapangan bermain menyesuaikan dengan ukuran layar Anda;\r\nPapan peringkat membantu Anda mengevaluasi seberapa sukses Anda dalam permainan!",
-  "description.instructions": "Temukan sepasang ikon identik yang dapat dihubungkan dengan satu, dua, atau tiga garis lurus.\r\nKetika semua pasangan telah ditemukan, level akan berakhir.\r\nJika Anda tidak memenuhi tenggat waktu dalam waktu yang ditentukan, poin yang dikumpulkan TIDAK akan dihapuskan (dapat digunakan untuk membeli booster)"
+  "descriptopn.short": "Mahjong Kitchen adalah variasi permainan puzzle klasik Tiongkok untuk menemukan pasangan simbol dalam waktu yang ditentukan, di lapangan bermain yang meningkat di setiap level.",
+  "description.long": "Mahjong Kitchen adalah variasi permainan puzzle mencocokkan simbol klasik Tiongkok.\nDalam variasi ini, level harus diselesaikan dalam waktu yang ditentukan.\nDengan setiap level baru, ukuran lapangan bermain bertambah.\nMelewati level bisa menjadi lebih mudah dengan menggunakan booster: satu menit ekstra, sebuah petunjuk.\nBooster dapat dibeli menggunakan poin yang diperoleh.\nBentuk lapangan bermain menyesuaikan dengan layar perangkat.",
+  "description.about": "Selamat datang di permainan Mahjong Kitchen.\nMahjong Kitchen adalah variasi permainan puzzle mencocokkan simbol klasik Tiongkok.\nTidak seperti mahjong klasik, game ini menawarkan mekanisme tambahan untuk mahjong terkenal di dunia:\ndengan setiap level baru, jumlah ikon bertambah - hingga tak terbatas (!), sehingga tujuan permainan ini adalah untuk mencapai level setinggi mungkin;\npermainan berlangsung dalam waktu terbatas;\nukuran dan bentuk lapangan bermain menyesuaikan dengan ukuran layar Anda;\nPapan peringkat membantu Anda mengevaluasi seberapa sukses Anda dalam permainan!",
+  "description.instructions": "Temukan sepasang ikon identik yang dapat dihubungkan dengan satu, dua, atau tiga garis lurus.\nKetika semua pasangan telah ditemukan, level akan berakhir.\nJika Anda tidak memenuhi tenggat waktu dalam waktu yang ditentukan, poin yang dikumpulkan TIDAK akan dihapuskan (dapat digunakan untuk membeli booster)"
 }

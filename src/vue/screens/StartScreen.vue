@@ -20,7 +20,7 @@ const handleTutorial = () => {
             <div ref="Popup" class="PopupLevelTwo">
                 <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
                 <div class="Label">{{ Localization.getText('start.kitchen') }}</div>
-                <div class="HalfLabel">{{ Localization.getText('start.reachTheHighestLevel') }}</div>
+                <div class="HalfLabel"></div>
             </div>
             <button class="StartButton" @click="handleStart">{{ Localization.getText('start.play') }}</button>
             <button class="TutorialButton" @click="handleTutorial">{{ Localization.getText('start.tutorial') }}</button>
@@ -79,6 +79,6 @@ const handleTutorial = () => {
     font-size: 2rem;
     font-family: 'Roboto-Light';
     color: $scene_label_text_color;
-    margin-top: 0.7rem;
+    margin-top: 1.7rem;
 }
 </style>
