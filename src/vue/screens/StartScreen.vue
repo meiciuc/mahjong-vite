@@ -18,8 +18,8 @@ const handleTutorial = () => {
     <div class="StartScreen">
         <div class="PopupLevelOne">
             <div ref="Popup" class="PopupLevelTwo">
-                <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
                 <div class="Label">{{ Localization.getText('start.kitchen') }}</div>
+                <div class="Label">{{ Localization.getText('start.mahjong') }}</div>
                 <div class="HalfLabel"></div>
             </div>
             <button class="StartButton" @click="handleStart">{{ Localization.getText('start.play') }}</button>
