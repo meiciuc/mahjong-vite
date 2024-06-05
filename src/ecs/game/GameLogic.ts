@@ -182,7 +182,7 @@ export class GameLogic {
 
         const seed = `${Math.random()}`;
         const kLevel = (10 - currentLevel % 5) / 10;
-        const gameMaxTime = Math.round(Math.max(size * size * 2, 60) * kLevel);
+        const gameMaxTime = Math.max(60, Math.round(size * size * 2 * kLevel));
 
         return { level, gridWidth, gridHeight, seed, gameMaxTime };
     }
