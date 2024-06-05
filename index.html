@@ -55,6 +55,22 @@
 
   <script type="text/javascript" id="preloader" preloaded="0">
 
+    window.onload = async () => {
+      if (window.addEventListener) {
+        window.addEventListener('contextmenu', (e) => {
+          e.preventDefault()
+          return false;
+        });
+      }
+
+      if (document.oncontextmenu) {
+        document.oncontextmenu = (e) => {
+          e.preventDefault();
+          return false;
+        }
+      }
+    }
+
     var startDate = Date.now();
 
     function getScript() {

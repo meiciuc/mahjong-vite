@@ -56,7 +56,6 @@ window.onload = async (): Promise<void> => {
                         vueService.signalDataBus.dispatch(VueServiceSignals.StartButton, {});
                     })
             }
-
         }
         document.body.addEventListener('click', fullscreen);
     }

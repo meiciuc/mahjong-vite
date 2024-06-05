@@ -6,7 +6,6 @@ import GameMenuMain from './components/GameMenuMain.vue';
 import GameMenuMainOptions from './components/GameMenuMainOptions.vue';
 
 import GameDefeatScreen from './screens/GameDefeatScreen.vue';
-import GamePause from './screens/GamePause.vue';
 import GameVictoryScreen from './screens/GameVictoryScreen.vue';
 import StartScreen from './screens/StartScreen.vue';
 import OptionsScreen from './screens/OptionsScreen.vue';
@@ -82,8 +81,6 @@ const defeatMessage = computed(() => {
 <template>
     <div class="AppBackground"></div>
     <div id="canvas" class="Canvas"></div>
-
-    <GamePause v-if="appState === AppStateEnum.GAME_SCREEN_PAUSE"></GamePause>
 
     <Transition>
         <StartScreen
