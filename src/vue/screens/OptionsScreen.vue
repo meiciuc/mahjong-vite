@@ -8,12 +8,16 @@ import TutorialAnimated from '../components/TutorialAnimated.vue';
 
 const shopIsVisible = useModel(["shopIsVisible"]);
 const shop = useModel(["shop"]);
-const tutorialOnly = useModel(["tutorialOnly"]);
+const tutorialMode = useModel(["tutorialMode"]);
 
 const sound = useModel(["sound"]);
 
 const handleSoundClick = () => {
     (sound.value as unknown as any) = !sound.value;
+}
+
+const handleShopClick = () => {
+    (shopIsVisible.value as unknown as any) = !shopIsVisible.value;
 }
 
 
@@ -26,7 +30,7 @@ const handleSoundClick = () => {
                 <TutorialAnimated class="Tutorial" :size="'35vh'" :marginLeft="'-17vh'"></TutorialAnimated>
             </div>
             <div class="Buttons">
-                <OptionsMenuButton v-if="!tutorialOnly"  @click.stop.prevent="shopIsVisible = !shopIsVisible" :icon="'./assets/svg/shoppingСartFill.svg'">
+                <OptionsMenuButton v-if="!tutorialMode"  @click.stop.prevent="handleShopClick" :icon="'./assets/svg/shoppingСartFill.svg'">
                 </OptionsMenuButton>
                 <OptionsMenuButton @click.stop.prevent="handleSoundClick"
                     :icon="sound ? './assets/svg/soundMax.svg' : './assets/svg/soundMute.svg'">

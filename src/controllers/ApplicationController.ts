@@ -76,11 +76,13 @@ export class ApplicationController extends BaseController {
 
         GameModelHelper.resetGameModelForNextGameCycle();
         GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
+        GameModelHelper.getModel().data.tutorialMode = true;
 
         const game = new TutorialController();
         const result = await Promise.race([game.execute(), this.waitVueServiceSignal(VueServiceSignals.LeaveTutorial)]);
         game.destroy();
 
+        GameModelHelper.getModel().data.tutorialMode = false;
         adsService.gameplayStop();
 
         if (result !== game) {

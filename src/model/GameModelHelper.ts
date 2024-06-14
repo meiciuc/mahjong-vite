@@ -129,7 +129,7 @@ export class GameModelHelper {
             leaderboardItems: [],
             optionsAreVisible: false,
             shopIsVisible: false,
-            tutorialOnly: false,
+            tutorialMode: false,
             sound: true,
 
             icons: [],

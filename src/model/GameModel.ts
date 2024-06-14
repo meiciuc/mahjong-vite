@@ -69,7 +69,7 @@ export interface GameModel {
     analytics: Analytics;
     shop: ShopModel;
 
-    tutorialOnly: boolean,
+    tutorialMode: boolean,
     optionsAreVisible: boolean,
     shopIsVisible: boolean,
     leaderboardIsVisible: boolean,
