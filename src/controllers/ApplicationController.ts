@@ -178,11 +178,8 @@ export class ApplicationController extends BaseController {
                     let result = false;
                     if (prop.price.valute === CurrencyType.VIDEO) {
                         try {
-                            await adsService.showRewarded();
-                            result = true;
-                        } catch (error: unknown) {
-                            result = false;
-                        }
+                            result = await adsService.showRewarded();
+                        } catch (error: unknown) { }
                     } else if (prop.price.valute === CurrencyType.POINTS && this.gameModel.data.points >= prop.price.price) {
                         this.gameModel.data.points -= prop.price.price;
                         result = true;
@@ -200,23 +197,9 @@ export class ApplicationController extends BaseController {
                 break;
             }
             case VueServiceSignals.LeaderBoardButton:
-                adsService.showLeaderboard();
-                soundService.play(SOUNDS.active_button);
-
-                this.gameModel.data.leaderboardIsVisible = !this.gameModel.data.leaderboardIsVisible;
-
-                if (this.gameModel.data.leaderboardIsVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-                }
-
-                if (!this.gameModel.data.leaderboardIsVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-                }
-
-                if (this.gameModel.data.leaderboardIsVisible) {
-                    this.gameModel.data.optionsAreVisible = false;
-                    this.gameModel.data.shopIsVisible = false;
-                }
+                this.gameModel.data.leaderboardIsVisible
+                    ? this.showGame()
+                    : this.showLeaderboard();
                 break;
             case VueServiceSignals.LeaderBoardYesterdayButton:
                 adsService.showLeaderboard('yesterday');
@@ -231,47 +214,30 @@ export class ApplicationController extends BaseController {
                 soundService.play(SOUNDS.active_button);
                 break;
             case VueServiceSignals.OpenShop:
+                this.gameModel.data.shopIsVisible
+                    ? this.showGame()
+                    : this.showShop();
+                break;
             case VueServiceSignals.OptionsButton:
-                soundService.play(SOUNDS.active_button);
-
-                this.gameModel.data.optionsAreVisible = !this.gameModel.data.optionsAreVisible;
-                this.gameModel.data.shopIsVisible = type === VueServiceSignals.OpenShop;
-
-                if (this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
-                }
-
-                if (!this.gameModel.data.optionsAreVisible && this.gameModel.data.appState === AppStateEnum.GAME_SCREEN_PAUSE) {
-                    GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
-                }
-
-                if (this.gameModel.data.optionsAreVisible) {
-                    this.gameModel.data.leaderboardIsVisible = false;
-                }
+                this.gameModel.data.optionsAreVisible
+                    ? this.showGame()
+                    : this.showOptions();
                 break;
             case VueServiceSignals.BoosterHelpClick: {
                 const boosters = this.gameModel.data.boosters[BoosterType.HELP];
                 if (boosters) {
-                    if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                        if (!boosters.current) {
-                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
-                        }
-                    } else {
-                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
-                    }
+                    GameModelHelper.getApplicationState() !== AppStateEnum.GAME_SCREEN
+                        ? this.showShop()
+                        : !boosters.current ? this.showShop() : null;
                 }
                 break;
             }
             case VueServiceSignals.BoosterTimeClick: {
                 const boosters = this.gameModel.data.boosters[BoosterType.TIME];
                 if (boosters) {
-                    if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
-                        if (!boosters.current) {
-                            vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
-                        }
-                    } else {
-                        vueService.signalDataBus.dispatch(VueServiceSignals.OpenShop, {});
-                    }
+                    GameModelHelper.getApplicationState() !== AppStateEnum.GAME_SCREEN
+                        ? this.showShop()
+                        : !boosters.current ? this.showShop() : null;
                 }
                 break;
             }
@@ -281,6 +247,53 @@ export class ApplicationController extends BaseController {
             case VueServiceSignals.InviteShow:
                 adsService.showInvite();
                 break;
+        }
+    }
+
+    private showLeaderboard() {
+        soundService.play(SOUNDS.active_button);
+        adsService.showLeaderboard();
+
+        this.gameModel.data.optionsAreVisible = false;
+        this.gameModel.data.leaderboardIsVisible = true;
+
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        }
+    }
+
+    private showOptions() {
+        soundService.play(SOUNDS.active_button);
+
+        this.gameModel.data.optionsAreVisible = true;
+        this.gameModel.data.shopIsVisible = false;
+        this.gameModel.data.leaderboardIsVisible = false;
+
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        }
+    }
+
+    private showShop() {
+        soundService.play(SOUNDS.active_button);
+
+        this.gameModel.data.optionsAreVisible = true;
+        this.gameModel.data.shopIsVisible = true;
+        this.gameModel.data.leaderboardIsVisible = false;
+
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN_PAUSE);
+        }
+    }
+
+    private showGame() {
+        soundService.play(SOUNDS.active_button);
+
+        this.gameModel.data.optionsAreVisible = false;
+        this.gameModel.data.leaderboardIsVisible = false;
+
+        if (GameModelHelper.getApplicationState() === AppStateEnum.GAME_SCREEN_PAUSE) {
+            GameModelHelper.setApplicationState(AppStateEnum.GAME_SCREEN);
         }
     }
 

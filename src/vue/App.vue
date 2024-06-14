@@ -19,7 +19,6 @@ const showGameOptionsButton = computed(() => {
 });
 
 const optionsAreVisible = useModel(["optionsAreVisible"]);
-const shopIsVisible = useModel(["shopIsVisible"]);
 const leaderboardIsVisible = useModel(["leaderboardIsVisible"]);
 
 const showMainMenu = computed(() => {
@@ -104,7 +103,7 @@ const defeatMessage = computed(() => {
     <GameMenuMain v-if="showMainMenu" class="GameMenuMain">
     </GameMenuMain>
     <Transition>
-        <OptionsScreen v-if="optionsAreVisible" :mode="shopIsVisible ? 'shop' : 'options'"></OptionsScreen>
+        <OptionsScreen v-if="optionsAreVisible"></OptionsScreen>
     </Transition>
     <Transition>
         <LeaderBoard v-if="leaderboardIsVisible"></LeaderBoard>

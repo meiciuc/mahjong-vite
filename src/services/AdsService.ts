@@ -112,7 +112,7 @@ class GpService {
 
     async showRewarded() {
         if (!this.gp?.ads.isRewardedAvailable) {
-            return Promise.reject();
+            return Promise.resolve(false);
         }
 
         return await this.gp.ads.showRewardedVideo();
@@ -216,19 +216,19 @@ class GpService {
 
     async showFullscreen() {
         if (!this.gp) {
-            return Promise.reject();
+            return Promise.resolve(false);
         }
 
         if (Date.now() - this.fullScreenAdsTimestamp >= Config.MIN_FULL_SCREEN_ADD_TIMEOUT) {
-            return Promise.reject();
+            return Promise.resolve(false);
         }
 
         this.fullScreenAdsTimestamp = Date.now();
 
         if (this.gp.ads.isFullscreenAvailable) {
-            return this.gp.ads.showFullscreen();
+            return await this.gp.ads.showFullscreen();
         } else {
-            return Promise.resolve();
+            return Promise.resolve(false);
         }
     }
 
