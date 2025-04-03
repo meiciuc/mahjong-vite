@@ -1,0 +1,1 @@
+run 'node localization_converter/converter.js' to export data from Google Sheet to export folder.
