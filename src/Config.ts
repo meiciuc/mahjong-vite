@@ -41,6 +41,8 @@ export class Config {
     static ADD_SCORE_FOR_FALSE_MOVE = -1;
     static MAX_GAME_LEVEL = 100;
     static MIN_FULL_SCREEN_ADD_TIMEOUT = 3000;
+    static TIME_FACTOR_PER_TURN = 1;
+    static MIN_TIME_PER_GAME = 40;
 
     static DEV = window.location.href.toLowerCase().indexOf('localhost') > -1;
     static get DEV_SHOW_STATS() {
